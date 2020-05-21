@@ -3,12 +3,39 @@ import React, { useState } from 'react';
 import MusicPlayer from "../components/musicPlayer"
 
 
+
+
+
+
+
 const Index = () => {
   const [showMe, setShowMe] = useState(false);
-  const [audioSource, setAudioSource] = useState("")
+  const [subreddit, setSubreddit] = useState("")
+  const [podcast, setPodcast] = useState("")
+
   function toggle() {
     setShowMe(!showMe);
   }
+
+  const clickHandler = () => {
+    // console.log(JSON.stringify(res.data))
+    setSubreddit("Julie")
+    setPodcast("hiJuJu")
+  }
+
+
+
+
+  // const handleFetch = (data, error) => {
+  //   if (error) console.log(error)
+  //   else if (!data) console.log("Loading...")
+  //   else setAudioSource(data)
+  // }
+
+  // const handleFetch = (subreddit, podcast) => {
+  //   firestore.getPodcast(subreddit, podcast)
+  // }
+
   return (
     <Layout>
       <div className="container">
@@ -18,11 +45,11 @@ const Index = () => {
         </div>
 
         <div className="button-container">
-          <button type="button" className="btn btn-primary" onClick={() => { setAudioSource("http://www.poweitsao.com/podcasts/podcast.mp3") }}>Get it</button>
+          <button type="button" className="btn btn-primary" onClick={() => { clickHandler() }}>Get it</button>
         </div>
         {/* <img className="image" src="http://www.poweitsao.com/images/kenobi.jpg"></img> */}
         <div className="musicPlayer">
-          <MusicPlayer audioSource={audioSource} />
+          <MusicPlayer subreddit={subreddit} podcast={podcast} />
         </div>
         <style>{`
       .container{
