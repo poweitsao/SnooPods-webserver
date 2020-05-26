@@ -15,8 +15,12 @@ const Index = () => {
     let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
     if (response.status == 200) {
       let res = await response.json()
-      console.log(res)
-      Router.push('/signedIn')
+      if (res.registered) {
+        Router.push('/home')
+      }
+      else if (!res.registered) {
+        Router.push('/register')
+      }
     }
     else {
       console.log("Login Failed")

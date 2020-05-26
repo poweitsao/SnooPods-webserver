@@ -4,28 +4,21 @@ import MusicPlayer from "../components/musicPlayer"
 
 
 
-const signedIn = () => {
+const register = () => {
   // const [showMe, setShowMe] = useState(false);
-  const [subreddit, setSubreddit] = useState("")
-  const [podcast, setPodcast] = useState("")
+  // const [subreddit, setSubreddit] = useState("")
+  // const [podcast, setPodcast] = useState("")
 
-  const clickHandler = () => {
-    // console.log(JSON.stringify(res.data))
-    setSubreddit("Julie")
-    setPodcast("hiJuJu")
-  }
   return (
     <Layout>
       <div className="container">
         <div className="heading">
-          <h1> Signed In </h1>
-          <button type="button" className="btn btn-primary" onClick={() => { clickHandler() }}>Play a podcast</button>
+          <h1> Register here, new user! </h1>
+          {/* <button type="button" className="btn btn-primary" onClick={() => { clickHandler() }}>Play a podcast</button> */}
 
         </div>
 
-        <div className="musicPlayer">
-          <MusicPlayer subreddit={subreddit} podcast={podcast} />
-        </div>
+
         <style>{`
       .container{
         margin-top:50px;
@@ -57,4 +50,4 @@ const signedIn = () => {
   )
 }
 
-export default signedIn
+export default register
