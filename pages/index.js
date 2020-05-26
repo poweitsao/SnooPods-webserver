@@ -48,6 +48,7 @@ const Index = () => {
 
         <div className="button-container">
           <div>
+            {/* //? figure out how to make this server side rendering so that login button loads faster */}
             <GoogleLogin
               clientId={CLIENT_ID}
               buttonText="Login"

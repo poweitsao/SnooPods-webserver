@@ -1,7 +1,9 @@
 import Layout from "../components/layout"
 import React, { useState } from 'react';
-import MusicPlayer from "../components/musicPlayer"
 
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import RegisterationForm from "../components/RegistrationForm"
 
 
 const register = () => {
@@ -17,7 +19,8 @@ const register = () => {
           {/* <button type="button" className="btn btn-primary" onClick={() => { clickHandler() }}>Play a podcast</button> */}
 
         </div>
-
+        {/* //! use redux to get user object from login screen */}
+        <RegisterationForm firstName={"Powei"} lastName={"Tsao"} />
 
         <style>{`
       .container{
