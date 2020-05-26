@@ -1,56 +1,58 @@
 import Layout from "../components/layout"
 import React, { useState } from 'react';
 import MusicPlayer from "../components/musicPlayer"
-
-
-
-
-
-
+// import GoogleBtn from "../components/GoogleBtn"
+import GoogleLogin from 'react-google-login';
+import Router from 'next/router';
+import { CLIENT_ID } from "../constants"
 
 const Index = () => {
-  const [showMe, setShowMe] = useState(false);
-  const [subreddit, setSubreddit] = useState("")
-  const [podcast, setPodcast] = useState("")
 
-  function toggle() {
-    setShowMe(!showMe);
+
+  async function onGoogleLoginSuccess(googleUser) {
+    var id_token = googleUser.getAuthResponse().id_token;
+
+    let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
+    if (response.status == 200) {
+      let res = await response.json()
+      console.log(res)
+      Router.push('/signedIn')
+    }
+    else {
+      console.log("Login Failed")
+    }
   }
 
-  const clickHandler = () => {
-    // console.log(JSON.stringify(res.data))
-    setSubreddit("Julie")
-    setPodcast("hiJuJu")
+
+
+
+  const onGoogleLoginFailed = (response) => {
+    console.log(response);
+    Router.push('/signInFailed')
+
   }
 
 
-
-
-  // const handleFetch = (data, error) => {
-  //   if (error) console.log(error)
-  //   else if (!data) console.log("Loading...")
-  //   else setAudioSource(data)
-  // }
-
-  // const handleFetch = (subreddit, podcast) => {
-  //   firestore.getPodcast(subreddit, podcast)
-  // }
 
   return (
     <Layout>
       <div className="container">
         <div className="heading">
-          <h1> Play the Podcast </h1>
+          <h1> Headphones for Reddit </h1>
 
         </div>
 
         <div className="button-container">
-          <button type="button" className="btn btn-primary" onClick={() => { clickHandler() }}>Get it</button>
+          <div>
+            <GoogleLogin
+              clientId={CLIENT_ID}
+              buttonText="Login"
+              onSuccess={onGoogleLoginSuccess}
+              onFailure={onGoogleLoginFailed}
+              cookiePolicy={'single_host_origin'}
+            />        </div>
         </div>
         {/* <img className="image" src="http://www.poweitsao.com/images/kenobi.jpg"></img> */}
-        <div className="musicPlayer">
-          <MusicPlayer subreddit={subreddit} podcast={podcast} />
-        </div>
         <style>{`
       .container{
         margin-top:50px;
@@ -65,15 +67,7 @@ const Index = () => {
       margin:20px;
       text-align:center;
     }
-    .image{
-      -webkit-user-select: none;
-      margin: auto;}
-      .heading{
-        text-align:center;
-      }
-      .musicPlayer{
-        text-align:center;
-      }
+
 `}</style>
       </div>
     </Layout >

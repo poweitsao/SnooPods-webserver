@@ -10,7 +10,6 @@ async function getPodcast(subreddit, podcast) {
     if (subreddit && podcast) {
         let podcastRef = db.collection("subreddits").doc(subreddit).collection('podcasts').doc(podcast + ".mp3");
         console.log("getting podcast")
-        //! change to async await.
         let doc = await podcastRef.get()
         console.log("podcastRef.get() executed")
         if (!doc.exists) {

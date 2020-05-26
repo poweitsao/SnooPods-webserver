@@ -20,7 +20,7 @@ function ShowMusicPlayer(props) {
             // <div>Data is created</div>
         );
     }
-    return (<div>No data</div>);
+    return (<div>Click the button to play a podcast!</div>);
 }
 
 class MusicPlayer extends React.Component {
