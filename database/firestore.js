@@ -25,8 +25,8 @@ async function getPodcast(subreddit, podcast) {
 }
 
 async function getUser(id_token) {
-    console.log("gettind user by token_id...")
-    console.log(id_token)
+    console.log("getting user by token_id...")
+    // console.log(id_token)
     let userRef = db.collection("users")
     let snapshot = await userRef.where('token_id', '==', id_token).get()
 

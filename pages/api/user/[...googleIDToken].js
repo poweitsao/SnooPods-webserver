@@ -12,11 +12,13 @@ export default async function handler(req, res) {
             console.log("verifying token...")
             try {
                 let verification = await verify(userID)
-                console.log(verification)
+                console.log("User verified!")
+                // console.log(verification)
                 if (verification) {
                     console.log("checking if user is registered")
                     if (await getUser(userID)) {
                         res.status(200).json({ registered: true, "verification": verification })
+
                     }
                     else {
                         res.status(200).json({ registered: false, "verification": verification })

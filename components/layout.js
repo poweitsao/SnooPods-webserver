@@ -1,4 +1,6 @@
 import Head from 'next/head';
+import { Provider } from 'react-redux';
+import store from "../redux/store"
 
 const Layout = (props) => (
     <div>
@@ -7,7 +9,9 @@ const Layout = (props) => (
             <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css" />
         </Head>
         <div>
-            {props.children}
+            <Provider store={store}>
+                {props.children}
+            </Provider>
         </div>
         <style jsx>
             {`.container{
