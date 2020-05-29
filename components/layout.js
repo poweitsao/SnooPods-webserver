@@ -6,7 +6,7 @@ const Layout = (props) => (
     <div>
         <Head>
             <title>Listen To Reddit</title>
-            <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css" />
+            <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
         </Head>
         <div>
             <Provider store={store}>

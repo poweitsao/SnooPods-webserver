@@ -1,4 +1,5 @@
-import Form from 'react-bootstrap/Form'
+import { Row, Col, Form } from 'react-bootstrap/'
+// import Col from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import React, { useState } from 'react';
 import Router from "next/router"
@@ -14,10 +15,14 @@ class RegisterationForm extends React.Component {
     }
 
     componentWillMount() {
+        console.log("store: ", store.getState())
         const userPayload = store.getState().userInfo.payload
+        const userID = store.getState().userInfo.userID
+
+        // console.log(userPayload)
         if (userPayload) {
             this.setState(
-                { firstName: userPayload.given_name, lastName: userPayload.family_name, email: userPayload.email }
+                { userID: userID, userPayload: userPayload, firstName: userPayload.given_name, lastName: userPayload.family_name, email: userPayload.email }
             )
         }
     }
@@ -34,33 +39,56 @@ class RegisterationForm extends React.Component {
         console.log(this.state)
     }
 
-    handleSubmit() {
+    async handleSubmit(email, firstName, lastName, picture_url, id_token) {
         event.preventDefault();
         console.log("form submitted")
-        Router.push("/home")
+        let user = {
+            userID: id_token,
+            firstName: firstName,
+            lastName: lastName,
+            picture_url: picture_url,
+            email: email
+        }
+        let response = await fetch("/api/user/register", {
+            method: "POST", body: JSON.stringify(user)
+        })
+        // console.log("post request response: ", response)
+        if (response.status == 201) {
+            let res = await response.json()
+            if (res.registeration_complete) {
+                Router.push("/home")
+
+            }
+        }
     }
 
     render() {
         return (
-            <Form onSubmit={this.handleSubmit}>
+
+            <Form onSubmit={() => { this.handleSubmit(this.state.email, this.state.firstName, this.state.lastName, this.state.userPayload.picture, this.state.userID) }}>
+                <Row >
+                    <Form.Group as={Col} controlId="formGridFirstName">
+                        <Form.Label>First Name</Form.Label>
+                        <Form.Control name="firstName" type="name" defaultValue={this.state.firstName} onChange={this.handleInputChange} />
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="formGridFirstName">
+                        <Form.Label>Last Name</Form.Label>
+                        <Form.Control name="lastName" type="name" defaultValue={this.state.lastName} onChange={this.handleInputChange} />
+                    </Form.Group>
+                </Row>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control name="email" type="email" placeholder={this.state.email} onChange={this.handleInputChange} />
+                    <Form.Control name="email" type="email" defaultValue={this.state.email} onChange={this.handleInputChange} />
                     <Form.Text className="text-muted">
                         We'll never share your email with anyone else.
-  </Form.Text>
-                </Form.Group>
-
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control name="password" type="password" placeholder="Password" onChange={this.handleInputChange} />
+              </Form.Text>
                 </Form.Group>
                 <Form.Group controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Check me out" />
                 </Form.Group>
                 <Button variant="primary" type="submit" >
                     Submit
-</Button>
+            </Button>
             </Form>
         )
     }

@@ -10,7 +10,8 @@ const userInfoReducer = (state = initialState, action) => {
         case "STORE_USER_INFO":
             return Object.assign({}, state, {
                 registered: action.userInfo.registered,
-                payload: action.userInfo.verification.payload
+                payload: action.userInfo.verification.payload,
+                userID: action.userInfo.userID
             })
         default:
             return state

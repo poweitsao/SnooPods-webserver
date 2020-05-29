@@ -22,6 +22,8 @@ const Index = () => {
         Router.push('/home')
       }
       else if (!res.registered) {
+        // res.userID = id_token
+        console.log("response in index.js", res)
         store.dispatch(storeUserInfo(res))
         // console.log("store: ", store.getState())
         console.log("Taking user to registeration page ")
