@@ -5,9 +5,11 @@ import MusicPlayer from "../components/musicPlayer"
 import GoogleLogin from 'react-google-login';
 import Router from 'next/router';
 import { CLIENT_ID } from "../constants"
+import { storeUserInfo } from "../redux/actions/index"
+
+import store from "../redux/store"
 
 const Index = () => {
-
 
   async function onGoogleLoginSuccess(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
@@ -16,9 +18,15 @@ const Index = () => {
     if (response.status == 200) {
       let res = await response.json()
       if (res.registered) {
+        console.log("Taking user to their homepage")
         Router.push('/home')
       }
       else if (!res.registered) {
+        // res.userID = id_token
+        console.log("response in index.js", res)
+        store.dispatch(storeUserInfo(res))
+        // console.log("store: ", store.getState())
+        console.log("Taking user to registeration page ")
         Router.push('/register')
       }
     }
@@ -26,8 +34,6 @@ const Index = () => {
       console.log("Login Failed")
     }
   }
-
-
 
 
   const onGoogleLoginFailed = (response) => {
@@ -48,6 +54,7 @@ const Index = () => {
 
         <div className="button-container">
           <div>
+            {/* //? figure out how to make this server side rendering so that login button loads faster */}
             <GoogleLogin
               clientId={CLIENT_ID}
               buttonText="Login"

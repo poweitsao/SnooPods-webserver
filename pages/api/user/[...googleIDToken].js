@@ -1,6 +1,7 @@
 import verify from "../../../database/verifyGoogleID"
 import { getUser } from "../../../database/firestore"
 
+
 export default async function handler(req, res) {
     // return new Promise(resolve => {
     console.log("Google User Verifier")
@@ -12,14 +13,16 @@ export default async function handler(req, res) {
             console.log("verifying token...")
             try {
                 let verification = await verify(userID)
-                console.log(verification)
+                console.log("User verified!")
+                // console.log(verification)
                 if (verification) {
                     console.log("checking if user is registered")
                     if (await getUser(userID)) {
-                        res.status(200).json({ registered: true, "verification": verification })
+                        res.status(200).json({ registered: true, userID: userID, "verification": verification })
+
                     }
                     else {
-                        res.status(200).json({ registered: false, "verification": verification })
+                        res.status(200).json({ registered: false, userID: userID, "verification": verification })
                     }
 
                 }

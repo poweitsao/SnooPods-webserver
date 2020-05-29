@@ -25,10 +25,10 @@ async function getPodcast(subreddit, podcast) {
 }
 
 async function getUser(id_token) {
-    console.log("gettind user by token_id...")
-    console.log(id_token)
+    console.log("getting user by token_id...")
+    // console.log(id_token)
     let userRef = db.collection("users")
-    let snapshot = await userRef.where('token_id', '==', id_token).get()
+    let snapshot = await userRef.doc(id_token).get()
 
     try {
         if (snapshot.empty) {
@@ -49,9 +49,26 @@ async function getUser(id_token) {
 
 }
 
-module.exports = {
-    getPodcast,
-    getUser
+async function createUser(user) {
+    let userRef = db.collection("users").doc(user.userID)
+    console.log("creating user!")
+    try {
+        await userRef.set({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            picture_url: user.picture_url
+        })
+        return true
+    } catch (e) {
+        console.log(e)
+        return false
+    }
+
 }
 
-// getPodcast("Julie", "hiJuJu")
+module.exports = {
+    getPodcast,
+    getUser,
+    createUser
+}
