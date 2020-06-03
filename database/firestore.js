@@ -24,14 +24,14 @@ async function getPodcast(subreddit, podcast) {
     }
 }
 
-async function getUser(id_token) {
-    console.log("getting user by token_id...")
-    // console.log(id_token)
+async function getUser(email) {
+    console.log("getting user by email...")
+    // console.log(email)
     let userRef = db.collection("users")
-    let snapshot = await userRef.doc(id_token).get()
-
+    let snapshot = await userRef.doc(email).get()
+    console.log("snapshot", snapshot)
     try {
-        if (snapshot.empty) {
+        if (!snapshot.exists) {
             console.log('User not found');
             return false;
         }
@@ -50,7 +50,7 @@ async function getUser(id_token) {
 }
 
 async function createUser(user) {
-    let userRef = db.collection("users").doc(user.userID)
+    let userRef = db.collection("users").doc(user.email)
     console.log("creating user!")
     try {
         await userRef.set({
@@ -59,16 +59,56 @@ async function createUser(user) {
             email: user.email,
             picture_url: user.picture_url
         })
-        return true
+        let sessionID = await createSession(user.email)
+        return {
+            sessionID: sessionID,
+            email: user.email
+        }
+
     } catch (e) {
         console.log(e)
-        return false
+        return null
     }
 
 }
 
+const generateID = () => {
+    return '_' + Math.random().toString(36).substr(2, 9);
+};
+
+async function createSession(email) {
+    const sessionID = generateID()
+    let userRef = db.collection("users").doc(email)
+    console.log("creating session")
+    try {
+        await userRef.set({
+            sessionID: sessionID
+        }, { merge: true })
+        return sessionID
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+
+}
+
+async function checkValidSession(sessionID, email) {
+    let userRef = db.collection("users").doc(email)
+    let user = await userRef.get()
+    let data = user.data()
+    if (sessionID === data.sessionID) {
+        return true
+    }
+    else {
+        return false
+    }
+}
+
+
 module.exports = {
     getPodcast,
     getUser,
-    createUser
+    createUser,
+    createSession,
+    checkValidSession
 }
