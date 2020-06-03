@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button'
 import React, { useState } from 'react';
 import Router from "next/router"
 import store from "../redux/store"
+import Cookie from "js-cookie"
+
 
 
 class RegisterationForm extends React.Component {
@@ -39,11 +41,10 @@ class RegisterationForm extends React.Component {
         console.log(this.state)
     }
 
-    async handleSubmit(email, firstName, lastName, picture_url, id_token) {
+    async handleSubmit(email, firstName, lastName, picture_url) {
         event.preventDefault();
         console.log("form submitted")
         let user = {
-            userID: id_token,
             firstName: firstName,
             lastName: lastName,
             picture_url: picture_url,
@@ -56,6 +57,8 @@ class RegisterationForm extends React.Component {
         if (response.status == 201) {
             let res = await response.json()
             if (res.registeration_complete) {
+                Cookie.set("session_id", res.session_id)
+                Cookie.set("email", res.email)
                 Router.push("/home")
 
             }
@@ -65,7 +68,7 @@ class RegisterationForm extends React.Component {
     render() {
         return (
 
-            <Form onSubmit={() => { this.handleSubmit(this.state.email, this.state.firstName, this.state.lastName, this.state.userPayload.picture, this.state.userID) }}>
+            <Form onSubmit={() => { this.handleSubmit(this.state.email, this.state.firstName, this.state.lastName, this.state.userPayload.picture) }}>
                 <Row >
                     <Form.Group as={Col} controlId="formGridFirstName">
                         <Form.Label>First Name</Form.Label>

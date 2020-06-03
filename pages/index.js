@@ -1,15 +1,49 @@
 import Layout from "../components/layout"
-import React, { useState } from 'react';
-import MusicPlayer from "../components/musicPlayer"
-// import GoogleBtn from "../components/GoogleBtn"
+import React, { useState, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import Router from 'next/router';
 import { CLIENT_ID } from "../constants"
 import { storeUserInfo } from "../redux/actions/index"
-
 import store from "../redux/store"
+import Cookie from "js-cookie"
+import parseCookies from "../parseCookies"
+import fetch from "isomorphic-unfetch"
+import useSwr from 'swr'
 
-const Index = () => {
+
+const Index = ({ userSession }) => {
+
+  // const [isLogged, setIsLogged] = useState(false)
+
+  // useEffect(() => {
+  //   async function checkSession() {
+  //     let res = await fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" })
+  //     if (res.status === 200) {
+  //       let response = res.json()
+  //       if (response.validSession) {
+  //         Router.push("/home")
+  //       } else { Router.push("/") }
+  //     }
+  //   }
+  //   checkSession()
+  // }, []);
+
+  useEffect(() => {
+    if (userSession.session_id && userSession.email) {
+      console.log("UserSession: ", userSession)
+      fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" }).then((res) => {
+        if (res.status === 200) {
+          res.json().then((object) => {
+            if (object.validSession) {
+              Router.push("/home")
+            }
+          })
+        }
+      })
+    }
+
+  }, []);
+
 
   async function onGoogleLoginSuccess(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
@@ -18,6 +52,10 @@ const Index = () => {
     if (response.status == 200) {
       let res = await response.json()
       if (res.registered) {
+        //store session_id
+        Cookie.set("session_id", res.session_id)
+        Cookie.set("email", res.verification.payload.email)
+
         console.log("Taking user to their homepage")
         Router.push('/home')
       }
@@ -35,14 +73,10 @@ const Index = () => {
     }
   }
 
-
   const onGoogleLoginFailed = (response) => {
     console.log(response);
     Router.push('/signInFailed')
-
   }
-
-
 
   return (
     <Layout>
@@ -84,6 +118,27 @@ const Index = () => {
     </Layout >
 
   )
+}
+// export async function getStaticProps({ req }) {
+//   const cookies = parseCookies(req)
+//   const res = await fetch("/api/user/validateSession" + cookies.session_id + "/" + cookies.email, { method: "GET" })
+//   console.log(res)
+
+// }
+
+Index.getInitialProps = ({ req }) => {
+  const cookies = parseCookies(req)
+  console.log("getInitialProps")
+  if (cookies.session_id && cookies.email) {
+    console.log("session_id: ", cookies.session_id)
+    console.log("email: ", cookies.email)
+  }
+  return {
+    userSession: {
+      "session_id": cookies.session_id,
+      "email": cookies.email
+    }
+  };
 }
 
 export default Index

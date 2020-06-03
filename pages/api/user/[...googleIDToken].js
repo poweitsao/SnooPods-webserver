@@ -1,5 +1,5 @@
 import verify from "../../../database/verifyGoogleID"
-import { getUser } from "../../../database/firestore"
+import { getUser, createSession } from "../../../database/firestore"
 
 
 export default async function handler(req, res) {
@@ -17,9 +17,13 @@ export default async function handler(req, res) {
                 // console.log(verification)
                 if (verification) {
                     console.log("checking if user is registered")
-                    if (await getUser(userID)) {
-                        res.status(200).json({ registered: true, userID: userID, "verification": verification })
-
+                    if (await getUser(verification.payload.email)) {
+                        //ccheck if cookie's session ID is valid
+                        let sessionID = await createSession(verification.payload.email)
+                        if (sessionID)
+                            res.status(200).json({ registered: true, userID: userID, "verification": verification, "session_id": sessionID })
+                        else
+                            res.status(500).end()
                     }
                     else {
                         res.status(200).json({ registered: false, userID: userID, "verification": verification })
