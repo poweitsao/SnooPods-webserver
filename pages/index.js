@@ -9,6 +9,10 @@ import Cookie from "js-cookie"
 import parseCookies from "../parseCookies"
 import fetch from "isomorphic-unfetch"
 import useSwr from 'swr'
+// npm install --save-dev @iconify/react @iconify/icons-fa-solid
+import { Icon, InlineIcon } from '@iconify/react';
+import headphonesAlt from '@iconify/icons-fa-solid/headphones-alt';
+
 
 
 const Index = ({ userSession }) => {
@@ -82,10 +86,16 @@ const Index = ({ userSession }) => {
     <Layout>
       <div className="container">
         <div className="heading">
+          <div className="logo">
+            <Icon icon={headphonesAlt} width={100} height={100} />
+          </div>
           <h1> Headphones for Reddit </h1>
 
         </div>
 
+        <div className="desc">
+          <p>Podcast summaries for your favorite subreddits.</p>
+        </div>
         <div className="button-container">
           <div>
             {/* //? figure out how to make this server side rendering so that login button loads faster */}
@@ -111,6 +121,16 @@ const Index = ({ userSession }) => {
     .button-container{
       margin:20px;
       text-align:center;
+    }
+    .heading{
+      
+    }
+    .logo{
+      text-align:center;
+      margin-bottom: 15px;
+    }
+    .desc{
+      text-align: center;
     }
 
 `}</style>

@@ -6,6 +6,8 @@ import Router from "next/router"
 import { GoogleLogout } from 'react-google-login';
 import { CLIENT_ID } from "../constants"
 import Cookie from "js-cookie"
+import store from "../redux/store"
+
 
 
 
@@ -30,6 +32,7 @@ const home = ({ userSession }) => {
   // }, []);
 
   useEffect(() => {
+    console.log(store.getState())
     if (userSession.session_id && userSession.email) {
       fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" }).then((res) => {
         if (res.status === 200) {
@@ -87,7 +90,6 @@ const home = ({ userSession }) => {
           >
           </GoogleLogout>
         </div>
-        <button type="button" className="btn btn-secondary" onClick={() => { setCookies() }}>Wipe Cookies</button>
 
         <style>{`
       .container{
