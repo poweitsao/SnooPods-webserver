@@ -1,5 +1,5 @@
 const { OAuth2Client } = require('google-auth-library');
-import { CLIENT_ID } from "../constants"
+import { CLIENT_ID } from "../lib/constants"
 
 
 async function verify(token) {

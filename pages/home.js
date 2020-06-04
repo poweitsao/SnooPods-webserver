@@ -1,48 +1,29 @@
 import Layout from "../components/layout"
 import React, { useState, useEffect } from 'react';
 import MusicPlayer from "../components/musicPlayer"
-import parseCookies from "../parseCookies"
+import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
 import { GoogleLogout } from 'react-google-login';
-import { CLIENT_ID } from "../constants"
+import { CLIENT_ID } from "../lib/constants"
 import Cookie from "js-cookie"
+import store from "../redux/store"
+import validateSession from "../lib/validateUserSessionOnPage"
+
+
 
 
 
 
 const home = ({ userSession }) => {
-  // const [showMe, setShowMe] = useState(false);
+
   const [subreddit, setSubreddit] = useState("")
   const [podcast, setPodcast] = useState("")
 
-  // useEffect(() => {
-  //   async function checkSession() {
-  //     let res = await fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" })
-  //     if (res.status === 200) {
-  //       let response = res.json()
-  //       if (response.validSession) {
-  //         Router.push("/home")
-  //       } else { Router.push("/") }
-  //     }
-  //   }
-
-  //   checkSession()
-  // }, []);
-
   useEffect(() => {
     if (userSession.session_id && userSession.email) {
-      fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" }).then((res) => {
-        if (res.status === 200) {
-          res.json().then((object) => {
-            if (object.validSession) {
-              Router.push("/home")
-            }
-            else {
-              Router.push("/")
-            }
-          })
-        }
-      })
+      console.log("UserSession: ", userSession)
+
+      validateSession(userSession.session_id, userSession.email);
     }
 
   }, []);
@@ -55,14 +36,7 @@ const home = ({ userSession }) => {
 
   }
 
-  // const setCookies = () => {
-  //   Cookie.set("session_id", "none")
-  //   Cookie.set("email", "none")
-  //   Router.push("/")
-  // }
-
   const clickHandler = () => {
-    // console.log(JSON.stringify(res.data))
     setSubreddit("Julie")
     setPodcast("hiJuJu")
   }
@@ -87,7 +61,6 @@ const home = ({ userSession }) => {
           >
           </GoogleLogout>
         </div>
-        <button type="button" className="btn btn-secondary" onClick={() => { setCookies() }}>Wipe Cookies</button>
 
         <style>{`
       .container{

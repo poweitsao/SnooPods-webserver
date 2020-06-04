@@ -2,44 +2,24 @@ import Layout from "../components/layout"
 import React, { useState, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import Router from 'next/router';
-import { CLIENT_ID } from "../constants"
+import { CLIENT_ID } from "../lib/constants"
 import { storeUserInfo } from "../redux/actions/index"
 import store from "../redux/store"
 import Cookie from "js-cookie"
-import parseCookies from "../parseCookies"
+import parseCookies from "../lib/parseCookies"
 import fetch from "isomorphic-unfetch"
-import useSwr from 'swr'
+import { Icon, InlineIcon } from '@iconify/react';
+import headphonesAlt from '@iconify/icons-fa-solid/headphones-alt';
+import validateSession from "../lib/validateUserSessionOnPage"
 
 
 const Index = ({ userSession }) => {
 
-  // const [isLogged, setIsLogged] = useState(false)
-
-  // useEffect(() => {
-  //   async function checkSession() {
-  //     let res = await fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" })
-  //     if (res.status === 200) {
-  //       let response = res.json()
-  //       if (response.validSession) {
-  //         Router.push("/home")
-  //       } else { Router.push("/") }
-  //     }
-  //   }
-  //   checkSession()
-  // }, []);
-
   useEffect(() => {
     if (userSession.session_id && userSession.email) {
       console.log("UserSession: ", userSession)
-      fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" }).then((res) => {
-        if (res.status === 200) {
-          res.json().then((object) => {
-            if (object.validSession) {
-              Router.push("/home")
-            }
-          })
-        }
-      })
+
+      validateSession(userSession.session_id, userSession.email);
     }
 
   }, []);
@@ -82,10 +62,16 @@ const Index = ({ userSession }) => {
     <Layout>
       <div className="container">
         <div className="heading">
+          <div className="logo">
+            <Icon icon={headphonesAlt} width={100} height={100} />
+          </div>
           <h1> Headphones for Reddit </h1>
 
         </div>
 
+        <div className="desc">
+          <p>Podcast summaries for your favorite subreddits.</p>
+        </div>
         <div className="button-container">
           <div>
             {/* //? figure out how to make this server side rendering so that login button loads faster */}
@@ -111,6 +97,16 @@ const Index = ({ userSession }) => {
     .button-container{
       margin:20px;
       text-align:center;
+    }
+    .heading{
+      
+    }
+    .logo{
+      text-align:center;
+      margin-bottom: 15px;
+    }
+    .desc{
+      text-align: center;
     }
 
 `}</style>
