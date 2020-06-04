@@ -2,48 +2,24 @@ import Layout from "../components/layout"
 import React, { useState, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import Router from 'next/router';
-import { CLIENT_ID } from "../constants"
+import { CLIENT_ID } from "../lib/constants"
 import { storeUserInfo } from "../redux/actions/index"
 import store from "../redux/store"
 import Cookie from "js-cookie"
-import parseCookies from "../parseCookies"
+import parseCookies from "../lib/parseCookies"
 import fetch from "isomorphic-unfetch"
-import useSwr from 'swr'
-// npm install --save-dev @iconify/react @iconify/icons-fa-solid
 import { Icon, InlineIcon } from '@iconify/react';
 import headphonesAlt from '@iconify/icons-fa-solid/headphones-alt';
-
+import validateSession from "../lib/validateUserSessionOnPage"
 
 
 const Index = ({ userSession }) => {
 
-  // const [isLogged, setIsLogged] = useState(false)
-
-  // useEffect(() => {
-  //   async function checkSession() {
-  //     let res = await fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" })
-  //     if (res.status === 200) {
-  //       let response = res.json()
-  //       if (response.validSession) {
-  //         Router.push("/home")
-  //       } else { Router.push("/") }
-  //     }
-  //   }
-  //   checkSession()
-  // }, []);
-
   useEffect(() => {
     if (userSession.session_id && userSession.email) {
       console.log("UserSession: ", userSession)
-      fetch("/api/user/validateSession/" + userSession.session_id + "/" + userSession.email, { method: "GET" }).then((res) => {
-        if (res.status === 200) {
-          res.json().then((object) => {
-            if (object.validSession) {
-              Router.push("/home")
-            }
-          })
-        }
-      })
+
+      validateSession(userSession.session_id, userSession.email);
     }
 
   }, []);
