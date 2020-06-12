@@ -3,19 +3,20 @@ import { Provider } from 'react-redux';
 import store from "../redux/store"
 
 const Layout = (props) => (
-    <div>
+    <div className="container">
         <Head>
             <title>Listen To Reddit</title>
             <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
         </Head>
-        <div>
+        <div >
             <Provider store={store}>
                 {props.children}
             </Provider>
         </div>
         <style jsx>
             {`.container{
-                
+                display:flex;
+                justify-content:center;
         }`}
         </style>
     </div>

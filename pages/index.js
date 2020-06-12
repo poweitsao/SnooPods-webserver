@@ -124,11 +124,7 @@ const Index = ({ userSession }) => {
 
 Index.getInitialProps = ({ req }) => {
   const cookies = parseCookies(req)
-  console.log("getInitialProps")
-  if (cookies.session_id && cookies.email) {
-    console.log("session_id: ", cookies.session_id)
-    console.log("email: ", cookies.email)
-  }
+
   return {
     userSession: {
       "session_id": cookies.session_id,

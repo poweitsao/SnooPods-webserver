@@ -97,18 +97,25 @@ async function checkValidSession(sessionID, email) {
     let user = await userRef.get()
     let data = user.data()
     if (sessionID === data.sessionID) {
-        return true
+        data.validSession = true;
+        return data
     }
     else {
-        return false
+        return { validSession: false }
     }
 }
 
+async function getFeaturedSubreddits() {
+    let docRef = db.collection("featured_subreddits")
+    let featured = await docRef.get()
+    return featured;
+}
 
 module.exports = {
     getPodcast,
     getUser,
     createUser,
     createSession,
-    checkValidSession
+    checkValidSession,
+    getFeaturedSubreddits
 }
