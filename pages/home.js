@@ -1,6 +1,9 @@
 import Layout from "../components/layout"
-import React, { useState, useEffect } from 'react';
+import CustomNavbar from "../components/CustomNavbar"
 import MusicPlayer from "../components/musicPlayer"
+import PlayableTile from "../components/PlayableTile"
+
+import React, { useState, useEffect } from 'react';
 import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
 import { GoogleLogout } from 'react-google-login';
@@ -9,7 +12,7 @@ import Cookie from "js-cookie"
 import store from "../redux/store"
 import validateSession from "../lib/validateUserSessionOnPage"
 import { Grid, Card, CardActions, CardContent, Typography, Button } from '@material-ui/core';
-import CustomNavbar from "../components/CustomNavbar"
+
 // import { Nav, NavDropdown, Form, FormControl } from "react-bootstrap"
 
 function isEmpty(obj) {
@@ -181,25 +184,34 @@ const home = ({ userSession }) => {
 
           <button type="button" className="btn btn-primary" onClick={() => { clickHandler() }}>Play a podcast</button>
 
+          <div style={{ padding: "10px", display: "flex", justifyContent: "center" }}>
+            <PlayableTile />
+          </div>
+
         </div>
-        <div className="grid-container">
-          {/* {console.log("featured Subreddits: ", featuredSubreddits)} */}
-          {featuredSubreddits === {}
+
+
+        {/* <div className="grid-container"> */}
+        {/* {console.log("featured Subreddits: ", featuredSubreddits)} */}
+        {/* {featuredSubreddits === {}
             ? <div></div>
-            : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
-        </div>
+            : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />} */}
+        {/* </div> */}
 
         <div className="musicPlayer">
           <MusicPlayer subreddit={subreddit} podcast={podcast} />
         </div>
 
         <div className="button-container">
-          <GoogleLogout
+
+          {/* <GoogleLogout
             clientId={CLIENT_ID}
             buttonText="Logout"
             onLogoutSuccess={logout}
           >
-          </GoogleLogout>
+          </GoogleLogout> */}
+
+
         </div>
 
         <style>{`

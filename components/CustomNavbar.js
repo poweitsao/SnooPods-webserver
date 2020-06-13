@@ -2,7 +2,9 @@ import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Image, Dropdown } 
 import React from "react"
 import store from "../redux/store"
 import ProfilePicMenu from "../components/ProfilePicMenu"
-
+import { useGoogleLogout, GoogleLogout } from 'react-google-login';
+import { CLIENT_ID } from "../lib/constants"
+import Router from "next/router"
 
 // const Navbar = (props) => {
 
@@ -18,15 +20,26 @@ import ProfilePicMenu from "../components/ProfilePicMenu"
 // import React, { useState } from 'react';
 // import Router from "next/router"
 // import store from "../redux/store"
-// import Cookie from "js-cookie"
+import Cookie from "js-cookie"
 
+const logout = () => {
+    // console.log("Logout clicked")
+    Cookie.remove("session_id")
+    Cookie.remove("email")
+    Router.push("/")
 
+}
+const logoutFailed = () => {
+    console.log("logout failed")
+}
 
 class CustomNavbar extends React.Component {
     constructor(props) {
         super(props);
         this.state = props.user
     }
+
+
 
     render() {
         return (
@@ -64,7 +77,29 @@ class CustomNavbar extends React.Component {
 
                         <div className="profile-pic-group">
                             {/* <Button roundedCircle></Button> */}
-                            <ProfilePicMenu picture_url={this.state.picture_url} />
+                            {/* <ProfilePicMenu picture_url={this.state.picture_url} /> */}
+                            <Nav style={{ whiteSpace: "nowrap" }}>
+                                <Image src={this.state.picture_url} roundedCircle style={{ width: "40px", height: "40px" }} />
+                                <NavDropdown title={this.state.firstName} id="basic-nav-dropdown">
+                                    {/* <NavDropdown.Item onClick={(CLIENT_ID) => { useGoogleLogout({ client_id: CLIENT_ID, onLogoutSuccess: logout, onFailure: logoutFailed }) }}>Log Out</NavDropdown.Item> */}
+                                    <GoogleLogout
+                                        clientId={CLIENT_ID}
+                                        render={renderProps => (
+                                            <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
+                                            // <button onClick={logout} disabled={renderProps.disabled}>This is my custom Google button</button>
+                                        )}
+                                        buttonText="custom logout"
+                                        onLogoutSuccess={logout}
+                                        onFailure={logoutFailed}
+                                        cookiePolicy={'single_host_origin'}
+                                    />
+
+                                    <NavDropdown.Item >Something</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                                </NavDropdown>
+                            </Nav>
+
                             {/* <Dropdown title="">
                                 <Dropdown.Toggle className="profile-pic-button">
                                     <Image src={this.state.picture_url} roundedCircle fluid />
@@ -107,14 +142,11 @@ class CustomNavbar extends React.Component {
 
                 }
                 .brand{
-                    padding-left:100px;
+                    margin-left:auto;
 
                 }
                 .profile-pic-group{
-                    width:40px;
-                    height:40px;
-                    margin-right: 100px;
-                    margin-left: 100px;
+                    margin-right:auto;
                 }
                 .profile-pic-button{
                     padding: unset;

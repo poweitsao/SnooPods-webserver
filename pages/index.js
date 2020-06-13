@@ -54,8 +54,7 @@ const Index = ({ userSession }) => {
   }
 
   const onGoogleLoginFailed = (response) => {
-    console.log(response);
-    Router.push('/signInFailed')
+
   }
 
   return (
