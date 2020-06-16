@@ -1,5 +1,7 @@
 import useSwr from 'swr'
+import ReactAudioPlayer from 'react-audio-player';
 
+// simple music player: https://codesandbox.io/s/custom-audio-player-with-react-hooks-zw5ui
 
 function ShowMusicPlayer(props) {
 
@@ -16,7 +18,9 @@ function ShowMusicPlayer(props) {
         }
 
         return (
-            <audio controls={true} autoPlay={false} name="media" src={data.cloud_storage_url} type="audio/mpeg"></audio>
+            <ReactAudioPlayer src={data.cloud_storage_url} controls={true} autoPlay={false} />
+
+            // <audio controls={true} autoPlay={false} name="media" src={data.cloud_storage_url} type="audio/mpeg"></audio>
 
         );
     }

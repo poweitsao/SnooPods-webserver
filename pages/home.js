@@ -2,6 +2,7 @@ import Layout from "../components/layout"
 import CustomNavbar from "../components/CustomNavbar"
 import MusicPlayer from "../components/musicPlayer"
 import PlayableTile from "../components/PlayableTile"
+import Audio from "../components/custom-audio-player/src/Audio"
 
 import React, { useState, useEffect } from 'react';
 import parseCookies from "../lib/parseCookies"
@@ -13,6 +14,7 @@ import store from "../redux/store"
 import validateSession from "../lib/validateUserSessionOnPage"
 import { Grid, Card, CardActions, CardContent, Typography, Button } from '@material-ui/core';
 
+
 // import { Nav, NavDropdown, Form, FormControl } from "react-bootstrap"
 
 function isEmpty(obj) {
@@ -21,40 +23,78 @@ function isEmpty(obj) {
       return false;
     }
   }
-
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
-const FeaturedCard = (props) => (
+const FeaturedTile = (props) => (
+
   <div>
-    <Card className={"root"} variant="outlined">
-      <CardContent>
-        <Typography className={"title"} color="textSecondary" gutterBottom>
-          {props.category.name}
-        </Typography>
-      </CardContent>
-      {/* <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions> */}
-    </Card>
+    <div className="featured-tile-container">
+      <button className="featured-button"
+        onClick={() => { console.log("playable tile clicked", props.category.name) }}>
+
+        <div className="featured-tile">
+
+          {/* {this.state.isShown && (
+            <div className="overlay">
+              <PlayCircleFilledIcon fontSize="large"></PlayCircleFilledIcon>
+            </div>
+          )} */}
+          <div className="featured-tile-overlay">
+            <div style={{ padding: "10px" }}>{"r/" + props.category.name}</div>
+          </div>
+          <img className="featured-tile-img" src=""></img>
+        </div>
+      </button>
+
+
+    </div>
     <style>{`
-      .root{
-        minWidth: 275;
-        padding: 50px;
-        display: flex;
-        justify-content: center;
-      }
-      .title{
-        fontSize: 14;
-      },
-      .pos{
-        marginBottom: 12;
-      }`}</style>
+            .featured-tile-container{
+                width:170px;
+                height:170px;
+
+                display:flex;
+                justify-content:center;
+                border: 2px solid black;
+                border-radius: 10px;
+
+            }
+            .featured-button{
+              padding:unset;
+              width: 100%;
+              border: none;
+              text-align: center;
+              text-decoration: none;
+              transition-duration: 0.4s;
+              cursor: pointer;
+              background-color: Transparent;
+              background-repeat:no-repeat;
+              overflow: hidden;
+              outline:none;
+
+            }
+            .featured-tile-img{
+                max-width:100%;
+                max-height:100%;
+                opacity:1;
+            }
+            .featured-tile{
+                display:flex;
+                justify-content:center;
+            }
+            .featured-tile-overlay{
+                position: absolute;
+                align-self:center;
+                color:black;
+                word-break: break-all;
+                padding: 10px;
+            }
+      `}</style>
   </div>
 )
 
 const FeaturedGridMenu = (props) => (
-  // console.log(props)
 
   <div >
     <Grid container spacing={3} justify={"center"}>
@@ -64,36 +104,36 @@ const FeaturedGridMenu = (props) => (
       <div className={"card-container"}>
         {isEmpty(props.featuredSubreddits)
           ? <div></div>
-          : <FeaturedCard category={props.featuredSubreddits[props.featuredSubreddits["_keys"][0]]} />}
+          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][0]]} />}
       </div>
       <div className={"card-container"}>
         {isEmpty(props.featuredSubreddits)
           ? <div></div>
-          : <FeaturedCard category={props.featuredSubreddits[props.featuredSubreddits["_keys"][1]]} />}
-      </div>
-
-      <div className={"card-container"}>
-        {isEmpty(props.featuredSubreddits)
-          ? <div></div>
-          : <FeaturedCard category={props.featuredSubreddits[props.featuredSubreddits["_keys"][2]]} />}
+          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][1]]} />}
       </div>
 
       <div className={"card-container"}>
         {isEmpty(props.featuredSubreddits)
           ? <div></div>
-          : <FeaturedCard category={props.featuredSubreddits[props.featuredSubreddits["_keys"][3]]} />}
+          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][2]]} />}
       </div>
 
       <div className={"card-container"}>
         {isEmpty(props.featuredSubreddits)
           ? <div></div>
-          : <FeaturedCard category={props.featuredSubreddits[props.featuredSubreddits["_keys"][4]]} />}
+          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][3]]} />}
       </div>
 
       <div className={"card-container"}>
         {isEmpty(props.featuredSubreddits)
           ? <div></div>
-          : <FeaturedCard category={props.featuredSubreddits[props.featuredSubreddits["_keys"][5]]} />}
+          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][4]]} />}
+      </div>
+
+      <div className={"card-container"}>
+        {isEmpty(props.featuredSubreddits)
+          ? <div></div>
+          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][5]]} />}
       </div>
 
     </Grid>  <style>{`
@@ -179,24 +219,20 @@ const home = ({ userSession }) => {
       <div className="container">
 
         <div className="heading">
-          <h1> Signed In </h1>
-
-
-          <button type="button" className="btn btn-primary" onClick={() => { clickHandler() }}>Play a podcast</button>
-
-          <div style={{ padding: "10px", display: "flex", justifyContent: "center" }}>
-            <PlayableTile />
-          </div>
-
+          <h1> Featured Subreddits </h1>
+          <button type="button" className="btn btn-primary"
+            onClick={() => { clickHandler() }}>Play a podcast</button>
+          {/* <div style={{ padding: "10px", display: "flex", justifyContent: "center" }}>
+            <PlayableTile /></div> */}
         </div>
 
 
-        {/* <div className="grid-container"> */}
-        {/* {console.log("featured Subreddits: ", featuredSubreddits)} */}
-        {/* {featuredSubreddits === {}
+        <div className="grid-container">
+          {/* {console.log("featured Subreddits: ", featuredSubreddits)} */}
+          {featuredSubreddits === {}
             ? <div></div>
-            : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />} */}
-        {/* </div> */}
+            : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
+        </div>
 
         <div className="musicPlayer">
           <MusicPlayer subreddit={subreddit} podcast={podcast} />
@@ -215,6 +251,9 @@ const home = ({ userSession }) => {
         </div>
 
         <style>{`
+        .heading{
+          text-align:center;
+        }
       .container{
         margin-top:50px;
         
@@ -244,6 +283,9 @@ const home = ({ userSession }) => {
         display: flex;
         justify-content:center;
         align-self:center;
+        margin-right: 50px;
+        margin-left:50px;
+        max-width: 690px;
       }
       .navbar{
         display:flex;
@@ -251,6 +293,9 @@ const home = ({ userSession }) => {
         align-items: stretch;
       }
 `}</style>
+      </div>
+      <div>
+        <Audio />
       </div>
     </Layout >
 

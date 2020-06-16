@@ -59,7 +59,7 @@ class CustomNavbar extends React.Component {
                                 <Nav.Link onClick={() => { console.log("click") }}>Home</Nav.Link>
                             </div>
                             <div className="center-button">
-                                <Nav.Link href="#link">Link</Nav.Link>
+                                <Nav.Link href="#link">Browse</Nav.Link>
                             </div>
                             <div className="center-button">
                                 <NavDropdown title="Dropdown" id="basic-nav-dropdown">
@@ -143,6 +143,7 @@ class CustomNavbar extends React.Component {
                 }
                 .brand{
                     margin-left:auto;
+                    margin-right:unset;
 
                 }
                 .profile-pic-group{

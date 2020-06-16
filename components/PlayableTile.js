@@ -11,32 +11,33 @@ class PlayableTile extends React.Component {
 
 
     render() {
-        return (<div>
-            <div className="tile-container">
-                <button className="button button1"
+        return (
+            <div>
+                <div className="tile-container">
+                    <button className="button button1"
 
-                    onClick={() => { console.log("playable tile clicked") }}
-                    onMouseEnter={() => this.setState((state) => {
-                        return { isShown: !state.isShown };
-                    })}
-                    onMouseLeave={() => this.setState((state) => {
-                        return { isShown: !state.isShown };
-                    })}>
+                        onClick={() => { console.log("playable tile clicked") }}
+                        onMouseEnter={() => this.setState((state) => {
+                            return { isShown: !state.isShown };
+                        })}
+                        onMouseLeave={() => this.setState((state) => {
+                            return { isShown: !state.isShown };
+                        })}>
 
-                    <div className="tile">
+                        <div className="tile">
 
-                        {this.state.isShown && (
-                            <div className="overlay">
-                                <PlayCircleFilledIcon fontSize="large"></PlayCircleFilledIcon>
-                            </div>
-                        )}
-                        <img className="img" src="https://i1.sndcdn.com/artworks-7nmc0L048KDmtv7Q-aSOK7A-t200x200.jpg"></img>
-                    </div>
-                </button>
+                            {this.state.isShown && (
+                                <div className="overlay">
+                                    <PlayCircleFilledIcon fontSize="large"></PlayCircleFilledIcon>
+                                </div>
+                            )}
+                            <img className="img" src="https://i1.sndcdn.com/artworks-7nmc0L048KDmtv7Q-aSOK7A-t200x200.jpg"></img>
+                        </div>
+                    </button>
 
 
-            </div>
-            <style>{`
+                </div>
+                <style>{`
                     .tile-container{
                         width:100px;
                         height:100px;
@@ -71,7 +72,7 @@ class PlayableTile extends React.Component {
                     }
 
                 `}</style>
-        </div>
+            </div>
 
 
         )
