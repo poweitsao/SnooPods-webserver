@@ -13,6 +13,7 @@ import Cookie from "js-cookie"
 import store from "../redux/store"
 import validateSession from "../lib/validateUserSessionOnPage"
 import { Grid, Card, CardActions, CardContent, Typography, Button } from '@material-ui/core';
+import AudioPlayerBar from "../components/AudioPlayerBar"
 
 
 // import { Nav, NavDropdown, Form, FormControl } from "react-bootstrap"
@@ -239,15 +240,6 @@ const home = ({ userSession }) => {
         </div>
 
         <div className="button-container">
-
-          {/* <GoogleLogout
-            clientId={CLIENT_ID}
-            buttonText="Logout"
-            onLogoutSuccess={logout}
-          >
-          </GoogleLogout> */}
-
-
         </div>
 
         <style>{`
@@ -295,7 +287,8 @@ const home = ({ userSession }) => {
 `}</style>
       </div>
       <div>
-        <Audio />
+        {/* <Audio /> */}
+        <AudioPlayerBar songName="" songArtist="" audioSource="" album_cover="" />
       </div>
     </Layout >
 

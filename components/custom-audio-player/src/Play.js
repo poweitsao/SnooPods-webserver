@@ -15,10 +15,6 @@ export default function Play(props) {
         width: 100%;
         background-color: transparent;
         border: none;
-        svg {
-          font-size: 4em;
-          color: black;
-        }
       }`}
       </style>
     </div>

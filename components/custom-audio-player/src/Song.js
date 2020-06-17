@@ -13,14 +13,13 @@ function Song(props) {
         {`
       .song {
         user-select: none;
-        margin: 0 20px;
       }
       .song__title {
         text-align: left;
         margin: 0;
         color: black;
         font-weight: normal;
-        font-size: 12;
+        font-size: 15px;
   
         
       }
@@ -29,7 +28,7 @@ function Song(props) {
         margin: 0;
         color: black;
         font-weight: normal;
-        font-size: 12;
+        font-size: 12px;
       }
 
       `}
