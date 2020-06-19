@@ -3,21 +3,22 @@ import Song from "./Song";
 import Play from "./Play";
 import Pause from "./Pause";
 import Bar from "./Bar";
-
+import { useState, useEffect } from "react"
 import useAudioPlayer from './useAudioPlayer';
 
-function Audio() {
-  const { curTime, duration, playing, setPlaying, setClickedTime } = useAudioPlayer();
 
+function AudioPlayer(props) {
+  const { curTime, duration, playing, setPlaying, setClickedTime } = useAudioPlayer();
+  const source = props.src
   return (
     <div>
       <div className="player">
         <audio id="audio">
-          <source src="https://storage.cloud.google.com/listen-to-reddit-test/podcasts/indianVoice.mp3" />
+          <source src={source} />
         Your browser does not support the <code>audio</code> element.
       </audio>
         <div className="song-info">
-          <Song songName="Instant Crush" songArtist="Daft Punk ft. Julian Casablancas" />
+          <Song songName={source} songArtist="Daft Punk ft. Julian Casablancas" />
         </div>
         <div className="controls">
           {playing ?
@@ -29,7 +30,7 @@ function Audio() {
           <Bar curTime={curTime} duration={duration} onTimeUpdate={(time) => setClickedTime(time)} />
         </div>
       </div>
-      <style>
+      <style >
         {`.player {
           display:flex;
           justify-content:center;
@@ -56,6 +57,30 @@ function Audio() {
 
     </div>
   );
+}
+
+
+function Audio(props) {
+  const [source, setSource] = useState("")
+  const [reload, setReload] = useState(false)
+  useEffect(() => {
+    if (props.src !== source) {
+      setSource(props.src)
+      setReload(true)
+    }
+    if (props.src === source && reload) {
+      setReload(false)
+    }
+  })
+
+  return (
+    <div>
+      {reload
+        ? <div></div>
+        : <AudioPlayer src={props.src} />
+      }
+    </div>
+  )
 }
 
 export default Audio;

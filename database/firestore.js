@@ -22,6 +22,7 @@ async function getPodcast(subreddit, podcast) {
 
 
     }
+    return
 }
 
 async function getUser(email) {

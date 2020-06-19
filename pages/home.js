@@ -9,12 +9,12 @@ import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
 import { GoogleLogout } from 'react-google-login';
 import { CLIENT_ID } from "../lib/constants"
-import Cookie from "js-cookie"
+import Cookie, { set } from "js-cookie"
 import store from "../redux/store"
 import validateSession from "../lib/validateUserSessionOnPage"
 import { Grid, Card, CardActions, CardContent, Typography, Button } from '@material-ui/core';
 import AudioPlayerBar from "../components/AudioPlayerBar"
-
+import fetch from "isomorphic-unfetch"
 
 // import { Nav, NavDropdown, Form, FormControl } from "react-bootstrap"
 
@@ -26,6 +26,8 @@ function isEmpty(obj) {
   }
   return JSON.stringify(obj) === JSON.stringify({});
 }
+
+
 
 const FeaturedTile = (props) => (
 
@@ -159,6 +161,7 @@ const home = ({ userSession }) => {
   const [podcast, setPodcast] = useState("")
   const [featuredSubreddits, setFeaturedSubreddits] = useState({})
   const [user, setUser] = useState({})
+  const [podcastURL, setPodcastURL] = useState("")
 
 
 
@@ -202,9 +205,30 @@ const home = ({ userSession }) => {
 
   }
 
+  const retrievePodcast = async (subreddit, podcast) => {
+    console.log("retrieving podcast")
+    console.log("subreddit: ", subreddit)
+    console.log("podcast: ", podcast)
+    if (subreddit && podcast) {
+      const res = await fetch('/api/podcasts/' + subreddit + '/' + podcast, { method: "GET" })
+      const { cloud_storage_url, filename } = await res.json()
+      console.log("storage_url found: ", cloud_storage_url)
+      setPodcastURL(cloud_storage_url)
+      return cloud_storage_url
+    }
+  }
+
   const clickHandler = () => {
     setSubreddit("Julie")
     setPodcast("hiJuJu")
+    retrievePodcast("Julie", "hiJuJu").catch((e) => {
+      console.log(e)
+    })
+  }
+  const clickHandler2 = () => {
+    setSubreddit("jokes")
+    setPodcast("jokes-2020-06-03")
+    retrievePodcast("jokes", "jokes-2020-06-03")
   }
   return (
 
@@ -223,6 +247,8 @@ const home = ({ userSession }) => {
           <h1> Featured Subreddits </h1>
           <button type="button" className="btn btn-primary"
             onClick={() => { clickHandler() }}>Play a podcast</button>
+          <button type="button" className="btn btn-primary"
+            onClick={() => { clickHandler2() }}>Play another podcast</button>
           {/* <div style={{ padding: "10px", display: "flex", justifyContent: "center" }}>
             <PlayableTile /></div> */}
         </div>
@@ -235,9 +261,9 @@ const home = ({ userSession }) => {
             : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
         </div>
 
-        <div className="musicPlayer">
+        {/* <div className="musicPlayer">
           <MusicPlayer subreddit={subreddit} podcast={podcast} />
-        </div>
+        </div> */}
 
         <div className="button-container">
         </div>
@@ -284,11 +310,11 @@ const home = ({ userSession }) => {
         flex-direction: column;
         align-items: stretch;
       }
-`}</style>
+  `}</style>
       </div>
       <div>
         {/* <Audio /> */}
-        <AudioPlayerBar songName="" songArtist="" audioSource="" album_cover="" />
+        <AudioPlayerBar subreddit={subreddit} podcast={podcast} src={podcastURL} />
       </div>
     </Layout >
 
