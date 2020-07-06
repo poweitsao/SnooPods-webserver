@@ -5,7 +5,7 @@ import store from "../redux/store"
 const Layout = (props) => (
     <div className="container">
         <Head>
-            <title>Listen To Reddit</title>
+            <title>SnooPods</title>
             <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
         </Head>
         <div >

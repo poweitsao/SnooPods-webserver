@@ -50,7 +50,7 @@ class CustomNavbar extends React.Component {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <div className="brand">
-                            <Navbar.Brand href="#home">Listen To Reddit</Navbar.Brand>
+                            <Navbar.Brand href="#home">SnooPods</Navbar.Brand>
                         </div>
                         <Nav className="m-auto">
 

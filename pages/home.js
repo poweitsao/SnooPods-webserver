@@ -163,9 +163,6 @@ const home = ({ userSession }) => {
   const [user, setUser] = useState({})
   const [podcastURL, setPodcastURL] = useState("")
 
-
-
-
   useEffect(() => {
     const validateUserSession = async (session_id, email) => {
       let user = await validateSession(session_id, email);

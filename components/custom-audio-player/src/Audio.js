@@ -7,8 +7,9 @@ import { useState, useEffect } from "react"
 import useAudioPlayer from './useAudioPlayer';
 
 
+
 function AudioPlayer(props) {
-  const { curTime, duration, playing, setPlaying, setClickedTime } = useAudioPlayer();
+  const { curTime, duration, playing, setPlaying, setClickedTime, audio } = useAudioPlayer();
   const source = props.src
   return (
     <div>
@@ -22,8 +23,14 @@ function AudioPlayer(props) {
         </div>
         <div className="controls">
           {playing ?
-            <Pause handleClick={() => setPlaying(false)} /> :
-            <Play handleClick={() => setPlaying(true)} />
+            <Pause handleClick={() => {
+              setPlaying(false);
+              audio.pause();
+            }} /> :
+            <Play handleClick={() => {
+              setPlaying(true);
+              audio.play();
+            }} />
           }
         </div>
         <div className="song-duration-info">

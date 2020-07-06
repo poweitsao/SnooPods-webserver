@@ -1,8 +1,11 @@
 const Firestore = require('@google-cloud/firestore');
 
+var file = require("../credentials/read-write-credentials/eternal-arcana-275612-2a726e49cb23.json")
+
+
 const db = new Firestore({
     projectId: 'eternal-arcana-275612',
-    keyFilename: '../web-server/credentials/read-write credentials/eternal-arcana-275612-2a726e49cb23.json',
+    credentials: { client_email: file.client_email, private_key: file.private_key }
 });
 
 async function getPodcast(subreddit, podcast) {
