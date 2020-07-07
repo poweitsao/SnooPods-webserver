@@ -1,20 +1,23 @@
 import React from 'react';
 
-function Song(props) {
-  const { songName, songArtist } = props;
+function Track(props) {
+  const { trackName, subreddit } = props;
+  console.log("trackname:", trackName)
+  console.log("subreddit:", subreddit)
+
 
   return (
     <div>
-      <div className="song">
-        <p className="song__title">{songName}</p>
-        <p className="song__artist">{songArtist}</p>
+      <div className="track">
+        <p className="track__title">{trackName}</p>
+        <p className="subreddit">{"r/" + subreddit}</p>
       </div>
       <style>
         {`
-      .song {
+      .track {
         user-select: none;
       }
-      .song__title {
+      .track__title {
         text-align: left;
         margin: 0;
         color: black;
@@ -24,7 +27,7 @@ function Song(props) {
         
       }
   
-      .song__artist {
+      .subreddit {
         margin: 0;
         color: black;
         font-weight: normal;
@@ -37,4 +40,4 @@ function Song(props) {
   )
 }
 
-export default Song;
+export default Track;

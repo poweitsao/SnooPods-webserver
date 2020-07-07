@@ -1,5 +1,5 @@
 import React from "react";
-import Song from "./Song";
+import Track from "./Track";
 import Play from "./Play";
 import Pause from "./Pause";
 import Bar from "./Bar";
@@ -10,16 +10,18 @@ import useAudioPlayer from './useAudioPlayer';
 
 function AudioPlayer(props) {
   const { curTime, duration, playing, setPlaying, setClickedTime, audio } = useAudioPlayer();
-  const source = props.src
+  const source = props.src;
+  const subreddit = props.subreddit;
+  const trackName = props.trackName;
   return (
     <div>
-      <div className="player">
+      <div className="player" style={{ width: "100%" }}>
         <audio id="audio">
           <source src={source} />
         Your browser does not support the <code>audio</code> element.
       </audio>
-        <div className="song-info">
-          <Song songName={source} songArtist="Daft Punk ft. Julian Casablancas" />
+        <div className="track-info">
+          <Track trackName={trackName} subreddit={subreddit} />
         </div>
         <div className="controls">
           {playing ?
@@ -33,7 +35,7 @@ function AudioPlayer(props) {
             }} />
           }
         </div>
-        <div className="song-duration-info">
+        <div className="track-duration-info">
           <Bar curTime={curTime} duration={duration} onTimeUpdate={(time) => setClickedTime(time)} />
         </div>
       </div>
@@ -45,19 +47,20 @@ function AudioPlayer(props) {
           padding: 20px 0;
           background-color: #EAECEF;
         }
-        .song-info{
+        .track-info{
           margin-left:auto;
           padding-right: 20px;
         }
-        .song-duration-info{
-          margin-right: auto;
+        .track-duration-info{
+          margin-right: 10%;
+          width: 30%;
         }
         .controls {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-right: auto;
-          margin-left: auto;
+          margin-right: 10%;
+          margin-left: 20%;
         }`}
       </style>
 
@@ -82,9 +85,12 @@ function Audio(props) {
 
   return (
     <div>
+
+      {/* <AudioPlayer src={props.src} trackName={props.trackName} subreddit={props.subreddit} /> */}
+
       {reload
         ? <div></div>
-        : <AudioPlayer src={props.src} />
+        : <AudioPlayer src={props.src} trackName={props.trackName} subreddit={props.subreddit} />
       }
     </div>
   )

@@ -10,22 +10,16 @@ function useAudioPlayer() {
   const [audio, setAudio] = useState();
 
 
-
   if (curTime && duration && curTime === duration) {
     setPlaying(false);
     setCurTime(0);
     audio.currentTime = 0;
   }
 
-
-
   useEffect(() => {
-
-
 
     const audio = document.getElementById("audio");
     setAudio(audio)
-    // const src = audio.getElementsByTagName("source")
     // state setters wrappers
     const setAudioData = () => {
       setDuration(audio.duration);
@@ -35,18 +29,9 @@ function useAudioPlayer() {
 
     const setAudioTime = () => setCurTime(audio.currentTime);
 
-    // DOM listeners: update React state on DOM events
     audio.addEventListener("loadeddata", setAudioData);
 
     audio.addEventListener("timeupdate", setAudioTime);
-
-    // React state listeners: update DOM on React state changes
-    // if (playing) {
-    //   audio.play()
-    // }
-    // playing ? audio.play() : audio.pause();
-
-
 
     if (clickedTime && clickedTime !== curTime) {
       audio.currentTime = clickedTime;
@@ -57,7 +42,6 @@ function useAudioPlayer() {
       setPlaying(false)
       setCurSource(source)
       audio.currentTime = 0;
-      // src.src = source;
     }
 
     // effect cleanup

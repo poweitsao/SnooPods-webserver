@@ -50,7 +50,7 @@ export default function Bar(props) {
         >
           <span
             className="bar__progress__knob"
-            style={{ left: `${curPercentage - 2}%` }}
+            style={{ left: `${curPercentage - (3.5)}%` }}
           />
         </div>
         <span className="bar__time">{formatDuration(duration)}</span>
@@ -67,7 +67,7 @@ export default function Bar(props) {
         .bar__time {
           color: black;
           font-size: 16px;
-          padding: 10px;
+          padding: 15px;
         }
     
         .bar__progress {
@@ -87,6 +87,7 @@ export default function Bar(props) {
           border: 1.5px solid black;
           border-radius: 50%;
           background-color: orange;
+
         }
       `}
       </style>
