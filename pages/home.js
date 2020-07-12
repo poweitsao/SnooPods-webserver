@@ -34,15 +34,12 @@ const FeaturedTile = (props) => (
   <div>
     <div className="featured-tile-container">
       <button className="featured-button"
-        onClick={() => { console.log("playable tile clicked", props.category.name) }}>
+        onClick={() => {
+          Router.push("/subreddit/" + props.category.name)
+          // console.log("playable tile clicked", props.category.name) 
+        }}>
 
         <div className="featured-tile">
-
-          {/* {this.state.isShown && (
-            <div className="overlay">
-              <PlayCircleFilledIcon fontSize="large"></PlayCircleFilledIcon>
-            </div>
-          )} */}
           <div className="featured-tile-overlay">
             <div style={{ padding: "10px" }}>{"r/" + props.category.name}</div>
           </div>
@@ -98,12 +95,8 @@ const FeaturedTile = (props) => (
 )
 
 const FeaturedGridMenu = (props) => (
-
   <div >
     <Grid container spacing={3} justify={"center"}>
-      {/* {console.log("props in featuredGridMenu: ", props.featuredSubreddits)} */}
-      {/* 
-    } */}
       <div className={"card-container"}>
         {isEmpty(props.featuredSubreddits)
           ? <div></div>
@@ -146,11 +139,8 @@ const FeaturedGridMenu = (props) => (
       display: flex;
       justify-content:center;
     }
-  
     `}</style>
   </div>
-
-
 )
 
 
@@ -271,12 +261,13 @@ const home = ({ userSession }) => {
         }
       .container{
         margin-top:50px;
-        
+        margin-bottom:50px;
         display:flex;
         flex-direction:column;
         justify-content:center;
         align-content:center;
         align-text:center;
+        
       }
     .button-container{
       margin:20px;
@@ -310,7 +301,6 @@ const home = ({ userSession }) => {
   `}</style>
       </div>
       <div>
-        {/* <Audio /> */}
         <AudioPlayerBar subreddit={subreddit} podcast={podcast} src={podcastURL} />
       </div>
     </Layout >

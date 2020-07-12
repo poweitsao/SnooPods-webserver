@@ -22,8 +22,6 @@ async function getPodcast(subreddit, podcast) {
             console.log('Document data:', doc.data());
             return doc.data()
         }
-
-
     }
     return
 }
@@ -44,13 +42,10 @@ async function getUser(email) {
             return true;
         }
     }
-
     catch (err) {
         console.log('Error getting user', err);
         return false
     }
-
-
 }
 
 async function createUser(user) {
@@ -68,12 +63,10 @@ async function createUser(user) {
             sessionID: sessionID,
             email: user.email
         }
-
     } catch (e) {
         console.log(e)
         return null
     }
-
 }
 
 const generateID = () => {
@@ -93,7 +86,6 @@ async function createSession(email) {
         console.log(e)
         return null
     }
-
 }
 
 async function checkValidSession(sessionID, email) {
@@ -115,11 +107,45 @@ async function getFeaturedSubreddits() {
     return featured;
 }
 
+async function getSubredditPlaylist(subID) {
+    console.log("subID in firestore:" + subID)
+    let docRef = db.collection("subreddits").doc(subID).collection("podcasts")
+    let doc = await docRef.get()
+
+    let playlist = { "keys": [] }
+    console.log(doc)
+    doc.forEach(doc => {
+        // console.log(doc.id, '=>', doc.data());
+        playlist[doc.id] = doc.data()
+        playlist["keys"].push(doc.id)
+    })
+
+    docRef = db.collection("subreddits").doc(subID)
+    doc = await docRef.get()
+    if (!doc.exists) {
+        console.log("No album picture found")
+    } else {
+        playlist["album_cover_url"] = doc.data()["album_cover_url"]
+    }
+    console.log("playlist info:", playlist)
+    return playlist
+
+    // if (!doc.exists) {
+    //     console.log('No such document!');
+    //     return null
+    // } else {
+    //     console.log('Document data:', doc.data());
+    //     return doc.data()
+    // }
+
+}
+
 module.exports = {
     getPodcast,
     getUser,
     createUser,
     createSession,
     checkValidSession,
-    getFeaturedSubreddits
+    getFeaturedSubreddits,
+    getSubredditPlaylist
 }

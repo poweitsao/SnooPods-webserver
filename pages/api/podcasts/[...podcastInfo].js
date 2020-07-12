@@ -9,10 +9,6 @@ export default async function handler(req, res) {
         if (req.query) {
             let podcast = await firestore.getPodcast(req.query["podcastInfo"][0], req.query["podcastInfo"][1])
             res.status(200).json(podcast)
-
         }
-
     }
-
-
 }
