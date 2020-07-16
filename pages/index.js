@@ -98,7 +98,7 @@ const Index = ({ userSession }) => {
       text-align:center;
     }
     .heading{
-      
+      text-align: center;
     }
     .logo{
       text-align:center;
