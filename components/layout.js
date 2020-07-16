@@ -15,6 +15,10 @@ const Layout = (props) => (
         </div>
         <style jsx>
             {`.container{
+                select: focus;
+                textarea: focus;
+                font-size: 16px;
+                
                 display:flex;
                 justify-content: center;
         }`}

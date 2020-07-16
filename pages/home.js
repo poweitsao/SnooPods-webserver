@@ -2,7 +2,7 @@ import Layout from "../components/layout"
 import CustomNavbar from "../components/CustomNavbar"
 import MusicPlayer from "../components/musicPlayer"
 import PlayableTile from "../components/PlayableTile"
-import Audio from "../components/custom-audio-player/src/Audio"
+
 
 import React, { useState, useEffect } from 'react';
 import parseCookies from "../lib/parseCookies"

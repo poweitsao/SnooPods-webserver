@@ -50,13 +50,13 @@ class CustomNavbar extends React.Component {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <div className="brand">
-                            <Navbar.Brand href="#home">SnooPods</Navbar.Brand>
+                            <Navbar.Brand onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
                         </div>
                         <Nav className="m-auto">
 
 
                             <div className="center-button">
-                                <Nav.Link onClick={() => { console.log("click") }}>Home</Nav.Link>
+                                <Nav.Link onClick={() => { Router.push("/home") }}>Home</Nav.Link>
                             </div>
                             <div className="center-button">
                                 <Nav.Link href="#link">Browse</Nav.Link>

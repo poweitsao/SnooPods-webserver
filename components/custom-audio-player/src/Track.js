@@ -2,8 +2,8 @@ import React from 'react';
 
 function Track(props) {
   const { trackName, subreddit } = props;
-  console.log("trackname:", trackName)
-  console.log("subreddit:", subreddit)
+  // console.log("trackname:", trackName)
+  // console.log("subreddit:", subreddit)
 
 
   return (

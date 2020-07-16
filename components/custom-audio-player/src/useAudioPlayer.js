@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
-
-function useAudioPlayer() {
+function useAudioPlayer(audioObject) {
   const [duration, setDuration] = useState();
   const [curTime, setCurTime] = useState();
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const [clickedTime, setClickedTime] = useState();
   const [curSource, setCurSource] = useState();
   const [source, setSource] = useState();
-  const [audio, setAudio] = useState();
+  const [audio, setAudio] = useState(audioObject);
+  // console.log("audio in useaudioplayer 1", audio)
+
+  // var audioElement = {}
+  // var elementId = "audioElement" + new Date().valueOf().toString();
+  // var audioElement = document.createElement('audio');
+  // audioElement.setAttribute("id", elementId);
+  // document.body.appendChild(audioElement);
+  // setAudio(audioElement)
 
 
   if (curTime && duration && curTime === duration) {
@@ -18,7 +25,11 @@ function useAudioPlayer() {
 
   useEffect(() => {
 
-    const audio = document.getElementById("audio");
+    // const audio = document.getElementById("audio");
+    // <audio id="audio" src="https://storage.cloud.google.com/listen-to-reddit-test/subreddits/jokes/jokes-2020-06-03.mp3">Your browser does not support the <code>audio</code> element.</audio>
+    //<audio preload="auto" src="https://storage.cloud.google.com/listen-to-reddit-test/subreddits/jokes/jokes-2020-06-03.mp3" id="audio"></audio>
+    // console.log("audio in useaudioplayer 2", audio)
+    // const audio = audioElement
     setAudio(audio)
     // state setters wrappers
     const setAudioData = () => {
