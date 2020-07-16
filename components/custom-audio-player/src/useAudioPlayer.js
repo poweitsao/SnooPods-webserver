@@ -70,8 +70,7 @@ function useAudioPlayer(audioObject) {
     setClickedTime,
     setSource,
     curSource,
-    source,
-    audio
+    source
   }
 }
 

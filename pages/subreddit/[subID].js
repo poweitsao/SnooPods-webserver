@@ -72,8 +72,33 @@ const Subreddit = ({ userSession }) => {
     }, [subID])
 
     // const [AudioPlayerBar, setAudioPlayerBar] = useState(<AudioPlayerBar subreddit={subID} podcast={podcast} src={podcastURL} audio={} />)
+    const unlockAudio = async (track) => {
+        await track.play();
+        track.pause()
+        // if (playPromise !== undefined) {
+        //     await playPromise
 
-    const playPodcast = (podcast) => {
+        //     playPromise.then(_ => {
+        //         // Automatic playback started!
+        //         // Show playing UI.
+        //         // We can now safely pause video...
+        //         console.log("pausing...")
+        //         track.pause();
+
+        //         // setAudio(track)
+
+        //     })
+        //         .catch(error => {
+        //             // Auto-play was prevented
+        //             // Show paused UI.
+        //             console.log("pausing...")
+        //             track.pause();
+        //         });
+
+
+        // }
+    }
+    const playPodcast = async (podcast) => {
         setPodcast(podcast["filename"])
         setPodcastURL(podcast["cloud_storage_url"])
 
@@ -81,26 +106,22 @@ const Subreddit = ({ userSession }) => {
         track.setAttribute("id", "audio")
         // var track = document.createElement(audio)
 
-        var playPromise = track.play();
+        // var playPromise = await track.play()
+        // if (playPromise !== undefined) {
+        //     track.pause()
+        // }
+        track.play()
+        // track.load()
+        // track.pause()
+        // track.currentTime = 0
 
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                // Automatic playback started!
-                // Show playing UI.
-                // We can now safely pause video...
-                track.pause();
-            })
-                .catch(error => {
-                    // Auto-play was prevented
-                    // Show paused UI.
-                });
-        }
+        setAudio(track)
 
         // track.play().catch()
         // track.pause()
-        track.currentTime = 0
+        // track.currentTime = 0
         // console.log("track:", track)
-        setAudio(track)
+        // setAudio(track)
         // setTimeout(() => { track.play() }, 5000);
         // audioElement.play()
 

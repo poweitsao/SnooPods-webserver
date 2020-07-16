@@ -79,17 +79,19 @@ function AudioPlayerInfo(props) {
     const audio = props.audio;
     // console.log("props.audio in AudioPlayerBar", props.audio)
 
-    if (audio !== null && playing) {
+    if (audio !== null && playing && duration) {
         // props.playAudio();
-        // console.log("playing in audioplayerbar")
-        audio.play()
+        console.log("playing in audioplayerbar")
+        console.log(duration)
+
+        // audio.play()
     }
 
     return (
         <div>
             <div className="player" style={{ width: "100%" }}>
                 {/* {console.log("audio in audioplayerbar", audio)} */}
-                audio
+
                 {/* <audio id="audio" >
                     <source src={source} />
                     Your browser does not support the <code>audio</code> element.
