@@ -31,7 +31,7 @@ async function getUser(email) {
     // console.log(email)
     let userRef = db.collection("users")
     let snapshot = await userRef.doc(email).get()
-    console.log("snapshot", snapshot)
+    // console.log("snapshot", snapshot)
     try {
         if (!snapshot.exists) {
             console.log('User not found');
@@ -108,12 +108,12 @@ async function getFeaturedSubreddits() {
 }
 
 async function getSubredditPlaylist(subID) {
-    console.log("subID in firestore:" + subID)
+    // console.log("subID in firestore:" + subID)
     let docRef = db.collection("subreddits").doc(subID).collection("podcasts")
     let doc = await docRef.get()
 
     let playlist = { "keys": [] }
-    console.log(doc)
+    // console.log(doc)
     doc.forEach(doc => {
         // console.log(doc.id, '=>', doc.data());
         playlist[doc.id] = doc.data()
@@ -127,7 +127,7 @@ async function getSubredditPlaylist(subID) {
     } else {
         playlist["album_cover_url"] = doc.data()["album_cover_url"]
     }
-    console.log("playlist info:", playlist)
+    // console.log("playlist info:", playlist)
     return playlist
 
     // if (!doc.exists) {

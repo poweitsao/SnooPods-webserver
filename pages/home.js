@@ -15,17 +15,18 @@ import validateSession from "../lib/validateUserSessionOnPage"
 import { Grid, Card, CardActions, CardContent, Typography, Button } from '@material-ui/core';
 import AudioPlayerBar from "../components/AudioPlayerBar"
 import fetch from "isomorphic-unfetch"
+import isEmpty from "../lib/isEmptyObject"
 
 // import { Nav, NavDropdown, Form, FormControl } from "react-bootstrap"
 
-function isEmpty(obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      return false;
-    }
-  }
-  return JSON.stringify(obj) === JSON.stringify({});
-}
+// function isEmpty(obj) {
+//   for (var prop in obj) {
+//     if (obj.hasOwnProperty(prop)) {
+//       return false;
+//     }
+//   }
+//   return JSON.stringify(obj) === JSON.stringify({});
+// }
 
 
 

@@ -9,9 +9,9 @@ const Layout = (props) => (
             <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
         </Head>
         <div >
-            <Provider store={store}>
-                {props.children}
-            </Provider>
+            {/* <Provider store={store}> */}
+            {props.children}
+            {/* </Provider> */}
         </div>
         <style jsx>
             {`.container{

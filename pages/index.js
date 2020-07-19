@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import Router from 'next/router';
 import { CLIENT_ID } from "../lib/constants"
-import { storeUserInfo } from "../redux/actions/index"
-import store from "../redux/store"
+
+import { createStore } from "redux"
 import Cookie from "js-cookie"
 import parseCookies from "../lib/parseCookies"
 import fetch from "isomorphic-unfetch"
@@ -12,6 +12,8 @@ import { Icon, InlineIcon } from '@iconify/react';
 import headphonesAlt from '@iconify/icons-fa-solid/headphones-alt';
 import validateSession from "../lib/validateUserSessionOnPage"
 
+import { storeUserInfo } from "../redux/actions/index"
+import { RegisterStore } from "../redux/store"
 
 const Index = ({ userSession }) => {
 
@@ -42,7 +44,9 @@ const Index = ({ userSession }) => {
       else if (!res.registered) {
         // res.userID = id_token
         console.log("response in index.js", res)
-        store.dispatch(storeUserInfo(res))
+        // const store = createStore(userInfoReducer)
+
+        RegisterStore.dispatch(storeUserInfo(res))
         // console.log("store: ", store.getState())
         console.log("Taking user to registeration page ")
         Router.push('/register')
@@ -76,7 +80,7 @@ const Index = ({ userSession }) => {
             {/* //? figure out how to make this server side rendering so that login button loads faster */}
             <GoogleLogin
               clientId={CLIENT_ID}
-              buttonText="Login"
+              buttonText="Sign In with Google"
               onSuccess={onGoogleLoginSuccess}
               onFailure={onGoogleLoginFailed}
               cookiePolicy={'single_host_origin'}

@@ -1,6 +1,16 @@
 import { createStore } from 'redux';
-import rootReducer from './reducers/rootReducer';
+import userInfoReducer from "./reducers/userInfoReducer"
+import AudioPlayerReducer from "./reducers/AudioPlayerReducer"
 
-const store = createStore(rootReducer);
+const RegisterStore = createStore(userInfoReducer);
 
-export default store;
+const AudioPlayerStore = createStore(AudioPlayerReducer);
+
+module.exports = {
+    RegisterStore,
+    AudioPlayerStore
+};
+
+// const store = createStore(rootReducer);
+
+// export default store;
