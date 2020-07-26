@@ -12,4 +12,11 @@ const storeAudioPlayerInfo = (AudioPlayerInfo) => {
     }
 }
 
-module.exports = { storeUserInfo, storeAudioPlayerInfo }
+const togglePlaying = (playingStatus) => {
+    return {
+        type: "TOGGLE_PLAYING",
+        playingStatus
+    }
+}
+
+module.exports = { storeUserInfo, storeAudioPlayerInfo, togglePlaying }

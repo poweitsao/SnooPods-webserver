@@ -8,6 +8,12 @@ import Cookie, { set } from "js-cookie"
 import Layout from "../../components/layout"
 import CustomNavbar from "../../components/CustomNavbar"
 import AudioPlayerBar from "../../components/AudioPlayerBar"
+import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarContainer"
+import { Provider } from 'react-redux'
+import { AudioPlayerStore } from "../../redux/store"
+import { storeAudioPlayerInfo } from "../../redux/actions/index"
+
+
 import ListGroup from 'react-bootstrap/ListGroup'
 import fetch from "isomorphic-unfetch"
 
@@ -99,6 +105,7 @@ const Subreddit = ({ userSession }) => {
         // }
     }
     const playPodcast = async (podcast) => {
+
         setPodcast(podcast["filename"])
         setPodcastURL(podcast["cloud_storage_url"])
 
@@ -110,10 +117,18 @@ const Subreddit = ({ userSession }) => {
         // if (playPromise !== undefined) {
         //     track.pause()
         // }
-        track.play()
+        // track.play()
         // track.load()
         // track.pause()
         // track.currentTime = 0
+
+        AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+            playing: true,
+            subreddit: subID,
+            trackName: podcast["filename"],
+            audio: track,
+            url: podcast["cloud_storage_url"]
+        }))
 
         setAudio(track)
 
@@ -193,7 +208,10 @@ const Subreddit = ({ userSession }) => {
                 `}
             </style>
             <div >
-                <AudioPlayerBar subreddit={subID} podcast={podcast} src={podcastURL} audio={audio} />
+                {/* <AudioPlayerBar subreddit={subID} podcast={podcast} src={podcastURL} audio={audio} /> */}
+                <Provider store={AudioPlayerStore}>
+                    <AudioPlayerBarContainer />
+                </Provider>
             </div>
         </Layout>
     )

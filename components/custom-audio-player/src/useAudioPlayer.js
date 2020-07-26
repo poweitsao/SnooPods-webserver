@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-function useAudioPlayer(audioObject) {
+function useAudioPlayer(audioObject, trackPlaying) {
   const [duration, setDuration] = useState();
   const [curTime, setCurTime] = useState();
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(trackPlaying);
   const [clickedTime, setClickedTime] = useState();
   const [curSource, setCurSource] = useState();
   const [source, setSource] = useState();
@@ -16,6 +16,18 @@ function useAudioPlayer(audioObject) {
   // document.body.appendChild(audioElement);
   // setAudio(audioElement)
 
+  // if (audio === undefined) {
+  //   return {
+  //     curTime,
+  //     duration,
+  //     playing,
+  //     setPlaying,
+  //     setClickedTime,
+  //     setSource,
+  //     curSource,
+  //     source
+  //   }
+  // }
 
   if (curTime && duration && curTime === duration) {
     setPlaying(false);

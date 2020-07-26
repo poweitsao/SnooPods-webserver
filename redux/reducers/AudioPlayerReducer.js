@@ -15,6 +15,11 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
                 audio: action.AudioPlayerInfo.audio,
                 url: action.AudioPlayerInfo.url
             })
+        case "TOGGLE_PLAYING":
+            return {
+                ...state,
+                playing: action.playingStatus
+            }
         default:
             return state
     }
