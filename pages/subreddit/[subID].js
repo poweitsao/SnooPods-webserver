@@ -11,7 +11,7 @@ import AudioPlayerBar from "../../components/AudioPlayerBar"
 import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarContainer"
 import { Provider } from 'react-redux'
 import { AudioPlayerStore } from "../../redux/store"
-import { storeAudioPlayerInfo } from "../../redux/actions/index"
+import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index"
 
 
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -105,42 +105,48 @@ const Subreddit = ({ userSession }) => {
         // }
     }
     const playPodcast = async (podcast) => {
+        const currStore = AudioPlayerStore.getState()
+        if (currStore.url === podcast["cloud_storage_url"]) {
+            AudioPlayerStore.dispatch(togglePlaying(!currStore.playing))
+        } else {
 
-        setPodcast(podcast["filename"])
-        setPodcastURL(podcast["cloud_storage_url"])
+            setPodcast(podcast["filename"])
+            setPodcastURL(podcast["cloud_storage_url"])
 
-        var track = new Audio(podcast["cloud_storage_url"])
-        track.setAttribute("id", "audio")
-        // var track = document.createElement(audio)
+            var track = new Audio(podcast["cloud_storage_url"])
+            track.setAttribute("id", "audio")
+            // var track = document.createElement(audio)
 
-        // var playPromise = await track.play()
-        // if (playPromise !== undefined) {
-        //     track.pause()
-        // }
-        // track.play()
-        // track.load()
-        // track.pause()
-        // track.currentTime = 0
+            // var playPromise = await track.play()
+            // if (playPromise !== undefined) {
+            //     track.pause()
+            // }
+            // track.play()
+            // track.load()
+            // track.pause()
+            // track.currentTime = 0
 
-        AudioPlayerStore.dispatch(storeAudioPlayerInfo({
-            playing: true,
-            subreddit: subID,
-            trackName: podcast["filename"],
-            audio: track,
-            url: podcast["cloud_storage_url"]
-        }))
+            AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+                playing: true,
+                subreddit: subID,
+                trackName: podcast["filename"],
+                audio: track,
+                url: podcast["cloud_storage_url"]
+            }))
 
-        setAudio(track)
+            setAudio(track)
 
-        // track.play().catch()
-        // track.pause()
-        // track.currentTime = 0
-        // console.log("track:", track)
-        // setAudio(track)
-        // setTimeout(() => { track.play() }, 5000);
-        // audioElement.play()
+            // track.play().catch()
+            // track.pause()
+            // track.currentTime = 0
+            // console.log("track:", track)
+            // setAudio(track)
+            // setTimeout(() => { track.play() }, 5000);
+            // audioElement.play()
 
-        // retrievePodcast(subID, podcast)
+            // retrievePodcast(subID, podcast)
+        }
+
     }
 
     const renderTrack = (trackIndex) => {

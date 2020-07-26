@@ -85,15 +85,17 @@ class AudioPlayerBar extends React.Component {
 function AudioPlayer(props) {
     const [source, setSource] = useState("")
     const [reload, setReload] = useState(false)
+    const [audio, setAudio] = useState(undefined)
     // const [audio, setAudio] = useState()
     useEffect(() => {
-        if (props.url !== source) {
+        if (props.audio !== audio) {
             // console.log("AudioPlayer props:", props)
-            if (props.audio !== undefined) {
-                props.audio.pause()
+            if (audio !== undefined) {
+                console.log("Pausing before switching!")
+                audio.pause()
             }
             setSource(props.url)
-            // setAudio(props.audio)
+            setAudio(props.audio)
             setReload(true)
         }
         else if (props.url === source && reload) {
@@ -138,6 +140,11 @@ function AudioPlayerInfo(props) {
         // console.log(duration)
 
         audio.play()
+    }
+    if (props.playing && audio.paused) {
+        audio.play()
+    } else if (!props.playing && !audio.paused) {
+        audio.pause()
     }
 
     return (
