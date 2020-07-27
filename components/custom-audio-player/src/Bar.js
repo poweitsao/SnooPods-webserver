@@ -2,10 +2,18 @@ import React from "react";
 import moment from "moment";
 import momentDurationFormatSetup from "moment-duration-format";
 
+function calculateCurPercentage(duration, curTime) {
+  if (duration && curTime) {
+    return (curTime / duration) * 100;
+  } else {
+    return 0;
+  }
+}
+
 export default function Bar(props) {
   const { duration, curTime, onTimeUpdate } = props;
 
-  const curPercentage = (curTime / duration) * 100;
+  const curPercentage = calculateCurPercentage(duration, curTime)
 
   function formatDuration(duration) {
     return moment
@@ -31,7 +39,6 @@ export default function Bar(props) {
     };
 
     document.addEventListener("mousemove", updateTimeOnMove);
-
     document.addEventListener("mouseup", () => {
       document.removeEventListener("mousemove", updateTimeOnMove);
     });
@@ -41,6 +48,7 @@ export default function Bar(props) {
     <div>
       <div className="bar">
         <span className="bar__time">{formatDuration(curTime)}</span>
+
         <div
           className="bar__progress"
           style={{
@@ -53,6 +61,37 @@ export default function Bar(props) {
             style={{ left: `${curPercentage - (2.2)}%` }}
           />
         </div>
+        {/* {duration
+          ? <div
+            className="bar__progress"
+            style={{
+              background: `linear-gradient(to right, orange ${curPercentage}%, black 0)`
+            }}
+            onMouseDown={e => handleTimeDrag(e)}
+          >
+            <span
+              className="bar__progress__knob"
+              style={{ left: `${curPercentage - (2.2)}%` }}
+            />
+          </div>
+
+          : <div
+            className="bar__progress"
+            style={{
+              background: `linear-gradient(to right, orange 0%, black 0)`
+            }}
+            onMouseDown={e => handleTimeDrag(e)}
+          >
+            <span
+              className="bar__progress__knob"
+              style={{ left: `${curPercentage - (2.2)}%` }}
+            />
+          </div>
+        } */}
+
+
+
+
         <span className="bar__time">{formatDuration(duration)}</span>
       </div>
       <style>
