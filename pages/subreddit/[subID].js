@@ -20,6 +20,7 @@ import fetch from "isomorphic-unfetch"
 import { Icon, InlineIcon } from '@iconify/react';
 import playCircleOutlined from '@iconify/icons-ant-design/play-circle-outlined';
 import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
+import { FullscreenExit } from '@material-ui/icons'
 
 
 
@@ -154,37 +155,42 @@ const Subreddit = ({ userSession }) => {
         return (
             <ListGroup.Item key={trackIndex}>
                 {/* <button onClick={() => { playPodcast(playlist[trackIndex]) }}>Play</button> */}
-                <div style={{ padding: "10px", width: "100%", height: "100%" }}>
-                    <Icon
-                        style={{ padding: "10px", width: "17%", height: "17%" }}
-                        icon={playButton}
-                        onClick={() => { playPodcast(playlist[trackIndex]) }}
-                        onMouseEnter={() => setPlayButton(playCircleFilled)}
-                        onMouseLeave={() => setPlayButton(playCircleOutlined)} />
-                    {/* <button onClick={() => { console.log(playlist) }}>Play</button> */}
-                    {playlist[trackIndex]["filename"]}
+                <div style={{ width: "250px" }}>
+                    <div style={{ fontSize: "16px", display: "flex", justifyContent: "center" }}>
+                        <Icon
+                            style={{ paddingRight: " 5px", width: "10%", height: "10%" }}
+                            icon={playButton}
+                            onClick={() => { playPodcast(playlist[trackIndex]) }}
+                            onMouseEnter={() => setPlayButton(playCircleFilled)}
+                            onMouseLeave={() => setPlayButton(playCircleOutlined)} />
+                        {/* <button onClick={() => { console.log(playlist) }}>Play</button> */}
+                        {playlist[trackIndex]["filename"]}
+                    </div>
                 </div>
 
             </ListGroup.Item>
         )
     }
 
-    const List = ({ playlist }) => (
-        <div>
-            <ListGroup>
-                {playlist["keys"].map(renderTrack)}
-                {/* <ListGroup.Item>
+    const List = ({ playlist }) => {
+        return (
+            <div>
+                <ListGroup >
+                    {playlist["keys"].map(renderTrack)}
+                    {/* <ListGroup.Item>
                     <button onClick={() => { playPodcast(playlist[playlist["keys"][0]]) }}>Play</button> */}
-                {/* <button onClick={() => { console.log(playlist) }}>Play</button> */}
+                    {/* <button onClick={() => { console.log(playlist) }}>Play</button> */}
 
-                {/* {playlist[playlist["keys"][0]]["filename"]} */}
-                {/* </ListGroup.Item> */}
-            </ListGroup>
-        </div>
-    )
+                    {/* {playlist[playlist["keys"][0]]["filename"]} */}
+                    {/* </ListGroup.Item> */}
+                </ListGroup>
+            </div>
+        )
+    }
 
     return (
         <Layout>
+
             {isEmpty(user)
                 ? <div></div>
                 : <CustomNavbar user={user} />

@@ -5,7 +5,7 @@ const initialState = {
 }
 
 const audioPlayerInfoReducer = (state = initialState, action) => {
-    console.log("action:", action)
+    // console.log("action:", action)
     switch (action.type) {
         case "STORE_AUDIO_PLAYER_INFO":
             return Object.assign({}, state, {

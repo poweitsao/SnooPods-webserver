@@ -4,6 +4,8 @@ import { Navbar } from "react-bootstrap"
 import Track from "./custom-audio-player/src/Track";
 import Play from "./custom-audio-player/src/Play";
 import Pause from "./custom-audio-player/src/Pause";
+import Replay10 from "./custom-audio-player/src/Replay10"
+import Forward10 from "./custom-audio-player/src/Forward10"
 import Bar from "./custom-audio-player/src/Bar";
 import { useState, useEffect } from "react"
 import useAudioPlayer from './custom-audio-player/src/useAudioPlayer';
@@ -15,6 +17,7 @@ import { AudioPlayerStore } from "../redux/store"
 class AudioPlayerBar extends React.Component {
     constructor(props) {
         super(props)
+
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -36,7 +39,8 @@ class AudioPlayerBar extends React.Component {
                             playing={this.props.playing}
                             changeAudioPlayerInfo={this.props.changeAudioPlayerInfo}
                             togglePlaying={this.props.togglePlaying} />
-                        : <div style={{ paddingTop: "84px" }}></div>
+
+                        : <div style={{ paddingTop: "84px", width: "100%", height: "100%" }}></div>
                     }
                 </Navbar>
             </div>
@@ -66,7 +70,7 @@ function AudioPlayer(props) {
     return (
         <div>
             {reload
-                ? <div></div>
+                ? <div style={{ width: "100%", height: "100%" }}></div>
                 : <AudioPlayerInfo
                     url={props.url}
                     trackName={props.trackName}
@@ -103,6 +107,14 @@ function AudioPlayerInfo(props) {
                     <Track trackName={trackName} subreddit={subreddit} />
                 </div>
                 <div className="controls">
+                    <Replay10 handleClick={() => {
+                        if (curTime - 10 > 0) {
+                            setClickedTime(curTime - 10)
+                        } else {
+                            setClickedTime(duration)
+                        }
+                    }} />
+
                     {props.playing ?
                         <Pause handleClick={() => {
                             props.togglePlaying(false)
@@ -113,6 +125,16 @@ function AudioPlayerInfo(props) {
                             audio.play();
                         }} />
                     }
+                    <Forward10 handleClick={() => {
+                        if (curTime + 10 > duration) {
+                            console.log("duration:", duration)
+                            setClickedTime(duration)
+                        } else {
+                            setClickedTime(curTime + 10)
+                        }
+                    }} />
+
+
                 </div>
                 <div className="track-duration-info">
                     <Bar curTime={curTime} duration={duration} onTimeUpdate={(time) => setClickedTime(time)} />

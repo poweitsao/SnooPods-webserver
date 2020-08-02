@@ -57,6 +57,7 @@ function useAudioPlayer(audioObject, trackPlaying) {
     audio.addEventListener("timeupdate", setAudioTime);
 
     if (clickedTime && clickedTime !== curTime) {
+      console.log("curTime:", curTime)
       audio.currentTime = clickedTime;
       setClickedTime(null);
     }
