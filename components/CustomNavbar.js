@@ -5,6 +5,7 @@ import ProfilePicMenu from "../components/ProfilePicMenu"
 import { useGoogleLogout, GoogleLogout } from 'react-google-login';
 import { CLIENT_ID } from "../lib/constants"
 import Router from "next/router"
+import useWindowDimensions from "../components/hooks/useWindowDimensions"
 
 // const Navbar = (props) => {
 
@@ -33,6 +34,126 @@ const logoutFailed = () => {
     console.log("logout failed")
 }
 
+const NavBarContent = (props) => {
+    const { height, width } = useWindowDimensions();
+    console.log("props in navbarcontent", props)
+    if (width <= 991) {
+        return (
+            <Navbar bg="light" expand="lg" fixed="top" >
+
+                <div style={{ display: "flex", justifyContent: "space-around" }}>
+                    <Navbar.Brand onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                </div>
+                <Navbar.Collapse id="responsive-navbar-nav">
+
+                    <Nav className="m-auto">
+
+
+                        <div className="center-button">
+                            <Nav.Link onClick={() => { Router.push("/home") }}>Home</Nav.Link>
+                        </div>
+                        <div className="center-button">
+                            <Nav.Link href="#link">Browse</Nav.Link>
+                        </div>
+                        <div className="center-button">
+                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                            </NavDropdown>
+                        </div>
+                    </Nav>
+
+                    <div className="profile-pic-group">
+                        <Nav style={{ whiteSpace: "nowrap" }}>
+                            <Image src={props.user.picture_url} roundedCircle style={{ width: "40px", height: "40px" }} />
+                            <NavDropdown title={props.user.firstName} id="basic-nav-dropdown">
+                                <GoogleLogout
+                                    clientId={CLIENT_ID}
+                                    render={renderProps => (
+                                        <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
+                                    )}
+                                    buttonText="custom logout"
+                                    onLogoutSuccess={logout}
+                                    onFailure={logoutFailed}
+                                    cookiePolicy={'single_host_origin'}
+                                />
+
+                                <NavDropdown.Item >Something</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+
+
+                    </div>
+
+                </Navbar.Collapse>
+            </Navbar>
+        )
+    }
+    else {
+        return (
+            <Navbar bg="light" expand="lg" fixed="top" >
+
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+                <Navbar.Collapse id="responsive-navbar-nav">
+                    <div className="brand" style={{ marginLeft: "auto" }}>
+                        <Navbar.Brand onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
+                    </div>
+                    <Nav className="m-auto">
+
+
+                        <div className="center-button">
+                            <Nav.Link onClick={() => { Router.push("/home") }}>Home</Nav.Link>
+                        </div>
+                        <div className="center-button">
+                            <Nav.Link href="#link">Browse</Nav.Link>
+                        </div>
+                        <div className="center-button">
+                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                            </NavDropdown>
+                        </div>
+                    </Nav>
+
+                    <div className="profile-pic-group" style={{ marginRight: "auto" }}>
+                        <Nav style={{ whiteSpace: "nowrap" }}>
+                            <Image src={props.user.picture_url} roundedCircle style={{ width: "40px", height: "40px" }} />
+                            <NavDropdown title={props.user.firstName} id="basic-nav-dropdown">
+                                <GoogleLogout
+                                    clientId={CLIENT_ID}
+                                    render={renderProps => (
+                                        <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
+                                    )}
+                                    buttonText="custom logout"
+                                    onLogoutSuccess={logout}
+                                    onFailure={logoutFailed}
+                                    cookiePolicy={'single_host_origin'}
+                                />
+
+                                <NavDropdown.Item >Something</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+
+
+                    </div>
+
+                </Navbar.Collapse>
+            </Navbar>
+        )
+    }
+
+}
+
 class CustomNavbar extends React.Component {
     constructor(props) {
         super(props);
@@ -45,83 +166,12 @@ class CustomNavbar extends React.Component {
         return (
             // dropdown customization: https://react-bootstrap.github.io/components/dropdowns/
             <div>
-                <Navbar bg="light" expand="lg" fixed="top" >
-
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <div className="brand">
-                            <Navbar.Brand onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
-                        </div>
-                        <Nav className="m-auto">
+                {/* <div style={{ display: "flex", justifyContent: "space-around" }}> */}
+                {this.state.firstName
+                    ? <NavBarContent user={this.state} />
+                    : <div></div>}
 
 
-                            <div className="center-button">
-                                <Nav.Link onClick={() => { Router.push("/home") }}>Home</Nav.Link>
-                            </div>
-                            <div className="center-button">
-                                <Nav.Link href="#link">Browse</Nav.Link>
-                            </div>
-                            <div className="center-button">
-                                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                                </NavDropdown>
-                            </div>
-                        </Nav>
-                        {/* <Form inline>
-                            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                            <Button variant="outline-success">Search</Button>
-                        </Form> */}
-
-                        <div className="profile-pic-group">
-                            {/* <Button roundedCircle></Button> */}
-                            {/* <ProfilePicMenu picture_url={this.state.picture_url} /> */}
-                            <Nav style={{ whiteSpace: "nowrap" }}>
-                                <Image src={this.state.picture_url} roundedCircle style={{ width: "40px", height: "40px" }} />
-                                <NavDropdown title={this.state.firstName} id="basic-nav-dropdown">
-                                    {/* <NavDropdown.Item onClick={(CLIENT_ID) => { useGoogleLogout({ client_id: CLIENT_ID, onLogoutSuccess: logout, onFailure: logoutFailed }) }}>Log Out</NavDropdown.Item> */}
-                                    <GoogleLogout
-                                        clientId={CLIENT_ID}
-                                        render={renderProps => (
-                                            <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
-                                            // <button onClick={logout} disabled={renderProps.disabled}>This is my custom Google button</button>
-                                        )}
-                                        buttonText="custom logout"
-                                        onLogoutSuccess={logout}
-                                        onFailure={logoutFailed}
-                                        cookiePolicy={'single_host_origin'}
-                                    />
-
-                                    <NavDropdown.Item >Something</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                                </NavDropdown>
-                            </Nav>
-
-                            {/* <Dropdown title="">
-                                <Dropdown.Toggle className="profile-pic-button">
-                                    <Image src={this.state.picture_url} roundedCircle fluid />
-
-                                </Dropdown.Toggle>
-
-
-                                <Dropdown.Menu>
-                                    <Dropdown.Item href="#action/3.2">Another action</Dropdown.Item>
-                                    <Dropdown.Item href="#action/3.3">Something</Dropdown.Item>
-                                    <Dropdown.Divider />
-                                    <Dropdown.Item href="#action/3.4">Separated link</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown> */}
-
-                            {/* <button className="btn profile-pic-button">
-                                <Image src={this.state.picture_url} roundedCircle fluid /></button> */}
-                        </div>
-                        {/* <img src={this.state.picture_url} className="profile-pic-button" onClick={() => { }} /> */}
-
-                    </Navbar.Collapse>
-                </Navbar>
                 <style jsx> {`
                 .parent{
                     display:flex;   
@@ -143,7 +193,7 @@ class CustomNavbar extends React.Component {
                 }
                 .brand{
                     margin-left:auto;
-                    margin-right:unset;
+
 
                 }
                 .profile-pic-group{
