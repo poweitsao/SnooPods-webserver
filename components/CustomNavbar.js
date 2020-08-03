@@ -42,7 +42,7 @@ const NavBarContent = (props) => {
             <Navbar bg="light" expand="lg" fixed="top" >
 
                 <div style={{ display: "flex", justifyContent: "space-around" }}>
-                    <Navbar.Brand onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
+                    <Navbar.Brand style={{ cursor: "pointer" }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 </div>
                 <Navbar.Collapse id="responsive-navbar-nav">
@@ -102,7 +102,7 @@ const NavBarContent = (props) => {
 
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <div className="brand" style={{ marginLeft: "auto" }}>
-                        <Navbar.Brand onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
+                        <Navbar.Brand style={{ cursor: "pointer" }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
                     </div>
                     <Nav className="m-auto">
 
