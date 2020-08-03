@@ -7,6 +7,8 @@ import { CLIENT_ID } from "../lib/constants"
 import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 
+import GoogleLogin from 'react-google-login';
+
 // const Navbar = (props) => {
 
 
@@ -32,6 +34,84 @@ const logout = () => {
 }
 const logoutFailed = () => {
     console.log("logout failed")
+}
+
+const ProfilePicGroup = (props) => {
+    return (
+        <div className="profile-pic-group">
+            <Nav style={{ whiteSpace: "nowrap" }}>
+                <Image src={props.user.picture_url} roundedCircle style={{ width: "40px", height: "40px" }} />
+                <NavDropdown title={props.user.firstName} id="basic-nav-dropdown">
+                    <GoogleLogout
+                        clientId={CLIENT_ID}
+                        render={renderProps => (
+                            <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
+                        )}
+                        buttonText="custom logout"
+                        onLogoutSuccess={logout}
+                        onFailure={logoutFailed}
+                        cookiePolicy={'single_host_origin'}
+                    />
+
+                    <NavDropdown.Item >Something</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                </NavDropdown>
+            </Nav>
+        </div>
+    )
+}
+
+const LoginGroup = () => {
+    return (
+        <div>
+            <Nav style={{ whiteSpace: "nowrap" }}>
+                <NavDropdown title="Login" id="basic-nav-dropdown">
+                    <GoogleLogin
+                        clientId={CLIENT_ID}
+                        buttonText="Sign In with Google"
+                        onSuccess={onGoogleLoginSuccess}
+                        onFailure={onGoogleLoginFailed}
+                        cookiePolicy={'single_host_origin'}
+                    />
+                </NavDropdown>
+            </Nav>
+        </div>
+    )
+}
+
+async function onGoogleLoginSuccess(googleUser) {
+    var id_token = googleUser.getAuthResponse().id_token;
+
+    let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
+    if (response.status == 200) {
+        let res = await response.json()
+        if (res.registered) {
+            //store session_id
+            Cookie.set("session_id", res.session_id)
+            Cookie.set("email", res.verification.payload.email)
+
+            console.log("Taking user to their homepage")
+            Router.push('/home')
+        }
+        else if (!res.registered) {
+            // res.userID = id_token
+            console.log("response in index.js", res)
+            // const store = createStore(userInfoReducer)
+
+            RegisterStore.dispatch(storeUserInfo(res))
+            // console.log("store: ", store.getState())
+            console.log("Taking user to registeration page ")
+            Router.push('/register')
+        }
+    }
+    else {
+        console.log("Login Failed")
+    }
+}
+
+const onGoogleLoginFailed = (response) => {
+
 }
 
 const NavBarContent = (props) => {
@@ -65,31 +145,12 @@ const NavBarContent = (props) => {
                             </NavDropdown>
                         </div>
                     </Nav>
-
-                    <div className="profile-pic-group">
-                        <Nav style={{ whiteSpace: "nowrap" }}>
-                            <Image src={props.user.picture_url} roundedCircle style={{ width: "40px", height: "40px" }} />
-                            <NavDropdown title={props.user.firstName} id="basic-nav-dropdown">
-                                <GoogleLogout
-                                    clientId={CLIENT_ID}
-                                    render={renderProps => (
-                                        <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
-                                    )}
-                                    buttonText="custom logout"
-                                    onLogoutSuccess={logout}
-                                    onFailure={logoutFailed}
-                                    cookiePolicy={'single_host_origin'}
-                                />
-
-                                <NavDropdown.Item >Something</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>
-
-
+                    <div style={{ marginRight: "auto" }}>
+                        {props.user
+                            ? <ProfilePicGroup user={props.user} />
+                            : <LoginGroup />
+                        }
                     </div>
-
                 </Navbar.Collapse>
             </Navbar>
         )
@@ -122,29 +183,11 @@ const NavBarContent = (props) => {
                             </NavDropdown>
                         </div>
                     </Nav>
-
-                    <div className="profile-pic-group" style={{ marginRight: "auto" }}>
-                        <Nav style={{ whiteSpace: "nowrap" }}>
-                            <Image src={props.user.picture_url} roundedCircle style={{ width: "40px", height: "40px" }} />
-                            <NavDropdown title={props.user.firstName} id="basic-nav-dropdown">
-                                <GoogleLogout
-                                    clientId={CLIENT_ID}
-                                    render={renderProps => (
-                                        <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
-                                    )}
-                                    buttonText="custom logout"
-                                    onLogoutSuccess={logout}
-                                    onFailure={logoutFailed}
-                                    cookiePolicy={'single_host_origin'}
-                                />
-
-                                <NavDropdown.Item >Something</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>
-
-
+                    <div style={{ marginRight: "auto" }}>
+                        {props.user
+                            ? <ProfilePicGroup user={props.user} />
+                            : <LoginGroup />
+                        }
                     </div>
 
                 </Navbar.Collapse>
@@ -167,9 +210,8 @@ class CustomNavbar extends React.Component {
             // dropdown customization: https://react-bootstrap.github.io/components/dropdowns/
             <div>
                 {/* <div style={{ display: "flex", justifyContent: "space-around" }}> */}
-                {this.state.firstName
-                    ? <NavBarContent user={this.state} />
-                    : <div></div>}
+                <NavBarContent user={this.state} />
+
 
 
                 <style jsx> {`

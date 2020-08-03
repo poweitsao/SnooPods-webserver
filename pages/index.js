@@ -11,6 +11,7 @@ import fetch from "isomorphic-unfetch"
 import { Icon, InlineIcon } from '@iconify/react';
 import headphonesAlt from '@iconify/icons-fa-solid/headphones-alt';
 import validateSession from "../lib/validateUserSessionOnPage"
+import CustomNavbar from "../components/CustomNavbar"
 
 import { storeUserInfo } from "../redux/actions/index"
 import { RegisterStore } from "../redux/store"
@@ -63,6 +64,7 @@ const Index = ({ userSession }) => {
 
   return (
     <Layout>
+      <CustomNavbar />
       <div className="container">
         <div className="heading">
           <div className="logo">
