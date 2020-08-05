@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import Router from 'next/router';
 import { CLIENT_ID } from "../lib/constants"
+import isEmpty from "../lib/isEmptyObject"
 
 import { createStore } from "redux"
 import Cookie from "js-cookie"
@@ -17,7 +18,7 @@ import { storeUserInfo } from "../redux/actions/index"
 import { RegisterStore } from "../redux/store"
 
 const Index = ({ userSession }) => {
-
+  const user = {}
   useEffect(() => {
     if (userSession.session_id && userSession.email) {
       console.log("UserSession: ", userSession)
@@ -64,7 +65,10 @@ const Index = ({ userSession }) => {
 
   return (
     <Layout>
-      <CustomNavbar />
+      <div>
+        <CustomNavbar />
+        {/* <CustomNavbar /> */}
+      </div>
       <div className="container">
         <div className="heading">
           <div className="logo">
@@ -112,6 +116,11 @@ const Index = ({ userSession }) => {
     }
     .desc{
       text-align: center;
+    }
+    .navbar{
+      display:flex;
+      flex-direction: column;
+      align-items: stretch;
     }
 
 `}</style>

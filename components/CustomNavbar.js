@@ -8,7 +8,7 @@ import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 
 import GoogleLogin from 'react-google-login';
-
+// import GoogleLogo from "../resources/google_logo"
 // const Navbar = (props) => {
 
 
@@ -53,9 +53,6 @@ const ProfilePicGroup = (props) => {
                         cookiePolicy={'single_host_origin'}
                     />
 
-                    <NavDropdown.Item >Something</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                 </NavDropdown>
             </Nav>
         </div>
@@ -67,8 +64,29 @@ const LoginGroup = () => {
         <div>
             <Nav style={{ whiteSpace: "nowrap" }}>
                 <NavDropdown title="Login" id="basic-nav-dropdown">
+                    {/* <GoogleLogout
+                        clientId={CLIENT_ID}
+                        render={renderProps => (
+                            <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
+                        )}
+                        buttonText="custom logout"
+                        onLogoutSuccess={logout}
+                        onFailure={logoutFailed}
+                        cookiePolicy={'single_host_origin'}
+                    /> */}
                     <GoogleLogin
                         clientId={CLIENT_ID}
+                        render={renderProps => (
+                            <NavDropdown.Item
+                                style={{ paddingLeft: "10px", paddingRight: "10px", display: "flex", alignItems: "center", justifyContent: "space-around" }}
+                                onClick={renderProps.onClick}
+                                disabled={renderProps.disabled}>
+                                <img
+                                    src={"https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"}
+                                    width="20" height="20"></img>
+                                <div style={{ paddingLeft: "10px" }}>Sign In with Google</div>
+                            </NavDropdown.Item>
+                        )}
                         buttonText="Sign In with Google"
                         onSuccess={onGoogleLoginSuccess}
                         onFailure={onGoogleLoginFailed}
@@ -119,11 +137,15 @@ const NavBarContent = (props) => {
     console.log("props in navbarcontent", props)
     if (width <= 991) {
         return (
-            <Navbar bg="light" expand="lg" fixed="top" >
+            <Navbar bg="light" expand="lg" fixed="top" style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch"
+            }}>
 
                 <div style={{ display: "flex", justifyContent: "space-around" }}>
-                    <Navbar.Brand style={{ cursor: "pointer" }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Brand style={{ cursor: "pointer" }} >SnooPods</Navbar.Brand>
+                    {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" /> */}
                 </div>
                 <Navbar.Collapse id="responsive-navbar-nav">
 
@@ -133,7 +155,7 @@ const NavBarContent = (props) => {
                         <div className="center-button">
                             <Nav.Link onClick={() => { Router.push("/home") }}>Home</Nav.Link>
                         </div>
-                        <div className="center-button">
+                        {/* <div className="center-button">
                             <Nav.Link href="#link">Browse</Nav.Link>
                         </div>
                         <div className="center-button">
@@ -143,7 +165,7 @@ const NavBarContent = (props) => {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
-                        </div>
+                        </div> */}
                     </Nav>
                     <div style={{ marginRight: "auto" }}>
                         {props.user
@@ -157,21 +179,25 @@ const NavBarContent = (props) => {
     }
     else {
         return (
-            <Navbar bg="light" expand="lg" fixed="top" >
+            <Navbar bg="light" expand="lg" fixed="top" style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch"
+            }}>
 
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
-                <Navbar.Collapse id="responsive-navbar-nav">
+                <Navbar.Collapse id="responsive-navbar-nav" style={{ display: "flex", justifySelf: "center" }}>
                     <div className="brand" style={{ marginLeft: "auto" }}>
-                        <Navbar.Brand style={{ cursor: "pointer" }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
+                        <Navbar.Brand style={{ cursor: "pointer", marginRight: "0" }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
                     </div>
                     <Nav className="m-auto">
 
 
-                        <div className="center-button">
+                        <div className="center-button" style={{ justifySelf: "center" }}>
                             <Nav.Link onClick={() => { Router.push("/home") }}>Home</Nav.Link>
                         </div>
-                        <div className="center-button">
+                        {/* <div className="center-button">
                             <Nav.Link href="#link">Browse</Nav.Link>
                         </div>
                         <div className="center-button">
@@ -181,9 +207,9 @@ const NavBarContent = (props) => {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
-                        </div>
+                        </div> */}
                     </Nav>
-                    <div style={{ marginRight: "auto" }}>
+                    <div style={{ marginRight: "auto", paddingLeft: "20px" }}>
                         {props.user
                             ? <ProfilePicGroup user={props.user} />
                             : <LoginGroup />
