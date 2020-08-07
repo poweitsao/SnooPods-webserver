@@ -1,11 +1,11 @@
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Image, Dropdown } from 'react-bootstrap/'
 import React from "react"
 import store from "../redux/store"
-import ProfilePicMenu from "../components/ProfilePicMenu"
+import ProfilePicMenu from "./ProfilePicMenu"
 import { useGoogleLogout, GoogleLogout } from 'react-google-login';
 import { CLIENT_ID } from "../lib/constants"
 import Router from "next/router"
-import useWindowDimensions from "../components/hooks/useWindowDimensions"
+import useWindowDimensions from "./hooks/useWindowDimensions"
 
 import GoogleLogin from 'react-google-login';
 // import GoogleLogo from "../resources/google_logo"
@@ -36,35 +36,39 @@ const logoutFailed = () => {
     console.log("logout failed")
 }
 
-// const ProfilePicToggle = React.forwardRef(({ children, onClick }, ref) => (
-//     <div>
-//         {/* <img
-//             src="/logo.svg"
-//             width="30"
-//             height="30"
-//             className="d-inline-block align-top"
-//             alt="React Bootstrap logo"
-//           /> */}
-//         <a
-//             href=""
-//             ref={ref}
-//             onClick={(e) => {
-//                 e.preventDefault();
-//                 onClick(e);
-//             }}
-//         >
-//             {children}
-//         &#x25bc;
-//       </a>
-//     </div>
-// ));
+const ProfilePicToggle = React.forwardRef(({ children, onClick }, ref) => (
+    <div>
+        {/* <img
+            src="/logo.svg"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            alt="React Bootstrap logo"
+          /> */}
+        <a
+            href=""
+            ref={ref}
+            onClick={(e) => {
+                e.preventDefault();
+                onClick(e);
+            }}
+        >
+            {children}
+        &#x25bc;
+      </a>
+    </div>
+));
 
 
 const ProfilePicGroup = (props) => {
     return (
         <div className="profile-pic-group">
-            <Nav style={{ whiteSpace: "nowrap" }}>
+            <Dropdown style={{ whiteSpace: "nowrap" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginRight: "37px" }}>
+                    {/* <div style={{
+                        display: "flex"
+
+                    }}> */}
                     <Image src={props.user.picture_url}
                         roundedCircle
                         style={{
@@ -74,18 +78,62 @@ const ProfilePicGroup = (props) => {
                             flexDirection: "column",
                             alignItems: "center"
                         }} />
-                    <NavDropdown
-                        title="Logout"
-                        id="basic-nav-dropdown"
-                        renderMenuOnMount={true}
-                        alignRight
+
+                    <Dropdown.Toggle as={ProfilePicToggle}
+                        // title={props.user.firstName} id="basic-nav-dropdown" renderMenuOnMount={true} alignRight
                         style={{
                             display: "flex",
                             justifyContent: "center",
                             flexDirection: "column",
                             alignItems: "center"
-                        }}>
-                        {/* <GoogleLogout
+                        }}
+                    >
+                        {props.user.firstName}
+
+
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item>
+                            <GoogleLogout
+                                clientId={CLIENT_ID}
+                                render={renderProps => (
+                                    // <Dropdown.Item
+                                    //     onClick={renderProps.onClick}
+                                    //     disabled={renderProps.disabled}
+                                    // >Log Out
+                                    // </Dropdown.Item>
+                                    <p>Logout</p>
+                                )}
+                                buttonText="custom logout"
+                                onLogoutSuccess={logout}
+                                onFailure={logoutFailed}
+                                cookiePolicy={'single_host_origin'}
+                            />
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                </div>
+                {/* </div> */}
+            </Dropdown>
+        </div >
+    )
+}
+
+const LoginGroup = () => {
+    return (
+        // <div>
+        //     <Nav style={{ whiteSpace: "nowrap" }}>
+        <NavDropdown
+            title="Login"
+            id="basic-nav-dropdown"
+            renderMenuOnMount={true}
+            alignRight
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                alignItems: "center"
+            }}>
+            {/* <GoogleLogout
                         clientId={CLIENT_ID}
                         render={renderProps => (
                             <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
@@ -95,73 +143,25 @@ const ProfilePicGroup = (props) => {
                         onFailure={logoutFailed}
                         cookiePolicy={'single_host_origin'}
                     /> */}
-                        <GoogleLogout
-                            clientId={CLIENT_ID}
-                            render={renderProps => (
-                                <Dropdown.Item
-                                    onClick={renderProps.onClick}
-                                    disabled={renderProps.disabled}
-                                >Log Out
-                                </Dropdown.Item>
-                            )}
-                            buttonText="custom logout"
-                            onLogoutSuccess={logout}
-                            onFailure={logoutFailed}
-                            cookiePolicy={'single_host_origin'}
-                        />
-                    </NavDropdown>
-                </div>
-            </Nav>
-        </div >
-    )
-}
-
-const LoginGroup = () => {
-    return (
-        // <div>
-        //     <Nav style={{ whiteSpace: "nowrap" }}>
-        <div className="profile-pic-group">
-            <Nav style={{ whiteSpace: "nowrap" }}>
-                <NavDropdown
-                    title="Login"
-                    // id="basic-nav-dropdown"
-                    renderMenuOnMount={true}
-                    alignRight
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        alignItems: "center",
-                    }}>
-
-                    <GoogleLogin
-                        clientId={CLIENT_ID}
-                        render={renderProps => (
-                            <NavDropdown.Item
-                                style={{
-                                    paddingLeft: "10px",
-                                    paddingRight: "10px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-around"
-
-                                }}
-                                onClick={renderProps.onClick}
-                                disabled={renderProps.disabled}>
-                                <img
-                                    src={"https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"}
-                                    width="20" height="20"></img>
-                                <div style={{ paddingLeft: "10px" }}>Sign In with Google</div>
-                            </NavDropdown.Item>
-                        )}
-                        buttonText="Sign In with Google"
-                        onSuccess={onGoogleLoginSuccess}
-                        onFailure={onGoogleLoginFailed}
-                        cookiePolicy={'single_host_origin'}
-                    />
-                </NavDropdown>
-            </Nav>
-        </div>
+            <GoogleLogin
+                clientId={CLIENT_ID}
+                render={renderProps => (
+                    <NavDropdown.Item
+                        style={{ paddingLeft: "10px", paddingRight: "10px", display: "flex", alignItems: "center", justifyContent: "space-around" }}
+                        onClick={renderProps.onClick}
+                        disabled={renderProps.disabled}>
+                        <img
+                            src={"https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"}
+                            width="20" height="20"></img>
+                        <div style={{ paddingLeft: "10px" }}>Sign In with Google</div>
+                    </NavDropdown.Item>
+                )}
+                buttonText="Sign In with Google"
+                onSuccess={onGoogleLoginSuccess}
+                onFailure={onGoogleLoginFailed}
+                cookiePolicy={'single_host_origin'}
+            />
+        </NavDropdown>
 
     )
 }
@@ -276,7 +276,7 @@ const NavBarContent = (props) => {
 
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
-                <Navbar.Collapse id="responsive-navbar-nav" style={{ display: "flex", justifyContent: "space-around" }}>
+                <Navbar.Collapse id="responsive-navbar-nav" style={{ display: "flex", justifySelf: "center" }}>
                     <div className="brand" style={{ marginLeft: "auto" }}>
                         <Navbar.Brand style={{ cursor: "pointer", marginRight: "0" }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
                     </div>
