@@ -12,9 +12,8 @@ const register = () => {
     <Layout>
       <div className="container">
         <div className="heading">
-          <h1> Register here, new user</h1>
+          <h1> Please Register Here</h1>
           {/* <button type="button" className="btn btn-primary" onClick={() => { clickHandler() }}>Play a podcast</button> */}
-
         </div>
         {/* //! use redux to get user object from login screen */}
         <RegisterationForm />

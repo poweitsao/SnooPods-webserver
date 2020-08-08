@@ -16,20 +16,24 @@ class RegisterationForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillMount() {
-        console.log("store: ", RegisterStore.getState())
-        const userPayload = RegisterStore.getState().userInfo.payload
-        const userID = RegisterStore.getState().userInfo.userID
+    // componentWillMount() {
+
+    // }
+    componentDidMount() {
+
+        // console.log("store: ", RegisterStore.getState())
+        const store = RegisterStore.getState()
+        console.table(store.payload)
+        const userPayload = store.payload
+        const userID = store.userID
 
         // console.log(userPayload)
         if (userPayload) {
             this.setState(
-                { userID: userID, userPayload: userPayload, firstName: userPayload.given_name, lastName: userPayload.family_name, email: userPayload.email }
+                { userID: userID, userPayload: userPayload, firstName: userPayload.given_name, lastName: userPayload.family_name, email: userPayload.email, picture_url: userPayload.picture }
             )
         }
-    }
-    componentDidMount() {
-        if (!this.state.firstName) {
+        else {
             Router.push("/")
         }
     }
@@ -67,32 +71,33 @@ class RegisterationForm extends React.Component {
 
     render() {
         return (
-
-            <Form onSubmit={() => { this.handleSubmit(this.state.email, this.state.firstName, this.state.lastName, this.state.userPayload.picture) }}>
-                <Row >
-                    <Form.Group as={Col} controlId="formGridFirstName">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control name="firstName" type="name" defaultValue={this.state.firstName} onChange={this.handleInputChange} />
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="formGridFirstName">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control name="lastName" type="name" defaultValue={this.state.lastName} onChange={this.handleInputChange} />
-                    </Form.Group>
-                </Row>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control name="email" type="email" defaultValue={this.state.email} onChange={this.handleInputChange} />
-                    <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
+            <div>
+                <div style={{ padding: "10px", display: "flex", justifyContent: "center" }}>
+                    <img width="70px" src={this.state.picture_url} />
+                </div>
+                <Form onSubmit={() => { this.handleSubmit(this.state.email, this.state.firstName, this.state.lastName, this.state.picture_url) }}>
+                    <Row >
+                        <Form.Group as={Col} controlId="formGridFirstName">
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control name="firstName" type="name" defaultValue={this.state.firstName} onChange={this.handleInputChange} />
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formGridFirstName">
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control name="lastName" type="name" defaultValue={this.state.lastName} onChange={this.handleInputChange} />
+                        </Form.Group>
+                    </Row>
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Label>Email address</Form.Label>
+                        <Form.Control name="email" type="email" defaultValue={this.state.email} onChange={this.handleInputChange} disabled={true} />
+                        <Form.Text className="text-muted">
+                            You are logging in with Google, so we'll use your Google Email address.
               </Form.Text>
-                </Form.Group>
-                <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Check me out" />
-                </Form.Group>
-                <Button variant="primary" type="submit" >
-                    Submit
+                    </Form.Group>
+                    <Button variant="primary" type="submit" >
+                        Submit
             </Button>
-            </Form>
+                </Form>
+            </div>
         )
     }
 }

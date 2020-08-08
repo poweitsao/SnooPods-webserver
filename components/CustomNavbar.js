@@ -7,6 +7,9 @@ import { CLIENT_ID } from "../lib/constants"
 import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 
+import { RegisterStore } from "../redux/store"
+import { storeUserInfo } from "../redux/actions/index"
+
 import GoogleLogin from 'react-google-login';
 // import GoogleLogo from "../resources/google_logo"
 // const Navbar = (props) => {
@@ -75,7 +78,7 @@ const ProfilePicGroup = (props) => {
                             alignItems: "center"
                         }} />
                     <NavDropdown
-                        title="Logout"
+                        title={props.user.firstName}
                         id="basic-nav-dropdown"
                         renderMenuOnMount={true}
                         alignRight
@@ -202,7 +205,7 @@ const onGoogleLoginFailed = (response) => {
 
 const NavBarContent = (props) => {
     const { height, width } = useWindowDimensions();
-    console.log("props in navbarcontent", props)
+    // console.log("props in navbarcontent", props)
     if (width <= 991) {
         return (
             <Navbar bg="light" expand="lg" fixed="top" style={{

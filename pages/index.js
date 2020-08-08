@@ -21,7 +21,7 @@ const Index = ({ userSession }) => {
   const user = {}
   useEffect(() => {
     if (userSession.session_id && userSession.email) {
-      console.log("UserSession: ", userSession)
+      // console.log("UserSession: ", userSession)
 
       validateSession(userSession.session_id, userSession.email);
     }
@@ -40,17 +40,17 @@ const Index = ({ userSession }) => {
         Cookie.set("session_id", res.session_id)
         Cookie.set("email", res.verification.payload.email)
 
-        console.log("Taking user to their homepage")
+        // console.log("Taking user to their homepage")
         Router.push('/home')
       }
       else if (!res.registered) {
         // res.userID = id_token
-        console.log("response in index.js", res)
+        // console.log("response in index.js", res)
         // const store = createStore(userInfoReducer)
 
         RegisterStore.dispatch(storeUserInfo(res))
         // console.log("store: ", store.getState())
-        console.log("Taking user to registeration page ")
+        // console.log("Taking user to registeration page ")
         Router.push('/register')
       }
     }
