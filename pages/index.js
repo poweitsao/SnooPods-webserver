@@ -72,25 +72,27 @@ const Index = ({ userSession }) => {
       <div className="container">
         <div className="heading">
           <div className="logo">
-            <Icon icon={headphonesAlt} width={100} height={100} />
+            {/* <Icon icon={headphonesAlt} width={100} height={100} /> */}
           </div>
-          <h1> Headphones for Reddit </h1>
+          <div style={{ height: "70px" }}></div>
+          <h1 style={{ fontSize: 60, fontWeight: "bold", color: "black" }}> SNOOPODS </h1>
 
         </div>
 
         <div className="desc">
-          <p>Podcast summaries for your favorite subreddits.</p>
+          <p style={{ fontSize: 20 }}>Listen to your favorite subreddits like never before.</p>
         </div>
         <div className="button-container">
           <div>
             {/* //? figure out how to make this server side rendering so that login button loads faster */}
-            <GoogleLogin
+            {/* <GoogleLogin
               clientId={CLIENT_ID}
               buttonText="Sign In with Google"
               onSuccess={onGoogleLoginSuccess}
               onFailure={onGoogleLoginFailed}
               cookiePolicy={'single_host_origin'}
-            />        </div>
+            />         */}
+          </div>
         </div>
         {/* <img className="image" src="http://www.poweitsao.com/images/kenobi.jpg"></img> */}
         <style>{`

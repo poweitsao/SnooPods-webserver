@@ -11,6 +11,8 @@ import { RegisterStore } from "../redux/store"
 import { storeUserInfo } from "../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
+import { Divider } from '@material-ui/core';
+
 // import GoogleLogo from "../resources/google_logo"
 // const Navbar = (props) => {
 
@@ -140,22 +142,25 @@ const LoginGroup = () => {
                     <GoogleLogin
                         clientId={CLIENT_ID}
                         render={renderProps => (
-                            <NavDropdown.Item
-                                style={{
-                                    paddingLeft: "10px",
-                                    paddingRight: "10px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-around"
+                            <Nav>
+                                <NavDropdown.Item
+                                    style={{
+                                        paddingLeft: "10px",
+                                        paddingRight: "10px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-around"
 
-                                }}
-                                onClick={renderProps.onClick}
-                                disabled={renderProps.disabled}>
-                                <img
-                                    src={"https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"}
-                                    width="20" height="20"></img>
-                                <div style={{ paddingLeft: "10px" }}>Sign In with Google</div>
-                            </NavDropdown.Item>
+                                    }}
+                                    onClick={renderProps.onClick}
+                                    disabled={renderProps.disabled}>
+                                    <img
+                                        src={"https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"}
+                                        width="20" height="20"></img>
+                                    <div style={{ paddingLeft: "10px" }}>Sign In with Google</div>
+                                </NavDropdown.Item>
+                            </Nav>
+
                         )}
                         buttonText="Sign In with Google"
                         onSuccess={onGoogleLoginSuccess}
@@ -271,26 +276,28 @@ const NavBarContent = (props) => {
     }
     else {
         return (
-            <Navbar bg="light" expand="lg" fixed="top" style={{
+            <Navbar bg="white" expand="lg" fixed="top" style={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "stretch"
+                alignItems: "stretch",
+                padding: "20px",
+                fontSize: 20
             }}>
 
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
                 <Navbar.Collapse id="responsive-navbar-nav" style={{ display: "flex", justifyContent: "space-around" }}>
                     <div className="brand" style={{ marginLeft: "auto" }}>
-                        <Navbar.Brand style={{ cursor: "pointer", marginRight: "0" }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
+                        <Navbar.Brand style={{ cursor: "pointer", marginRight: "0", fontSize: 30 }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
                     </div>
                     <Nav className="m-auto">
 
 
-                        <div className="center-button" style={{ display: "flex", justifySelf: "center" }}>
-                            <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
-                            <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/home") }}>About</Nav.Link>
+                        {/* <div className="center-button" style={{ display: "flex", justifySelf: "center" }}> */}
+                        {/* <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
+                        <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/home") }}>About</Nav.Link> */}
 
-                        </div>
+                        {/* </div> */}
                         {/* <div className="center-button">
                             <Nav.Link href="#link">Browse</Nav.Link>
                         </div>
@@ -302,13 +309,17 @@ const NavBarContent = (props) => {
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
                         </div> */}
+                        <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
+                        <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/home") }}>About</Nav.Link>
+                        <Divider orientation="vertical" flexItem={true} />
+                        <div style={{ marginRight: "auto", paddingLeft: "20px" }}>
+                            {props.user
+                                ? <ProfilePicGroup user={props.user} />
+                                : <LoginGroup />
+                            }
+                        </div>
                     </Nav>
-                    <div style={{ marginRight: "auto", paddingLeft: "20px" }}>
-                        {props.user
-                            ? <ProfilePicGroup user={props.user} />
-                            : <LoginGroup />
-                        }
-                    </div>
+
 
                 </Navbar.Collapse>
             </Navbar>
@@ -328,7 +339,7 @@ class CustomNavbar extends React.Component {
     render() {
         return (
             // dropdown customization: https://react-bootstrap.github.io/components/dropdowns/
-            <div>
+            <div >
                 {/* <div style={{ display: "flex", justifyContent: "space-around" }}> */}
                 <NavBarContent user={this.state} />
 
