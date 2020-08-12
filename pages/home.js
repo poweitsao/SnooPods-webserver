@@ -217,7 +217,7 @@ const home = ({ userSession }) => {
         }
 
       </div>
-      <div className="container">
+      <div className="page-body">
         <div className="heading">
           <h1> Featured Subreddits </h1>
         </div>
@@ -236,7 +236,7 @@ const home = ({ userSession }) => {
         .heading{
           text-align:center;
         }
-      .container{
+      .page-body{
         margin-top:50px;
         margin-bottom:50px;
         display:flex;

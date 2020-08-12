@@ -190,11 +190,12 @@ const Subreddit = ({ userSession }) => {
 
     return (
         <Layout>
-
-            {isEmpty(user)
-                ? <div></div>
-                : <CustomNavbar user={user} />
-            }
+            <div>
+                {isEmpty(user)
+                    ? <div></div>
+                    : <CustomNavbar user={user} />
+                }
+            </div>
             <div className="page-body">
                 {isEmpty(playlist)
                     ? <div></div>
@@ -206,8 +207,12 @@ const Subreddit = ({ userSession }) => {
 
             <style>
                 {`.page-body{
-                    margin-top: 100px;
+                    margin-top: 50px;
                     margin-bottom: 100px;
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:nowrap;
+                    align-items:center;
                     }
                     .album-cover{
                         padding: 20px;

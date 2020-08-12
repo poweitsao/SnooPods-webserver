@@ -8,7 +8,7 @@ const Layout = (props) => (
             <title>SnooPods</title>
             <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
         </Head>
-        <div >
+        <div style={{ width: "100%" }}>
             {/* <Provider store={store}> */}
             {props.children}
             {/* </Provider> */}
@@ -20,7 +20,12 @@ const Layout = (props) => (
                 font-size: 16px;
                 
                 display:flex;
+                margin-top:30px;
+                margin-bottom:30px;
                 justify-content: center;
+                flex-direction:column;
+                align-content:center;
+                align-text:center;
         }`}
         </style>
     </div>
