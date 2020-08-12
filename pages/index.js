@@ -74,7 +74,7 @@ const Index = ({ userSession }) => {
           <div className="logo">
             {/* <Icon icon={headphonesAlt} width={100} height={100} /> */}
           </div>
-          <div style={{ height: "70px" }}></div>
+          <div style={{ height: "10%" }}></div>
           <h1 style={{ fontSize: 60, fontWeight: "bold", color: "black" }}> SNOOPODS </h1>
 
         </div>

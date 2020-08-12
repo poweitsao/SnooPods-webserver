@@ -69,7 +69,7 @@ const ProfilePicGroup = (props) => {
     return (
         <div className="profile-pic-group">
             <Nav style={{ whiteSpace: "nowrap" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginRight: "37px" }}>
+                <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "37px" }}>
                     <Image src={props.user.picture_url}
                         roundedCircle
                         style={{
@@ -77,7 +77,7 @@ const ProfilePicGroup = (props) => {
                             display: "flex",
                             justifyContent: "center",
                             flexDirection: "column",
-                            alignItems: "center"
+                            alignItems: "flex-start"
                         }} />
                     <NavDropdown
                         title={props.user.firstName}
@@ -88,7 +88,7 @@ const ProfilePicGroup = (props) => {
                             display: "flex",
                             justifyContent: "center",
                             flexDirection: "column",
-                            alignItems: "center"
+                            alignItems: "flex-start"
                         }}>
                         {/* <GoogleLogout
                         clientId={CLIENT_ID}
@@ -136,7 +136,7 @@ const LoginGroup = () => {
                         display: "flex",
                         justifyContent: "center",
                         flexDirection: "column",
-                        alignItems: "center",
+                        alignItems: "flex-start",
                     }}>
 
                     <GoogleLogin
@@ -148,9 +148,8 @@ const LoginGroup = () => {
                                         paddingLeft: "10px",
                                         paddingRight: "10px",
                                         display: "flex",
-                                        alignItems: "center",
+                                        alignItems: "flex-start",
                                         justifyContent: "space-around"
-
                                     }}
                                     onClick={renderProps.onClick}
                                     disabled={renderProps.disabled}>
@@ -232,10 +231,10 @@ const MobileNavBar = (props) => {
                 <div>
                     <Nav className="m-auto">
 
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                             <div className="center-button">
-                                <Nav.Link onClick={() => { Router.push("/home") }}>Home</Nav.Link>
-                                <Nav.Link onClick={() => { Router.push("/home") }}>About</Nav.Link>
+                                <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
+                                <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/home") }}>About</Nav.Link>
 
                             </div>
                             {/* <NavDropdown
@@ -292,7 +291,7 @@ const DesktopNavBar = (props) => {
 
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
-            <Navbar.Collapse id="responsive-navbar-nav" style={{ display: "flex", justifyContent: "space-around" }}>
+            <Navbar.Collapse id="responsive-navbar-nav" style={{ display: "flex", justifyContent: "space-between" }}>
                 <div className="brand" style={{ marginLeft: "auto" }}>
                     <Navbar.Brand style={{ cursor: "pointer", marginRight: "0", fontSize: 30 }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
                 </div>
@@ -358,7 +357,7 @@ class CustomNavbar extends React.Component {
     render() {
         return (
             // dropdown customization: https://react-bootstrap.github.io/components/dropdowns/
-            <div >
+            <div style={{ width: "100%" }}>
                 {/* <div style={{ display: "flex", justifyContent: "space-around" }}> */}
                 <NavBarContent user={this.state} />
 
