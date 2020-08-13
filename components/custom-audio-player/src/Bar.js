@@ -58,7 +58,7 @@ export default function Bar(props) {
         >
           <span
             className="bar__progress__knob"
-            style={{ left: `${curPercentage - (2.2)}%` }}
+            style={{ left: `${curPercentage - (1.375)}%` }}
           />
         </div>
         {/* {duration
@@ -106,14 +106,16 @@ export default function Bar(props) {
         .bar__time {
           color: black;
           font-size: 16px;
-          padding: 15px;
+          padding-left: 15px;
+          padding-right: 15px;
+
         }
     
         .bar__progress {
           flex: 1;
           border-radius: 5px;
           width: 100px;
-          height: 10px;
+          height: 7px;
           display: flex;
           align-items: center;
           cursor: pointer;
@@ -121,8 +123,8 @@ export default function Bar(props) {
 
         .bar__progress__knob {
           position: relative;
-          height: 16px;
-          width: 16px;
+          height: 10px;
+          width: 10px;
           border: 1.5px solid black;
           border-radius: 50%;
           background-color: orange;

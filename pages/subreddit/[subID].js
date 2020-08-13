@@ -12,7 +12,7 @@ import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarC
 import { Provider } from 'react-redux'
 import { AudioPlayerStore } from "../../redux/store"
 import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index"
-
+import Image from 'react-bootstrap/Image'
 
 import ListGroup from 'react-bootstrap/ListGroup'
 import fetch from "isomorphic-unfetch"
@@ -158,13 +158,13 @@ const Subreddit = ({ userSession }) => {
                 <div style={{ width: "250px" }}>
                     <div style={{ fontSize: "16px", display: "flex", justifyContent: "center" }}>
                         <Icon
-                            style={{ paddingRight: " 5px", width: "10%", height: "10%" }}
+                            style={{ width: "10%", height: "10%" }}
                             icon={playButton}
                             onClick={() => { playPodcast(playlist[trackIndex]) }}
                             onMouseEnter={() => setPlayButton(playCircleFilled)}
                             onMouseLeave={() => setPlayButton(playCircleOutlined)} />
                         {/* <button onClick={() => { console.log(playlist) }}>Play</button> */}
-                        {playlist[trackIndex]["filename"]}
+                        <div>{playlist[trackIndex]["filename"]}</div>
                     </div>
                 </div>
 
@@ -199,7 +199,7 @@ const Subreddit = ({ userSession }) => {
             <div className="page-body">
                 {isEmpty(playlist)
                     ? <div></div>
-                    : <img className="album-cover" src={playlist.album_cover_url}></img>}
+                    : <Image className="album-cover" src={playlist.album_cover_url} width="256px" height="256px" />}
                 {isEmpty(playlist)
                     ? <div></div>
                     : <List playlist={playlist} />}
@@ -207,7 +207,7 @@ const Subreddit = ({ userSession }) => {
 
             <style>
                 {`.page-body{
-                    margin-top: 50px;
+                    margin-top: 30px;
                     margin-bottom: 100px;
                     display:flex;
                     flex-direction:column;

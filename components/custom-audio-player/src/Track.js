@@ -22,7 +22,7 @@ function Track(props) {
         margin: 0;
         color: black;
         font-weight: normal;
-        font-size: 15px;
+        font-size: 20px;
   
         
       }
@@ -31,7 +31,7 @@ function Track(props) {
         margin: 0;
         color: black;
         font-weight: normal;
-        font-size: 12px;
+        font-size: 15px;
       }
 
       `}

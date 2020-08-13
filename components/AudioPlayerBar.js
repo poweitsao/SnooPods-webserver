@@ -106,62 +106,79 @@ function AudioPlayerInfo(props) {
                 <div className="track-info">
                     <Track trackName={trackName} subreddit={subreddit} />
                 </div>
-                <div className="controls">
-                    <Replay10 handleClick={() => {
-                        if (curTime - 10 > 0) {
-                            setClickedTime(curTime - 10)
-                        } else {
-                            setClickedTime(duration)
-                        }
-                    }} />
-
-                    {props.playing ?
-                        <Pause handleClick={() => {
-                            props.togglePlaying(false)
-                            audio.pause();
-                        }} /> :
-                        <Play handleClick={() => {
-                            props.togglePlaying(true)
-                            audio.play();
+                <div className="center-piece">
+                    <div className="controls">
+                        <Replay10 handleClick={() => {
+                            if (curTime - 10 > 0) {
+                                setClickedTime(curTime - 10)
+                            } else {
+                                setClickedTime(duration)
+                            }
                         }} />
-                    }
-                    <Forward10 handleClick={() => {
-                        if (curTime + 10 > duration) {
-                            console.log("duration:", duration)
-                            setClickedTime(duration)
-                        } else {
-                            setClickedTime(curTime + 10)
+
+                        {props.playing ?
+                            <Pause handleClick={() => {
+                                props.togglePlaying(false)
+                                audio.pause();
+                            }} /> :
+                            <Play handleClick={() => {
+                                props.togglePlaying(true)
+                                audio.play();
+                            }} />
                         }
-                    }} />
+                        <Forward10 handleClick={() => {
+                            if (curTime + 10 > duration) {
+                                console.log("duration:", duration)
+                                setClickedTime(duration)
+                            } else {
+                                setClickedTime(curTime + 10)
+                            }
+                        }} />
 
 
+                    </div>
+                    <div className="track-duration-info">
+                        <Bar curTime={curTime} duration={props.audio.duration} onTimeUpdate={(time) => setClickedTime(time)} />
+                    </div>
                 </div>
-                <div className="track-duration-info">
-                    <Bar curTime={curTime} duration={duration} onTimeUpdate={(time) => setClickedTime(time)} />
+                <div className="volume">
+                    <p>Volume</p>
                 </div>
             </div>
             <style >
-                {`.player {
+                {`
+         .player {
             display:flex;
-            justify-content:center;
+            justify-content: space-between;
             align-items:center;
-            padding: 20px 0;
+            padding-top: 10px;
+            padding-bottom:10px;
             background-color: #EAECEF;
           }
+          .center-piece{
+              display:flex;
+              flex-direction: column;
+              justify-content:space-between;
+              align-items:center;
+              width:70%;
+          } 
           .track-info{
-            margin-left:auto;
-            padding-right: 20px;
+            width:35%;
+            margin-left:5%;
+            font-size: 25;
+          }
+          .volume{
+            display:flex;
+            justify-content: flex-end;
+            width:35%;
+            margin-right:5%;
+            font-size: 25;
           }
           .track-duration-info{
-            margin-right: 10%;
-            width: 30%;
+            width: 100%;
           }
           .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 10%;
-            margin-left: 20%;
+            display: flex; 
           }`}
             </style>
         </div>
