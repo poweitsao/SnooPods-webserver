@@ -19,4 +19,11 @@ const togglePlaying = (playingStatus) => {
     }
 }
 
-module.exports = { storeUserInfo, storeAudioPlayerInfo, togglePlaying }
+const nextTrack = (AudioPlayerInfo) => {
+    return {
+        type: "NEXT_TRACK",
+        AudioPlayerInfo
+    }
+}
+
+module.exports = { storeUserInfo, storeAudioPlayerInfo, togglePlaying, nextTrack }

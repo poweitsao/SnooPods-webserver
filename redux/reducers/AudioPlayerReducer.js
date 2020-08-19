@@ -13,12 +13,18 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
                 subreddit: action.AudioPlayerInfo.subreddit,
                 trackName: action.AudioPlayerInfo.trackName,
                 audio: action.AudioPlayerInfo.audio,
-                url: action.AudioPlayerInfo.url
+                url: action.AudioPlayerInfo.url,
+                playlist: action.AudioPlayerInfo.playlist,
+                keyIndex: action.AudioPlayerInfo.keyIndex
             })
         case "TOGGLE_PLAYING":
             return {
                 ...state,
                 playing: action.playingStatus
+            }
+        case "NEXT_TRACK":
+            return {
+                ...state
             }
         default:
             return state

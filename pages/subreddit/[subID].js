@@ -80,10 +80,15 @@ const Subreddit = ({ userSession }) => {
 
 
     }, [subID])
-    console.log(playlist)
+    // console.log(playlist)
 
-    const playPodcast = async (podcast) => {
+    const playPodcast = async (trackIndex) => {
         const currStore = AudioPlayerStore.getState()
+        var podcast = playlist[trackIndex]
+        // console.log("podcast", podcast)
+        // console.log("trackIndex", trackIndex)
+        // console.table(playlist)
+
         if (currStore.url === podcast["cloud_storage_url"]) {
             AudioPlayerStore.dispatch(togglePlaying(!currStore.playing))
         } else {
@@ -109,20 +114,12 @@ const Subreddit = ({ userSession }) => {
                 subreddit: subID,
                 trackName: podcast["filename"],
                 audio: track,
-                url: podcast["cloud_storage_url"]
+                url: podcast["cloud_storage_url"],
+                playlist: playlist,
+                keyIndex: playlist["keys"].indexOf(trackIndex)
             }))
 
             setAudio(track)
-
-            // track.play().catch()
-            // track.pause()
-            // track.currentTime = 0
-            // console.log("track:", track)
-            // setAudio(track)
-            // setTimeout(() => { track.play() }, 5000);
-            // audioElement.play()
-
-            // retrievePodcast(subID, podcast)
         }
 
     }
@@ -152,6 +149,10 @@ const Subreddit = ({ userSession }) => {
         )
     }
 
+    const unlockPlaylist = () => {
+
+    }
+
     const renderTrack = (trackIndex) => {
         const [playButton, setPlayButton] = useState(playCircleOutlined)
         return (
@@ -162,7 +163,7 @@ const Subreddit = ({ userSession }) => {
                         <Icon
                             style={{ width: "25px", height: "25px", marginRight: "20px" }}
                             icon={playButton}
-                            onClick={() => { playPodcast(playlist[trackIndex]) }}
+                            onClick={() => { playPodcast(trackIndex) }}
                             onMouseEnter={() => setPlayButton(playCircleFilled)}
                             onMouseLeave={() => setPlayButton(playCircleOutlined)} />
                         {/* <button onClick={() => { console.log(playlist) }}>Play</button> */}
@@ -185,6 +186,12 @@ const Subreddit = ({ userSession }) => {
             </ListGroup.Item>
         )
     }
+    const convertDate = (dateObject) => {
+        var unixTime = new Date(dateObject["_seconds"] * 1000);
+        var dateString = unixTime.toDateString()
+        return dateString.substring(4, 10) + ", " + dateString.substring(11, 15);
+    }
+
     const renderTrackOnTable = (trackIndex) => {
         const [playButton, setPlayButton] = useState(playCircleOutlined)
         return (
@@ -197,7 +204,7 @@ const Subreddit = ({ userSession }) => {
                     <Icon
                         style={{ width: "25px", height: "25px", marginRight: "20px" }}
                         icon={playButton}
-                        onClick={() => { playPodcast(playlist[trackIndex]) }}
+                        onClick={() => { playPodcast(trackIndex) }}
                         onMouseEnter={() => setPlayButton(playCircleFilled)}
                         onMouseLeave={() => setPlayButton(playCircleOutlined)} />
                 </td>
@@ -220,7 +227,7 @@ const Subreddit = ({ userSession }) => {
                 </td>
                 <td>
                     {playlist[trackIndex]["date_posted"]
-                        ? <div className="date-posted">{playlist[trackIndex]["date_posted"]}</div>
+                        ? <div className="date-posted">{convertDate(playlist[trackIndex]["date_posted"])}</div>
                         : <div className="date-posted-dummy">{"datePosted"}</div>}
                 </td>
                 {/* {playlist[trackIndex]["post_title"]
