@@ -4,37 +4,7 @@ import { storeAudioPlayerInfo, togglePlaying } from "../../../redux/actions/inde
 import { AudioPlayerStore } from "../../../redux/store"
 
 
-const nextTrack = () => {
-  const currStore = AudioPlayerStore.getState()
-  var keyIndex = currStore["keyIndex"]
-  var playlist = currStore["playlist"]
 
-
-
-  if (keyIndex < playlist["keys"].length - 1) {
-    var filename = currStore["playlist"]["keys"][keyIndex + 1]
-    var podcast = currStore["playlist"][filename]
-
-    var track = new Audio(podcast["cloud_storage_url"])
-    track.setAttribute("id", "audio")
-    currStore["audio"].setAttribute("id", "")
-    AudioPlayerStore.dispatch(togglePlaying(false))
-
-
-    AudioPlayerStore.dispatch(storeAudioPlayerInfo({
-      playing: true,
-      subreddit: currStore["subreddit"],
-      trackName: filename,
-      audio: track,
-      url: podcast["cloud_storage_url"],
-      playlist: playlist,
-      keyIndex: playlist["keys"].indexOf(filename)
-    }))
-  }
-
-
-
-}
 
 function useAudioPlayer(audioObject, trackPlaying) {
   const [duration, setDuration] = useState();
@@ -66,12 +36,12 @@ function useAudioPlayer(audioObject, trackPlaying) {
   //   }
   // }
 
-  if (curTime && duration && curTime === duration) {
-    // setPlaying(false);
-    setCurTime(0);
-    nextTrack()
-    // audio.currentTime = 0;
-  }
+  // if (curTime && duration && curTime === duration) {
+  //   // setPlaying(false);
+  //   setCurTime(0);
+  //   nextTrack()
+  //   // audio.currentTime = 0;
+  // }
 
   useEffect(() => {
 
@@ -120,6 +90,7 @@ function useAudioPlayer(audioObject, trackPlaying) {
     setPlaying,
     setClickedTime,
     setSource,
+    setCurTime,
     curSource,
     source
   }

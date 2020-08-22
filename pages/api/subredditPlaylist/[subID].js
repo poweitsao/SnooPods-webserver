@@ -7,7 +7,7 @@ export default async function handler(req, res) {
             console.log("req:", req.query)
             console.log("req.query:" + req.query["subID"])
             let playlist = await firestore.getSubredditPlaylist(req.query["subID"])
-            console.log("playlist", playlist)
+            // console.log("playlist", playlist)
             res.status(200).json(playlist)
 
         }

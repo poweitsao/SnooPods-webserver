@@ -10,7 +10,7 @@ import Bar from "./custom-audio-player/src/Bar";
 import { useState, useEffect } from "react"
 import useAudioPlayer from './custom-audio-player/src/useAudioPlayer';
 import { AudioPlayerStore } from "../redux/store"
-
+import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 
 
 
@@ -53,6 +53,8 @@ function AudioPlayer(props) {
     const [reload, setReload] = useState(false)
     const [audio, setAudio] = useState(undefined)
     useEffect(() => {
+
+
         if (props.audio !== audio) {
             if (audio !== undefined) {
                 // console.log("Pausing before switching!")
@@ -84,12 +86,48 @@ function AudioPlayer(props) {
     )
 }
 
+const nextTrack = () => {
+    const currStore = AudioPlayerStore.getState()
+    var keyIndex = currStore["keyIndex"]
+    var playlist = currStore["playlist"]
+
+    if (keyIndex < playlist["keys"].length - 1) {
+        var filename = currStore["playlist"]["keys"][keyIndex + 1]
+        var podcast = currStore["playlist"][filename]
+
+        var track = new Audio(podcast["cloud_storage_url"])
+        track.setAttribute("id", "audio")
+        currStore["audio"].setAttribute("id", "")
+        AudioPlayerStore.dispatch(togglePlaying(false))
+
+        AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+            playing: true,
+            subreddit: currStore["subreddit"],
+            trackName: filename,
+            audio: track,
+            url: podcast["cloud_storage_url"],
+            playlist: playlist,
+            keyIndex: playlist["keys"].indexOf(filename)
+        }))
+    }
+}
+
 function AudioPlayerInfo(props) {
-    const { curTime, duration, setClickedTime } = useAudioPlayer(props.audio);
+    const { curTime, duration, setClickedTime, setCurTime } = useAudioPlayer(props.audio);
     const source = props.url;
     const subreddit = props.subreddit;
     const trackName = props.trackName;
     const audio = props.audio;
+
+    useEffect(() => {
+
+        if (curTime && duration && curTime === duration) {
+            // setPlaying(false);
+            setCurTime(0);
+            nextTrack()
+            // audio.currentTime = 0;
+        }
+    })
 
     if (audio !== null && props.playing && duration) {
         audio.play()
