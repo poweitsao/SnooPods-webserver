@@ -40,7 +40,7 @@ class AudioPlayerBar extends React.Component {
                             changeAudioPlayerInfo={this.props.changeAudioPlayerInfo}
                             togglePlaying={this.props.togglePlaying} />
 
-                        : <div style={{ paddingTop: "84px", width: "100%", height: "100%" }}></div>
+                        : <div></div>
                     }
                 </Navbar>
             </div>

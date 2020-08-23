@@ -11,6 +11,7 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
             return Object.assign({}, state, {
                 playing: action.AudioPlayerInfo.playing,
                 subreddit: action.AudioPlayerInfo.subreddit,
+                filename: action.AudioPlayerInfo.filename,
                 trackName: action.AudioPlayerInfo.trackName,
                 audio: action.AudioPlayerInfo.audio,
                 url: action.AudioPlayerInfo.url,

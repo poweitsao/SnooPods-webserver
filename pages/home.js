@@ -329,7 +329,9 @@ const home = ({ userSession }) => {
   `}</style>
       </div>
       <div>
+
         <AudioPlayerBar subreddit={subreddit} podcast={podcast} src={podcastURL} />
+
       </div>
     </Layout >
 
