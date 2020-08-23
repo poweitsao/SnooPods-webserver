@@ -7,7 +7,7 @@ import PlayableTile from "../components/PlayableTile"
 import React, { useState, useEffect } from 'react';
 import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
-import { GoogleLogout } from 'react-google-login';
+import { GoogleLogin } from 'react-google-login';
 import { CLIENT_ID } from "../lib/constants"
 import Cookie, { set } from "js-cookie"
 import store from "../redux/store"
@@ -16,6 +16,8 @@ import { Grid, Card, CardActions, CardContent, Typography, Button } from '@mater
 import AudioPlayerBar from "../components/AudioPlayerBar"
 import fetch from "isomorphic-unfetch"
 import isEmpty from "../lib/isEmptyObject"
+
+import Modal from 'react-bootstrap/Modal'
 
 // import { Nav, NavDropdown, Form, FormControl } from "react-bootstrap"
 
@@ -28,7 +30,61 @@ import isEmpty from "../lib/isEmptyObject"
 //   return JSON.stringify(obj) === JSON.stringify({});
 // }
 
+async function onGoogleLoginSuccess(googleUser) {
+  var id_token = googleUser.getAuthResponse().id_token;
 
+  let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
+  if (response.status == 200) {
+    let res = await response.json()
+    if (res.registered) {
+      //store session_id
+      Cookie.set("session_id", res.session_id)
+      Cookie.set("email", res.verification.payload.email)
+
+      Router.reload()
+    }
+    else if (!res.registered) {
+
+      RegisterStore.dispatch(storeUserInfo(res))
+      Router.push('/register')
+    }
+  }
+  else {
+    console.log("Login Failed")
+  }
+}
+
+const onGoogleLoginFailed = (response) => {
+
+}
+
+const Popup = (props) => {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Please sign in to continue.
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <GoogleLogin
+          clientId={CLIENT_ID}
+          buttonText="Sign In with Google"
+          onSuccess={onGoogleLoginSuccess}
+          onFailure={onGoogleLoginFailed}
+          cookiePolicy={'single_host_origin'} />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 
 const FeaturedTile = (props) => (
 
@@ -153,6 +209,7 @@ const home = ({ userSession }) => {
   const [featuredSubreddits, setFeaturedSubreddits] = useState({})
   const [user, setUser] = useState({})
   const [podcastURL, setPodcastURL] = useState("")
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
 
   useEffect(() => {
     const validateUserSession = async (session_id, email) => {
@@ -163,7 +220,7 @@ const home = ({ userSession }) => {
       // console.log("UserSession: ", userSession)
       validateUserSession(userSession.session_id, userSession.email);
     } else {
-      Router.push("/")
+      setShowLoginPopup(true)
     }
 
     // getFeaturedSubreddits()
@@ -193,23 +250,17 @@ const home = ({ userSession }) => {
 
   }
 
-  // const retrievePodcast = async (subreddit, podcast) => {
-  //   console.log("retrieving podcast")
-  //   console.log("subreddit: ", subreddit)
-  //   console.log("podcast: ", podcast)
-  //   if (subreddit && podcast) {
-  //     const res = await fetch('/api/podcasts/' + subreddit + '/' + podcast, { method: "GET" })
-  //     const { cloud_storage_url, filename } = await res.json()
-  //     console.log("storage_url found: ", cloud_storage_url)
-  //     setPodcastURL(cloud_storage_url)
-  //     return cloud_storage_url
-  //   }
-  // }
-
-
   return (
 
     <Layout>
+      <div>
+        <Popup show={showLoginPopup}
+          onHide={() => {
+            setShowLoginPopup(false);
+            Router.push("/")
+
+          }} />
+      </div>
       <div >
         {isEmpty(user)
           ? <div></div>

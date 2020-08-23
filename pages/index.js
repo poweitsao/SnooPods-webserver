@@ -18,7 +18,6 @@ import { storeUserInfo } from "../redux/actions/index"
 import { RegisterStore } from "../redux/store"
 
 const Index = ({ userSession }) => {
-  const user = {}
   useEffect(() => {
     if (userSession.session_id && userSession.email) {
       // console.log("UserSession: ", userSession)

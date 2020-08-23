@@ -236,7 +236,7 @@ const MobileNavBar = (props) => {
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                             <div className="center-button">
                                 <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
-                                <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/home") }}>About</Nav.Link>
+                                <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link>
 
                             </div>
                             {/* <NavDropdown
@@ -317,7 +317,7 @@ const DesktopNavBar = (props) => {
                     </NavDropdown>
                 </div> */}
                     <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
-                    <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/home") }}>About</Nav.Link>
+                    <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link>
                     <Divider orientation="vertical" flexItem={true} />
                     <div style={{ marginRight: "auto", paddingLeft: "20px" }}>
                         {props.user
