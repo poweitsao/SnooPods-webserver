@@ -16,8 +16,7 @@ import { Grid, Card, CardActions, CardContent, Typography, Button } from '@mater
 import AudioPlayerBar from "../components/AudioPlayerBar"
 import fetch from "isomorphic-unfetch"
 import isEmpty from "../lib/isEmptyObject"
-
-import Modal from 'react-bootstrap/Modal'
+import LoginPopup from "../components/LoginPopup"
 
 // import { Nav, NavDropdown, Form, FormControl } from "react-bootstrap"
 
@@ -58,33 +57,7 @@ const onGoogleLoginFailed = (response) => {
 
 }
 
-const Popup = (props) => {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Please sign in to continue.
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <GoogleLogin
-          clientId={CLIENT_ID}
-          buttonText="Sign In with Google"
-          onSuccess={onGoogleLoginSuccess}
-          onFailure={onGoogleLoginFailed}
-          cookiePolicy={'single_host_origin'} />
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
+
 
 const FeaturedTile = (props) => (
 
@@ -254,7 +227,7 @@ const home = ({ userSession }) => {
 
     <Layout>
       <div>
-        <Popup show={showLoginPopup}
+        <LoginPopup show={showLoginPopup}
           onHide={() => {
             setShowLoginPopup(false);
             Router.push("/")
