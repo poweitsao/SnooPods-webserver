@@ -29,6 +29,7 @@ import { Divider } from '@material-ui/core';
 // import Router from "next/router"
 // import store from "../redux/store"
 import Cookie from "js-cookie"
+import isEmpty from '../lib/isEmptyObject';
 
 const logout = () => {
     // console.log("Logout clicked")
@@ -320,7 +321,7 @@ const DesktopNavBar = (props) => {
                     <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link>
                     <Divider orientation="vertical" flexItem={true} />
                     <div style={{ marginRight: "auto", paddingLeft: "20px" }}>
-                        {props.user
+                        {props.user && !isEmpty(props.user)
                             ? <ProfilePicGroup user={props.user} />
                             : <LoginGroup paddingLeft="0px" />
                         }

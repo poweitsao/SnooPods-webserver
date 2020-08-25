@@ -3,83 +3,38 @@ import CustomNavbar from "../components/CustomNavbar"
 import MusicPlayer from "../components/musicPlayer"
 import PlayableTile from "../components/PlayableTile"
 
-
 import React, { useState, useEffect } from 'react';
 import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
-import { GoogleLogin } from 'react-google-login';
-import { CLIENT_ID } from "../lib/constants"
 import Cookie, { set } from "js-cookie"
 import store from "../redux/store"
 import validateSession from "../lib/validateUserSessionOnPage"
-import { Grid, Card, CardActions, CardContent, Typography, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import AudioPlayerBar from "../components/AudioPlayerBar"
 import fetch from "isomorphic-unfetch"
 import isEmpty from "../lib/isEmptyObject"
 import LoginPopup from "../components/LoginPopup"
 
-// import { Nav, NavDropdown, Form, FormControl } from "react-bootstrap"
+const FeaturedTile = (props) => {
+  return (
+    <div>
+      <div className="featured-tile-container">
+        <button className="featured-button"
+          onClick={() => {
+            Router.push("/subreddit/" + props.category.name)
+          }}>
 
-// function isEmpty(obj) {
-//   for (var prop in obj) {
-//     if (obj.hasOwnProperty(prop)) {
-//       return false;
-//     }
-//   }
-//   return JSON.stringify(obj) === JSON.stringify({});
-// }
-
-async function onGoogleLoginSuccess(googleUser) {
-  var id_token = googleUser.getAuthResponse().id_token;
-
-  let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
-  if (response.status == 200) {
-    let res = await response.json()
-    if (res.registered) {
-      //store session_id
-      Cookie.set("session_id", res.session_id)
-      Cookie.set("email", res.verification.payload.email)
-
-      Router.reload()
-    }
-    else if (!res.registered) {
-
-      RegisterStore.dispatch(storeUserInfo(res))
-      Router.push('/register')
-    }
-  }
-  else {
-    console.log("Login Failed")
-  }
-}
-
-const onGoogleLoginFailed = (response) => {
-
-}
-
-
-
-const FeaturedTile = (props) => (
-
-  <div>
-    <div className="featured-tile-container">
-      <button className="featured-button"
-        onClick={() => {
-          Router.push("/subreddit/" + props.category.name)
-          // console.log("playable tile clicked", props.category.name) 
-        }}>
-
-        <div className="featured-tile">
-          <div className="featured-tile-overlay">
-            <div style={{ padding: "10px" }}>{"r/" + props.category.name}</div>
+          <div className="featured-tile">
+            <div className="featured-tile-overlay">
+              <div style={{ padding: "10px" }}>{"r/" + props.category.name}</div>
+            </div>
+            <img className="featured-tile-img" src=""></img>
           </div>
-          <img className="featured-tile-img" src=""></img>
-        </div>
-      </button>
+        </button>
 
 
-    </div>
-    <style>{`
+      </div>
+      <style>{`
             .featured-tile-container{
                 width:170px;
                 height:170px;
@@ -121,48 +76,49 @@ const FeaturedTile = (props) => (
                 padding: 10px;
             }
       `}</style>
-  </div>
-)
+    </div>)
+}
 
-const FeaturedGridMenu = (props) => (
-  <div >
-    <Grid container spacing={3} justify={"center"}>
-      <div className={"card-container"}>
-        {isEmpty(props.featuredSubreddits)
-          ? <div></div>
-          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][0]]} />}
-      </div>
-      <div className={"card-container"}>
-        {isEmpty(props.featuredSubreddits)
-          ? <div></div>
-          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][1]]} />}
-      </div>
+const FeaturedGridMenu = (props) => {
+  return (
+    <div >
+      <Grid container spacing={3} justify={"center"}>
+        <div className={"card-container"}>
+          {isEmpty(props.featuredSubreddits)
+            ? <div></div>
+            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][0]]} />}
+        </div>
+        <div className={"card-container"}>
+          {isEmpty(props.featuredSubreddits)
+            ? <div></div>
+            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][1]]} />}
+        </div>
 
-      <div className={"card-container"}>
-        {isEmpty(props.featuredSubreddits)
-          ? <div></div>
-          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][2]]} />}
-      </div>
+        <div className={"card-container"}>
+          {isEmpty(props.featuredSubreddits)
+            ? <div></div>
+            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][2]]} />}
+        </div>
 
-      <div className={"card-container"}>
-        {isEmpty(props.featuredSubreddits)
-          ? <div></div>
-          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][3]]} />}
-      </div>
+        <div className={"card-container"}>
+          {isEmpty(props.featuredSubreddits)
+            ? <div></div>
+            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][3]]} />}
+        </div>
 
-      <div className={"card-container"}>
-        {isEmpty(props.featuredSubreddits)
-          ? <div></div>
-          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][4]]} />}
-      </div>
+        <div className={"card-container"}>
+          {isEmpty(props.featuredSubreddits)
+            ? <div></div>
+            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][4]]} />}
+        </div>
 
-      <div className={"card-container"}>
-        {isEmpty(props.featuredSubreddits)
-          ? <div></div>
-          : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][5]]} />}
-      </div>
+        <div className={"card-container"}>
+          {isEmpty(props.featuredSubreddits)
+            ? <div></div>
+            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][5]]} />}
+        </div>
 
-    </Grid>  <style>{`
+      </Grid>  <style>{`
     
     .card-container{
       padding: 10px;
@@ -170,10 +126,8 @@ const FeaturedGridMenu = (props) => (
       justify-content:center;
     }
     `}</style>
-  </div>
-)
-
-
+    </div>)
+}
 
 const home = ({ userSession }) => {
 
@@ -196,8 +150,6 @@ const home = ({ userSession }) => {
       setShowLoginPopup(true)
     }
 
-    // getFeaturedSubreddits()
-    // console.log(featuredSubreddits)
     const getFeaturedSubreddits = async () => {
       const res = await fetch("/api/podcasts/getFeatured", { method: "GET" })
       if (res.status === 200) {
@@ -207,21 +159,8 @@ const home = ({ userSession }) => {
         setFeaturedSubreddits(featured);
       }
     }
-
-
-
     getFeaturedSubreddits();
   }, []);
-
-
-
-  const logout = () => {
-    // console.log("Logout clicked")
-    Cookie.remove("session_id")
-    Cookie.remove("email")
-    Router.push("/")
-
-  }
 
   return (
 
@@ -245,7 +184,6 @@ const home = ({ userSession }) => {
         <div className="heading">
           <h1> Featured Subreddits </h1>
         </div>
-
 
         <div className="grid-container">
           {featuredSubreddits === {}
