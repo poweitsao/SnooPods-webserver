@@ -133,27 +133,29 @@ const Subreddit = ({ userSession }) => {
         const [playButton, setPlayButton] = useState(playCircleOutlined)
         return (
             <tr key={trackIndex}>
-                <td>
-                    <Icon
-                        style={{ width: "25px", height: "25px", marginRight: "20px" }}
-                        icon={playButton}
-                        onClick={() => { playPodcast(trackIndex) }}
-                        onMouseEnter={() => setPlayButton(playCircleFilled)}
-                        onMouseLeave={() => setPlayButton(playCircleOutlined)} />
+                <td style={{ width: "5%" }}>
+                    <div style={{ display: "flex", justifyContent: "center", paddingLeft: "12px" }}>
+                        <Icon
+                            style={{ width: "25px", height: "25px" }}
+                            icon={playButton}
+                            onClick={() => { playPodcast(trackIndex) }}
+                            onMouseEnter={() => setPlayButton(playCircleFilled)}
+                            onMouseLeave={() => setPlayButton(playCircleOutlined)} />
+                    </div>
                 </td>
-                <td>
+                <td style={{ width: "60%" }}>
                     {playlist[trackIndex]["post_title"]
-                        ? <div className="post-title">{playlist[trackIndex]["post_title"]}</div>
-                        : <div className="filename">{playlist[trackIndex]["filename"]}</div>}
+                        ? <div className="post-title" >{playlist[trackIndex]["post_title"]}</div>
+                        : <div className="filename" >{playlist[trackIndex]["filename"]}</div>}
                 </td>
-                <td>
+                <td style={{ width: "10%" }}>
                     {playlist[trackIndex]["audio_length"]
-                        ? <div className="audio-length">{formatDuration(playlist[trackIndex]["audio_length"])}</div>
+                        ? <div className="audio-length" >{formatDuration(playlist[trackIndex]["audio_length"])}</div>
                         : <div className="audio-length-dummy">{"audioLength"}</div>}
                 </td>
-                <td>
+                <td style={{ width: "15%" }}>
                     {playlist[trackIndex]["date_posted"]
-                        ? <div className="date-posted">{convertDate(playlist[trackIndex]["date_posted"])}</div>
+                        ? <div className="date-posted" >{convertDate(playlist[trackIndex]["date_posted"])}</div>
                         : <div className="date-posted-dummy">{"datePosted"}</div>}
                 </td>
                 {/* {playlist[trackIndex]["post_title"]
