@@ -62,6 +62,7 @@ const Subreddit = ({ userSession }) => {
                 const result = await res.json()
                 console.log(result)
                 setPlaylist(result)
+                
             }
         }
 
