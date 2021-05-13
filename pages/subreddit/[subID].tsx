@@ -48,7 +48,7 @@ const Subreddit = ({ userSession }) => {
     const [user, setUser] = useState({})
     const [podcast, setPodcast] = useState("")
     const [podcastURL, setPodcastURL] = useState("")
-    const [audio, setAudio] = useState()
+    const [audio, setAudio] = useState<HTMLAudioElement|null>(null)
 
     const router = useRouter()
     const { subID } = router.query

@@ -4,7 +4,7 @@ import AudioPlayerReducer from "./reducers/AudioPlayerReducer"
 
 const RegisterStore = createStore(userInfoReducer);
 
-const AudioPlayerStore = createStore(AudioPlayerReducer);
+export const AudioPlayerStore = createStore(AudioPlayerReducer);
 
 module.exports = {
     RegisterStore,
