@@ -1,4 +1,5 @@
-const Firestore = require('@google-cloud/firestore');
+// const Firestore = require('@google-cloud/firestore');
+import {Firestore} from "@google-cloud/firestore";
 
 var file = require("../credentials/read-write-credentials/eternal-arcana-275612-2a726e49cb23.json")
 
@@ -8,7 +9,7 @@ const db = new Firestore({
     credentials: { client_email: file.client_email, private_key: file.private_key }
 });
 
-async function getPodcast(subreddit, podcast) {
+export async function getPodcast(subreddit, podcast) {
     console.log("getPodcast executed")
     if (subreddit && podcast) {
         let podcastRef = db.collection("subreddits").doc(subreddit).collection('podcasts').doc(podcast + ".mp3");
@@ -26,7 +27,7 @@ async function getPodcast(subreddit, podcast) {
     return
 }
 
-async function getUser(email) {
+export async function getUser(email) {
     console.log("getting user by email...")
     // console.log(email)
     let userRef = db.collection("users")
@@ -48,7 +49,7 @@ async function getUser(email) {
     }
 }
 
-async function createUser(user) {
+export async function createUser(user) {
     let userRef = db.collection("users").doc(user.email)
     console.log("creating user!")
     try {
@@ -73,7 +74,7 @@ const generateID = () => {
     return '_' + Math.random().toString(36).substr(2, 9);
 };
 
-async function createSession(email) {
+export async function createSession(email) {
     const sessionID = generateID()
     let userRef = db.collection("users").doc(email)
     console.log("creating session")
@@ -88,7 +89,7 @@ async function createSession(email) {
     }
 }
 
-async function checkValidSession(sessionID, email) {
+export async function checkValidSession(sessionID, email) {
     let userRef = db.collection("users").doc(email)
     let user = await userRef.get()
     let data = user.data()
@@ -101,31 +102,66 @@ async function checkValidSession(sessionID, email) {
     }
 }
 
-async function getFeaturedSubreddits() {
+export async function getFeaturedSubreddits() {
     let docRef = db.collection("featured_subreddits")
     let featured = await docRef.get()
     return featured;
 }
 
-async function getSubredditPlaylist(subID) {
+export async function getSubredditPlaylist(subID) {
     // console.log("subID in firestore:" + subID)
-    let docRef = db.collection("subreddits").doc(subID).collection("podcasts")
+    let docRef:FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData> = db.collection("subreddits").doc(subID).collection("podcasts")
     let doc = await docRef.get()
 
-    let playlist = { "keys": [] }
+    interface timestamp {
+        _seconds: number,
+        _nanoseconds: number
+    }
+
+    interface Track {
+        filename: string,
+        cloud_storage_url: string,
+        date_posted: timestamp,
+        audio_length: number,
+        post_title: string
+    }
+
+    interface PlaylistInterface {
+        keys: Array<string>;
+        tracks: {[x: string]: Track}
+      }
+
+
+
+
+    let playlist = <PlaylistInterface>{keys:[], tracks:{}};
     // console.log(doc)
     doc.forEach(doc => {
         // console.log(doc.id, '=>', doc.data());
-        playlist[doc.id] = doc.data()
-        playlist["keys"].push(doc.id)
-    })
+        let documentData:FirebaseFirestore.DocumentData = doc.data()
+        let track:Track = {
+            filename: documentData["filename"],
+            cloud_storage_url: documentData["cloud_storage_url"],
+            date_posted: documentData["date_posted"],
+            audio_length: documentData["audio_length"],
+            post_title: documentData["post_title"]
+        }
 
-    docRef = db.collection("subreddits").doc(subID)
-    doc = await docRef.get()
-    if (!doc.exists) {
+        // console.log(track)
+        // console.log(playlist)
+        playlist["keys"].push(doc.id)
+        playlist["tracks"][doc.id] = track
+
+    })
+    // playlist
+    // console.log("doc", doc)
+
+    let subredditsDocRef = db.collection("subreddits").doc(subID)
+    let subredditsDoc = await subredditsDocRef.get()
+    if (!subredditsDoc.exists) {
         console.log("No album picture found")
     } else {
-        playlist["album_cover_url"] = doc.data()["album_cover_url"]
+        playlist["album_cover_url"] = subredditsDoc.data()["album_cover_url"]
     }
     // console.log("playlist info:", playlist)
     return playlist

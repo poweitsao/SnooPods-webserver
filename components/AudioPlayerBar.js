@@ -93,7 +93,7 @@ const nextTrack = () => {
 
     if (keyIndex < playlist["keys"].length - 1) {
         var filename = currStore["playlist"]["keys"][keyIndex + 1]
-        var podcast = currStore["playlist"][filename]
+        var podcast = currStore["playlist"]["tracks"][filename]
 
         var track = new Audio(podcast["cloud_storage_url"])
         track.setAttribute("id", "audio")
