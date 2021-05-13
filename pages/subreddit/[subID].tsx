@@ -37,11 +37,6 @@ function isEmpty(obj) {
     return JSON.stringify(obj) === JSON.stringify({});
 }
 
-// var audioElement = {}
-// var elementId = "audioElement" + new Date().valueOf().toString();
-// var audioElement = document.createElement('audio');
-// audioElement.setAttribute("id", elementId);
-// document.body.appendChild(audioElement);
 
 const Subreddit = ({ userSession }) => {
     const [playlist, setPlaylist] = useState({})
@@ -81,7 +76,7 @@ const Subreddit = ({ userSession }) => {
     }, [subID])
     // console.log(playlist)
 
-    const playPodcast = async (trackIndex) => {
+    const playPodcast = (trackIndex: number) => {
         const currStore = AudioPlayerStore.getState()
         var podcast = playlist["tracks"][trackIndex]
         // console.log("podcast", podcast)
@@ -139,7 +134,7 @@ const Subreddit = ({ userSession }) => {
                         <Icon
                             style={{ width: "25px", height: "25px" }}
                             icon={playButton}
-                            onClick={() => { playPodcast(trackIndex) }}
+                            onClick={() =>  playPodcast(trackIndex) }
                             onMouseEnter={() => setPlayButton(playCircleFilled)}
                             onMouseLeave={() => setPlayButton(playCircleOutlined)} />
                     </div>
@@ -230,7 +225,7 @@ const Subreddit = ({ userSession }) => {
             <div className="page-body">
                 {isEmpty(playlist)
                     ? <div></div>
-                    : <SubredditInfo albumCover={playlist.album_cover_url} />}
+                    : <SubredditInfo albumCover={playlist['album_cover_url']} />}
                 {isEmpty(playlist)
                     ? <div></div>
                     : <Tablelist playlist={playlist} />}
