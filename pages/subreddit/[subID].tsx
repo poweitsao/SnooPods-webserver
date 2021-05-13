@@ -21,14 +21,15 @@ import Table from 'react-bootstrap/Table'
 
 import fetch from "isomorphic-unfetch"
 
-import { Icon, InlineIcon } from '@iconify/react';
+import { Icon, IconifyIcon, InlineIcon } from '@iconify/react';
 import playCircleOutlined from '@iconify/icons-ant-design/play-circle-outlined';
 import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
 import LaunchIcon from '@material-ui/icons/Launch';
+import {Playlist, Timestamp, Track} from "../../ts/interfaces"
 
 
 
-function isEmpty(obj) {
+function isEmpty(obj:Object) {
     for (var prop in obj) {
         if (obj.hasOwnProperty(prop)) {
             return false;
@@ -39,29 +40,29 @@ function isEmpty(obj) {
 
 
 const Subreddit = ({ userSession }) => {
-    const [playlist, setPlaylist] = useState({})
+    const [playlist, setPlaylist] = useState<Playlist | {}>({})
     const [user, setUser] = useState({})
-    const [podcast, setPodcast] = useState("")
-    const [podcastURL, setPodcastURL] = useState("")
-    const [audio, setAudio] = useState<HTMLAudioElement|null>(null)
+    // const [podcast, setPodcast] = useState("")
+    // const [podcastURL, setPodcastURL] = useState("")
+    // const [audio, setAudio] = useState<HTMLAudioElement|null>(null)
 
     const router = useRouter()
-    const { subID } = router.query
+    const subID : string = router.query["subID"].toString()
 
     // console.log(router.query)
     useEffect(() => {
-        const getSubredditPlaylist = async (subID) => {
+        const getSubredditPlaylist = async (subID : string) => {
 
             const res = await fetch("/api/subredditPlaylist/" + subID, { method: "GET" })
             if (res.status === 200) {
-                const result = await res.json()
+                const result : JSON = await res.json()
                 console.log(result)
                 setPlaylist(result)
                 
             }
         }
 
-        const validateUserSession = async (session_id, email) => {
+        const validateUserSession = async (session_id : string, email : string) => {
             let user = await validateSession(session_id, email);
             setUser(user)
         }
@@ -78,30 +79,14 @@ const Subreddit = ({ userSession }) => {
 
     const playPodcast = (trackIndex: number) => {
         const currStore = AudioPlayerStore.getState()
-        var podcast = playlist["tracks"][trackIndex]
-        // console.log("podcast", podcast)
-        // console.log("trackIndex", trackIndex)
-        // console.table(playlist)
+        var podcast : Track = playlist["tracks"][trackIndex]
 
         if (currStore.url === podcast["cloud_storage_url"]) {
             AudioPlayerStore.dispatch(togglePlaying(!currStore.playing))
         } else {
 
-            setPodcast(podcast["filename"])
-            setPodcastURL(podcast["cloud_storage_url"])
-
             var track = new Audio(podcast["cloud_storage_url"])
             track.setAttribute("id", "audio")
-            // var track = document.createElement(audio)
-
-            // var playPromise = await track.play()
-            // if (playPromise !== undefined) {
-            //     track.pause()
-            // }
-            // track.play()
-            // track.load()
-            // track.pause()
-            // track.currentTime = 0
 
             AudioPlayerStore.dispatch(storeAudioPlayerInfo({
                 playing: true,
@@ -113,19 +98,16 @@ const Subreddit = ({ userSession }) => {
                 playlist: playlist,
                 keyIndex: playlist["keys"].indexOf(trackIndex)
             }))
-
-            setAudio(track)
         }
-
     }
 
-    const convertDate = (dateObject) => {
+    const convertDate = (dateObject:Timestamp) => {
         var unixTime = new Date(dateObject["_seconds"] * 1000);
         var dateString = unixTime.toDateString()
         return dateString.substring(4, 10) + ", " + dateString.substring(11, 15);
     }
 
-    const renderTrackOnTable = (trackIndex) => {
+    const renderTrackOnTable = (trackIndex : number) => {
         const [playButton, setPlayButton] = useState(playCircleOutlined)
         return (
             <tr key={trackIndex}>
