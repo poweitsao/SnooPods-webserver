@@ -10,7 +10,7 @@ function useAudioPlayer(audioObject, trackPlaying) {
   const [duration, setDuration] = useState();
   const [curTime, setCurTime] = useState();
   const [playing, setPlaying] = useState(trackPlaying);
-  const [clickedTime, setClickedTime] = useState();
+  const [clickedTime, setClickedTime] = useState(-1);
   const [curSource, setCurSource] = useState();
   const [source, setSource] = useState();
   const [audio, setAudio] = useState(audioObject);
@@ -64,10 +64,11 @@ function useAudioPlayer(audioObject, trackPlaying) {
 
     audio.addEventListener("timeupdate", setAudioTime);
 
-    if (clickedTime && clickedTime !== curTime) {
+    // console.log("clickedTime", clickedTime)
+    if (clickedTime >= 0 && clickedTime !== curTime) {
       console.log("curTime:", curTime)
       audio.currentTime = clickedTime;
-      setClickedTime(null);
+      setClickedTime(-1);
     }
 
     if (curSource !== source) {

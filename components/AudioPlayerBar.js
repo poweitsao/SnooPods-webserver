@@ -123,6 +123,7 @@ function AudioPlayerInfo(props) {
 
         if (curTime && duration && curTime === duration) {
             // setPlaying(false);
+            // audio.pause();
             setCurTime(0);
             nextTrack()
             // audio.currentTime = 0;
@@ -135,8 +136,9 @@ function AudioPlayerInfo(props) {
     if (props.playing && audio.paused) {
         audio.play()
     } else if (!props.playing && !audio.paused) {
+        
         audio.pause()
-    }
+    } 
 
     return (
         <div>
@@ -147,16 +149,18 @@ function AudioPlayerInfo(props) {
                 <div className="center-piece">
                     <div className="controls">
                         <Replay10 handleClick={() => {
-                            if (curTime - 10 > 0) {
-                                setClickedTime(curTime - 10)
-                            } else {
-                                setClickedTime(duration)
-                            }
+                            // if (curTime - 10 > 0) {
+                            //     setClickedTime(curTime - 10)
+                            // } else {
+                            //     setClickedTime(0)
+                            // }
+                            setClickedTime(Math.max(curTime - 10, 0))
                         }} />
 
                         {props.playing ?
                             <Pause handleClick={() => {
                                 props.togglePlaying(false)
+                                console.log("pausing...")
                                 audio.pause();
                             }} /> :
                             <Play handleClick={() => {
