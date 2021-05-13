@@ -1,5 +1,6 @@
 // const Firestore = require('@google-cloud/firestore');
 import {Firestore} from "@google-cloud/firestore";
+import {Timestamp, Track, Playlist} from "../ts/interfaces"
 
 var file = require("../credentials/read-write-credentials/eternal-arcana-275612-2a726e49cb23.json")
 
@@ -113,28 +114,8 @@ export async function getSubredditPlaylist(subID) {
     let docRef:FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData> = db.collection("subreddits").doc(subID).collection("podcasts")
     let doc = await docRef.get()
 
-    interface timestamp {
-        _seconds: number,
-        _nanoseconds: number
-    }
 
-    interface Track {
-        filename: string,
-        cloud_storage_url: string,
-        date_posted: timestamp,
-        audio_length: number,
-        post_title: string
-    }
-
-    interface PlaylistInterface {
-        keys: Array<string>;
-        tracks: {[x: string]: Track}
-      }
-
-
-
-
-    let playlist = <PlaylistInterface>{keys:[], tracks:{}};
+    let playlist = <Playlist>{keys:[], tracks:{}};
     // console.log(doc)
     doc.forEach(doc => {
         // console.log(doc.id, '=>', doc.data());
