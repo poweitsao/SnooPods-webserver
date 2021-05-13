@@ -109,6 +109,8 @@ const nextTrack = () => {
             playlist: playlist,
             keyIndex: playlist["keys"].indexOf(filename)
         }))
+    } else{
+        AudioPlayerStore.dispatch(togglePlaying(false))
     }
 }
 
@@ -124,6 +126,7 @@ function AudioPlayerInfo(props) {
         if (curTime && duration && curTime === duration) {
             // setPlaying(false);
             // audio.pause();
+            console.log("next")
             setCurTime(0);
             nextTrack()
             // audio.currentTime = 0;
@@ -131,7 +134,20 @@ function AudioPlayerInfo(props) {
     })
 
     if (audio !== null && props.playing && duration) {
-        audio.play()
+        // audio.play()
+
+        var playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+          playPromise.then(_ => {
+            if (curTime == duration){
+                audio.pause()
+            }
+          })
+          .catch(error => {
+          });
+        }
+
     }
     if (props.playing && audio.paused) {
         audio.play()
