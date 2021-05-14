@@ -58,7 +58,7 @@ const ProfilePicMenu = (props) => (
             <Dropdown>
                 <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" alignRight>
 
-                    <Image src={props.picture_url} roundedCircle fluid />
+                    <Image src={props.pictureURL} roundedCircle fluid />
 
                 </Dropdown.Toggle>
 

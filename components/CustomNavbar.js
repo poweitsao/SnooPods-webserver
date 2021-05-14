@@ -71,7 +71,7 @@ const ProfilePicGroup = (props) => {
         <div className="profile-pic-group">
             <Nav style={{ whiteSpace: "nowrap" }}>
                 <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "37px" }}>
-                    <Image src={props.user.picture_url}
+                    <Image src={props.user.pictureURL}
                         roundedCircle
                         style={{
                             width: "40px", height: "40px", marginRight: "10px",

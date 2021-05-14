@@ -25,7 +25,7 @@ import { Icon, IconifyIcon, InlineIcon } from '@iconify/react';
 import playCircleOutlined from '@iconify/icons-ant-design/play-circle-outlined';
 import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
 import LaunchIcon from '@material-ui/icons/Launch';
-import {Playlist, Timestamp, Track} from "../../ts/interfaces"
+import {Playlist, Timestamp, Track, UserSession} from "../../ts/interfaces"
 
 
 
@@ -39,9 +39,10 @@ function isEmpty(obj:Object) {
 }
 
 
-const Subreddit = ({ userSession }) => {
-    const [playlist, setPlaylist] = useState<Playlist | {}>({})
-    const [user, setUser] = useState({})
+const Subreddit = ({ cookies }) => {
+    let emptyPlaylist : Playlist = {"keys":[], "tracks":{}}
+    const [playlist, setPlaylist] = useState<Playlist>(emptyPlaylist)
+    const [user, setUser] = useState<UserSession | {}>({})
     // const [podcast, setPodcast] = useState("")
     // const [podcastURL, setPodcastURL] = useState("")
     // const [audio, setAudio] = useState<HTMLAudioElement|null>(null)
@@ -63,13 +64,14 @@ const Subreddit = ({ userSession }) => {
         }
 
         const validateUserSession = async (session_id : string, email : string) => {
-            let user = await validateSession(session_id, email);
+            let user : UserSession = await validateSession(session_id, email);
             setUser(user)
+            
         }
 
-        if (userSession.session_id && userSession.email) {
-            validateUserSession(userSession.session_id, userSession.email);
-
+        if (cookies.session_id && cookies.email) {
+            validateUserSession(cookies.session_id, cookies.email);
+            console.log("router.query", router.query)
             if (!isEmpty(router.query)) {
                 getSubredditPlaylist(subID)
             }
@@ -85,7 +87,7 @@ const Subreddit = ({ userSession }) => {
             AudioPlayerStore.dispatch(togglePlaying(!currStore.playing))
         } else {
 
-            var track = new Audio(podcast["cloud_storage_url"])
+            var track : HTMLAudioElement = new Audio(podcast["cloud_storage_url"])
             track.setAttribute("id", "audio")
 
             AudioPlayerStore.dispatch(storeAudioPlayerInfo({
@@ -102,43 +104,43 @@ const Subreddit = ({ userSession }) => {
     }
 
     const convertDate = (dateObject:Timestamp) => {
-        var unixTime = new Date(dateObject["_seconds"] * 1000);
-        var dateString = unixTime.toDateString()
+        var unixTime : Date = new Date(dateObject["_seconds"] * 1000);
+        var dateString : string = unixTime.toDateString()
         return dateString.substring(4, 10) + ", " + dateString.substring(11, 15);
     }
 
-    const renderTrackOnTable = (trackIndex : number) => {
+    const renderTrackOnTable = (trackKey : string) => {
         const [playButton, setPlayButton] = useState(playCircleOutlined)
         return (
-            <tr key={trackIndex}>
+            <tr key={trackKey}>
                 <td style={{ width: "5%" }}>
                     <div style={{ display: "flex", justifyContent: "center", paddingLeft: "12px" }}>
                         <Icon
                             style={{ width: "25px", height: "25px" }}
                             icon={playButton}
-                            onClick={() =>  playPodcast(trackIndex) }
+                            onClick={() =>  playPodcast(trackKey) }
                             onMouseEnter={() => setPlayButton(playCircleFilled)}
                             onMouseLeave={() => setPlayButton(playCircleOutlined)} />
                     </div>
                 </td>
                 <td style={{ width: "60%" }}>
-                    {playlist["tracks"][trackIndex]["post_title"]
-                        ? <div className="post-title" >{playlist["tracks"][trackIndex]["post_title"]}</div>
-                        : <div className="filename" >{playlist["tracks"][trackIndex]["filename"]}</div>}
+                    {playlist["tracks"][trackKey]["post_title"]
+                        ? <div className="post-title" >{playlist["tracks"][trackKey]["post_title"]}</div>
+                        : <div className="filename" >{playlist["tracks"][trackKey]["filename"]}</div>}
                 </td>
                 <td style={{ width: "10%" }}>
-                    {playlist["tracks"][trackIndex]["audio_length"]
-                        ? <div className="audio-length" >{formatDuration(playlist["tracks"][trackIndex]["audio_length"])}</div>
+                    {playlist["tracks"][trackKey]["audio_length"]
+                        ? <div className="audio-length" >{formatDuration(playlist["tracks"][trackKey]["audio_length"])}</div>
                         : <div className="audio-length-dummy">{"audioLength"}</div>}
                 </td>
                 <td style={{ width: "15%" }}>
-                    {playlist["tracks"][trackIndex]["date_posted"]
-                        ? <div className="date-posted" >{convertDate(playlist["tracks"][trackIndex]["date_posted"])}</div>
+                    {playlist["tracks"][trackKey]["date_posted"]
+                        ? <div className="date-posted" >{convertDate(playlist["tracks"][trackKey]["date_posted"])}</div>
                         : <div className="date-posted-dummy">{"datePosted"}</div>}
                 </td>
-                {/* {playlist[trackIndex]["post_title"]
-                            ? <div style={{}}>{playlist[trackIndex]["post_title"]}</div>
-                            : <div style={{}}>{playlist[trackIndex]["filename"]}</div>} */}
+                {/* {playlist[trackKey]["post_title"]
+                            ? <div style={{}}>{playlist[trackKey]["post_title"]}</div>
+                            : <div style={{}}>{playlist[trackKey]["filename"]}</div>} */}
 
                 {/* </div> */}
                 {/* </div> */}
@@ -148,7 +150,7 @@ const Subreddit = ({ userSession }) => {
         )
     }
 
-    const Tablelist = ({ playlist }) => {
+    const Tablelist = ({ playlist } : {playlist : Playlist} ) => {
         return (
             <div style={{ width: "100%" }}>
                 {/* <ListGroup variant="flush"></ListGroup> */}
@@ -246,7 +248,7 @@ const Subreddit = ({ userSession }) => {
 Subreddit.getInitialProps = ({ req }) => {
     const cookies = parseCookies(req)
     return {
-        userSession: {
+        cookies: {
             "session_id": cookies.session_id,
             "email": cookies.email
         }

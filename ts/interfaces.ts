@@ -15,3 +15,12 @@ export interface Playlist {
     keys: Array<string>;
     tracks: {[x: string]: Track}
   }
+
+export interface UserSession {
+    sessionID: string, 
+    email: string,
+    firstName: string,
+    lastName: string,
+    pictureURL: string,
+    validSession?: boolean, 
+}

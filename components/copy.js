@@ -69,7 +69,7 @@ const ProfilePicGroup = (props) => {
                         display: "flex"
 
                     }}> */}
-                    <Image src={props.user.picture_url}
+                    <Image src={props.user.pictureURL}
                         roundedCircle
                         style={{
                             width: "40px", height: "40px", marginRight: "10px",
