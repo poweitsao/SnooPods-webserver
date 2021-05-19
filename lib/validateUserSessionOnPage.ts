@@ -10,7 +10,7 @@ const validateSession = async (session_id : string, email : string) => {
             email: response["email"],
             firstName: response["firstName"],
             lastName: response["lastName"],
-            pictureURL: response["picture_url"],
+            pictureURL: response["pictureURL"],
             validSession: response["validSession"]
         }
         return userSession

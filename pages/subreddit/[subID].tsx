@@ -25,7 +25,8 @@ import { Icon, IconifyIcon, InlineIcon } from '@iconify/react';
 import playCircleOutlined from '@iconify/icons-ant-design/play-circle-outlined';
 import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
 import LaunchIcon from '@material-ui/icons/Launch';
-import {Playlist, Timestamp, Track, UserSession} from "../../ts/interfaces"
+import {Collection, Timestamp, Track, UserSession} from "../../ts/interfaces"
+import useWindowDimensions from "../../components/hooks/useWindowDimensions"
 
 
 
@@ -40,8 +41,8 @@ function isEmpty(obj:Object) {
 
 
 const Subreddit = ({ cookies }) => {
-    let emptyPlaylist : Playlist = {"keys":[], "tracks":{}}
-    const [playlist, setPlaylist] = useState<Playlist>(emptyPlaylist)
+    let emptyPlaylist : Collection = {"keys":[], "tracks":{}, "collectionName": ""}
+    const [playlist, setPlaylist] = useState<Collection>(emptyPlaylist)
     const [user, setUser] = useState<UserSession | {}>({})
     // const [podcast, setPodcast] = useState("")
     // const [podcastURL, setPodcastURL] = useState("")
@@ -56,7 +57,7 @@ const Subreddit = ({ cookies }) => {
 
             const res = await fetch("/api/subredditPlaylist/" + subID, { method: "GET" })
             if (res.status === 200) {
-                const result : JSON = await res.json()
+                const result : Collection = await res.json()
                 console.log(result)
                 setPlaylist(result)
                 
@@ -79,7 +80,7 @@ const Subreddit = ({ cookies }) => {
     }, [subID])
     // console.log(playlist)
 
-    const playPodcast = (trackIndex: number) => {
+    const playPodcast = (trackIndex: string) => {
         const currStore = AudioPlayerStore.getState()
         var podcast : Track = playlist["tracks"][trackIndex]
 
@@ -93,7 +94,7 @@ const Subreddit = ({ cookies }) => {
             AudioPlayerStore.dispatch(storeAudioPlayerInfo({
                 playing: true,
                 subreddit: subID,
-                trackName: podcast["post_title"],
+                trackName: podcast["track_name"],
                 filename: podcast["filename"],
                 audio: track,
                 url: podcast["cloud_storage_url"],
@@ -124,8 +125,8 @@ const Subreddit = ({ cookies }) => {
                     </div>
                 </td>
                 <td style={{ width: "60%" }}>
-                    {playlist["tracks"][trackKey]["post_title"]
-                        ? <div className="post-title" >{playlist["tracks"][trackKey]["post_title"]}</div>
+                    {playlist["tracks"][trackKey]["track_name"]
+                        ? <div className="post-title" >{playlist["tracks"][trackKey]["track_name"]}</div>
                         : <div className="filename" >{playlist["tracks"][trackKey]["filename"]}</div>}
                 </td>
                 <td style={{ width: "10%" }}>
@@ -138,8 +139,8 @@ const Subreddit = ({ cookies }) => {
                         ? <div className="date-posted" >{convertDate(playlist["tracks"][trackKey]["date_posted"])}</div>
                         : <div className="date-posted-dummy">{"datePosted"}</div>}
                 </td>
-                {/* {playlist[trackKey]["post_title"]
-                            ? <div style={{}}>{playlist[trackKey]["post_title"]}</div>
+                {/* {playlist[trackKey]["track_name"]
+                            ? <div style={{}}>{playlist[trackKey]["track_name"]}</div>
                             : <div style={{}}>{playlist[trackKey]["filename"]}</div>} */}
 
                 {/* </div> */}
@@ -150,7 +151,7 @@ const Subreddit = ({ cookies }) => {
         )
     }
 
-    const Tablelist = ({ playlist } : {playlist : Playlist} ) => {
+    const Tablelist = ({ playlist } : {playlist : Collection} ) => {
         return (
             <div style={{ width: "100%" }}>
                 {/* <ListGroup variant="flush"></ListGroup> */}
@@ -197,9 +198,10 @@ const Subreddit = ({ cookies }) => {
             </div>
         )
     }
-
+    const { height, width } = useWindowDimensions();
     return (
         <Layout>
+            
             <div>
                 {isEmpty(user)
                     ? <div></div>
@@ -213,8 +215,12 @@ const Subreddit = ({ cookies }) => {
                 {isEmpty(playlist)
                     ? <div></div>
                     : <Tablelist playlist={playlist} />}
+                
             </div>
-
+            <Provider store={AudioPlayerStore}>
+                <AudioPlayerBarContainer />
+            </Provider>
+            {/* ; */}
             <style>
                 {`.page-body{
                     margin-top: 30px;
@@ -223,7 +229,12 @@ const Subreddit = ({ cookies }) => {
                     flex-direction:column;
                     justify-content:nowrap;
                     align-items:center;
+                    height: 82%;
+                    overflow-y: scroll;
                     }
+
+                    
+
                     .album-cover{
                         padding: 20px;
                     }
@@ -236,9 +247,7 @@ const Subreddit = ({ cookies }) => {
             </style>
             <div >
                 {/* <AudioPlayerBar subreddit={subID} podcast={podcast} src={podcastURL} audio={audio} /> */}
-                <Provider store={AudioPlayerStore}>
-                    <AudioPlayerBarContainer />
-                </Provider>
+                
             </div>
         </Layout>
     )

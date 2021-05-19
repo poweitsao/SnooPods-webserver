@@ -13,7 +13,7 @@ const getAudioPlayerStatus = () => {
 // })
 
 function mapStateToProps(state) {
-    // console.log("mapStateToProps", state)
+    console.log("mapStateToProps", state)
     return state
 }
 

@@ -22,7 +22,7 @@ function Track(props) {
     <div>
       <div className="track">
         <p className="track__title">{displayTrackName}</p>
-        <p className="subreddit">{"r/" + subreddit}</p>
+        <p className="subreddit">{subreddit}</p>
       </div>
       <style>
         {`

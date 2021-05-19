@@ -8,12 +8,14 @@ export interface Track{
     cloud_storage_url: string,
     date_posted: Timestamp,
     audio_length: number,
-    post_title: string
+    track_name: string,
+    track_id: string
 }
 
-export interface Playlist {
-    keys: Array<string>;
-    tracks: {[x: string]: Track}
+export interface Collection {
+    keys: Array<string>,
+    tracks: {[x: string]: Track},
+    collectionName: string
   }
 
 export interface UserSession {

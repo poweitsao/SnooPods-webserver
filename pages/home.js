@@ -2,7 +2,7 @@ import Layout from "../components/layout"
 import CustomNavbar from "../components/CustomNavbar"
 import MusicPlayer from "../components/musicPlayer"
 import PlayableTile from "../components/PlayableTile"
-
+import { server } from '../config';
 import React, { useState, useEffect } from 'react';
 import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
@@ -21,12 +21,12 @@ const FeaturedTile = (props) => {
       <div className="featured-tile-container">
         <button className="featured-button"
           onClick={() => {
-            Router.push("/subreddit/" + props.category.name)
+            Router.push("/subreddit/" + props.subredditInfo.subredditName)
           }}>
 
           <div className="featured-tile">
             <div className="featured-tile-overlay">
-              <div style={{ padding: "10px" }}>{"r/" + props.category.name}</div>
+              <div style={{ padding: "10px" }}>{"r/" + props.subredditInfo.subredditName}</div>
             </div>
             <img className="featured-tile-img" src=""></img>
           </div>
@@ -80,44 +80,22 @@ const FeaturedTile = (props) => {
 }
 
 const FeaturedGridMenu = (props) => {
+  const subreddits = []
+  if (!isEmpty(props.featuredSubreddits)){
+    for (const [index, value] of props.featuredSubreddits._keys.entries()) {
+      // console.log(props.featuredSubreddits[value])
+      subreddits.push(<div key={index} className={"card-container"}><FeaturedTile subredditInfo={props.featuredSubreddits[value]} /></div>
+      // <li key={index}>{value}</li>
+      )
+    }
+  }
+
+  
+  
   return (
     <div >
       <Grid container spacing={3} justify={"center"}>
-        <div className={"card-container"}>
-          {isEmpty(props.featuredSubreddits)
-            ? <div></div>
-            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][0]]} />}
-        </div>
-        <div className={"card-container"}>
-          {isEmpty(props.featuredSubreddits)
-            ? <div></div>
-            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][1]]} />}
-        </div>
-
-        <div className={"card-container"}>
-          {isEmpty(props.featuredSubreddits)
-            ? <div></div>
-            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][2]]} />}
-        </div>
-
-        <div className={"card-container"}>
-          {isEmpty(props.featuredSubreddits)
-            ? <div></div>
-            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][3]]} />}
-        </div>
-
-        <div className={"card-container"}>
-          {isEmpty(props.featuredSubreddits)
-            ? <div></div>
-            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][4]]} />}
-        </div>
-
-        <div className={"card-container"}>
-          {isEmpty(props.featuredSubreddits)
-            ? <div></div>
-            : <FeaturedTile category={props.featuredSubreddits[props.featuredSubreddits["_keys"][5]]} />}
-        </div>
-
+        {subreddits}
       </Grid>  <style>{`
     
     .card-container{
@@ -129,11 +107,11 @@ const FeaturedGridMenu = (props) => {
     </div>)
 }
 
-const home = ({ userSession }) => {
+const home = ({ userSession, featured }) => {
 
   const [subreddit, setSubreddit] = useState("")
   const [podcast, setPodcast] = useState("")
-  const [featuredSubreddits, setFeaturedSubreddits] = useState({})
+  const [featuredSubreddits, setFeaturedSubreddits] = useState(featured)
   const [user, setUser] = useState({})
   const [podcastURL, setPodcastURL] = useState("")
   const [showLoginPopup, setShowLoginPopup] = useState(false)
@@ -141,6 +119,7 @@ const home = ({ userSession }) => {
   useEffect(() => {
     const validateUserSession = async (session_id, email) => {
       let user = await validateSession(session_id, email);
+      console.log(user)
       setUser(user)
     }
     if (userSession.session_id && userSession.email) {
@@ -150,16 +129,16 @@ const home = ({ userSession }) => {
       setShowLoginPopup(true)
     }
 
-    const getFeaturedSubreddits = async () => {
-      const res = await fetch("/api/podcasts/getFeatured", { method: "GET" })
-      if (res.status === 200) {
+    // const getFeaturedSubreddits = async () => {
+    //   const res = await fetch("/api/podcasts/getFeatured", { method: "GET" })
+    //   if (res.status === 200) {
 
-        const featured = await res.json()
-        // console.log("featured in home: ", featured)
-        setFeaturedSubreddits(featured);
-      }
-    }
-    getFeaturedSubreddits();
+    //     const featured = await res.json()
+    //     console.log("featured in home: ", featured)
+    //     setFeaturedSubreddits(featured);
+    //   }
+    // }
+    // getFeaturedSubreddits();
   }, []);
 
   return (
@@ -249,13 +228,26 @@ const home = ({ userSession }) => {
   )
 }
 
-home.getInitialProps = ({ req }) => {
+home.getInitialProps = async ({ req }) => {
   const cookies = parseCookies(req)
+
+  const res = await fetch(server + "/api/podcasts/getFeatured", { method: "GET" })
+    if (res.status === 200) {
+
+      var featured = await res.json()
+      console.log("featured in home: ", featured)
+      // setFeaturedSubreddits(featured);
+    } else{
+      var featured = {} 
+    }
+
   return {
     userSession: {
       "session_id": cookies.session_id,
       "email": cookies.email
-    }
+    },
+    featured: featured,
+    revalidate: 60 //seconds
   };
 }
 
