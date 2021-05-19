@@ -1,4 +1,4 @@
-import Layout from "../components/layout"
+import IndexLayout from "../components/IndexLayout"
 import React, { useState, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import Router from 'next/router';
@@ -63,7 +63,7 @@ const Index = ({ userSession }) => {
   }
 
   return (
-    <Layout>
+    <IndexLayout>
       <div>
         <CustomNavbar />
         {/* <CustomNavbar /> */}
@@ -130,7 +130,7 @@ const Index = ({ userSession }) => {
 
 `}</style>
       </div>
-    </Layout >
+    </IndexLayout >
 
   )
 }
