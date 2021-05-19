@@ -1,33 +1,61 @@
 import Head from 'next/head';
 import { Provider } from 'react-redux';
 import store from "../redux/store"
+import Sidebar from "../components/Sidebar"
 
 const Layout = (props) => (
-    <div className="container">
-        <Head>
-            <title>SnooPods</title>
-            <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
-        </Head>
-        <div style={{ width: "100%" }}>
-            {/* <Provider store={store}> */}
-            {props.children}
-            {/* </Provider> */}
+    <div className="screen-container">
+        {/* <div className="sidebar">sidebar sidebar sidebar sidebar</div>
+         */}
+        <Sidebar></Sidebar>
+        <div className="page-container">
+            <Head>
+                <title>SnooPods</title>
+                <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
+            </Head>
+            <div style={{ width: "100%" }}>
+                {/* <Provider store={store}> */}
+                {props.children}
+                {/* </Provider> */}
+            </div>
+            
         </div>
         <style jsx>
-            {`.container{
-                select: focus;
-                textarea: focus;
-                font-size: 16px;
+                {`
+                .screen-container{
+                    display: flex;
+                    justify-content: center;
+                    max-width: none;
+                    padding: 0;
+                    margin: 0;
+                }
+                .page-container{
+                    select: focus;
+                    textarea: focus;
+                    font-size: 16px;
+                    
+                    display:flex;
+                    margin-top:30px;
+                    margin-bottom:30px;
+                    justify-content: center;
+                    flex-direction:row;
+                    align-content:center;
+                    align-text:center;
+                    width: 88%;
+                }
+
                 
-                display:flex;
-                margin-top:30px;
-                margin-bottom:30px;
-                justify-content: center;
-                flex-direction:column;
-                align-content:center;
-                align-text:center;
-        }`}
-        </style>
+                `}
+            </style>
+            <style global jsx>{`
+                html,
+                body,
+                body > div:first-child,
+                div#__next,
+                div#__next > div {
+                    height: 100%;
+                }
+            `}</style>
     </div>
 
 )
