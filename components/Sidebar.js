@@ -1,59 +1,51 @@
-// import { Row, Col, Form } from 'react-bootstrap/'
-// // import Col from 'react-bootstrap/Form'
-// import Button from 'react-bootstrap/Button'
-import React, { useState } from 'react';
-// import Router from "next/router"
-// import { RegisterStore } from "../redux/store"
-// import Cookie from "js-cookie"
+import React, { useState, useEffect } from 'react';
 import { Navbar, Nav } from "react-bootstrap"
+import { server } from '../config';
 
 
-class Sidebar extends React.Component {
-    constructor(props) {
-        super(props);
-        // this.state = { firstName: "", lastName: "", email: "" };
-        // this.handleInputChange = this.handleInputChange.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
-    }
 
-    render() {
-        return (
-            
-            
-            <Navbar className="sidebar" style={{
-                backgroundColor: "#EAECEF",
-                width: "14%",
+const Sidebar = (props) => {
+    
+    // useEffect(() => {
+    //     const res = await fetch(server + "/api/user/getCollections/" + props.userEmail, { method: "GET" })
+    //     if (res.status === 200) {
+
+    //     var userCollections = await res.json()
+    //     console.log("collections: ", userCollections)
+    //     // setFeaturedSubreddits(featured);
+    //     } 
+    //   }, []);
+
+    return (
+        <Navbar className="sidebar" style={{
+            backgroundColor: "#EAECEF",
+            width: "14%",
+            flexDirection: "column",
+            alignItems: "center",
+        }}>
+            <Nav style={{
+                display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
-                // flexWrap: "wrap"
+                alignItems: "flex-start",
+                maxWidth: "100%", 
             }}>
-                <Nav style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    // flexWrap: "wrap",
-                    maxWidth: "100%",
-                    
-                    
-                    
-                }}>
-                    <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Home</Nav.Link>
-                    <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Search</Nav.Link>
-                    <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Your Collections</Nav.Link>
-                    <Nav.Link style={{ paddingLeft: "25px", maxWidth: "100%",flex: "1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} onClick={() => { Router.push("/") }}>Collection 1234567678</Nav.Link>
-                    <Nav.Link style={{ paddingLeft: "25px", maxWidth: "100%",flex: "1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} onClick={() => { Router.push("/") }}>Collection2131312312</Nav.Link>
+                <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Home</Nav.Link>
+                <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Search</Nav.Link>
+                <div style={{padding: "8px"}}>Your Collections</div>
+                <Nav.Link style={{ paddingLeft: "25px", maxWidth: "100%",flex: "1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} onClick={() => { Router.push("/") }}>Collection 1234567678</Nav.Link>
+                <Nav.Link style={{ paddingLeft: "25px", maxWidth: "100%",flex: "1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} onClick={() => { Router.push("/") }}>Collection2131312312</Nav.Link>
 
+            </Nav>
+                <style jsx>
+                {``}
+                </style>
+        </Navbar>
+    )
 
-                </Nav>
-                    <style jsx>
-                    {`
-                    `}
-                    </style>
-            </Navbar>
-                
-            
-        )
-    }
 }
+
+// Sidebar.getInitialProps = async () =>{
+    
+// }
 
 export default Sidebar

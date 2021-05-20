@@ -4,45 +4,34 @@ import store from "../redux/store"
 import Sidebar from "../components/Sidebar"
 
 const Layout = (props) => (
-    <div className="screen-container">
-        {/* <div className="sidebar">sidebar sidebar sidebar sidebar</div>
-         */}
-        <Sidebar></Sidebar>
-        <div className="page-container">
+    
+        
+        <div className="screen-container">
             <Head>
                 <title>SnooPods</title>
                 <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
             </Head>
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", height: "100%" }}>
                 {/* <Provider store={store}> */}
                 {props.children}
                 {/* </Provider> */}
             </div>
             
-        </div>
-        <style jsx>
+        
+            <style jsx>
                 {`
                 .screen-container{
                     display: flex;
                     justify-content: center;
                     max-width: none;
-                    padding: 0;
-                    margin: 0;
-                }
-                .page-container{
+                    padding: 0px;
+                    margin: 0px;
                     select: focus;
                     textarea: focus;
                     font-size: 16px;
-                    
-                    display:flex;
-                    margin-top:30px;
-                    margin-bottom:30px;
-                    justify-content: center;
-                    flex-direction:row;
-                    align-content:center;
-                    align-text:center;
-                    width: 88%;
+                    width: 100%;
                 }
+
 
                 
                 `}
@@ -56,7 +45,8 @@ const Layout = (props) => (
                     height: 100%;
                 }
             `}</style>
-    </div>
+        </div>
+    
 
 )
 export default Layout;

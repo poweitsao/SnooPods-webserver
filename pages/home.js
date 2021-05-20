@@ -14,6 +14,8 @@ import AudioPlayerBar from "../components/AudioPlayerBar"
 import fetch from "isomorphic-unfetch"
 import isEmpty from "../lib/isEmptyObject"
 import LoginPopup from "../components/LoginPopup"
+import Sidebar from "../components/Sidebar"
+
 
 const FeaturedTile = (props) => {
   return (
@@ -152,83 +154,95 @@ const home = ({ userSession, featured }) => {
 
           }} />
       </div>
-      <div >
-        {isEmpty(user)
-          ? <div></div>
-          : <CustomNavbar user={user} />
-        }
-
-      </div>
-      <div className="page-body">
-        <div className="heading">
-          <h1> Featured Subreddits </h1>
-        </div>
-
-        <div className="grid-container">
-          {featuredSubreddits === {}
+      <div className="page-container">
+        <Sidebar></Sidebar> 
+        
+        <div className="main-page">
+          {isEmpty(user)
             ? <div></div>
-            : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
-        </div>
+            : <CustomNavbar user={user} />
+          }
+          
+        
+          <div className="heading">
+            <h1> Featured Subreddits </h1>
+          </div>
 
-        <div className="button-container">
-        </div>
+          <div className="grid-container">
+            {featuredSubreddits === {}
+              ? <div></div>
+              : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
+          </div>
 
-        <style>{`
-        .heading{
+          <div className="button-container">
+          </div>
+
+          <style>{`
+          .heading{
+            text-align:center;
+          }
+          .main-page{
+            width: 88%;
+            margin-top:30px;
+            margin-bottom:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-content:center;
+            align-text:center;
+            align-self: flex-start;
+          }
+
+        .page-container{
+          display: flex;
+          height: 100%;
+          
+        }
+        .button-container{
+          margin:20px;
           text-align:center;
         }
-      .page-body{
-        margin-top:50px;
-        margin-bottom:50px;
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-content:center;
-        align-text:center;
-        
-      }
-    .button-container{
-      margin:20px;
-      text-align:center;
-    }
-    .image{
-      -webkit-user-select: none;
-      margin: auto;}
-      .heading{
-        text-align:center;
-      }
-      .musicPlayer{
-        text-align:center;
-        padding: 20px;
-      }
-      .grid-container{
-        padding:20px;
-        width: 80%;
-        display: flex;
-        justify-content:center;
-        align-self:center;
-        margin-right: 50px;
-        margin-left:50px;
-        max-width: 690px;
-      }
-      .navbar{
-        display:flex;
-        flex-direction: column;
-        align-items: stretch;
-      }
-  `}</style>
-      </div>
-      <div>
+        .image{
+          -webkit-user-select: none;
+          margin: auto;}
+          .heading{
+            text-align:center;
+        }
+        .musicPlayer{
+          text-align:center;
+          padding: 20px;
+        }
+        .grid-container{
+          padding:20px;
+          width: 80%;
+          display: flex;
+          justify-content:center;
+          align-self:center;
+          margin-right: 50px;
+          margin-left:50px;
+          max-width: 690px;
+        }
+        .navbar{
+          display:flex;
+          flex-direction: column;
+          align-items: stretch;
+        }
+    `}</style>
+        </div>
+        </div>
+        <div>
 
-        <AudioPlayerBar subreddit={subreddit} podcast={podcast} src={podcastURL} />
+          <AudioPlayerBar subreddit={subreddit} podcast={podcast} src={podcastURL} />
 
-      </div>
+        </div>
+      
     </Layout >
 
   )
 }
 
 home.getInitialProps = async ({ req }) => {
+  console.log("req", req)
   const cookies = parseCookies(req)
 
   const res = await fetch(server + "/api/podcasts/getFeatured", { method: "GET" })
