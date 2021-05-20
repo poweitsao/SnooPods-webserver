@@ -169,12 +169,12 @@ export async function getFeaturedSubreddits() {
 
 export async function getSubredditPlaylist(subID) {
     // console.log("subID in firestore:" + subID)
-    let docRef : FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> = db.collection("subreddits").doc(subID)
+    let docRef = db.collection("subreddits").doc(subID)
     let doc = await docRef.get()
 
     let mainCollectionID: string = doc.data().mainCollectionID
     
-    let collectionRef : FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> = db.collection("collections").doc(mainCollectionID)
+    let collectionRef = db.collection("collections").doc(mainCollectionID)
     let collectionDoc = await collectionRef.get()
     let tracks : Array<string> = collectionDoc.data().tracks
 
@@ -182,12 +182,12 @@ export async function getSubredditPlaylist(subID) {
     let collection = <Collection>{keys:[], tracks:{}};
     // console.log(doc)
     for (const [index, track_id] of tracks.entries()) {
-        let trackRef : FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> = db.collection("tracks").doc(track_id)
+        let trackRef = db.collection("tracks").doc(track_id)
         let trackDoc = await trackRef.get()
 
         
         // console.log(doc.id, '=>', doc.data());
-        let trackData:FirebaseFirestore.DocumentData = trackDoc.data()
+        let trackData = trackDoc.data()
         let track:Track = {
             filename: trackData["filename"],
             cloud_storage_url: trackData["cloudStorageURL"],
@@ -211,7 +211,7 @@ export async function getSubredditPlaylist(subID) {
     if (!subredditsDoc.exists) {
         console.log("No album picture found")
     } else {
-        collection["album_cover_url"] = subredditsDoc.data()["pictureURL"]
+        collection["cover_url"] = subredditsDoc.data()["pictureURL"]
     }
     // console.log("collection info:", collection)
     return collection

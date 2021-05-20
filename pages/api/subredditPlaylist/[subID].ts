@@ -4,7 +4,7 @@ import {Timestamp, Collection, Track} from "../../../ts/interfaces"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-
+    console.log("request sent to subID")
     if (req.method === "GET") {
         if (req.query["subID"]) {
             console.log("req.query:" + req.query["subID"])

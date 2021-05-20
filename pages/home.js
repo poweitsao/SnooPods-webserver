@@ -15,6 +15,7 @@ import fetch from "isomorphic-unfetch"
 import isEmpty from "../lib/isEmptyObject"
 import LoginPopup from "../components/LoginPopup"
 import Sidebar from "../components/Sidebar"
+import useSWR from 'swr'
 
 
 const FeaturedTile = (props) => {
@@ -82,15 +83,30 @@ const FeaturedTile = (props) => {
 }
 
 const FeaturedGridMenu = (props) => {
+
+  const [mounted, setMounted] = useState(false)
+  const {data} = useSWR(mounted ? "/api/podcasts/getFeatured/": null)
+  const {data: endpoint3} = useSWR(mounted?"/api/subredditPlaylist/cscareerquestions":null)
+  // console.log(mounted)
+  console.log("endpoint3.2", endpoint3)
+
+  // const { data } = useSWR( '/api/data' : null, fetchData)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const subreddits = []
-  if (!isEmpty(props.featuredSubreddits)){
-    for (const [index, value] of props.featuredSubreddits._keys.entries()) {
-      // console.log(props.featuredSubreddits[value])
-      subreddits.push(<div key={index} className={"card-container"}><FeaturedTile subredditInfo={props.featuredSubreddits[value]} /></div>
-      // <li key={index}>{value}</li>
+  if(mounted){
+    console.log("data", data)
+    if (!data) return <div>loading...</div>
+    for (const [index, value] of data._keys.entries()) {
+      subreddits.push(<div key={index} className={"card-container"}><FeaturedTile subredditInfo={data[value]} /></div>
       )
     }
   }
+
+  
 
   
   
@@ -109,14 +125,24 @@ const FeaturedGridMenu = (props) => {
     </div>)
 }
 
-const home = ({ userSession, featured }) => {
+const home = ({ userSession }) => {
 
   const [subreddit, setSubreddit] = useState("")
   const [podcast, setPodcast] = useState("")
-  const [featuredSubreddits, setFeaturedSubreddits] = useState(featured)
+  const [featuredSubreddits, setFeaturedSubreddits] = useState({})
   const [user, setUser] = useState({})
   const [podcastURL, setPodcastURL] = useState("")
   const [showLoginPopup, setShowLoginPopup] = useState(false)
+
+  const [mounted, setMounted] = useState(false)
+
+  const {data: endpoint2} = useSWR("/api/user/getCollections/poweitsao@gmail.com")
+  // console.log(mounted)
+  console.log("endpoint2", endpoint2)
+
+  const {data: endpoint3} = useSWR("/api/subredditPlaylist/cscareerquestions")
+  // console.log(mounted)
+  console.log("endpoint3.1", endpoint3)  
 
   useEffect(() => {
     const validateUserSession = async (session_id, email) => {
@@ -130,6 +156,11 @@ const home = ({ userSession, featured }) => {
     } else {
       setShowLoginPopup(true)
     }
+    setMounted(true)
+    // if (data){
+    //   // setFeaturedSubreddits(data)
+
+    // }
 
     // const getFeaturedSubreddits = async () => {
     //   const res = await fetch("/api/podcasts/getFeatured", { method: "GET" })
@@ -246,26 +277,26 @@ const home = ({ userSession, featured }) => {
 }
 
 home.getInitialProps = async ({ req }) => {
-  console.log("req", req)
+  // console.log("req", req)
   const cookies = parseCookies(req)
 
-  const res = await fetch(server + "/api/podcasts/getFeatured", { method: "GET" })
-    if (res.status === 200) {
+  // const res = await fetch(server + "/api/podcasts/getFeatured", { method: "GET" })
+  //   if (res.status === 200) {
 
-      var featured = await res.json()
-      console.log("featured in home: ", featured)
-      // setFeaturedSubreddits(featured);
-    } else{
-      var featured = {} 
-    }
+  //     var featured = await res.json()
+  //     console.log("featured in home: ", featured)
+  //     // setFeaturedSubreddits(featured);
+  //   } else{
+  //     var featured = {} 
+  //   }
 
   return {
     userSession: {
       "session_id": cookies.session_id,
       "email": cookies.email
-    },
-    featured: featured,
-    revalidate: 60 //seconds
+    }
+    // featured: data,
+    // revalidate: 60 //seconds
   };
 }
 
