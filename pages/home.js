@@ -155,7 +155,11 @@ const home = ({ userSession, featured }) => {
           }} />
       </div>
       <div className="page-container">
-        <Sidebar></Sidebar> 
+        {isEmpty(user)
+            ? <div></div>
+            : <Sidebar user={user}></Sidebar>
+          }
+         
         
         <div className="main-page">
           {isEmpty(user)

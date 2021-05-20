@@ -98,8 +98,8 @@ export async function createUser(user) {
     }
 }
 
-export async function getUserCollections(user) {
-    let userRef = db.collection("users").doc(user.email)
+export async function getUserCollections(email) {
+    let userRef = db.collection("users").doc(email)
     console.log("getting user collections")
     try {
         let userData = await userRef.get()
@@ -235,5 +235,6 @@ module.exports = {
     createSession,
     checkValidSession,
     getFeaturedSubreddits,
-    getSubredditPlaylist
+    getSubredditPlaylist,
+    getUserCollections
 }

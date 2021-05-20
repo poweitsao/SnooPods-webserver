@@ -28,6 +28,8 @@ import LaunchIcon from '@material-ui/icons/Launch';
 import {Collection, Timestamp, Track, UserSession} from "../../ts/interfaces"
 import useWindowDimensions from "../../components/hooks/useWindowDimensions"
 
+import Sidebar from "../../components/Sidebar"
+
 
 
 function isEmpty(obj:Object) {
@@ -201,53 +203,73 @@ const Subreddit = ({ cookies }) => {
     const { height, width } = useWindowDimensions();
     return (
         <Layout>
-            
-            <div>
+            <div className="page-container">
                 {isEmpty(user)
                     ? <div></div>
-                    : <CustomNavbar user={user} />
+                    : <Sidebar user={user}></Sidebar>
                 }
-            </div>
-            <div className="page-body">
-                {isEmpty(playlist)
-                    ? <div></div>
-                    : <SubredditInfo albumCover={playlist['album_cover_url']} />}
-                {isEmpty(playlist)
-                    ? <div></div>
-                    : <Tablelist playlist={playlist} />}
+                <div className="main-page">
+                    {isEmpty(user)
+                        ? <div></div>
+                        : <CustomNavbar user={user} />
+                    }
                 
-            </div>
-            <Provider store={AudioPlayerStore}>
-                <AudioPlayerBarContainer />
-            </Provider>
-            {/* ; */}
-            <style>
-                {`.page-body{
-                    margin-top: 30px;
-                    margin-bottom: 100px;
-                    display:flex;
-                    flex-direction:column;
-                    justify-content:nowrap;
-                    align-items:center;
-                    height: 82%;
-                    overflow-y: scroll;
-                    }
-
-                    
-
-                    .album-cover{
-                        padding: 20px;
-                    }
-                    .navbar{
+                    <div className="page-body">
+                        {isEmpty(playlist)
+                            ? <div></div>
+                            : <SubredditInfo albumCover={playlist['album_cover_url']} />}
+                        {isEmpty(playlist)
+                            ? <div></div>
+                            : <Tablelist playlist={playlist} />}
+                        
+                    </div>
+                </div>
+                <Provider store={AudioPlayerStore}>
+                    <AudioPlayerBarContainer />
+                </Provider>
+                {/* ; */}
+                <style>
+                    {`.page-body{
+                        margin-top: 30px;
+                        margin-bottom: 100px;
                         display:flex;
-                        flex-direction: column;
-                        align-items: stretch;
-                      }
-                `}
-            </style>
-            <div >
-                {/* <AudioPlayerBar subreddit={subID} podcast={podcast} src={podcastURL} audio={audio} /> */}
-                
+                        flex-direction:column;
+                        justify-content:nowrap;
+                        align-items:center;
+                        height: 82%;
+                        overflow-y: scroll;
+                        }
+                        .main-page{
+                            width: 88%;
+                            margin-top:30px;
+                            margin-bottom:30px;
+                            display:flex;
+                            flex-direction:column;
+                            justify-content:center;
+                            align-content:center;
+                            align-text:center;
+                            align-self: flex-start;
+                        }
+
+                        .page-container{
+                            display: flex;
+                            height: 100%
+                        }
+
+                        .album-cover{
+                            padding: 20px;
+                        }
+                        .navbar{
+                            display:flex;
+                            flex-direction: column;
+                            align-items: stretch;
+                        }
+                    `}
+                </style>
+                <div >
+                    {/* <AudioPlayerBar subreddit={subID} podcast={podcast} src={podcastURL} audio={audio} /> */}
+                    
+                </div>
             </div>
         </Layout>
     )
