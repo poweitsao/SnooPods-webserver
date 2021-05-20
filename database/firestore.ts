@@ -1,14 +1,27 @@
 // const Firestore = require('@google-cloud/firestore');
-import {Firestore} from "@google-cloud/firestore";
+// import {Firestore} from "@google-cloud/firestore";
 import {Timestamp, Track, Collection} from "../ts/interfaces"
 
 var file = require("../credentials/read-write-credentials/snoopods-us-bd34eda00ba3.json")
 
 
-const db = new Firestore({
-    projectId: 'snoopods-us',
-    credentials: { client_email: file.client_email, private_key: file.private_key }
-});
+// const db = new Firestore({
+//     projectId: 'snoopods-us',
+//     credentials: { client_email: file.client_email, private_key: file.private_key }
+// });
+const admin = require('firebase-admin');
+
+const serviceAccount = require('../credentials/read-write-credentials/snoopods-us-bd34eda00ba3.json');
+
+// admin.app().delete()
+if (admin.apps.length === 0) {
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+    });
+}
+
+
+const db = admin.firestore();
 
 export async function getPodcast(subreddit, podcast) {
     console.log("getPodcast executed")
@@ -50,26 +63,7 @@ export async function getUser(email) {
     }
 }
 
-// export async function createUser(user) {
-//     let userRef = db.collection("users").doc(user.email)
-//     console.log("creating user!")
-//     try {
-//         await userRef.set({
-//             firstName: user.firstName,
-//             lastName: user.lastName,
-//             email: user.email,
-//             picture_url: user.picture_url
-//         })
-//         let sessionID = await createSession(user.email)
-//         return {
-//             sessionID: sessionID,
-//             email: user.email
-//         }
-//     } catch (e) {
-//         console.log(e)
-//         return null
-//     }
-// }
+
 
 export async function createUser(user) {
     let userRef = db.collection("users").doc(user.email)
@@ -98,6 +92,20 @@ export async function createUser(user) {
             sessionID: sessionID,
             email: user.email
         }
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+}
+
+export async function getUserCollections(user) {
+    let userRef = db.collection("users").doc(user.email)
+    console.log("getting user collections")
+    try {
+        let userData = await userRef.get()
+        userData = userData.data()
+        let userCollections = userData.collections
+        return userCollections
     } catch (e) {
         console.log(e)
         return null
