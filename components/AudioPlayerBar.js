@@ -79,7 +79,7 @@ function AudioPlayer(props) {
         <div>
             {reload
                 ? <div style={{ width: "100%", height: "100%" }}></div>
-                : [(props.url == ""
+                : (props.url == ""
                     ? <EmptyAudioPlayerInfo/>
                     : <AudioPlayerInfo
                         url={props.url}
@@ -89,7 +89,7 @@ function AudioPlayer(props) {
                         playing={props.playing}
                         changeAudioPlayerInfo={props.changeAudioPlayerInfo}
                         togglePlaying={props.togglePlaying} />
-                )]
+                )
             }
         </div>
     )
