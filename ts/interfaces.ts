@@ -27,3 +27,15 @@ export interface UserSession {
     pictureURL: string,
     validSession?: boolean, 
 }
+
+export interface QueuePlaylist{
+    playlistID: string,
+    playlistName: string,
+    tracks: Array<Track>
+}
+
+export interface QueueObject{
+    currentTrack: Track,
+    currentPlaylist: QueuePlaylist,
+    queue: Array<QueuePlaylist>
+}

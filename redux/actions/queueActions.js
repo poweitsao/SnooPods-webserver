@@ -31,10 +31,11 @@ const clearCurrentPlaylist = () => {
     }
 }
 
-const removeTrackFromCurrentPlaylist = (trackID) => {
+const removeTrackFromCurrentPlaylist = (trackID, index) => {
     return {
         type: "REMOVE_TRACK_FROM_CURRENT_PLAYLIST",
-        trackID
+        trackID,
+        index
     }
 }
 
@@ -46,9 +47,10 @@ const removePlaylistFromQueue = (playlistID) => {
     }
 }
 
-const removeTrackFromQueue = (trackID, index) => {
+const removeTrackFromQueue = (playlistID, trackID, index) => {
     return {
         type: "REMOVE_TRACK_FROM_QUEUE",
+        playlistID,
         trackID,
         index
 
