@@ -1,4 +1,4 @@
-import { storeAudioPlayerInfo } from "../actions"
+import { storeAudioPlayerInfo } from "../actions/index"
 
 const initialState = {
     AudioPlayerInfo: {}

@@ -1,4 +1,4 @@
-import { storeUserInfo } from "../actions"
+import { storeUserInfo } from "../actions/index"
 
 const initialState = {
     userInfo: {}
