@@ -74,7 +74,7 @@ export async function createUser(user) {
 
         await userRef.set({
             collections: [],
-            currentPlaylist: {},
+            currentPlaylist: {"playlistID": "", "playlistName": "", "tracks": []},
             currentTrack: "",
             email: user.email,
             firstName: user.firstName,
