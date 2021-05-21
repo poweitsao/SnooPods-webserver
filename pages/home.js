@@ -16,6 +16,11 @@ import isEmpty from "../lib/isEmptyObject"
 import LoginPopup from "../components/LoginPopup"
 import Sidebar from "../components/Sidebar"
 import useSWR from 'swr'
+import { AudioPlayerStore } from "../redux/store";
+// import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index";
+import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
+import { Provider } from "react-redux";
+
 
 
 const FeaturedTile = (props) => {
@@ -88,7 +93,7 @@ const FeaturedGridMenu = (props) => {
   const {data} = useSWR(mounted ? "/api/podcasts/getFeatured/": null)
   const {data: endpoint3} = useSWR(mounted?"/api/subredditPlaylist/cscareerquestions":null)
   // console.log(mounted)
-  console.log("endpoint3.2", endpoint3)
+  // console.log("endpoint3.2", endpoint3)
 
   // const { data } = useSWR( '/api/data' : null, fetchData)
 
@@ -136,13 +141,13 @@ const home = ({ userSession }) => {
 
   const [mounted, setMounted] = useState(false)
 
-  const {data: endpoint2} = useSWR("/api/user/getCollections/poweitsao@gmail.com")
+  const {data: endpoint2} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
   // console.log(mounted)
-  console.log("endpoint2", endpoint2)
+  // console.log("endpoint2", endpoint2)
 
   const {data: endpoint3} = useSWR("/api/subredditPlaylist/cscareerquestions")
   // console.log(mounted)
-  console.log("endpoint3.1", endpoint3)  
+  // console.log("endpoint3.1", endpoint3)  
 
   useEffect(() => {
     const validateUserSession = async (session_id, email) => {
@@ -267,8 +272,9 @@ const home = ({ userSession }) => {
         </div>
         <div>
 
-          <AudioPlayerBar subreddit={subreddit} podcast={podcast} src={podcastURL} />
-
+        <Provider store={AudioPlayerStore}>
+          <AudioPlayerBarContainer />
+        </Provider>
         </div>
       
     </Layout >

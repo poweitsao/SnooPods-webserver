@@ -100,7 +100,7 @@ export async function createUser(user) {
 
 export async function getUserCollections(email) {
     let userRef = db.collection("users").doc(email)
-    console.log("getting user collections")
+    console.log("getting user collections of", email)
     try {
         let userData = await userRef.get()
         userData = userData.data()
@@ -110,6 +110,48 @@ export async function getUserCollections(email) {
         console.log(e)
         return null
     }
+}
+
+export const addNewCollection = async(collectionName: string, email: string) => {
+    let newCollectionID = await createCollection(collectionName, email, [])
+    let userRef = db.collection("users").doc(email)
+    try{
+        // let userData = await userRef.get()
+        // var newEntry = {"collectionID": newCollectionID, "collectionName": collectionName };
+        // var newEntryString = JSON.stringify(newEntry)
+        await userRef.update({
+            collections: admin.firestore.FieldValue.arrayUnion({"collectionID": newCollectionID, "collectionName": collectionName})
+        })
+        return 200
+    }catch(e){
+        console.error("error in addNewCollection", e)
+        return 500
+    }
+
+}
+
+export const deleteCollection = async(collectionID: string, collectionName: string, email: string) => {
+    console.log("deleteCollection for firestore got", email, collectionID)
+    let userRef = db.collection("users").doc(email)
+    
+
+    try{
+        userRef.update({collections:admin.firestore.FieldValue.arrayRemove({"collectionID": collectionID, "collectionName": collectionName}) })
+    } catch(e){
+        console.log("error in deleteCollection, deleting collection from user", e)
+        return 500
+    }
+    try{
+        let collectionRef = db.collection("collections").doc(collectionID)
+        await collectionRef.delete()
+    } catch(e){
+        console.log("error in deleteCollection, deleting collection from collections", e)
+        return 500
+    }
+
+    return 200
+
+
 }
 
 export const createCollection = async (collectionName: string, ownerID: string, tracks: Array<string>) => {
@@ -236,5 +278,7 @@ module.exports = {
     checkValidSession,
     getFeaturedSubreddits,
     getSubredditPlaylist,
-    getUserCollections
+    getUserCollections,
+    addNewCollection, 
+    deleteCollection
 }

@@ -57,9 +57,9 @@ const Subreddit = ({ cookies, subredditPlaylist }) => {
 // const [mounted, setMounted] = useState(false)
 // const {data: playlist} = useSWR("/api/subredditPlaylist/test/cscareerquestions")
 // const {data: endpoint1} = useSWR("/api/subredditPlaylist/poweitsao@gmail.com")
-// const {data: endpoint2} = useSWR("/api/user/getCollections/poweitsao@gmail.com")
+// const {data: endpoint2} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
 
-// const {data: playlist} = useSWR("/api/user/getCollections/poweitsao@gmail.com")
+// const {data: playlist} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
 
 
 
@@ -69,11 +69,11 @@ const Subreddit = ({ cookies, subredditPlaylist }) => {
 
 // const {data: playlist} = useSWR("/api/subredditPlaylist/cscareerquestions")
 const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
-  const {data: collections} = useSWR("/api/user/getCollections/poweitsao@gmail.com")
+const {data: collections} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
 
 
-  console.log("SWRPlaylist", playlist)
-  console.log("collections", collections)
+  // console.log("SWRPlaylist", playlist)
+  // console.log("collections", collections)
 
 
 

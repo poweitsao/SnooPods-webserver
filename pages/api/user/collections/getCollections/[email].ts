@@ -1,6 +1,6 @@
-import {getUserCollections} from "../../../../database/firestore"
+import {getUserCollections} from "../../../../../database/firestore"
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {Collection} from "../../../../ts/interfaces"
+import {Collection} from "../../../../../ts/interfaces"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
