@@ -11,6 +11,13 @@ const pushNextTrack = () => {
     }
 }
 
+const replaceCurrentTrack = (track) =>{
+    return {
+        type: "REPLACE_CURRENT_TRACK",
+        track
+    }
+}
+
 const addPlaylistToQueue = (newPlaylist) => {
     return {
         type: "ADD_PLAYLIST_TO_QUEUE",

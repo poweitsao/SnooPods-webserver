@@ -268,6 +268,21 @@ export async function getSubredditPlaylist(subID) {
 
 }
 
+export async function getQueue(email: string){
+    console.log("email in getQueue", email)
+    let userRef = db.collection("users").doc(email)
+    try {
+        
+        let userData = await userRef.get()
+        userData = userData.data()
+        return {currentTrack: userData.currentTrack, currentPlaylist: userData.currentPlaylist, queue: userData.queue}
+        
+    } catch (error) {
+        console.error("error in getQueue", error)
+        
+    }
+
+}
 
 
 module.exports = {
@@ -280,5 +295,6 @@ module.exports = {
     getSubredditPlaylist,
     getUserCollections,
     addNewCollection, 
-    deleteCollection
+    deleteCollection,
+    getQueue
 }

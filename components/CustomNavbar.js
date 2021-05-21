@@ -318,6 +318,7 @@ const DesktopNavBar = (props) => {
                     </NavDropdown>
                 </div> */}
                     <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
+                    <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
                     <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link>
                     <Divider orientation="vertical" flexItem={true} />
                     <div style={{ marginRight: "auto", paddingLeft: "20px" }}>

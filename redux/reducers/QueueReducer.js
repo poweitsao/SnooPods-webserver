@@ -34,6 +34,13 @@ const queueInfoReducer = (state = initialState, action) => {
                 currentPlaylist: currentPlaylist,
                 queue: queue
             }
+        case "REPLACE_CURRENT_TRACK":
+
+            return{
+                ...state,
+                currentTrack: action.track
+            }
+
         case "ADD_PLAYLIST_TO_QUEUE":
             let queue = state.queue
             queue.unshift(action.newPlaylist)
@@ -43,11 +50,11 @@ const queueInfoReducer = (state = initialState, action) => {
             }
         case "CLEAR_CURRENT_PLAYLIST":
             return {
-                // ...state
+                //!
             }
         case "REMOVE_TRACK_FROM_CURRENT_PLAYLIST":
             return {
-                // ...state
+                //!
             }
 
         case "REMOVE_PLAYLIST_FROM_QUEUE":
