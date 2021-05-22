@@ -63,7 +63,20 @@ export async function getUser(email) {
     }
 }
 
-
+export async function getTrack(trackID: string){
+    let trackRef = db.collection("tracks").doc(trackID)
+    let trackDoc = await trackRef.get()
+    let trackData = trackDoc.data()
+    let track:Track = {
+        filename: trackData["filename"],
+        cloud_storage_url: trackData["cloudStorageURL"],
+        date_posted: trackData["datePosted"],
+        audio_length: trackData["audioLength"],
+        track_name: trackData["trackName"],
+        track_id: trackData["trackID"]
+    }
+    return track
+}
 
 export async function createUser(user) {
     let userRef = db.collection("users").doc(user.email)
@@ -296,5 +309,6 @@ module.exports = {
     getUserCollections,
     addNewCollection, 
     deleteCollection,
-    getQueue
+    getQueue,
+    getTrack
 }

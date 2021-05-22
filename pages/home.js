@@ -20,6 +20,8 @@ import { AudioPlayerStore } from "../redux/store";
 // import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index";
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
+import { QueueStore } from "../redux/store";
+import { Queue } from "@material-ui/icons";
 
 
 
@@ -179,6 +181,10 @@ const home = ({ userSession }) => {
     // getFeaturedSubreddits();
   }, []);
 
+  const getQueueStore = () =>{
+    let queueInfo = QueueStore.getState();
+    console.log(queueInfo)
+  }
   return (
 
     <Layout>
@@ -215,6 +221,7 @@ const home = ({ userSession }) => {
           </div>
 
           <div className="button-container">
+            <button onClick={getQueueStore}>get queueStore</button>
           </div>
 
           <style>{`

@@ -31,11 +31,11 @@ export interface UserSession {
 export interface QueuePlaylist{
     playlistID: string,
     playlistName: string,
-    tracks: Array<Track>
+    tracks: Array<string>
 }
 
 export interface QueueObject{
-    currentTrack: Track,
+    currentTrack: string,
     currentPlaylist: QueuePlaylist,
     queue: Array<QueuePlaylist>
 }

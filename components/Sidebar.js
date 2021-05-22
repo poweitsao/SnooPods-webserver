@@ -21,7 +21,7 @@ const Sidebar = (props) => {
         // console.log("collections", data)
 
         if (data !== undefined){
-        console.log("collections", data)
+        // console.log("collections", data)
         if (data.length !== showDelete.length){
             setShowDelete([...Array(data.length)].map((_, i) => false))
             

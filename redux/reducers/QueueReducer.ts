@@ -1,6 +1,6 @@
 import { nextTrack, storeAudioPlayerInfo } from "../actions"
 import {Track, QueuePlaylist, QueueObject} from "../../ts/interfaces"
-
+import {QueueStore} from "../store"
 
 const emptyPlaylist : QueuePlaylist= {
     playlistID: "",
@@ -8,33 +8,39 @@ const emptyPlaylist : QueuePlaylist= {
     tracks: []
 }
 
-const emptyTrack : Track= {
-    filename: "",
-    cloud_storage_url: "",
-    date_posted: {
-        _seconds: 0,
-        _nanoseconds: 0
-    },
-    audio_length: 0,
-    track_name: "",
-    track_id: ""
-}
+// const emptyTrack : Track= {
+//     filename: "",
+//     cloud_storage_url: "",
+//     date_posted: {
+//         _seconds: 0,
+//         _nanoseconds: 0
+//     },
+//     audio_length: 0,
+//     track_name: "",
+//     track_id: ""
+// }
 
 
 const initialState = {
     QueueInfo:<QueueObject> {
-        currentTrack: emptyTrack,
+        currentTrack: "",
         currentPlaylist: emptyPlaylist,
         queue: []
     }
 }
 
 let assignQueueObject = function(currentTrack: Track, currentPlaylist: QueuePlaylist, queue: Array<QueuePlaylist>) {
-    return Object.assign({}, currentTrack, currentPlaylist, queue)
+    return Object.assign({}, 
+        {QueueInfo:{
+            currentTrack, 
+            currentPlaylist, 
+            queue
+        }
+    })
 }
 
 const queueInfoReducer = (state = initialState, action) => {
-
+    
 
     switch (action.type) {
         //! only called when putting db queue info into redux
@@ -51,43 +57,68 @@ const queueInfoReducer = (state = initialState, action) => {
                 action.QueueInfo.currentTrack, 
                 action.QueueInfo.currentPlaylist, 
                 action.QueueInfo.queue)
+        
+        case "GET_QUEUE_INFO":
+            return state
 
         case "PUSH_NEXT_TRACK":
+            // const currStore =QueueStore.getState()
+            // console.log("currStore", currStore)
+
+            // console.log("state", state)
             var currentPlaylist = state.QueueInfo.currentPlaylist
             var queue = state.QueueInfo.queue
-            var nextTrack : Track
+            var nextTrack = ""
             if (currentPlaylist.tracks.length == 0){
-                nextTrack = queue[0].tracks[0]
-                queue[0].tracks.shift()
+                if (queue.length > 0){
+                    nextTrack = queue[0].tracks[0]
+                    queue[0].tracks.shift()
+                    if(queue[0].tracks.length == 0){
+                        queue.shift()
+                    }
+                } else{
+                    
+                }
+                
             } else{
                 nextTrack = currentPlaylist.tracks[0]
                 currentPlaylist.tracks.shift()
             }
             
             return {
-                currentTrack: nextTrack,
-                currentPlaylist: currentPlaylist,
-                queue: queue
+                QueueInfo:{
+                    currentTrack: nextTrack,
+                    currentPlaylist: currentPlaylist,
+                    queue: queue
+                }
+                
             }
         case "REPLACE_CURRENT_TRACK":
 
             return{
-                ...state,
-                currentTrack: action.track
+                QueueInfo:{
+                    ...state.QueueInfo,
+                    currentTrack: action.track
+                }
+                
             }
 
         case "ADD_PLAYLIST_TO_QUEUE":
             var queue = state.QueueInfo.queue
-            queue.unshift(action.newPlaylist)
+            queue.push(action.newPlaylist)
             return {
-                ...state,
-                queue: queue
+                QueueInfo:{
+                    ...state.QueueInfo,
+                    queue: queue
+                }
             }
 
         case "CLEAR_CURRENT_PLAYLIST":
             return {
-                ...state,
-                currentPlaylist: emptyPlaylist
+                QueueInfo:{
+                    ...state.QueueInfo,
+                    currentPlaylist: emptyPlaylist
+                }
             }
 
         case "REMOVE_TRACK_FROM_CURRENT_PLAYLIST":
@@ -95,11 +126,13 @@ const queueInfoReducer = (state = initialState, action) => {
             var trackID = action.trackID
             var trackIndex = action.index
             var filteredTracks = currentPlaylist.tracks.filter(
-                (track, index) => {return track.track_id !== trackID || index !== trackIndex})
+                (track, index) => {return track !== trackID || index !== trackIndex})
             currentPlaylist.tracks = filteredTracks
             return {
-                ...state,
-                currentPlaylist: currentPlaylist
+                QueueInfo:{
+                    ...state.QueueInfo,
+                    currentPlaylist: currentPlaylist
+                }
             }
 
         case "REMOVE_PLAYLIST_FROM_QUEUE":
@@ -107,11 +140,12 @@ const queueInfoReducer = (state = initialState, action) => {
             var queue = state.QueueInfo.queue
             queue = queue.filter((playlist) => {return playlist.playlistID !== playlistID})
             return {
-                ...state,
-                queue: queue
-
+                QueueInfo:{
+                    ...state.QueueInfo,
+                    queue: queue
+                }
             }
-            
+
         case "REMOVE_TRACK_FROM_QUEUE":
             var trackID = action.trackID
             var trackIndex = action.index
@@ -121,13 +155,15 @@ const queueInfoReducer = (state = initialState, action) => {
                 var currQueuePlaylist = queue[i]
                 if (currQueuePlaylist.playlistID == playlistID){
                     var filteredTracks = currQueuePlaylist.tracks.filter(
-                        (track, index) => {return track.track_id !== trackID || index !== trackIndex})
+                        (track, index) => {return track !== trackID || index !== trackIndex})
                     queue[i].tracks = filteredTracks
                 }
             }
             return {
-                ...state,
-                queue: queue
+                QueueInfo:{
+                    ...state.QueueInfo,
+                    queue: queue
+                }
             }
         default:
             return state

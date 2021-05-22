@@ -19,6 +19,7 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
                 keyIndex: action.AudioPlayerInfo.keyIndex
             })
         case "TOGGLE_PLAYING":
+            console.log("state in AudioPlayerReducer", state)
             return {
                 ...state,
                 playing: action.playingStatus
