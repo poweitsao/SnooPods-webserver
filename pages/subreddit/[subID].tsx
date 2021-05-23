@@ -166,13 +166,22 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
               paddingLeft: "12px",
             }}
           >
-            <Icon
-              style={{ width: "25px", height: "25px" }}
-              icon={playButton}
-              onClick={() => playPodcast(trackKey)}
-              onMouseEnter={() => setPlayButton(playCircleFilled)}
-              onMouseLeave={() => setPlayButton(playCircleOutlined)}
-            />
+            <button 
+                onClick={() => playPodcast(trackKey)}
+                onMouseEnter={() => setPlayButton(playCircleFilled)}
+                onMouseLeave={() => setPlayButton(playCircleOutlined)}
+                style={{
+                  padding: "0px",
+                  width: "fit-content",
+                  backgroundColor: "transparent",
+                  border: "none"
+
+                  }}>
+              <Icon
+                style={{ width: "25px", height: "25px" }}
+                icon={playButton}
+              />
+            </button>
           </div>
         </td>
         <td style={{ width: "60%" }}>
