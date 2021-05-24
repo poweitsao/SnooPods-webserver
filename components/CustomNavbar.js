@@ -207,7 +207,7 @@ async function onGoogleLoginSuccess(googleUser) {
 }
 
 const onGoogleLoginFailed = (response) => {
-
+    console.log("Google login failed", response)
 }
 
 const MobileNavBar = (props) => {
