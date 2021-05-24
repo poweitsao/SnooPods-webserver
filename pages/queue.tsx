@@ -125,36 +125,43 @@ const Queue = ({ userSession }) => {
       QueueStore.dispatch(
         pushNextTrack()
       )
+      syncDB(userSession.email)
     }
     const replaceCurrentTrackRedux = (track) =>{
       QueueStore.dispatch(
         replaceCurrentTrack(track)
       )
+      syncDB(userSession.email)
     }
     const addPlaylistToQueueRedux = (newPlaylist) =>{
       QueueStore.dispatch(
         addPlaylistToQueue(newPlaylist)
       )
+      syncDB(userSession.email)
     }
     const clearCurrentPlaylistRedux = () =>{
       QueueStore.dispatch(
         clearCurrentPlaylist()
       )
+      syncDB(userSession.email)
     }
     const removeTrackFromCurrentPlaylistRedux = (trackID, index) =>{
       QueueStore.dispatch(
         removeTrackFromCurrentPlaylist(trackID, index)
       )
+      syncDB(userSession.email)
     }
     const removePlaylistFromQueueRedux = (playlistID) =>{
       QueueStore.dispatch(
         removePlaylistFromQueue(playlistID)
       )
+      syncDB(userSession.email)
     }
     const removeTrackFromQueueRedux = (playlistID, trackID, index) =>{
       QueueStore.dispatch(
         removeTrackFromQueue(playlistID, trackID, index)
       )
+      syncDB(userSession.email)
     }
 
     const syncDB = async (email: string) =>{
@@ -162,15 +169,49 @@ const Queue = ({ userSession }) => {
       var res = await fetch("/api/queue/pushQueueToDB", {method: "POST", body: JSON.stringify({email: email, queueInfo: currStore.QueueInfo})})
     }
 
-    const newTrack = "reduxNewTrackID1"
+    const emptyTrack : Track= {
+      filename: "",
+      cloud_storage_url: "",
+      date_posted: {
+          _seconds: 0,
+          _nanoseconds: 0
+      },
+      audio_length: 0,
+      track_name: "",
+      track_id: ""
+    }
+    
+    
+        const testTrack : Track= {
+          filename: "0Cwlemwi19LtNtXQvbTv.mp3",
+          cloud_storage_url: "https://storage.cloud.google.com/snoopods-us/tracks/0Cwlemwi19LtNtXQvbTv.mp3",
+          date_posted: {
+              _seconds: 0,
+              _nanoseconds: 0
+          },
+          audio_length: 81,
+          track_name: "YSK it is perfectly legal to make you wear a mask, Jacobson v Mass 1905",
+          track_id: "0Cwlemwi19LtNtXQvbTv"
+      }
+    
+      const testTrack2 : Track= {
+        filename: "5C94NFAopU1tShiytiuP.mp3",
+        cloud_storage_url: "https://storage.cloud.google.com/snoopods-us/tracks/5C94NFAopU1tShiytiuP.mp3",
+        date_posted: {
+            _seconds: 0,
+            _nanoseconds: 0
+        },
+        audio_length: 187,
+        track_name: "Graduated with a 2.9 GPA and no internships, after over 400 applications I got my first offer.",
+        track_id: "5C94NFAopU1tShiytiuP"
+    }
 
     const newPlaylist = {
       playlistID: "reduxNewPlaylistID1",
       playlistName: "reduxNewPlaylistID1",
       tracks: [
-        "reduxNewTrackID2", 
-        "reduxNewTrackID3",
-        "reduxNewTrackID4"
+        testTrack,
+        testTrack2
       ]
     }
 
