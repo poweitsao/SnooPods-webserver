@@ -140,6 +140,11 @@ const Queue = ({ userSession }) => {
       )
     }
 
+    const syncDB = async (email: string) =>{
+      const currStore =QueueStore.getState()
+      var res = await fetch("/api/queue/pushQueueToDB", {method: "POST", body: JSON.stringify({email: email, queueInfo: currStore.QueueInfo})})
+    }
+
     const newTrack = "reduxNewTrackID1"
 
     const newPlaylist = {
@@ -177,6 +182,7 @@ const Queue = ({ userSession }) => {
                 <button onClick={clearCurrentPlaylistRedux}>CLEAR_CURRENT_PLAYLIST</button>
                 <button onClick={() => removeTrackFromQueueRedux("reduxNewPlaylistID1","reduxNewTrackID2", 0)}>REMOVE_TRACK_FROM_QUEUE</button>
                 <button onClick={() => removePlaylistFromQueueRedux("reduxNewPlaylistID1")}>REMOVE_PLAYLIST_FROM_QUEUE</button>
+                <button onClick={() => syncDB(userSession.email)}>sync db</button>
 
 
                 <style>{`

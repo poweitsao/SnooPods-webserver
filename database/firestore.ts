@@ -297,6 +297,21 @@ export async function getQueue(email: string){
 
 }
 
+export async function pushQueueToDB(email: string, queueInfo: Object){
+    console.log("pushQueueToDB:", email, queueInfo)
+    let userRef = db.collection("users").doc(email)
+    try {
+        
+        await userRef.update({currentPlaylist: queueInfo["currentPlaylist"]})
+        await userRef.update({queue: queueInfo["queue"]})
+        await userRef.update({currentTrack: queueInfo["currentTrack"]})
+        return 200
+    } catch (error) {
+        console.error("error in pushQueueToDB", error)  
+        return 500
+    }
+
+}
 
 module.exports = {
     getPodcast,
@@ -310,5 +325,6 @@ module.exports = {
     addNewCollection, 
     deleteCollection,
     getQueue,
-    getTrack
+    getTrack,
+    pushQueueToDB
 }
