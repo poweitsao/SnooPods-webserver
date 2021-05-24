@@ -15,6 +15,7 @@ import { connect } from "react-redux"
 import { QueueStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import {QueuePlaylist, Track} from "../ts/interfaces"
+import { storeAudioPlayerInfo} from "../redux/actions/index"
 
 const Queue = ({ userSession }) => {
     // const store = useStore()
@@ -36,7 +37,7 @@ const Queue = ({ userSession }) => {
             console.log("getQueue result:", userQueueInfo)
 
             // let currTrackInfo = {}
-            let currTrack = ""
+            let currTrack : Track
             let currentPlaylist = userQueueInfo.currentPlaylist
             let queue = userQueueInfo.queue
 
@@ -80,6 +81,22 @@ const Queue = ({ userSession }) => {
                 queue: queue
               })
             )
+
+            let currAudioStore = AudioPlayerStore.getState()
+            console.log("currAudioStore", currAudioStore)
+            if (isEmpty(currAudioStore.AudioPlayerInfo) && !isEmpty(currTrack)){
+              AudioPlayerStore.dispatch(
+                storeAudioPlayerInfo({
+                  playing: false,
+                  subreddit: "loremipsum",
+                  trackName: currTrack.track_name,
+                  filename: currTrack.filename,
+                  audio: new Audio(currTrack.cloud_storage_url),
+                  url: currTrack.cloud_storage_url,
+                  email: userSession.email
+                })
+              );
+            }
       }
 
       if (userSession.session_id && userSession.email) {

@@ -12,6 +12,13 @@ import useAudioPlayer from './custom-audio-player/src/useAudioPlayer';
 import { AudioPlayerStore } from "../redux/store"
 import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 
+import { QueueStore } from "../redux/store";
+import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
+import isEmpty from '../lib/isEmptyObject';
+import syncDB from "../lib/syncQueue";
+
+
+
 
 
 class AudioPlayerBar extends React.Component {
@@ -60,7 +67,7 @@ function AudioPlayer(props) {
     const [audio, setAudio] = useState(undefined)
     useEffect(() => {
 
-
+        
         if (props.audio !== audio) {
             if (audio !== null && audio !== undefined) {
                 // console.log("Pausing before switching!")
@@ -74,7 +81,7 @@ function AudioPlayer(props) {
             setReload(false)
         }
     })
-
+    console.log(props)
     return (
         <div>
             {reload
@@ -123,6 +130,40 @@ const nextTrack = () => {
     }
 }
 
+const nextTrackFromQueue = () => {
+    // var keyIndex = currStore["keyIndex"]
+    // var playlist = currStore["playlist"]
+    const audioCurrStore = AudioPlayerStore.getState()
+    console.log("pushing next track")
+    QueueStore.dispatch(pushNextTrack())
+    syncDB(audioCurrStore.email)
+        
+    var queueCurrStore = QueueStore.getState()
+    var currTrack = queueCurrStore.QueueInfo.currentTrack
+    console.log("queueCurrStore from nextTrackFromQueue", queueCurrStore)
+
+    console.log("currTrack from nextTrackFromQueue", currTrack)
+    if (!isEmpty(currTrack)) { 
+        // var filename = currStore["playlist"]["keys"][keyIndex + 1]
+        // var podcast = currStore["playlist"]["tracks"][filename]
+
+        var track = new Audio(currTrack.cloud_storage_url)
+        track.setAttribute("id", "audio")
+        audioCurrStore["audio"].setAttribute("id", "")
+        AudioPlayerStore.dispatch(togglePlaying(false))
+
+        AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+            playing: true,
+            subreddit: "r/LoremIpsum",
+            trackName: currTrack.track_name,
+            audio: track,
+            url: currTrack.cloud_storage_url,
+        }))
+    } else{
+        AudioPlayerStore.dispatch(togglePlaying(false))
+    }
+}
+
 function AudioPlayerInfo(props) {
     const { curTime, duration, setClickedTime, setCurTime } = useAudioPlayer(props.audio);
     const source = props.url;
@@ -137,7 +178,9 @@ function AudioPlayerInfo(props) {
             // audio.pause();
             console.log("next")
             setCurTime(0);
-            nextTrack()
+            console.log("props", props)
+            nextTrackFromQueue()
+            // testQueueStore()
             // audio.currentTime = 0;
         }
     })
@@ -166,6 +209,10 @@ function AudioPlayerInfo(props) {
         }
     }
  
+    const testQueueStore = () =>{
+        let queueCurrStore = QueueStore.getState()
+        console.log("queueCurrStore", queueCurrStore)
+    }
 
     return (
         <div>
@@ -198,6 +245,7 @@ function AudioPlayerInfo(props) {
                                 setClickedTime(curTime + 10)
                             }
                         }} />
+                        {/* <button onClick={testQueueStore}>test</button> */}
 
 
                     </div>
@@ -315,5 +363,30 @@ function EmptyAudioPlayerInfo(props) {
         </div>
     );
 }
+
+// AudioPlayerBar.getInitialProps = async ({ req }) => {
+//     // console.log("req", req)
+//     const cookies = parseCookies(req)
+  
+//     // const res = await fetch(server + "/api/podcasts/getFeatured", { method: "GET" })
+//     //   if (res.status === 200) {
+  
+//     //     var featured = await res.json()
+//     //     console.log("featured in home: ", featured)
+//     //     // setFeaturedSubreddits(featured);
+//     //   } else{
+//     //     var featured = {} 
+//     //   }
+  
+//     return {
+//       userSession: {
+//         "session_id": cookies.session_id,
+//         "email": cookies.email
+//       }
+//       // featured: data,
+//       // revalidate: 60 //seconds
+//     };
+//   }
+  
 
 export default AudioPlayerBar

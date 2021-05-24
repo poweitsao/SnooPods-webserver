@@ -8,22 +8,22 @@ const emptyPlaylist : QueuePlaylist= {
     tracks: []
 }
 
-// const emptyTrack : Track= {
-//     filename: "",
-//     cloud_storage_url: "",
-//     date_posted: {
-//         _seconds: 0,
-//         _nanoseconds: 0
-//     },
-//     audio_length: 0,
-//     track_name: "",
-//     track_id: ""
-// }
+const emptyTrack : Track= {
+    filename: "",
+    cloud_storage_url: "",
+    date_posted: {
+        _seconds: 0,
+        _nanoseconds: 0
+    },
+    audio_length: 0,
+    track_name: "",
+    track_id: ""
+}
 
 
 const initialState = {
     QueueInfo:<QueueObject> {
-        currentTrack: "",
+        currentTrack: emptyTrack,
         currentPlaylist: emptyPlaylist,
         queue: []
     }
@@ -65,10 +65,10 @@ const queueInfoReducer = (state = initialState, action) => {
             // const currStore =QueueStore.getState()
             // console.log("currStore", currStore)
 
-            // console.log("state", state)
+            console.log("state", state)
             var currentPlaylist = state.QueueInfo.currentPlaylist
             var queue = state.QueueInfo.queue
-            var nextTrack = ""
+            var nextTrack = {}
             if (currentPlaylist.tracks.length == 0){
                 if (queue.length > 0){
                     nextTrack = queue[0].tracks[0]
@@ -77,7 +77,7 @@ const queueInfoReducer = (state = initialState, action) => {
                         queue.shift()
                     }
                 } else{
-                    
+                    nextTrack = emptyTrack
                 }
                 
             } else{
@@ -105,11 +105,20 @@ const queueInfoReducer = (state = initialState, action) => {
 
         case "ADD_PLAYLIST_TO_QUEUE":
             var queue = state.QueueInfo.queue
-            queue.push(action.newPlaylist)
+            var newPlaylist = action.newPlaylist
+            var currentTrack = state.QueueInfo.currentTrack
+            if (currentTrack.cloud_storage_url == "" ){
+                currentTrack = newPlaylist.tracks[0]
+                newPlaylist.tracks.shift()
+            }
+            if (newPlaylist.tracks.length > 0){
+                queue.push(newPlaylist)
+            }
             return {
                 QueueInfo:{
                     ...state.QueueInfo,
-                    queue: queue
+                    queue: queue,
+                    currentTrack: currentTrack
                 }
             }
 
@@ -126,7 +135,7 @@ const queueInfoReducer = (state = initialState, action) => {
             var trackID = action.trackID
             var trackIndex = action.index
             var filteredTracks = currentPlaylist.tracks.filter(
-                (track, index) => {return track !== trackID || index !== trackIndex})
+                (track, index) => {return track.track_id !== trackID || index !== trackIndex})
             currentPlaylist.tracks = filteredTracks
             return {
                 QueueInfo:{
@@ -155,7 +164,7 @@ const queueInfoReducer = (state = initialState, action) => {
                 var currQueuePlaylist = queue[i]
                 if (currQueuePlaylist.playlistID == playlistID){
                     var filteredTracks = currQueuePlaylist.tracks.filter(
-                        (track, index) => {return track !== trackID || index !== trackIndex})
+                        (track, index) => {return track.track_id !== trackID || index !== trackIndex})
                     queue[i].tracks = filteredTracks
                 }
             }
