@@ -136,7 +136,9 @@ const nextTrackFromQueue = () => {
     const audioCurrStore = AudioPlayerStore.getState()
     console.log("pushing next track")
     QueueStore.dispatch(pushNextTrack())
-    syncDB(audioCurrStore.email)
+    if (audioCurrStore.email !== undefined){
+        syncDB(audioCurrStore.email)
+    }
         
     var queueCurrStore = QueueStore.getState()
     var currTrack = queueCurrStore.QueueInfo.currentTrack
