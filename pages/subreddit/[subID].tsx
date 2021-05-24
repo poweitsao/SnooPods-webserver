@@ -32,6 +32,10 @@ import Sidebar from "../../components/Sidebar";
 import useSWR from "swr";
 import { server } from "../../config";
 
+import { QueueStore } from "../../redux/store";
+import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue, replaceCurrentPlaylist } from "../../redux/actions/queueActions";
+import syncDB from "../../lib/syncQueue"
+
 function isEmpty(obj: Object) {
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) {
@@ -52,7 +56,7 @@ const Subreddit = ({ cookies, subredditPlaylist }) => {
 
   const router = useRouter();
   const subID: string = router.query["subID"].toString();
-  console.log(server + "/api/subredditPlaylist/" + subID)
+  // console.log(server + "/api/subredditPlaylist/" + subID)
 //   const data = {}
 // const [mounted, setMounted] = useState(false)
 // const {data: playlist} = useSWR("/api/subredditPlaylist/test/cscareerquestions")
@@ -108,7 +112,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
 
     if (cookies.session_id && cookies.email) {
       validateUserSession(cookies.session_id, cookies.email);
-      console.log("router.query", router.query);
+      // console.log("router.query", router.query);
       if (!isEmpty(router.query)) {
         // getSubredditPlaylist(subID);
       }
@@ -123,7 +127,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
     //   console.log("playlist", playlist)
 
 
-  const playPodcast = (trackIndex: string) => {
+  const oldplayPodcast = (trackIndex: string) => {
     const currStore = AudioPlayerStore.getState();
     var podcast: Track = playlist["tracks"][trackIndex];
 
@@ -148,14 +152,102 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
     }
   };
 
+  const playPodcast = (trackKey: string, trackIndex: number) => {
+
+    // console.log("trackKey", trackKey)
+    // console.log("trackIndex", trackIndex)
+    // console.log("playlist", playlist)
+    // console.log("subID", subID)
+
+    var queuePlaylistTracks = []
+    for(var i = trackIndex + 1; i <playlist.keys.length; i++ ){
+      queuePlaylistTracks.push(playlist.tracks[playlist.keys[i]])
+    }
+
+    // console.log("queuePlaylistTracks", queuePlaylistTracks)
+    var currStore = QueueStore.getState()
+    // console.log("store before dispatch", currStore)
+
+    if (queuePlaylistTracks.length > 0){
+      var playlistName = "r/" + subID
+
+      var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
+      // console.log("queuePlaylist", queuePlaylist)
+      QueueStore.dispatch(
+        replaceCurrentPlaylist(queuePlaylist)
+      )
+      
+    
+      // console.log("store after dispatch", currStore)
+      // console.log(playlist.tracks[trackKey])
+    
+    }
+    QueueStore.dispatch(
+      replaceCurrentTrack(playlist.tracks[trackKey])
+    )
+    currStore = QueueStore.getState()
+    let currTrack = currStore.QueueInfo.currentTrack
+    // syncDB(cookies.email)
+    AudioPlayerStore.dispatch(
+      storeAudioPlayerInfo({
+        playing: true,
+        subreddit: "loremipsum",
+        trackName: currTrack.track_name,
+        filename: currTrack.filename,
+        audio: new Audio(currTrack.cloud_storage_url),
+        url: currTrack.cloud_storage_url,
+        email: cookies.email}
+      )
+    )
+
+
+    // const currStore = AudioPlayerStore.getState();
+    // var podcast: Track = playlist["tracks"][trackIndex];
+
+    // if (currStore.url === podcast["cloud_storage_url"]) {
+    //   AudioPlayerStore.dispatch(togglePlaying(!currStore.playing));
+    // } else {
+    //   var track: HTMLAudioElement = new Audio(podcast["cloud_storage_url"]);
+    //   track.setAttribute("id", "audio");
+
+    //   AudioPlayerStore.dispatch(
+    //     storeAudioPlayerInfo({
+    //       playing: true,
+    //       subreddit: subID,
+    //       trackName: podcast["track_name"],
+    //       filename: podcast["filename"],
+    //       audio: track,
+    //       url: podcast["cloud_storage_url"],
+    //       playlist: playlist,
+    //       keyIndex: playlist["keys"].indexOf(trackIndex),
+    //     })
+    //   );
+    // }
+  };
+
+  const createQueuePlaylist = (tracks: Array<Track>, playlistName: string) => {
+    var playlistID = generateID()
+    return {
+      playlistID: playlistID,
+      playlistName: playlistName,
+      tracks: tracks
+    }
+
+  }
+
+  const generateID = () => {
+    return '_' + Math.random().toString(36).substr(2, 9);
+};
+
   const convertDate = (dateObject: Timestamp) => {
     var unixTime: Date = new Date(dateObject["_seconds"] * 1000);
     var dateString: string = unixTime.toDateString();
     return dateString.substring(4, 10) + ", " + dateString.substring(11, 15);
   };
 
-  const renderTrackOnTable = (trackKey: string) => {
+  const renderTrackOnTable = (trackKey: string, index: number) => {
     const [playButton, setPlayButton] = useState(playCircleOutlined);
+    // console.log(index)
     return (
       <tr key={trackKey}>
         <td style={{ width: "5%" }}>
@@ -167,7 +259,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
             }}
           >
             <button 
-                onClick={() => playPodcast(trackKey)}
+                onClick={() => playPodcast(trackKey, index)}
                 onMouseEnter={() => setPlayButton(playCircleFilled)}
                 onMouseLeave={() => setPlayButton(playCircleOutlined)}
                 style={{

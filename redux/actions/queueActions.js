@@ -27,6 +27,14 @@ const replaceCurrentTrack = (track) =>{
     }
 }
 
+const replaceCurrentPlaylist = (newPlaylist) =>{
+    console.log("replacing current playlist with", newPlaylist)
+    return {
+        type: "REPLACE_CURRENT_PLAYLIST",
+        newPlaylist
+    }
+}
+
 const addPlaylistToQueue = (newPlaylist) => {
     console.log("adding new playlist to queue", newPlaylist.playlistID)
     return {
@@ -82,5 +90,6 @@ module.exports = {
     clearCurrentPlaylist,
     removeTrackFromCurrentPlaylist,
     removePlaylistFromQueue,
-    removeTrackFromQueue
+    removeTrackFromQueue,
+    replaceCurrentPlaylist
  }

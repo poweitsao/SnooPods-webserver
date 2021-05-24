@@ -29,9 +29,13 @@ class AudioPlayerBar extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         // console.log(" the props in audio bar", this.props)
-        if (prevProps.audio !== this.props.audio) {
-            // console.log("audio changed")
-        }
+        // if (prevProps.audio !== this.props.audio) {
+        //     // console.log("audio changed")
+        // }
+
+        
+        //! sync with db when playing!
+        syncDB(AudioPlayerStore.getState().email)
     }
 
     render() {
@@ -81,7 +85,7 @@ function AudioPlayer(props) {
             setReload(false)
         }
     })
-    console.log(props)
+    // console.log(props)
     return (
         <div>
             {reload
@@ -247,7 +251,7 @@ function AudioPlayerInfo(props) {
                                 setClickedTime(curTime + 10)
                             }
                         }} />
-                        {/* <button onClick={testQueueStore}>test</button> */}
+                        <button onClick={testQueueStore}>test</button>
 
 
                     </div>
@@ -305,7 +309,10 @@ function EmptyAudioPlayerInfo(props) {
     const subreddit = props.subreddit;
     const trackName = props.trackName;
     const audio = props.audio;
-
+    const testQueueStore = () =>{
+        let queueCurrStore = QueueStore.getState()
+        console.log("queueCurrStore", queueCurrStore)
+    }
     return (
         <div>
             <div className="player" style={{ width: "100%" }}>
@@ -317,6 +324,7 @@ function EmptyAudioPlayerInfo(props) {
                         <Replay10 handleClick={() => {}} />
                         <Play handleClick={() => {}} />
                         <Forward10 handleClick={() => {}} />
+                        <button onClick={testQueueStore}>test</button>
                     </div>
                     <div className="track-duration-info">
                         {/* <Bar curTime={0} duration={0} onTimeUpdate={() =>{}} /> */}

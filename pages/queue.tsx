@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import validateSession from "../lib/validateUserSessionOnPage"
 import isEmpty from "../lib/isEmptyObject"
 import Sidebar from "../components/Sidebar"
-import { AudioPlayerStore } from "../redux/store";
+
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
 import { Provider, useStore, useSelector } from "react-redux";
 import parseCookies from "../lib/parseCookies"
@@ -15,6 +15,8 @@ import { connect } from "react-redux"
 import { QueueStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import {QueuePlaylist, Track} from "../ts/interfaces"
+
+import { AudioPlayerStore } from "../redux/store";
 import { storeAudioPlayerInfo} from "../redux/actions/index"
 
 const Queue = ({ userSession }) => {
@@ -83,7 +85,7 @@ const Queue = ({ userSession }) => {
             )
 
             let currAudioStore = AudioPlayerStore.getState()
-            console.log("currAudioStore", currAudioStore)
+            // console.log("currAudioStore", currAudioStore)
             if (isEmpty(currAudioStore.AudioPlayerInfo) && !isEmpty(currTrack)){
               AudioPlayerStore.dispatch(
                 storeAudioPlayerInfo({

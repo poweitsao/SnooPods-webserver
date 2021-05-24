@@ -103,6 +103,16 @@ const queueInfoReducer = (state = initialState, action) => {
                 
             }
 
+        case "REPLACE_CURRENT_PLAYLIST":
+
+            return{
+                QueueInfo:{
+                    ...state.QueueInfo,
+                    currentPlaylist: action.newPlaylist
+                }
+                
+            }
+
         case "ADD_PLAYLIST_TO_QUEUE":
             var queue = state.QueueInfo.queue
             var newPlaylist = action.newPlaylist
