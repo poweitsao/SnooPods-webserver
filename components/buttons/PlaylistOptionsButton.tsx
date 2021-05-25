@@ -9,20 +9,23 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 import {addPlaylistToQueue} from "../../redux/actions/queueActions"
 import {QueueStore, AudioPlayerStore, UserSessionStore} from "../../redux/store"
-import {Track} from "../../ts/interfaces"
+import {QueuePlaylist, Track} from "../../ts/interfaces"
 import {syncDB} from "../../lib/syncQueue"
 
 export default function PlaylistOptionsButton(props) {
-    const {trackInfo}:{trackInfo: Track} = props
+    const {playlist, subID}:{playlist: any, subID: string} = props
 
-    const addTrackToQueue = () =>{
-        // console.log(trackInfo)
-        var queuePlaylist = createQueuePlaylist([trackInfo], "${singleTrack}")
+    const addSubPlaylistToQueue = () =>{
+        console.log("to be added to queue:", playlist)
+        var tracks : Array<Track> = []
+        for (var i = 0; i < playlist.keys.length; i++){
+            tracks.push(playlist.tracks[playlist.keys[i]])
+        }
+        var queuePlaylist = createQueuePlaylist(tracks, "r/"+subID)
         console.log("queuePlaylist", queuePlaylist)
         QueueStore.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
-        
         syncDB()
 
     }
@@ -43,7 +46,7 @@ export default function PlaylistOptionsButton(props) {
 
     return (
         <Menu menuButton={<MoreHorizIcon />}>
-            <MenuItem onClick={addTrackToQueue}>Add to queue</MenuItem>
+            <MenuItem onClick={addSubPlaylistToQueue}>Add to queue</MenuItem>
             <SubMenu label="Add to Subscription List">
             <MenuItem>Render Subscription Lists dynamically</MenuItem>
                 {/* render this dynamically later */}

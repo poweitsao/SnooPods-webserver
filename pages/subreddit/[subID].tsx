@@ -40,6 +40,8 @@ import {syncDB, getQueue} from "../../lib/syncQueue"
 import {UserSessionStore} from "../../redux/store"
 import LoginPopup from "../../components/LoginPopup";
 
+import PlaylistOptionsButton from "../../components/buttons/PlaylistOptionsButton"
+
 function isEmpty(obj: Object) {
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) {
@@ -381,6 +383,9 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
               style={{ height: "18px", width: "18px", paddingBottom: "3px" }}
             />
           </div>
+          <div>
+            <PlaylistOptionsButton playlist={props.playlist} subID={subID}/>
+          </div>
         </div>
         <style>{`
                 .subreddit-info-container{
@@ -415,7 +420,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
             {playlist == undefined ? (
               <div></div>
             ) : (
-              <SubredditInfo albumCover={playlist["cover_url"]} />
+              <SubredditInfo albumCover={playlist["cover_url"]} playlist={playlist} />
             )}
             {playlist == undefined ? (
               <div></div>
