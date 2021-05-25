@@ -8,7 +8,7 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import {addPlaylistToQueue} from "../../redux/actions/queueActions"
-import {QueueStore, AudioPlayerStore} from "../../redux/store"
+import {QueueStore, AudioPlayerStore, UserSessionStore} from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB} from "../../lib/syncQueue"
 
@@ -23,11 +23,7 @@ export default function TrackOptionsButton(props) {
             addPlaylistToQueue(queuePlaylist)
         )
         
-        var email = AudioPlayerStore.getState().email
-        console.log("email in add to queue", email)
-        if (email !== ""){
-            syncDB(email)
-        }
+        syncDB()
 
     }
 

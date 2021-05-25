@@ -7,7 +7,6 @@ import React, { useState, useEffect } from 'react';
 import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
 import Cookie, { set } from "js-cookie"
-import store from "../redux/store"
 import validateSession from "../lib/validateUserSessionOnPage"
 import { Grid } from '@material-ui/core';
 import AudioPlayerBar from "../components/AudioPlayerBar"
@@ -23,7 +22,9 @@ import { Provider } from "react-redux";
 import { QueueStore } from "../redux/store";
 import {getQueue} from "../lib/syncQueue";
 
+import {UserSession} from "../ts/interfaces"
 
+import {UserSessionStore} from "../redux/store"
 
 
 
@@ -107,7 +108,7 @@ const FeaturedGridMenu = (props) => {
 
   const subreddits = []
   if(mounted){
-    console.log("data", data)
+    // console.log("data", data)
     if (!data) return <div>loading...</div>
     for (const [index, value] of data._keys.entries()) {
       subreddits.push(<div key={index} className={"card-container"}><FeaturedTile subredditInfo={data[value]} /></div>
@@ -154,40 +155,47 @@ const home = ({ userSession }) => {
   // console.log("endpoint3.1", endpoint3)  
 
   useEffect(() => {
-    const validateUserSession = async (session_id, email) => {
-      let user = await validateSession(session_id, email);
-      console.log(user)
-      setUser(user)
+    const validateUserSession = async (session_id: string, email: string) => {
+      let userSession: UserSession = await validateSession(session_id, email);
+      if (userSession.validSession){
+        console.log("user from validateUserSession", userSession)
+        setUser(userSession)
+        UserSessionStore.dispatch({
+          type:"STORE_USER_SESSION_INFO",
+          userSession
+        })
+      } else{
+        Router.push("/")
+      }
     }
+
     if (userSession.session_id && userSession.email) {
-      // console.log("UserSession: ", userSession)
-      validateUserSession(userSession.session_id, userSession.email);
+      console.log("UserSession: ", UserSessionStore.getState())
+      if (!UserSessionStore.getState().validSession){
+        validateUserSession(userSession.session_id, userSession.email);
+      } else{
+        console.log("not validating user session because it's already valid")
+      }
+      
+
     } else {
       setShowLoginPopup(true)
     }
+
+    
     setMounted(true)
 
     getQueue(userSession.email)
-    // if (data){
-    //   // setFeaturedSubreddits(data)
-
-    // }
-
-    // const getFeaturedSubreddits = async () => {
-    //   const res = await fetch("/api/podcasts/getFeatured", { method: "GET" })
-    //   if (res.status === 200) {
-
-    //     const featured = await res.json()
-    //     console.log("featured in home: ", featured)
-    //     setFeaturedSubreddits(featured);
-    //   }
-    // }
-    // getFeaturedSubreddits();
+    
   }, []);
 
   const getQueueStore = () =>{
     let queueInfo = QueueStore.getState();
     console.log(queueInfo)
+  }
+  const getUserSessionStore = () =>{
+    let UserSessionInfo = UserSessionStore.getState()
+    console.log(UserSessionInfo)
   }
   return (
 
@@ -226,6 +234,7 @@ const home = ({ userSession }) => {
 
           <div className="button-container">
             <button onClick={getQueueStore}>get queueStore</button>
+            <button onClick={getUserSessionStore}>get UserSessionStore</button>
           </div>
 
           <style>{`

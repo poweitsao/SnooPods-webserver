@@ -1,14 +1,19 @@
-import { QueueStore, AudioPlayerStore } from "../redux/store"
+import { QueueStore, AudioPlayerStore, UserSessionStore } from "../redux/store"
 import { storeQueueInfo } from "../redux/actions/queueActions"
 import { storeAudioPlayerInfo, setAudioStoreEmail } from "../redux/actions/index"
 import { Track } from "../ts/interfaces"
 
 
-export async function syncDB (email: string) {
-  console.log("sync queue", email)
-  const currStore = QueueStore.getState()
-  var res = await fetch("/api/queue/pushQueueToDB",
-    { method: "POST", body: JSON.stringify({ email: email, queueInfo: currStore.QueueInfo }) })
+export async function syncDB () {
+  let email = UserSessionStore.getState().email
+  if (email !== ""){
+    console.log("sync queue", email)
+    const currStore = QueueStore.getState()
+    var res = await fetch("/api/queue/pushQueueToDB",
+      { method: "POST", body: JSON.stringify({ email: email, queueInfo: currStore.QueueInfo }) })
+  } else{
+    console.error("email is empty in syncDB")
+  }
 }
 
 
@@ -17,7 +22,7 @@ export async function getQueue (email: string) {
     method: "POST", body: JSON.stringify({ email: email })
   })
   let userQueueInfo = await getQueueRes.json()
-  console.log("getQueue result:", userQueueInfo)
+  // console.log("getQueue result:", userQueueInfo)
 
   // let currTrackInfo = {}
   let currTrack: Track

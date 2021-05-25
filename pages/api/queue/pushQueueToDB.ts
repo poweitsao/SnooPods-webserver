@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method === "POST") {
         let {email, queueInfo} = JSON.parse(req.body)
-        console.log("request sent to pushQueueToDB", email, queueInfo)
+        // console.log("request sent to pushQueueToDB", email, queueInfo)
 
         // console.log("req.query:" + req.query["subID"])
         let serverRes = await pushQueueToDB(email, queueInfo)

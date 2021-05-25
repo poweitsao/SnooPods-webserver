@@ -19,7 +19,7 @@ import {QueuePlaylist, Track} from "../ts/interfaces"
 import { AudioPlayerStore } from "../redux/store";
 import { storeAudioPlayerInfo} from "../redux/actions/index"
 
-import { getQueue} from "../lib/syncQueue"
+import { getQueue, syncDB} from "../lib/syncQueue"
 
 
 const Queue = ({ userSession }) => {
@@ -130,49 +130,49 @@ const Queue = ({ userSession }) => {
       QueueStore.dispatch(
         pushNextTrack()
       )
-      syncDB(userSession.email)
+      syncDB()
     }
     const replaceCurrentTrackRedux = (track) =>{
       QueueStore.dispatch(
         replaceCurrentTrack(track)
       )
-      syncDB(userSession.email)
+      syncDB()
     }
     const addPlaylistToQueueRedux = (newPlaylist) =>{
       QueueStore.dispatch(
         addPlaylistToQueue(newPlaylist)
       )
-      syncDB(userSession.email)
+      syncDB()
     }
     const clearCurrentPlaylistRedux = () =>{
       QueueStore.dispatch(
         clearCurrentPlaylist()
       )
-      syncDB(userSession.email)
+      syncDB()
     }
     const removeTrackFromCurrentPlaylistRedux = (trackID, index) =>{
       QueueStore.dispatch(
         removeTrackFromCurrentPlaylist(trackID, index)
       )
-      syncDB(userSession.email)
+      syncDB()
     }
     const removePlaylistFromQueueRedux = (playlistID) =>{
       QueueStore.dispatch(
         removePlaylistFromQueue(playlistID)
       )
-      syncDB(userSession.email)
+      syncDB()
     }
     const removeTrackFromQueueRedux = (playlistID, trackID, index) =>{
       QueueStore.dispatch(
         removeTrackFromQueue(playlistID, trackID, index)
       )
-      syncDB(userSession.email)
+      syncDB()
     }
 
-    const syncDB = async (email: string) =>{
-      const currStore =QueueStore.getState()
-      var res = await fetch("/api/queue/pushQueueToDB", {method: "POST", body: JSON.stringify({email: email, queueInfo: currStore.QueueInfo})})
-    }
+    // const syncDB = async (email: string) =>{
+    //   const currStore =QueueStore.getState()
+    //   var res = await fetch("/api/queue/pushQueueToDB", {method: "POST", body: JSON.stringify({email: email, queueInfo: currStore.QueueInfo})})
+    // }
 
     const emptyTrack : Track= {
       filename: "",
@@ -245,7 +245,7 @@ const Queue = ({ userSession }) => {
                 <button onClick={clearCurrentPlaylistRedux}>CLEAR_CURRENT_PLAYLIST</button>
                 <button onClick={() => removeTrackFromQueueRedux("reduxNewPlaylistID1","reduxNewTrackID2", 0)}>REMOVE_TRACK_FROM_QUEUE</button>
                 <button onClick={() => removePlaylistFromQueueRedux("reduxNewPlaylistID1")}>REMOVE_PLAYLIST_FROM_QUEUE</button>
-                <button onClick={() => syncDB(userSession.email)}>sync db</button>
+                <button onClick={() => syncDB()}>sync db</button>
 
 
                 <style>{`
@@ -323,7 +323,7 @@ const Queue = ({ userSession }) => {
   }
   
 function mapStateToProps(state) {
-  console.log("mapStateToProps", state)
+  // console.log("mapStateToProps", state)
   return state
 }
 

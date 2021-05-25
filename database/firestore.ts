@@ -221,11 +221,12 @@ export async function checkValidSession(sessionID: string, email: string) {
     let data = user.data()
     if (sessionID === data.sessionID) {
         data.validSession = true;
-        return data
     }
     else {
-        return { validSession: false }
+        data.validSession = false 
     }
+    return data
+
 }
 
 export async function getFeaturedSubreddits() {
@@ -310,7 +311,7 @@ export async function getQueue(email: string){
 }
 
 export async function pushQueueToDB(email: string, queueInfo: Object){
-    console.log("pushQueueToDB:", email, queueInfo)
+    // console.log("pushQueueToDB:", email, queueInfo)
     let userRef = db.collection("users").doc(email)
     try {
         

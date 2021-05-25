@@ -282,6 +282,8 @@ const MobileNavBar = (props) => {
 }
 
 const DesktopNavBar = (props) => {
+    // console.log("DesktopNavBar props", props)
+
     return (
         <Navbar bg="white" expand="lg" style={{
             display: "flex",

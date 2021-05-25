@@ -6,7 +6,7 @@ const validateSession = async (session_id : string, email : string) => {
         const response : JSON = await res.json()
         // console.log(object)
         var userSession : UserSession = {
-            sessionID: response["session_id"],
+            sessionID: response["sessionID"],
             email: response["email"],
             firstName: response["firstName"],
             lastName: response["lastName"],

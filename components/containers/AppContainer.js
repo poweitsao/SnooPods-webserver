@@ -13,7 +13,7 @@ import AudioPlayerBar from "../AudioPlayerBar"
 // })
 
 function mapStateToProps(state) {
-    console.log("mapStateToProps", state)
+    // console.log("mapStateToProps", state)
     return state
 }
 

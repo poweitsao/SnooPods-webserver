@@ -37,6 +37,8 @@ import { QueueStore } from "../../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue, replaceCurrentPlaylist } from "../../redux/actions/queueActions";
 import {syncDB, getQueue} from "../../lib/syncQueue"
 
+import {UserSessionStore} from "../../redux/store"
+import LoginPopup from "../../components/LoginPopup";
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {
@@ -47,14 +49,12 @@ function isEmpty(obj: Object) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
-const Subreddit = ({ cookies, subredditPlaylist }) => {
+const Subreddit = ({ userSession, subredditPlaylist }) => {
   // let emptyPlaylist: Collection = { keys: [], tracks: {}, collectionName: "" , cover_url: ""};
   // const [playlist, setPlaylist] = useState<Collection>(emptyPlaylist);
   const [mounted, setMounted] = useState<Boolean>(false);
   const [user, setUser] = useState<UserSession | {}>({});
-  // const [podcast, setPodcast] = useState("")
-  // const [podcastURL, setPodcastURL] = useState("")
-  // const [audio, setAudio] = useState<HTMLAudioElement|null>(null)
+  const [showLoginPopup, setShowLoginPopup] = useState<Boolean>(false)
 
   const router = useRouter();
   const subID: string = router.query["subID"].toString();
@@ -96,32 +96,37 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
 //   if (!data) return <div>loading...</div>
   // console.log(router.query)
   useEffect(() => {
-    // const getSubredditPlaylist = async (subID: string) => {
-    //   const res = await fetch("/api/subredditPlaylist/" + subID, {
-    //     method: "GET",
-    //   });
-    //   if (res.status === 200) {
-    //     const result: Collection = await res.json();
-    //     console.log(result);
-    //     setPlaylist(result);
-    //   }
-    // };
-    setMounted(true);
-    const validateUserSession = async (session_id: string, email: string) => {
-      let user: UserSession = await validateSession(session_id, email);
-      setUser(user);
-    };
 
-    if (cookies.session_id && cookies.email) {
-      validateUserSession(cookies.session_id, cookies.email);
-      // console.log("router.query", router.query);
-      if (!isEmpty(router.query)) {
-        // getSubredditPlaylist(subID);
+    setMounted(true);
+
+    const validateUserSession = async (session_id: string, email: string) => {
+      let userSession: UserSession = await validateSession(session_id, email);
+      if (userSession.validSession){
+        console.log("user from validateUserSession", userSession)
+        setUser(userSession)
+        UserSessionStore.dispatch({
+          type:"STORE_USER_SESSION_INFO",
+          userSession
+        })
+      } else{
+        Router.push("/")
       }
-    
+    }
+
+    if (userSession.session_id && userSession.email) {
+      console.log("UserSession: ", UserSessionStore.getState())
+      if (!UserSessionStore.getState().validSession){
+        validateUserSession(userSession.session_id, userSession.email);
+      } else{
+        console.log("not validating user session because it's already valid")
+      }
+      
+
+    } else {
+      setShowLoginPopup(true)
     }
     // console.log(data)
-    getQueue(cookies.email)
+    getQueue(userSession.email)
   }, []);
   // console.log(playlist)
 
@@ -199,7 +204,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
         filename: currTrack.filename,
         audio: new Audio(currTrack.cloud_storage_url),
         url: currTrack.cloud_storage_url,
-        email: cookies.email}
+        email: UserSessionStore.getState().email}
       )
     )
 
@@ -393,6 +398,13 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
   const { height, width } = useWindowDimensions();
   return (
     <Layout>
+      <div>
+        <LoginPopup show={showLoginPopup}
+          onHide={() => {
+            setShowLoginPopup(false);
+            Router.push("/")
+          }} />
+      </div>
       <div className="page-container">
         {isEmpty(user) ? <div></div> : <Sidebar user={user}></Sidebar>}
         <div className="main-page">
@@ -472,7 +484,7 @@ Subreddit.getInitialProps = async ({ req, query }) => {
   let result: Collection = await res.json();
 
   return {
-    cookies: {
+    userSession: {
       session_id: cookies.session_id,
       email: cookies.email,
     },
