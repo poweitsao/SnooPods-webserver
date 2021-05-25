@@ -19,6 +19,13 @@ const togglePlaying = (playingStatus) => {
     }
 }
 
+const setAudioStoreEmail = (email) => {
+    return {
+        type: "SET_AUDIO_STORE_EMAIL",
+        email
+    }
+}
+
 const nextTrack = (AudioPlayerInfo) => {
     return {
         type: "NEXT_TRACK",
@@ -26,4 +33,4 @@ const nextTrack = (AudioPlayerInfo) => {
     }
 }
 
-module.exports = { storeUserInfo, storeAudioPlayerInfo, togglePlaying, nextTrack }
+module.exports = { storeUserInfo, storeAudioPlayerInfo, togglePlaying, nextTrack, setAudioStoreEmail }

@@ -1,6 +1,6 @@
 import { QueueStore, AudioPlayerStore } from "../redux/store"
 import { storeQueueInfo } from "../redux/actions/queueActions"
-import { storeAudioPlayerInfo } from "../redux/actions/index"
+import { storeAudioPlayerInfo, setAudioStoreEmail } from "../redux/actions/index"
 import { Track } from "../ts/interfaces"
 
 
@@ -77,6 +77,13 @@ export async function getQueue (email: string) {
         audio: new Audio(currTrack.cloud_storage_url),
         url: currTrack.cloud_storage_url,
         email: email
+      })
+    );
+  } else if (currAudioStore.email == ""){
+    console.log("email in setAudioStoreEmail", email)
+    AudioPlayerStore.dispatch(
+      setAudioStoreEmail({
+        email
       })
     );
   }

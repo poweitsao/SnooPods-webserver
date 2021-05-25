@@ -33,6 +33,12 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
             return {
                 ...state
             }
+
+        case "SET_AUDIO_STORE_EMAIL":
+            return {
+                ...state,
+                email: action.email.email
+            }
         default:
             return state
     }

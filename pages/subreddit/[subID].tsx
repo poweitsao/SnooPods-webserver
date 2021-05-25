@@ -27,6 +27,7 @@ import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
 import LaunchIcon from "@material-ui/icons/Launch";
 import { Collection, Timestamp, Track, UserSession } from "../../ts/interfaces";
 import useWindowDimensions from "../../components/hooks/useWindowDimensions";
+import TrackOptionsButton from "../../components/buttons/TrackOptionsButton"
 
 import Sidebar from "../../components/Sidebar";
 import useSWR from "swr";
@@ -35,6 +36,7 @@ import { server } from "../../config";
 import { QueueStore } from "../../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue, replaceCurrentPlaylist } from "../../redux/actions/queueActions";
 import {syncDB, getQueue} from "../../lib/syncQueue"
+
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {
@@ -290,8 +292,10 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
         </td>
         <td style={{ width: "10%" }}>
           {playlist["tracks"][trackKey]["audio_length"] ? (
-            <div className="audio-length">
-              {formatDuration(playlist["tracks"][trackKey]["audio_length"])}
+            <div style={{display: "flex", alignItems: "center"}}>
+              <div className="audio-length">
+                {formatDuration(playlist["tracks"][trackKey]["audio_length"])}
+              </div>
             </div>
           ) : (
             <div className="audio-length-dummy">{"audioLength"}</div>
@@ -299,8 +303,9 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
         </td>
         <td style={{ width: "15%" }}>
           {playlist["tracks"][trackKey]["date_posted"] ? (
-            <div className="date-posted">
+            <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
               {convertDate(playlist["tracks"][trackKey]["date_posted"])}
+              <div style={{padding: "10px"}}><TrackOptionsButton trackInfo={playlist.tracks[trackKey]}/></div>
             </div>
           ) : (
             <div className="date-posted-dummy">{"datePosted"}</div>
@@ -312,6 +317,12 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
 
         {/* </div> */}
         {/* </div> */}
+        <style>{`
+          .table td{
+            padding: 10px;
+            vertical-align: unset;
+          }
+        `}</style>
       </tr>
     );
   };
