@@ -94,7 +94,25 @@ export async function getQueue (email: string) {
   }
 }
 
+export function syncQueueWithAudioPlayer(playing: boolean) {
+  let audioCurrStore = AudioPlayerStore.getState()
+  let queueCurrStore = QueueStore.getState()
+  
+  if (audioCurrStore.url !== queueCurrStore.QueueInfo.currentTrack.cloud_storage_url){
+    var currTrack = queueCurrStore.QueueInfo.currentTrack
+    AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+      playing: playing,
+      subreddit: "r/LoremIpsum",
+      filename: currTrack.filename,
+      trackName: currTrack.track_name,
+      audio: new Audio(currTrack.cloud_storage_url),
+      url: currTrack.cloud_storage_url,
+    }))
+  }
+}
+
 module.exports = {
   syncDB,
-  getQueue
+  getQueue,
+  syncQueueWithAudioPlayer
 }

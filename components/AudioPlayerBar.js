@@ -5,6 +5,7 @@ import Track from "./custom-audio-player/src/Track";
 import Play from "./custom-audio-player/src/Play";
 import Pause from "./custom-audio-player/src/Pause";
 import Replay10 from "./custom-audio-player/src/Replay10"
+import Next from "./custom-audio-player/src/Next"
 import Forward10 from "./custom-audio-player/src/Forward10"
 import Bar from "./custom-audio-player/src/Bar";
 import { useState, useEffect } from "react"
@@ -15,7 +16,7 @@ import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 import { QueueStore, UserSessionStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import isEmpty from '../lib/isEmptyObject';
-import {syncDB} from "../lib/syncQueue";
+import {syncDB, syncQueueWithAudioPlayer} from "../lib/syncQueue";
 
 
 
@@ -152,31 +153,33 @@ const nextTrackFromQueue = () => {
     var currTrack = queueCurrStore.QueueInfo.currentTrack
     // console.log("queueCurrStore from nextTrackFromQueue", queueCurrStore)
 
-    console.log("currTrack after push", currTrack)
-    if (currTrack.cloud_storage_url !== "") { 
-        // var filename = currStore["playlist"]["keys"][keyIndex + 1]
-        // var podcast = currStore["playlist"]["tracks"][filename]
+    // console.log("currTrack after push", currTrack)
+    // if (currTrack.cloud_storage_url !== "") { 
+    //     // var filename = currStore["playlist"]["keys"][keyIndex + 1]
+    //     // var podcast = currStore["playlist"]["tracks"][filename]
 
-        var track = new Audio(currTrack.cloud_storage_url)
-        track.setAttribute("id", "audio")
-        // audioCurrStore["audio"].setAttribute("id", "")
-        AudioPlayerStore.dispatch(togglePlaying(false))
+    //     var track = new Audio(currTrack.cloud_storage_url)
+    //     track.setAttribute("id", "audio")
+    //     // audioCurrStore["audio"].setAttribute("id", "")
+        
+    //     // AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+    //     //     playing: true,
+    //     //     subreddit: "r/LoremIpsum",
+    //     //     filename: currTrack.filename,
+    //     //     trackName: currTrack.track_name,
+    //     //     audio: track,
+    //     //     url: currTrack.cloud_storage_url,
+    //     // }))
+        
 
-        AudioPlayerStore.dispatch(storeAudioPlayerInfo({
-            playing: true,
-            subreddit: "r/LoremIpsum",
-            filename: currTrack.filename,
-            trackName: currTrack.track_name,
-            audio: track,
-            url: currTrack.cloud_storage_url,
-        }))
-
-        let audioCurrStore = AudioPlayerStore.getState()
-        console.log("after pushing", audioCurrStore)
-        console.log("pushing next track")
-    } else{
-        AudioPlayerStore.dispatch(togglePlaying(false))
-    }
+    //     let audioCurrStore = AudioPlayerStore.getState()
+    //     console.log("after pushing", audioCurrStore)
+    //     console.log("pushing next track")
+    // } else{
+    //     AudioPlayerStore.dispatch(togglePlaying(false))
+    // }
+    AudioPlayerStore.dispatch(togglePlaying(false))
+    syncQueueWithAudioPlayer(true)
 }
 
 function AudioPlayerInfo(props) {
@@ -265,7 +268,10 @@ function AudioPlayerInfo(props) {
                                 setClickedTime(curTime + 10)
                             }
                         }} />
-                        <button onClick={testQueueStore}>test</button>
+
+                        <Next handleClick={nextTrackFromQueue} />
+
+                        {/* <button onClick={testQueueStore}>test</button> */}
 
 
                     </div>

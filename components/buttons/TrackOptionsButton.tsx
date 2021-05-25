@@ -10,7 +10,7 @@ import '@szhsin/react-menu/dist/index.css';
 import {addPlaylistToQueue} from "../../redux/actions/queueActions"
 import {QueueStore, AudioPlayerStore, UserSessionStore} from "../../redux/store"
 import {Track} from "../../ts/interfaces"
-import {syncDB} from "../../lib/syncQueue"
+import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
 export default function TrackOptionsButton(props) {
     const {trackInfo}:{trackInfo: Track} = props
@@ -24,6 +24,7 @@ export default function TrackOptionsButton(props) {
         )
         
         syncDB()
+        syncQueueWithAudioPlayer(false)
 
     }
 

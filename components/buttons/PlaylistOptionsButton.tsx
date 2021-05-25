@@ -10,7 +10,7 @@ import '@szhsin/react-menu/dist/index.css';
 import {addPlaylistToQueue} from "../../redux/actions/queueActions"
 import {QueueStore, AudioPlayerStore, UserSessionStore} from "../../redux/store"
 import {QueuePlaylist, Track} from "../../ts/interfaces"
-import {syncDB} from "../../lib/syncQueue"
+import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
 export default function PlaylistOptionsButton(props) {
     const {playlist, subID}:{playlist: any, subID: string} = props
@@ -27,6 +27,8 @@ export default function PlaylistOptionsButton(props) {
             addPlaylistToQueue(queuePlaylist)
         )
         syncDB()
+
+        syncQueueWithAudioPlayer(false)
 
     }
 

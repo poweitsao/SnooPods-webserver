@@ -24,7 +24,7 @@ import Router from "next/router";
 import LoginPopup from "../components/LoginPopup";
 
 
-const Queue = ({ userSession }) => {
+const hiddenQueueControls = ({ userSession }) => {
     // const store = useStore()
 
 
@@ -133,7 +133,115 @@ const Queue = ({ userSession }) => {
 
       getQueue(userSession.email)
     }, []);
+    // let queueInfo = useSelector(state => state)
+    // console.log(queueInfo)
+    const getQueueInfoRedux = () =>{
+      // console.log("getQueueInfo result", queueInfo)
+      const currStore =QueueStore.getState()
+      console.log(currStore)
+
+    }
+
+    const getCurrentTrackRedux = () =>{
+      // console.log("getQueueInfo result", queueInfo)
+      const currStore =QueueStore.getState()
+      console.log(currStore.QueueInfo.currentTrack)
+
+    }
+
+    const pushNextTrackRedux = () =>{
+      QueueStore.dispatch(
+        pushNextTrack()
+      )
+      syncDB()
+    }
+    const replaceCurrentTrackRedux = (track) =>{
+      QueueStore.dispatch(
+        replaceCurrentTrack(track)
+      )
+      syncDB()
+    }
+    const addPlaylistToQueueRedux = (newPlaylist) =>{
+      QueueStore.dispatch(
+        addPlaylistToQueue(newPlaylist)
+      )
+      syncDB()
+    }
+    const clearCurrentPlaylistRedux = () =>{
+      QueueStore.dispatch(
+        clearCurrentPlaylist()
+      )
+      syncDB()
+    }
+    const removeTrackFromCurrentPlaylistRedux = (trackID, index) =>{
+      QueueStore.dispatch(
+        removeTrackFromCurrentPlaylist(trackID, index)
+      )
+      syncDB()
+    }
+    const removePlaylistFromQueueRedux = (playlistID) =>{
+      QueueStore.dispatch(
+        removePlaylistFromQueue(playlistID)
+      )
+      syncDB()
+    }
+    const removeTrackFromQueueRedux = (playlistID, trackID, index) =>{
+      QueueStore.dispatch(
+        removeTrackFromQueue(playlistID, trackID, index)
+      )
+      syncDB()
+    }
+
+    // const syncDB = async (email: string) =>{
+    //   const currStore =QueueStore.getState()
+    //   var res = await fetch("/api/queue/pushQueueToDB", {method: "POST", body: JSON.stringify({email: email, queueInfo: currStore.QueueInfo})})
+    // }
+
+    const emptyTrack : Track= {
+      filename: "",
+      cloud_storage_url: "",
+      date_posted: {
+          _seconds: 0,
+          _nanoseconds: 0
+      },
+      audio_length: 0,
+      track_name: "",
+      track_id: ""
+    }
     
+    
+        const testTrack : Track= {
+          filename: "0Cwlemwi19LtNtXQvbTv.mp3",
+          cloud_storage_url: "https://storage.cloud.google.com/snoopods-us/tracks/0Cwlemwi19LtNtXQvbTv.mp3",
+          date_posted: {
+              _seconds: 0,
+              _nanoseconds: 0
+          },
+          audio_length: 81,
+          track_name: "YSK it is perfectly legal to make you wear a mask, Jacobson v Mass 1905",
+          track_id: "0Cwlemwi19LtNtXQvbTv"
+      }
+    
+      const testTrack2 : Track= {
+        filename: "5C94NFAopU1tShiytiuP.mp3",
+        cloud_storage_url: "https://storage.cloud.google.com/snoopods-us/tracks/5C94NFAopU1tShiytiuP.mp3",
+        date_posted: {
+            _seconds: 0,
+            _nanoseconds: 0
+        },
+        audio_length: 187,
+        track_name: "Graduated with a 2.9 GPA and no internships, after over 400 applications I got my first offer.",
+        track_id: "5C94NFAopU1tShiytiuP"
+    }
+
+    const newPlaylist = {
+      playlistID: "reduxNewPlaylistID1",
+      playlistName: "reduxNewPlaylistID1",
+      tracks: [
+        testTrack,
+        testTrack2
+      ]
+    }
 
     return (
   
@@ -159,7 +267,16 @@ const Queue = ({ userSession }) => {
                 <div className="heading">
                     <h1> Queue </h1>
                 </div>
-                
+                <button onClick={getQueueInfoRedux}>GET_QUEUE_INFO</button>
+                <button onClick={getCurrentTrackRedux}>get current track</button>
+                <button onClick={pushNextTrackRedux}>PUSH_NEXT_TRACK</button>
+                <button onClick={() => replaceCurrentTrackRedux("reduxNewTrackID1")}>REPLACE_CURRENT_TRACK</button>
+                <button onClick={() => addPlaylistToQueueRedux(newPlaylist)}>ADD_PLAYLIST_TO_QUEUE</button>
+                <button onClick={() => removeTrackFromCurrentPlaylistRedux("1UhNCFznoAsGHuLF8NcE", 1)}>REMOVE_TRACK_FROM_CURRENT_PLAYLIST</button>
+                <button onClick={clearCurrentPlaylistRedux}>CLEAR_CURRENT_PLAYLIST</button>
+                <button onClick={() => removeTrackFromQueueRedux("reduxNewPlaylistID1","reduxNewTrackID2", 0)}>REMOVE_TRACK_FROM_QUEUE</button>
+                <button onClick={() => removePlaylistFromQueueRedux("reduxNewPlaylistID1")}>REMOVE_PLAYLIST_FROM_QUEUE</button>
+                <button onClick={() => syncDB()}>sync db</button>
 
 
                 <style>{`
@@ -226,7 +343,7 @@ const Queue = ({ userSession }) => {
     )
   }
 
-  Queue.getInitialProps = async ({ req }) => {
+  hiddenQueueControls.getInitialProps = async ({ req }) => {
     const cookies = parseCookies(req)
     return {
       userSession: {
@@ -258,4 +375,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 // export default connect(mapStateToProps, mapDispatchToProps)(Queue)
 
-export default Queue
+export default hiddenQueueControls
