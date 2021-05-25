@@ -15,7 +15,7 @@ import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 import { QueueStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import isEmpty from '../lib/isEmptyObject';
-import syncDB from "../lib/syncQueue";
+import {syncDB} from "../lib/syncQueue";
 
 
 
@@ -35,7 +35,10 @@ class AudioPlayerBar extends React.Component {
 
         
         //! sync with db when playing!
-        syncDB(AudioPlayerStore.getState().email)
+        let email = AudioPlayerStore.getState().email
+        if (email !== ""){
+            syncDB(email)
+        }
     }
 
     render() {
@@ -140,7 +143,7 @@ const nextTrackFromQueue = () => {
     const audioCurrStore = AudioPlayerStore.getState()
     console.log("pushing next track")
     QueueStore.dispatch(pushNextTrack())
-    if (audioCurrStore.email !== undefined){
+    if (audioCurrStore.email !== ""){
         syncDB(audioCurrStore.email)
     }
         

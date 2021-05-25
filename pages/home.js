@@ -21,7 +21,9 @@ import { AudioPlayerStore } from "../redux/store";
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
 import { QueueStore } from "../redux/store";
-import { Queue } from "@material-ui/icons";
+import {getQueue} from "../lib/syncQueue";
+
+
 
 
 
@@ -164,6 +166,8 @@ const home = ({ userSession }) => {
       setShowLoginPopup(true)
     }
     setMounted(true)
+
+    getQueue(userSession.email)
     // if (data){
     //   // setFeaturedSubreddits(data)
 

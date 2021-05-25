@@ -1,7 +1,13 @@
 import { storeAudioPlayerInfo } from "../actions/index"
 
 const initialState = {
-    AudioPlayerInfo: {}
+    playing: false,
+    subreddit: "",
+    filename: "",
+    trackName: "",
+    audio: "",
+    url: "",
+    email: ""
 }
 
 const audioPlayerInfoReducer = (state = initialState, action) => {

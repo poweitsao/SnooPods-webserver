@@ -34,7 +34,7 @@ import { server } from "../../config";
 
 import { QueueStore } from "../../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue, replaceCurrentPlaylist } from "../../redux/actions/queueActions";
-import syncDB from "../../lib/syncQueue"
+import {syncDB, getQueue} from "../../lib/syncQueue"
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {
@@ -119,6 +119,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
     
     }
     // console.log(data)
+    getQueue(cookies.email)
   }, []);
   // console.log(playlist)
 
