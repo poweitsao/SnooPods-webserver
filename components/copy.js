@@ -183,9 +183,9 @@ async function onGoogleLoginSuccess(googleUser) {
         else if (!res.registered) {
             // res.userID = id_token
             console.log("response in index.js", res)
-            // const store = createStore(userInfoReducer)
+            // const store = createStore(registerReducer)
 
-            RegisterStore.dispatch(storeUserInfo(res))
+            RegisterStore.dispatch(storeRegisterationInfo(res))
             // console.log("store: ", store.getState())
             console.log("Taking user to registeration page ")
             Router.push('/register')

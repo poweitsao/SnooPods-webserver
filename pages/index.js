@@ -14,7 +14,7 @@ import headphonesAlt from '@iconify/icons-fa-solid/headphones-alt';
 import validateSession from "../lib/validateUserSessionOnPage"
 import CustomNavbar from "../components/CustomNavbar"
 
-import { storeUserInfo } from "../redux/actions/index"
+import { storeRegisterationInfo } from "../redux/actions/index"
 import { RegisterStore } from "../redux/store"
 
 const Index = ({ userSession }) => {
@@ -45,9 +45,9 @@ const Index = ({ userSession }) => {
       else if (!res.registered) {
         // res.userID = id_token
         // console.log("response in index.js", res)
-        // const store = createStore(userInfoReducer)
+        // const store = createStore(registerReducer)
 
-        RegisterStore.dispatch(storeUserInfo(res))
+        RegisterStore.dispatch(storeRegisterationInfo(res))
         // console.log("store: ", store.getState())
         // console.log("Taking user to registeration page ")
         Router.push('/register')

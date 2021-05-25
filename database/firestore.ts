@@ -23,6 +23,18 @@ if (admin.apps.length === 0) {
 
 const db = admin.firestore();
 
+const emptyTrack : Track= {
+    filename: "",
+    cloud_storage_url: "",
+    date_posted: {
+        _seconds: 0,
+        _nanoseconds: 0
+    },
+    audio_length: 0,
+    track_name: "",
+    track_id: ""
+  }
+
 export async function getPodcast(subreddit, podcast) {
     console.log("getPodcast executed")
     if (subreddit && podcast) {
@@ -88,7 +100,7 @@ export async function createUser(user) {
         await userRef.set({
             collections: [],
             currentPlaylist: {"playlistID": "", "playlistName": "", "tracks": []},
-            currentTrack: "",
+            currentTrack: emptyTrack,
             email: user.email,
             firstName: user.firstName,
             history: [],

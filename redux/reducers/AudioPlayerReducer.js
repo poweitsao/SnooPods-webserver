@@ -46,7 +46,7 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
 
 export default audioPlayerInfoReducer;
 
-// const userInfoReducer = (state = initialState, action) => {
+// const registerReducer = (state = initialState, action) => {
 //     switch (action.type) {
 //         case "STORE_USER_INFO":
 //             return Object.assign({}, state, {
@@ -59,4 +59,4 @@ export default audioPlayerInfoReducer;
 //     }
 // }
 
-// export default userInfoReducer
+// export default registerReducer

@@ -1,6 +1,6 @@
-const storeUserInfo = (userInfo) => {
+const storeRegisterationInfo = (userInfo) => {
     return {
-        type: "STORE_USER_INFO",
+        type: "STORE_REGISTERATION_INFO",
         userInfo
     }
 }
@@ -33,4 +33,4 @@ const nextTrack = (AudioPlayerInfo) => {
     }
 }
 
-module.exports = { storeUserInfo, storeAudioPlayerInfo, togglePlaying, nextTrack, setAudioStoreEmail }
+module.exports = { storeRegisterationInfo, storeAudioPlayerInfo, togglePlaying, nextTrack, setAudioStoreEmail }

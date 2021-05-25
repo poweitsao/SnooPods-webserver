@@ -8,7 +8,7 @@ import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 import Collapse from 'react-bootstrap/Collapse'
 import { RegisterStore } from "../redux/store"
-import { storeUserInfo } from "../redux/actions/index"
+import { storeRegisterationInfo } from "../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
 import { Divider } from '@material-ui/core';
@@ -193,9 +193,9 @@ async function onGoogleLoginSuccess(googleUser) {
         else if (!res.registered) {
             // res.userID = id_token
             console.log("response in index.js", res)
-            // const store = createStore(userInfoReducer)
+            // const store = createStore(registerReducer)
 
-            RegisterStore.dispatch(storeUserInfo(res))
+            RegisterStore.dispatch(storeRegisterationInfo(res))
             // console.log("store: ", store.getState())
             console.log("Taking user to registeration page ")
             Router.push('/register')

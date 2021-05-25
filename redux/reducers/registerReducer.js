@@ -1,13 +1,13 @@
-import { storeUserInfo } from "../actions/index"
+import { storeRegisterationInfo } from "../actions/index"
 
 const initialState = {
     userInfo: {}
 }
 
 
-const userInfoReducer = (state = initialState, action) => {
+const registerReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "STORE_USER_INFO":
+        case "STORE_REGISTERATION_INFO":
             return Object.assign({}, state, {
                 registered: action.userInfo.registered,
                 payload: action.userInfo.verification.payload,
@@ -18,4 +18,4 @@ const userInfoReducer = (state = initialState, action) => {
     }
 }
 
-export default userInfoReducer
+export default registerReducer
