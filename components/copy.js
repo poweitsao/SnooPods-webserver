@@ -202,7 +202,7 @@ const onGoogleLoginFailed = (response) => {
 
 const NavBarContent = (props) => {
     const { height, width } = useWindowDimensions();
-    console.log("props in navbarcontent", props)
+    // console.log("props in navbarcontent", props)
     if (width <= 991) {
         return (
             <Navbar bg="light" expand="lg" fixed="top" style={{

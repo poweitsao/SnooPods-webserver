@@ -137,54 +137,68 @@ const nextTrack = () => {
 const nextTrackFromQueue = () => {
     // var keyIndex = currStore["keyIndex"]
     // var playlist = currStore["playlist"]
-    const audioCurrStore = AudioPlayerStore.getState()
+    let audioCurrStore = AudioPlayerStore.getState()
+    console.log("before pushing", audioCurrStore)
     console.log("pushing next track")
+
     QueueStore.dispatch(pushNextTrack())
-    let email = UserSessionStore.getState().email
+
+    
+
     syncDB()
 
         
     var queueCurrStore = QueueStore.getState()
     var currTrack = queueCurrStore.QueueInfo.currentTrack
-    console.log("queueCurrStore from nextTrackFromQueue", queueCurrStore)
+    // console.log("queueCurrStore from nextTrackFromQueue", queueCurrStore)
 
-    console.log("currTrack from nextTrackFromQueue", currTrack)
-    if (!isEmpty(currTrack)) { 
+    console.log("currTrack after push", currTrack)
+    if (currTrack.cloud_storage_url !== "") { 
         // var filename = currStore["playlist"]["keys"][keyIndex + 1]
         // var podcast = currStore["playlist"]["tracks"][filename]
 
         var track = new Audio(currTrack.cloud_storage_url)
         track.setAttribute("id", "audio")
-        audioCurrStore["audio"].setAttribute("id", "")
+        // audioCurrStore["audio"].setAttribute("id", "")
         AudioPlayerStore.dispatch(togglePlaying(false))
 
         AudioPlayerStore.dispatch(storeAudioPlayerInfo({
             playing: true,
             subreddit: "r/LoremIpsum",
+            filename: currTrack.filename,
             trackName: currTrack.track_name,
             audio: track,
             url: currTrack.cloud_storage_url,
         }))
+
+        let audioCurrStore = AudioPlayerStore.getState()
+        console.log("after pushing", audioCurrStore)
+        console.log("pushing next track")
     } else{
         AudioPlayerStore.dispatch(togglePlaying(false))
     }
 }
 
 function AudioPlayerInfo(props) {
-    const { curTime, duration, setClickedTime, setCurTime } = useAudioPlayer(props.audio);
+    const { curTime, setClickedTime, setCurTime } = useAudioPlayer(props.audio);
     const source = props.url;
     const subreddit = props.subreddit;
     const trackName = props.trackName;
     const audio = props.audio;
+    const duration = AudioPlayerStore.getState().audio.duration
 
     useEffect(() => {
+        // console.log("curTime", curTime)
+        // console.log("duration", duration)
+        // if (duration == undefined){
+        //     duration = AudioPlayerStore.getState().duration
+        // }
 
         if (curTime && duration && curTime === duration) {
             // setPlaying(false);
             // audio.pause();
             console.log("next")
             setCurTime(0);
-            console.log("props", props)
             nextTrackFromQueue()
             // testQueueStore()
             // audio.currentTime = 0;

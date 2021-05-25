@@ -170,7 +170,7 @@ const home = ({ userSession }) => {
     }
 
     if (userSession.session_id && userSession.email) {
-      console.log("UserSession: ", UserSessionStore.getState())
+      // console.log("UserSession: ", UserSessionStore.getState())
       if (!UserSessionStore.getState().validSession){
         validateUserSession(userSession.session_id, userSession.email);
       } else{

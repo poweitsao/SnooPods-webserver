@@ -65,7 +65,7 @@ const queueInfoReducer = (state = initialState, action) => {
             // const currStore =QueueStore.getState()
             // console.log("currStore", currStore)
 
-            console.log("state", state)
+            // console.log("state", state)
             var currentPlaylist = state.QueueInfo.currentPlaylist
             var queue = state.QueueInfo.queue
             var nextTrack = {}
