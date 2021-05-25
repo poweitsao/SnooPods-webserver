@@ -160,10 +160,12 @@ const home = ({ userSession }) => {
       if (userSession.validSession){
         console.log("user from validateUserSession", userSession)
         setUser(userSession)
+        
         UserSessionStore.dispatch({
           type:"STORE_USER_SESSION_INFO",
           userSession
         })
+        
       } else{
         Router.push("/")
       }
@@ -175,6 +177,7 @@ const home = ({ userSession }) => {
         validateUserSession(userSession.session_id, userSession.email);
       } else{
         console.log("not validating user session because it's already valid")
+        setUser(UserSessionStore.getState())
       }
       
 
@@ -182,6 +185,8 @@ const home = ({ userSession }) => {
       setShowLoginPopup(true)
     }
 
+   
+    // console.log("usersessionstore", )
     
     setMounted(true)
 
@@ -209,14 +214,14 @@ const home = ({ userSession }) => {
           }} />
       </div>
       <div className="page-container">
-        {isEmpty(user)
+        {!user["validSession"]
             ? <div></div>
             : <Sidebar user={user}></Sidebar>
           }
          
         
         <div className="main-page">
-          {isEmpty(user)
+          {!user["validSession"]
             ? <div></div>
             : <CustomNavbar user={user} />
           }
@@ -234,7 +239,7 @@ const home = ({ userSession }) => {
 
           <div className="button-container">
             <button onClick={getQueueStore}>get queueStore</button>
-            <button onClick={getUserSessionStore}>get UserSessionStore</button>
+            <button onClick={() => {console.log("user", user)}}>get user</button>
           </div>
 
           <style>{`

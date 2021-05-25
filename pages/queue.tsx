@@ -12,14 +12,16 @@ import fetch from "isomorphic-unfetch"
 import { connect } from "react-redux"
 
 
-import { QueueStore } from "../redux/store";
+import { QueueStore, UserSessionStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
-import {QueuePlaylist, Track} from "../ts/interfaces"
+import {QueuePlaylist, Track, UserSession} from "../ts/interfaces"
 
 import { AudioPlayerStore } from "../redux/store";
 import { storeAudioPlayerInfo} from "../redux/actions/index"
 
 import { getQueue, syncDB} from "../lib/syncQueue"
+import Router from "next/router";
+import LoginPopup from "../components/LoginPopup";
 
 
 const Queue = ({ userSession }) => {
@@ -27,11 +29,24 @@ const Queue = ({ userSession }) => {
 
 
     const [user, setUser] = useState({})
+
+    const [showLoginPopup, setShowLoginPopup] = useState(false)
+
     useEffect(() => {
-      const validateUserSession = async (session_id, email) => {
-        let user = await validateSession(session_id, email);
-        // console.log(user)
-        setUser(user)
+      const validateUserSession = async (session_id: string, email: string) => {
+        let userSession: UserSession = await validateSession(session_id, email);
+        if (userSession.validSession){
+          console.log("user from validateUserSession", userSession)
+          setUser(userSession)
+          
+          UserSessionStore.dispatch({
+            type:"STORE_USER_SESSION_INFO",
+            userSession
+          })
+          
+        } else{
+          Router.push("/")
+        }
       }
 
       // const getQueue = async(email) =>{
@@ -105,9 +120,17 @@ const Queue = ({ userSession }) => {
       // }
 
       if (userSession.session_id && userSession.email) {
-        // console.log("UserSession: ", userSession)
-        validateUserSession(userSession.session_id, userSession.email);
-      } 
+        // console.log("UserSession: ", UserSessionStore.getState())
+        if (!UserSessionStore.getState().validSession){
+          validateUserSession(userSession.session_id, userSession.email);
+        } else{
+          console.log("not validating user session because it's already valid")
+          setUser(UserSessionStore.getState())
+        }
+      } else {
+        setShowLoginPopup(true)
+      }
+
       getQueue(userSession.email)
     }, []);
     // let queueInfo = useSelector(state => state)
@@ -223,6 +246,14 @@ const Queue = ({ userSession }) => {
     return (
   
       <Layout>
+        <div>
+          <LoginPopup show={showLoginPopup}
+            onHide={() => {
+              setShowLoginPopup(false);
+              Router.push("/")
+
+            }} />
+        </div>
         <div className="page-container">
           {isEmpty(user)
               ? <div></div>

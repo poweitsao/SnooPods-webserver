@@ -119,6 +119,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
         validateUserSession(userSession.session_id, userSession.email);
       } else{
         console.log("not validating user session because it's already valid")
+        setUser(UserSessionStore.getState())
       }
       
 
