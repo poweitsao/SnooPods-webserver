@@ -1,22 +1,35 @@
 import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
 import playCircleOutlined from "@iconify/icons-ant-design/play-circle-outlined";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import convertDate from "../lib/convertDate";
 import formatDuration from "../lib/formatDuration";
 import isEmpty from "../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../lib/syncQueue";
 import { togglePlaying } from "../redux/actions";
 import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue } from "../redux/actions/queueActions";
-import { AudioPlayerStore, QueueStore } from "../redux/store";
+import { AudioPlayerStore, CollectionStore, QueueStore, UserSessionStore } from "../redux/store";
 import { Track, QueuePlaylist } from "../ts/interfaces";
 import Icon from "@iconify/react";
-import QueuePlaylistOptionsButton from "./buttons/QueuePlaylistOptionsButton";
+import QueuePlaylistOptionsButtonContainer from "./containers/QueuePlaylistOptionsButtonContainer";
 import { Table } from "react-bootstrap";
+import { Provider } from "react-redux";
+import useSWR from "swr";
 
 
 const QueuePageBody = (props) => {
   let {currentTrack, currentPlaylist, queue} = props.QueueInfo
   console.log("QueuePageBody props", props)
+  const {data: collections} = useSWR("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
+  
+  useEffect(() => {
+    if(collections){
+      console.log("collections fro useSWR", collections)
+      CollectionStore.dispatch({
+        type:"STORE_COLLECTIONS",
+        collections: collections
+      })
+    }
+  }, [collections]);
     // const [queueDisplayInfo, setQueueDisplayInfo] = useState({})
 
     const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
@@ -76,7 +89,11 @@ const QueuePageBody = (props) => {
               {array[index]["date_posted"] ? (
                 <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
                   {convertDate(array[index]["date_posted"])}
-                  <div style={{padding: "10px"}}><QueuePlaylistOptionsButton trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/></div>
+                  <div style={{padding: "10px"}}>
+                  <Provider store={CollectionStore}>
+                    <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
+                  </Provider>
+                    </div>
                 </div>
               ) : (
                 <div className="date-posted-dummy">{"datePosted"}</div>
@@ -174,7 +191,7 @@ const QueuePageBody = (props) => {
                 </tr>
               </thead>
               <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
-                console.log("track in currentSong.map", track, "array:", array)
+                // console.log("track in currentSong.map", track, "array:", array)
                 return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack, removeTrack:removeCurrentTrack })
               })
               }</tbody>

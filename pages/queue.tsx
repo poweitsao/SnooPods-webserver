@@ -369,7 +369,7 @@ const Queue = ({ userSession }) => {
                   align-content:center;
                   align-text:center;
                   align-self: flex-start;
-                  height: 100%;
+                  height: 95%;
               }
   
               .page-container{

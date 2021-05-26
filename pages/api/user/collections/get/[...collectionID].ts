@@ -18,6 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (getTracksRes.status == 200){
                     let collection = getUserCollectionsRes.collectionData
                     collection.tracks = getTracksRes.tracks
+                    // console.log("collection.tracks", collection.tracks)
                     res.status(200).json(collection)
                 }else{
                     res.status(500).end()

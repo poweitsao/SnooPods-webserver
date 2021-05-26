@@ -15,7 +15,7 @@ const Layout = (props) => (
                 <title>SnooPods</title>
                 <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
             </Head>
-            <SWRConfig value={{fetcher: (...args) => fetch(...args).then(res => res.json())}}>
+            <SWRConfig value={{fetcher: (url) => fetch(url).then((r) => r.json())}}>
                 
                     <div style={{ width: "100%", height: "100%" }}>
                         {/* <Provider store={store}> */}

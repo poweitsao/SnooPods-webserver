@@ -71,7 +71,7 @@ export async function getQueue (email: string) {
   )
 
   let currAudioStore = AudioPlayerStore.getState()
-  console.log("currAudioStore", currAudioStore)
+  // console.log("currAudioStore", currAudioStore)
   if (currAudioStore.audio == "" && currTrack.cloud_storage_url !== "") {
     AudioPlayerStore.dispatch(
       storeAudioPlayerInfo({

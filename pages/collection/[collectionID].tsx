@@ -16,7 +16,7 @@ import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
 import { Icon } from "@iconify/react";
 import formatDuration from "../../lib/formatDuration";
 import convertDate from "../../lib/convertDate";
-import TrackOptionsButton from "../../components/buttons/TrackOptionsButton";
+import CollectionsTrackOptionsButton from "../../components/buttons/CollectionsTrackOptionsButton";
 import { Table } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import LaunchIcon from "@material-ui/icons/Launch";
@@ -88,7 +88,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
 
 
     const playPodcast = (trackKey: string, trackIndex: number,  tracks: Array<Track>, collectionName: string) => {
-
+      console.log("params in playPodcast",trackKey, trackIndex, tracks, collectionName )
       var queuePlaylistTracks = []
       for(var i = trackIndex + 1; i <tracks.length; i++ ){
         queuePlaylistTracks.push(tracks[i])
@@ -111,9 +111,10 @@ const CollectionPage = ({ userSession, collectionID }) => {
       
       }
       QueueStore.dispatch(
-        replaceCurrentTrack(playlist.tracks[trackKey])
+        replaceCurrentTrack(tracks[trackIndex])
       )
       currStore = QueueStore.getState()
+      console.log("currStore after replace ", currStore )
       let currTrack = currStore.QueueInfo.currentTrack
       // syncDB(cookies.email)
       AudioPlayerStore.dispatch(
@@ -201,7 +202,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
             {track.date_posted ? (
               <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
                 {convertDate(track.date_posted)}
-                <div style={{padding: "10px"}}><TrackOptionsButton trackInfo={track}/></div>
+                <div style={{padding: "10px"}}><CollectionsTrackOptionsButton trackInfo={track}/></div>
               </div>
             ) : (
               <div className="date-posted-dummy">{"datePosted"}</div>
@@ -219,6 +220,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
     };
   
     const Tablelist = ({ playlist }) => {
+      console.log("playlist in Tablelist", playlist)
       return (
         <div style={{ width: "100%" }}>
           {/* <ListGroup variant="flush"></ListGroup> */}
@@ -327,7 +329,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
                 align-content:center;
                 align-text:center;
                 align-self: flex-start;
-                height: 100%;
+                height: 95%;
             }
 
             .page-container{

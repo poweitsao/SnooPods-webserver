@@ -256,6 +256,7 @@ const home = ({ userSession }) => {
             align-content:center;
             align-text:center;
             align-self: flex-start;
+
           }
 
         .page-container{

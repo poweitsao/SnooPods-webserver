@@ -293,6 +293,7 @@ const hiddenQueueControls = ({ userSession }) => {
                 align-content:center;
                 align-text:center;
                 align-self: flex-start;
+                height: 95%;
                 }
     
             .page-container{

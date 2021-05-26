@@ -7,14 +7,17 @@ import {
     SubMenu
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
-import {addPlaylistToQueue, removeTrackFromCurrentPlaylist} from "../../redux/actions/queueActions"
+import {addPlaylistToQueue} from "../../redux/actions/queueActions"
 import {QueueStore, AudioPlayerStore, UserSessionStore, CollectionStore} from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
-export default function QueuePlaylistOptionsButton(props) {
-    // console.log("props in QueuePlaylistOptionsButton", props)
-    const {trackInfo, index, removeTrack, playlistID}:{trackInfo: Track, index: number, removeTrack: any, playlistID: string} = props
+
+export default function CollectionsTrackOptionsButton(props) {
+
+
+    const {trackInfo}:{trackInfo: Track} = props
+    // console.log("CollectionsTrackOptionsButton props", props)
 
     const addTrackToQueue = () =>{
         // console.log(trackInfo)
@@ -23,11 +26,11 @@ export default function QueuePlaylistOptionsButton(props) {
         QueueStore.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
+        
         syncDB()
         syncQueueWithAudioPlayer(false)
+
     }
-
-
 
     const createQueuePlaylist = (tracks: Array<Track>, playlistName: string) => {
         var playlistID = generateID()
@@ -43,8 +46,11 @@ export default function QueuePlaylistOptionsButton(props) {
         return '_' + Math.random().toString(36).substr(2, 9);
     };
 
-    const addTrackToCollection = (collectionID) => {
+
+    const addTrackToCollection = (collectionID: string) => {
         // console.log("adding track", trackInfo.track_name ," to collection")
+        // console.log("addTrackToCollection fields", props)
+        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, UserSessionStore.getState().email)
         fetch("/api/user/collections/editCollection", 
             { method: "POST", body: JSON.stringify({
                 action:"addTrack",
@@ -60,27 +66,29 @@ export default function QueuePlaylistOptionsButton(props) {
     const renderCollectionsSubmenu = (collection, index) => {
         let collectionID = collection.collectionID
         return(
-            <MenuItem key={index} onClick={() => {addTrackToCollection(collectionID)}}>{collection.collectionName}</MenuItem>
+            <MenuItem key={index} 
+                    onClick={() => {
+                        addTrackToCollection(collectionID)}}
+            >{collection.collectionName}</MenuItem>
         )
 
     }
 
-    const collections = CollectionStore.getState()
+    // const collections = CollectionStore.getState()
+    // console.log("collections", collections)
+
 
     return (
         <Menu menuButton={<MoreHorizIcon />}>
             <MenuItem onClick={addTrackToQueue}>Add to queue</MenuItem>
-            <MenuItem onClick={() => {removeTrack(trackInfo.track_id, index, playlistID)}}>Remove</MenuItem>
-
             <MenuItem>Go to Subreddit</MenuItem>
-            <SubMenu label="Add to collection">
-                {props.Collections.map(renderCollectionsSubmenu)}
-            {/* <MenuItem>Render collections dynamically</MenuItem> */}
+            {/* <SubMenu label="Add to collection"> */}
+                {/* {props.Collections.map(renderCollectionsSubmenu)} */}
                 {/* render this dynamically later */}
                 {/* <MenuItem>index.html</MenuItem>
                 <MenuItem>example.js</MenuItem>
                 <MenuItem>about.css</MenuItem> */}
-            </SubMenu>
+            {/* </SubMenu> */}
         </Menu>
     );
 }

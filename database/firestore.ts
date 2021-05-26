@@ -163,6 +163,8 @@ export async function getTracks(trackIDs: Array<string>) {
         let trackRef = db.collection("tracks").doc(trackIDs[i])
         try{
             let trackInfo = await trackRef.get()
+            trackInfo = trackInfo.data()
+            // console.log("trackInfo", trackInfo)
             let track: Track = {
                 filename: trackInfo.filename,
                 audio_length: trackInfo.audioLength,
@@ -171,6 +173,7 @@ export async function getTracks(trackIDs: Array<string>) {
                 track_id: trackInfo.trackID,
                 track_name: trackInfo.trackName
             }
+            console.log("track", track)
             tracks.push(track)
         } catch(e){
             console.error("error in getTracks", e)
@@ -202,8 +205,7 @@ export const addNewCollection = async(collectionName: string, email: string) => 
 
 export const deleteCollection = async(collectionID: string, collectionName: string, email: string) => {
     console.log("deleteCollection for firestore got", email, collectionID)
-    let userRef = db.collection("users").doc(email)
-    
+    let userRef = db.collection("users").doc(email)  
 
     try{
         userRef.update({collections:admin.firestore.FieldValue.arrayRemove({"collectionID": collectionID, "collectionName": collectionName}) })
@@ -220,9 +222,60 @@ export const deleteCollection = async(collectionID: string, collectionName: stri
     }
 
     return 200
-
-
 }
+
+export const renameCollection = async(collectionID: string, newCollectionName: string, email: string ) => {
+    let collectionRef = db.collection("collections").doc(collectionID)
+    try{
+        let collectionData = await collectionRef.get()
+        if (collectionData.ownerID == email){
+            await db.collection("collections").doc(collectionID).update({collectionName: newCollectionName})
+            return 200
+        } else{
+            return 403
+        }
+    } catch (e){
+        console.error("error in renameCollection", e)
+        return 500
+    }
+} 
+
+export const addTrackToCollection = async(collectionID: string, newTrackID: string, email: string) => {
+    let collectionRef = db.collection("collections").doc(collectionID)
+    try{
+        let collectionData = await collectionRef.get()
+        collectionData = collectionData.data()
+        console.log("ownerID:", collectionData.ownerID)
+        if (collectionData.ownerID == email){
+            await db.collection("collections").doc(collectionID).update({
+                tracks: admin.firestore.FieldValue.arrayUnion(newTrackID)})
+            return 200
+        } else{
+            return 403
+        }
+    } catch (e){
+        console.error("error in addTrackToCollection", e)
+        return 500
+    }
+}
+
+export const removeTrackFromCollection = async(collectionID: string, trackID: string, email: string) => {
+    let collectionRef = db.collection("collections").doc(collectionID)
+    try{
+        let collectionData = await collectionRef.get()
+        if (collectionData.ownerID == email){
+            await db.collection("collections").doc(collectionID).update({
+                tracks: admin.firestore.FieldValue.arrayRemove(trackID)})
+            return 200
+        } else{
+            return 403
+        }
+    } catch (e){
+        console.error("error in removeTrackFromCollection", e)
+        return 500
+    }
+}
+
 
 export const createCollection = async (collectionName: string, ownerID: string, tracks: Array<string>) => {
     // console.log("creating collection", collectionName)
@@ -387,4 +440,7 @@ module.exports = {
     getQueue,
     getTrack,
     pushQueueToDB,
+    renameCollection, 
+    addTrackToCollection, 
+    removeTrackFromCollection
 }

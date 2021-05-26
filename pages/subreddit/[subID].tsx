@@ -65,7 +65,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
   const subID: string = router.query["subID"].toString();
 
 const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
-const {data: collections} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
+const {data: collections} = useSWR("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
 
 
   useEffect(() => {
@@ -371,7 +371,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
                 align-content:center;
                 align-text:center;
                 align-self: flex-start;
-                height: 100%;
+                height: 95%;
             }
 
             .page-container{

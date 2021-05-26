@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 lastName: userInfo.lastName,
                 validSession: userInfo.validSession
             }
-            console.log("user from api endpoint ", user)
+            // console.log("user from api endpoint ", user)
             res.status(200).json(user)
         } else {
             res.status(200).json({ validSession: false })

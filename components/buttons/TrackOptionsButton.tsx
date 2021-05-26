@@ -47,15 +47,29 @@ export default function TrackOptionsButton(props) {
     };
 
 
-    const addTrackToCollection = () => {
-        console.log("adding track", trackInfo.track_name ," to collection")
-
+    const addTrackToCollection = (collectionID: string) => {
+        // console.log("adding track", trackInfo.track_name ," to collection")
+        // console.log("addTrackToCollection fields", props)
+        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, UserSessionStore.getState().email)
+        fetch("/api/user/collections/editCollection", 
+            { method: "POST", body: JSON.stringify({
+                action:"addTrack",
+                fields: {
+                    collectionID: collectionID,
+                    newTrackID: trackInfo.track_id,
+                    email: UserSessionStore.getState().email
+                }
+            }) 
+        })
     }
 
     const renderCollectionsSubmenu = (collection, index) => {
         let collectionID = collection.collectionID
         return(
-            <MenuItem key={index} onClick={addTrackToCollection}>{collection.collectionName}</MenuItem>
+            <MenuItem key={index} 
+                    onClick={() => {
+                        addTrackToCollection(collectionID)}}
+            >{collection.collectionName}</MenuItem>
         )
 
     }
