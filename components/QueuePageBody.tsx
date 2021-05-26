@@ -6,7 +6,7 @@ import formatDuration from "../lib/formatDuration";
 import isEmpty from "../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../lib/syncQueue";
 import { togglePlaying } from "../redux/actions";
-import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue } from "../redux/actions/queueActions";
+import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack } from "../redux/actions/queueActions";
 import { AudioPlayerStore, QueueStore } from "../redux/store";
 import { Track, QueuePlaylist } from "../ts/interfaces";
 import Icon from "@iconify/react";
@@ -149,6 +149,17 @@ const QueuePageBody = (props) => {
           let playing = AudioPlayerStore.getState().playing
           AudioPlayerStore.dispatch(togglePlaying(!playing))
         }
+
+        const removeCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
+          // console.log("playing...")
+          let playing = AudioPlayerStore.getState().playing
+          AudioPlayerStore.dispatch(togglePlaying(!playing))
+          QueueStore.dispatch(
+            pushNextTrack()
+          )
+          syncDB()
+          syncQueueWithAudioPlayer(false)
+        }
         return (
           <div style={{ width: "100%"}}>
             {/* <ListGroup variant="flush"></ListGroup> */}
@@ -164,7 +175,7 @@ const QueuePageBody = (props) => {
               </thead>
               <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
                 console.log("track in currentSong.map", track, "array:", array)
-                return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack})
+                return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack, removeTrack:removeCurrentTrack })
               })
               }</tbody>
             </Table>
