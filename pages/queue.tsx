@@ -101,7 +101,7 @@ const Queue = ({ userSession }) => {
               }}
             >
               <button 
-                  onClick={() => options?.playTrack(track.track_id, index, track)}
+                  onClick={() => options?.playTrack(track.track_id, index, track, options?.playlistID)}
                   onMouseEnter={() => setPlayButton(playCircleFilled)}
                   onMouseLeave={() => setPlayButton(playCircleOutlined)}
                   style={{
@@ -162,7 +162,7 @@ const Queue = ({ userSession }) => {
     };
   
     const CurrentPlaylist = ({ playlist }: { playlist: QueuePlaylist }) => {
-      const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track) => {
+      const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track, playlistID?: string) => {
 
         let playing = AudioPlayerStore.getState().playing
         AudioPlayerStore.dispatch(togglePlaying(!playing))
@@ -200,7 +200,7 @@ const Queue = ({ userSession }) => {
     };
   
     const CurrentSong = ({ track }: { track: Track }) => {
-      const playCurrentTrack = (trackID: string, index: number, track: Track) => {
+      const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
         // console.log("playing...")
         let playing = AudioPlayerStore.getState().playing
         AudioPlayerStore.dispatch(togglePlaying(!playing))
@@ -238,6 +238,23 @@ const Queue = ({ userSession }) => {
     };
   
     const QueueChunk = (playlist: QueuePlaylist, index: number) => {
+
+      const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
+
+        let playing = AudioPlayerStore.getState().playing
+        AudioPlayerStore.dispatch(togglePlaying(!playing))
+
+        QueueStore.dispatch(
+          replaceCurrentTrack(track)
+        )
+        QueueStore.dispatch(
+          removeTrackFromQueue(playlistID, trackID, index)
+        )
+        syncQueueWithAudioPlayer(true)
+        setQueueDisplayInfo(QueueStore.getState().QueueInfo)
+
+      }
+
       return (
         <div key={playlist.playlistID}>
           {
@@ -256,7 +273,9 @@ const Queue = ({ userSession }) => {
                   <td>Date posted</td> */}
                 </tr>
               </thead>
-              <tbody>{playlist.tracks.map(renderTrackOnTable)}</tbody>
+              <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+                      return renderTrackOnTable(track, index, array, {playTrack: playTrackFromCurrentQueueChunk, playlistID: playlist.playlistID})
+            })}</tbody>
             </Table>
           </div>
         </div>
