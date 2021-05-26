@@ -202,7 +202,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
             {track.date_posted ? (
               <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
                 {convertDate(track.date_posted)}
-                <div style={{padding: "10px"}}><CollectionsTrackOptionsButton trackInfo={track}/></div>
+                <div style={{padding: "10px"}}><CollectionsTrackOptionsButton collectionID={options.collectionID} trackInfo={track} index={index}/></div>
               </div>
             ) : (
               <div className="date-posted-dummy">{"datePosted"}</div>
@@ -236,7 +236,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
             </thead>
             <tbody>{playlist.tracks.map(
               (track, index, array) => {
-                return renderTrackOnTable(track, index, array, {collectionName: playlist.collectionName})
+                return renderTrackOnTable(track, index, array, {collectionName: playlist.collectionName, collectionID: playlist.collectionID})
                 })}</tbody>
           </Table>
         </div>

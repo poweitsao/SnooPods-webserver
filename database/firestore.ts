@@ -173,7 +173,7 @@ export async function getTracks(trackIDs: Array<string>) {
                 track_id: trackInfo.trackID,
                 track_name: trackInfo.trackName
             }
-            console.log("track", track)
+            // console.log("track", track)
             tracks.push(track)
         } catch(e){
             console.error("error in getTracks", e)
@@ -245,11 +245,15 @@ export const addTrackToCollection = async(collectionID: string, newTrackID: stri
     try{
         let collectionData = await collectionRef.get()
         collectionData = collectionData.data()
+        
         console.log("ownerID:", collectionData.ownerID)
         if (collectionData.ownerID == email){
-            await db.collection("collections").doc(collectionID).update({
-                tracks: admin.firestore.FieldValue.arrayUnion(newTrackID)})
+            collectionData.tracks.push(newTrackID)
+            await db.collection("collections").doc(collectionID).set(
+                collectionData
+            )
             return 200
+
         } else{
             return 403
         }
@@ -259,14 +263,22 @@ export const addTrackToCollection = async(collectionID: string, newTrackID: stri
     }
 }
 
-export const removeTrackFromCollection = async(collectionID: string, trackID: string, email: string) => {
+export const removeTrackFromCollection = async(collectionID: string, trackID: string, trackIndex: string, email: string) => {
     let collectionRef = db.collection("collections").doc(collectionID)
     try{
         let collectionData = await collectionRef.get()
+        collectionData = collectionData.data()
+        console.log("before remove track", collectionData.tracks)
         if (collectionData.ownerID == email){
-            await db.collection("collections").doc(collectionID).update({
-                tracks: admin.firestore.FieldValue.arrayRemove(trackID)})
+            var newTrackArray = collectionData.tracks.filter((track, index) => {return track !== trackID || index !== trackIndex}  )
+            collectionData.tracks = newTrackArray
+            await db.collection("collections").doc(collectionID).set(
+                collectionData
+            )
+            console.log("after remove track", collectionData.tracks)
+
             return 200
+
         } else{
             return 403
         }

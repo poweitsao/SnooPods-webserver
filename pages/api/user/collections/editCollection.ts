@@ -8,6 +8,7 @@ interface Fields {
     newCollectionName?: string,
     newTrackID?: string, 
     trackIDToRemove?: string,
+    trackIndex?: string
   }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -24,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } else if (action == "addTrack"){
             serverRes = await addTrackToCollection(fields.collectionID, fields.newTrackID, fields.email)
         } else if (action == "removeTrack"){
-            serverRes = await removeTrackFromCollection(fields.collectionID, fields.trackIDToRemove, fields.email)
+            serverRes = await removeTrackFromCollection(fields.collectionID, fields.trackIDToRemove, fields.trackIndex, fields.email)
         }
 
         res.status(serverRes).end()

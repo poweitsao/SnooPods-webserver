@@ -11,13 +11,14 @@ import {addPlaylistToQueue} from "../../redux/actions/queueActions"
 import {QueueStore, AudioPlayerStore, UserSessionStore, CollectionStore} from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
+import { trigger } from 'swr';
 
 
 export default function CollectionsTrackOptionsButton(props) {
 
 
-    const {trackInfo}:{trackInfo: Track} = props
-    // console.log("CollectionsTrackOptionsButton props", props)
+    const {trackInfo, index, collectionID}:{trackInfo: Track, index: number, collectionID: string} = props
+    console.log("CollectionsTrackOptionsButton props", props)
 
     const addTrackToQueue = () =>{
         // console.log(trackInfo)
@@ -63,6 +64,29 @@ export default function CollectionsTrackOptionsButton(props) {
         })
     }
 
+    const removeTrackFromCollection = async (collectionID: string, index: number) => {
+        // console.log("adding track", trackInfo.track_name ," to collection")
+        // console.log("addTrackToCollection fields", props)
+        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, UserSessionStore.getState().email)
+        removeTrackFetch(collectionID, trackInfo.track_id, index, UserSessionStore.getState().email)
+    }
+
+    const removeTrackFetch = async (collectionID: string, trackID: string, index: number, email: string) => {
+        await fetch("/api/user/collections/editCollection", 
+        // fields.collectionID, fields.trackIDToRemove, fields.trackIndex, fields.email)
+            { method: "POST", body: JSON.stringify({
+                action:"removeTrack",
+                fields: {
+                    collectionID: collectionID,
+                    trackIDToRemove: trackID,
+                    trackIndex: index,
+                    email: email
+                }
+            }) 
+        })
+        trigger("/api/user/collections/get/" + email + "/" + collectionID)
+    }
+
     const renderCollectionsSubmenu = (collection, index) => {
         let collectionID = collection.collectionID
         return(
@@ -81,6 +105,8 @@ export default function CollectionsTrackOptionsButton(props) {
     return (
         <Menu menuButton={<MoreHorizIcon />}>
             <MenuItem onClick={addTrackToQueue}>Add to queue</MenuItem>
+            <MenuItem onClick={ () => { removeTrackFromCollection(collectionID, index)}}>Remove from collection</MenuItem>
+
             <MenuItem>Go to Subreddit</MenuItem>
             {/* <SubMenu label="Add to collection"> */}
                 {/* {props.Collections.map(renderCollectionsSubmenu)} */}
