@@ -6,6 +6,7 @@ import isEmpty from '../lib/isEmptyObject';
 import useSWR, {trigger} from 'swr';
 import AddButton from "./buttons/AddButton"
 import DeleteButton from "./buttons/DeleteButton"
+import Router from "next/router"
 
 const Sidebar = (props) => {
     const [mounted, setMounted] = useState(false)
@@ -115,7 +116,7 @@ const Sidebar = (props) => {
                 alignItems: "flex-start",
                 maxWidth: "100%", 
             }}>
-                <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Home</Nav.Link>
+                <Nav.Link style={{  }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
                 <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Search</Nav.Link>
                 <div className="your-collections-title-container">
                     <div style={{padding: "8px", paddingRight: "3px"}}>Your Collections</div>

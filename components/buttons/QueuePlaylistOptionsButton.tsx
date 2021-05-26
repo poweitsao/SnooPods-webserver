@@ -12,7 +12,7 @@ import {QueueStore, AudioPlayerStore, UserSessionStore} from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
-export default function TrackOptionsButton(props) {
+export default function QueuePlaylistOptionsButton(props) {
     const {trackInfo, index, removeTrack, playlistID}:{trackInfo: Track, index: number, removeTrack: any, playlistID: string} = props
 
     const addTrackToQueue = () =>{

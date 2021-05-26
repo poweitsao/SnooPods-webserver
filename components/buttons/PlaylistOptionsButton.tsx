@@ -13,21 +13,18 @@ import {QueuePlaylist, Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
 export default function PlaylistOptionsButton(props) {
-    const {playlist, subID}:{playlist: any, subID: string} = props
+    const {playlist}:{playlist: any} = props
 
     const addSubPlaylistToQueue = () =>{
         console.log("to be added to queue:", playlist)
-        var tracks : Array<Track> = []
-        for (var i = 0; i < playlist.keys.length; i++){
-            tracks.push(playlist.tracks[playlist.keys[i]])
-        }
-        var queuePlaylist = createQueuePlaylist(tracks, "r/"+subID)
+        var tracks : Array<Track> = playlist.tracks
+        
+        var queuePlaylist = createQueuePlaylist(tracks, playlist.collectionName)
         console.log("queuePlaylist", queuePlaylist)
         QueueStore.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
         syncDB()
-
         syncQueueWithAudioPlayer(false)
 
     }

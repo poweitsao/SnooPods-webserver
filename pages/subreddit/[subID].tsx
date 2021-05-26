@@ -102,35 +102,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
   }, []);
   // console.log(playlist)
 
-  
 
-    //   console.log("playlist", playlist)
-
-
-  const oldplayPodcast = (trackIndex: string) => {
-    const currStore = AudioPlayerStore.getState();
-    var podcast: Track = playlist["tracks"][trackIndex];
-
-    if (currStore.url === podcast["cloud_storage_url"]) {
-      AudioPlayerStore.dispatch(togglePlaying(!currStore.playing));
-    } else {
-      var track: HTMLAudioElement = new Audio(podcast["cloud_storage_url"]);
-      track.setAttribute("id", "audio");
-
-      AudioPlayerStore.dispatch(
-        storeAudioPlayerInfo({
-          playing: true,
-          subreddit: subID,
-          trackName: podcast["track_name"],
-          filename: podcast["filename"],
-          audio: track,
-          url: podcast["cloud_storage_url"],
-          playlist: playlist,
-          keyIndex: playlist["keys"].indexOf(trackIndex),
-        })
-      );
-    }
-  };
 
   const playPodcast = (trackKey: string, trackIndex: number) => {
 

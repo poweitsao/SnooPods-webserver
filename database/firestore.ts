@@ -137,6 +137,51 @@ export async function getUserCollections(email) {
     }
 }
 
+
+export async function getSingleUserCollection(email: string, collectionID: string) {
+    let collectionRef = db.collection("collections").doc(collectionID)
+    console.log("getting single collection", collectionID)
+    try {
+        let collectionData = await collectionRef.get()
+        collectionData = collectionData.data()
+        if(collectionData.ownerID == email){
+            return {status: 200, collectionData: collectionData}
+        } else{
+            return {status: 403, collectionData: {}}
+        }
+        
+    } catch (e) {
+        console.log(e)
+        return {status: 500, collectionData: {}}
+    }
+}
+
+export async function getTracks(trackIDs: Array<string>) {
+
+    let tracks : Array<Track> = []
+    for (var i = 0; i < trackIDs.length; i++){
+        let trackRef = db.collection("tracks").doc(trackIDs[i])
+        try{
+            let trackInfo = await trackRef.get()
+            let track: Track = {
+                filename: trackInfo.filename,
+                audio_length: trackInfo.audioLength,
+                cloud_storage_url: trackInfo.cloudStorageURL,
+                date_posted: trackInfo.datePosted,
+                track_id: trackInfo.trackID,
+                track_name: trackInfo.trackName
+            }
+            tracks.push(track)
+        } catch(e){
+            console.error("error in getTracks", e)
+            return {status: 500, tracks: []}
+        }
+    }
+    return {status: 200, tracks: tracks}
+
+
+}
+
 export const addNewCollection = async(collectionName: string, email: string) => {
     let newCollectionID = await createCollection(collectionName, email, [])
     let userRef = db.collection("users").doc(email)
@@ -335,9 +380,11 @@ module.exports = {
     getFeaturedSubreddits,
     getSubredditPlaylist,
     getUserCollections,
+    getSingleUserCollection,
+    getTracks,
     addNewCollection, 
     deleteCollection,
     getQueue,
     getTrack,
-    pushQueueToDB
+    pushQueueToDB,
 }

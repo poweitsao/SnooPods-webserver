@@ -31,7 +31,7 @@ const Index = ({ userSession }) => {
   async function onGoogleLoginSuccess(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
 
-    let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
+    let response = await fetch("/api/user/verifyGoogleSession/" + id_token, { method: "GET" }, { revalidateOnMount: false })
     if (response.status == 200) {
       let res = await response.json()
       if (res.registered) {

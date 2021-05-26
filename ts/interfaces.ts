@@ -16,7 +16,7 @@ export interface Collection {
     keys: Array<string>,
     tracks: {[x: string]: Track},
     collectionName: string,
-    cover_url: string
+    cover_url?: string
   }
 
 export interface UserSession {
