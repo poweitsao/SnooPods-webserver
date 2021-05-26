@@ -7,13 +7,13 @@ import {
     SubMenu
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
-import {addPlaylistToQueue} from "../../redux/actions/queueActions"
+import {addPlaylistToQueue, removeTrackFromCurrentPlaylist} from "../../redux/actions/queueActions"
 import {QueueStore, AudioPlayerStore, UserSessionStore} from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
 export default function TrackOptionsButton(props) {
-    const {trackInfo, setQueueDisplayInfo}:{trackInfo: Track, setQueueDisplayInfo:React.Dispatch<React.SetStateAction<{}>>} = props
+    const {trackInfo, index, removeTrack, playlistID}:{trackInfo: Track, index: number, removeTrack: any, playlistID: string} = props
 
     const addTrackToQueue = () =>{
         // console.log(trackInfo)
@@ -22,12 +22,11 @@ export default function TrackOptionsButton(props) {
         QueueStore.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
-        
         syncDB()
         syncQueueWithAudioPlayer(false)
-        setQueueDisplayInfo(QueueStore.getState().QueueInfo)
-
     }
+
+
 
     const createQueuePlaylist = (tracks: Array<Track>, playlistName: string) => {
         var playlistID = generateID()
@@ -46,6 +45,8 @@ export default function TrackOptionsButton(props) {
     return (
         <Menu menuButton={<MoreHorizIcon />}>
             <MenuItem onClick={addTrackToQueue}>Add to queue</MenuItem>
+            <MenuItem onClick={() => {removeTrack(trackInfo.track_id, index, playlistID)}}>Remove</MenuItem>
+
             <MenuItem>Go to Subreddit</MenuItem>
             <SubMenu label="Add to collection">
             <MenuItem>Render collections dynamically</MenuItem>

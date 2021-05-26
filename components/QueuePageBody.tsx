@@ -1,0 +1,285 @@
+import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
+import playCircleOutlined from "@iconify/icons-ant-design/play-circle-outlined";
+import React, { useState } from "react";
+import convertDate from "../lib/convertDate";
+import formatDuration from "../lib/formatDuration";
+import isEmpty from "../lib/isEmptyObject";
+import { syncDB, syncQueueWithAudioPlayer } from "../lib/syncQueue";
+import { togglePlaying } from "../redux/actions";
+import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue } from "../redux/actions/queueActions";
+import { AudioPlayerStore, QueueStore } from "../redux/store";
+import { Track, QueuePlaylist } from "../ts/interfaces";
+import Icon from "@iconify/react";
+import QueuePlaylistOptionsButton from "./buttons/QueuePlaylistOptionsButton";
+import { Table } from "react-bootstrap";
+
+
+const QueuePageBody = (props) => {
+  let {currentTrack, currentPlaylist, queue} = props.QueueInfo
+  console.log("QueuePageBody props", props)
+    // const [queueDisplayInfo, setQueueDisplayInfo] = useState({})
+
+    const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
+        const [playButton, setPlayButton] = useState(playCircleOutlined);
+        // console.log(index)
+        return (
+          <tr key={track.track_id}>
+            <td style={{ width: "5%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  paddingLeft: "12px",
+                }}
+              >
+                <button 
+                    onClick={() => options?.playTrack(track.track_id, index, track, options?.playlistID)}
+                    onMouseEnter={() => setPlayButton(playCircleFilled)}
+                    onMouseLeave={() => setPlayButton(playCircleOutlined)}
+                    style={{
+                      padding: "0px",
+                      width: "fit-content",
+                      backgroundColor: "transparent",
+                      border: "none"
+    
+                      }}>
+                  <Icon
+                    style={{ width: "25px", height: "25px" }}
+                    icon={playButton}
+                  />
+                </button>
+              </div>
+            </td>
+            <td style={{ width: "60%" }}>
+              {array[index]["track_name"] ? (
+                <div className="post-title">
+                  {array[index]["track_name"]}
+                </div>
+              ) : (
+                <div className="filename">
+                  {array[index]["filename"]}
+                </div>
+              )}
+            </td>
+            <td style={{ width: "10%" }}>
+              {array[index]["audio_length"] ? (
+                <div style={{display: "flex", alignItems: "center"}}>
+                  <div className="audio-length">
+                    {formatDuration(array[index]["audio_length"])}
+                  </div>
+                </div>
+              ) : (
+                <div className="audio-length-dummy">{"audioLength"}</div>
+              )}
+            </td>
+            <td style={{ width: "15%" }}>
+              {array[index]["date_posted"] ? (
+                <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
+                  {convertDate(array[index]["date_posted"])}
+                  <div style={{padding: "10px"}}><QueuePlaylistOptionsButton trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/></div>
+                </div>
+              ) : (
+                <div className="date-posted-dummy">{"datePosted"}</div>
+              )}
+            </td>
+    
+            <style>{`
+              .table td{
+                padding: 10px;
+                vertical-align: unset;
+              }
+            `}</style>
+          </tr>
+        );
+      };
+    
+      const CurrentPlaylist = ({ playlist }: { playlist: QueuePlaylist }) => {
+        const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track, playlistID?: string) => {
+  
+          let playing = AudioPlayerStore.getState().playing
+          AudioPlayerStore.dispatch(togglePlaying(!playing))
+  
+          QueueStore.dispatch(
+            replaceCurrentTrack(track)
+          )
+          QueueStore.dispatch(
+            removeTrackFromCurrentPlaylist(trackID, index)
+          )
+          syncQueueWithAudioPlayer(true)
+          // setQueueDisplayInfo(QueueStore.getState().QueueInfo)
+  
+        }
+        const removeFromCurrentPlaylist = (trackID: string, index: number, playlistID: string) =>{
+
+          QueueStore.dispatch(
+              removeTrackFromCurrentPlaylist(trackID, index)
+          )
+          
+          syncDB()
+          syncQueueWithAudioPlayer(false)
+      }
+
+        return (
+          <div style={{ width: "100%" }}>
+            {/* <ListGroup variant="flush"></ListGroup> */}
+            <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
+              {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+              <thead>
+                <tr>
+                  {/* <td></td>
+                  <td>Title</td>
+                  <td>Duration</td>
+                  <td>Date posted</td> */}
+                </tr>
+              </thead>
+              <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+                        return renderTrackOnTable(track, index, array, 
+                          {playTrack: playTrackFromCurrentPlaylist, removeTrack: removeFromCurrentPlaylist, playlistID: playlist.playlistID}
+                        )
+                    })}
+              </tbody>
+            </Table>
+          </div>
+        );
+      };
+    
+      const CurrentSong = ({ track }: { track: Track }) => {
+        const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
+          // console.log("playing...")
+          let playing = AudioPlayerStore.getState().playing
+          AudioPlayerStore.dispatch(togglePlaying(!playing))
+        }
+        return (
+          <div style={{ width: "100%"}}>
+            {/* <ListGroup variant="flush"></ListGroup> */}
+            <Table style={{overflowY: "visible", overflowX: "visible"}}  hover >
+              {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+              <thead>
+                <tr>
+                  {/* <td></td>
+                  <td>Title</td>
+                  <td>Duration</td>
+                  <td>Date posted</td> */}
+                </tr>
+              </thead>
+              <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
+                console.log("track in currentSong.map", track, "array:", array)
+                return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack})
+              })
+              }</tbody>
+            </Table>
+          </div>
+        );
+      };
+    
+      const CurrentQueue = ({ queue }: { queue: Array<QueuePlaylist> }) => {
+        return (
+          <div style={{ width: "100%" }}>
+            
+            {queue.map(QueueChunk)}
+          </div>
+        );
+      };
+    
+      const QueueChunk = (playlist: QueuePlaylist, index: number) => {
+  
+        const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
+  
+          let playing = AudioPlayerStore.getState().playing
+          AudioPlayerStore.dispatch(togglePlaying(!playing))
+  
+          QueueStore.dispatch(
+            replaceCurrentTrack(track)
+          )
+          QueueStore.dispatch(
+            removeTrackFromQueue(playlistID, trackID, index)
+          )
+          syncQueueWithAudioPlayer(true)
+          // setQueueDisplayInfo(QueueStore.getState().QueueInfo)
+  
+        }
+
+        const removeFromCurrentQueueChunk = (trackID: string, index: number, playlistID: string) =>{
+
+          QueueStore.dispatch(
+            removeTrackFromQueue(playlistID, trackID, index)
+          )
+          
+          syncDB()
+          syncQueueWithAudioPlayer(false)
+      }
+  
+        return (
+          <div key={playlist.playlistID}>
+            {
+              <div style={{padding: "10px", paddingLeft: "50px"}}>{playlist.playlistName}</div>
+            }
+            
+            <div style={{ width: "95%", marginLeft: "auto" }}>
+              {/* <ListGroup variant="flush"></ListGroup> */}
+              <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
+                {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+                <thead>
+                  <tr>
+                    {/* <td></td>
+                    <td>Title</td>
+                    <td>Duration</td>
+                    <td>Date posted</td> */}
+                  </tr>
+                </thead>
+                <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+                        return renderTrackOnTable(track, index, array, {playTrack: playTrackFromCurrentQueueChunk, removeTrack: removeFromCurrentQueueChunk, playlistID: playlist.playlistID})
+              })}</tbody>
+              </Table>
+            </div>
+          </div>
+        );
+    
+      }
+
+    return (
+        <div className="page-body">
+              {currentTrack.cloud_storage_url == "" ? (
+                <div>Nothing here.</div>
+              ) : (
+                // <SubredditInfo albumCover={playlist["cover_url"]} playlist={playlist} />
+                <div style={{width: "90%"}}>
+                  <div style={{ padding: "10px", paddingLeft: "25px"}}>Current Track:</div>
+                  <CurrentSong track={currentTrack}/>
+                </div>
+              )}
+              {currentPlaylist.tracks.length == 0 
+                ? <div></div> 
+                : (
+                    <div style={{width: "90%"}}>
+                      <div style={{padding: "10px", paddingLeft: "25px"}}>Currently Playing:</div>
+                      <CurrentPlaylist playlist={currentPlaylist}/>
+                    </div>
+                  )
+              }
+                
+              {queue.length == 0
+                ? <div></div>
+                :<div style={{width: "90%"}}>
+                  <div style={{padding: "10px", paddingLeft: "25px"}}>Queue:</div>
+                  <CurrentQueue queue={queue}/>
+                </div>
+                
+              }
+              <style>
+                {`.page-body{
+                margin-top: 30px;
+                margin-bottom: 100px;
+                display:flex;
+                flex-direction:column;
+                justify-content:nowrap;
+                align-items:center;
+                
+                overflow-y: scroll;
+                }`}
+          </style>
+            </div>
+    )
+}
+
+export default QueuePageBody

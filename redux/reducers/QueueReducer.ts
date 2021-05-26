@@ -178,6 +178,11 @@ const queueInfoReducer = (state = initialState, action) => {
                     queue[i].tracks = filteredTracks
                 }
             }
+            var filteredQueue = queue.filter(
+                (playlist, index) => { return playlist.tracks.length > 0}
+            )
+            queue = filteredQueue
+
             return {
                 QueueInfo:{
                     ...state.QueueInfo,
