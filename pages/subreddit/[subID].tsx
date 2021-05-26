@@ -41,6 +41,7 @@ import {UserSessionStore} from "../../redux/store"
 import LoginPopup from "../../components/LoginPopup";
 
 import PlaylistOptionsButton from "../../components/buttons/PlaylistOptionsButton"
+import convertDate from "../../lib/convertDate";
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {
@@ -60,43 +61,11 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 
   const router = useRouter();
   const subID: string = router.query["subID"].toString();
-  // console.log(server + "/api/subredditPlaylist/" + subID)
-//   const data = {}
-// const [mounted, setMounted] = useState(false)
-// const {data: playlist} = useSWR("/api/subredditPlaylist/test/cscareerquestions")
-// const {data: endpoint1} = useSWR("/api/subredditPlaylist/poweitsao@gmail.com")
-// const {data: endpoint2} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
 
-// const {data: playlist} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
-
-
-
-//   console.log(mounted)
-//   console.log("endpoint1", endpoint1)
-//   console.log("endpoint2", endpoint2)
-
-// const {data: playlist} = useSWR("/api/subredditPlaylist/cscareerquestions")
 const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
 const {data: collections} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
 
 
-  // console.log("SWRPlaylist", playlist)
-  // console.log("collections", collections)
-
-
-
-//   if (!data) return <div>loading...</div>
-//   let playlist: Collection | undefined = data
-//   if (!mounted){
-//     let playlist: Collection = { keys: [], tracks: {}, collectionName: "", cover_url: "" };
-
-//   }else{
-    
-
-//   }
-//   if (error) return <div>failed to load</div>
-//   if (!data) return <div>loading...</div>
-  // console.log(router.query)
   useEffect(() => {
 
     setMounted(true);
@@ -165,11 +134,6 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
 
   const playPodcast = (trackKey: string, trackIndex: number) => {
 
-    // console.log("trackKey", trackKey)
-    // console.log("trackIndex", trackIndex)
-    // console.log("playlist", playlist)
-    // console.log("subID", subID)
-
     var queuePlaylistTracks = []
     for(var i = trackIndex + 1; i <playlist.keys.length; i++ ){
       queuePlaylistTracks.push(playlist.tracks[playlist.keys[i]])
@@ -189,8 +153,6 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
       )
       
     
-      // console.log("store after dispatch", currStore)
-      // console.log(playlist.tracks[trackKey])
     
     }
     QueueStore.dispatch(
@@ -211,29 +173,6 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
       )
     )
 
-
-    // const currStore = AudioPlayerStore.getState();
-    // var podcast: Track = playlist["tracks"][trackIndex];
-
-    // if (currStore.url === podcast["cloud_storage_url"]) {
-    //   AudioPlayerStore.dispatch(togglePlaying(!currStore.playing));
-    // } else {
-    //   var track: HTMLAudioElement = new Audio(podcast["cloud_storage_url"]);
-    //   track.setAttribute("id", "audio");
-
-    //   AudioPlayerStore.dispatch(
-    //     storeAudioPlayerInfo({
-    //       playing: true,
-    //       subreddit: subID,
-    //       trackName: podcast["track_name"],
-    //       filename: podcast["filename"],
-    //       audio: track,
-    //       url: podcast["cloud_storage_url"],
-    //       playlist: playlist,
-    //       keyIndex: playlist["keys"].indexOf(trackIndex),
-    //     })
-    //   );
-    // }
   };
 
   const createQueuePlaylist = (tracks: Array<Track>, playlistName: string) => {
@@ -250,11 +189,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
     return '_' + Math.random().toString(36).substr(2, 9);
 };
 
-  const convertDate = (dateObject: Timestamp) => {
-    var unixTime: Date = new Date(dateObject["_seconds"] * 1000);
-    var dateString: string = unixTime.toDateString();
-    return dateString.substring(4, 10) + ", " + dateString.substring(11, 15);
-  };
+
 
   const renderTrackOnTable = (trackKey: string, index: number) => {
     const [playButton, setPlayButton] = useState(playCircleOutlined);
@@ -319,12 +254,7 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
             <div className="date-posted-dummy">{"datePosted"}</div>
           )}
         </td>
-        {/* {playlist[trackKey]["track_name"]
-                            ? <div style={{}}>{playlist[trackKey]["track_name"]}</div>
-                            : <div style={{}}>{playlist[trackKey]["filename"]}</div>} */}
 
-        {/* </div> */}
-        {/* </div> */}
         <style>{`
           .table td{
             padding: 10px;
@@ -358,8 +288,6 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
   const SubredditInfo = (props) => {
     const [mounted, setMounted] = useState(false)
 
-    // const {data: endpoint3} = useSWR(mounted?"/api/subredditPlaylist/cscareerquestions/":undefined)
-    // console.log("endpoint3", endpoint3)
 
     useEffect(() => {
         setMounted(true)
@@ -473,7 +401,6 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
                     `}
         </style>
         <div>
-          {/* <AudioPlayerBar subreddit={subID} podcast={podcast} src={podcastURL} audio={audio} /> */}
         </div>
       </div>
     </Layout>

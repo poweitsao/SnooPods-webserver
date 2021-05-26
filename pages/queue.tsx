@@ -14,14 +14,22 @@ import { connect } from "react-redux"
 
 import { QueueStore, UserSessionStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
-import {QueuePlaylist, Track, UserSession} from "../ts/interfaces"
+import {Collection, QueuePlaylist, Track, UserSession} from "../ts/interfaces"
 
 import { AudioPlayerStore } from "../redux/store";
-import { storeAudioPlayerInfo} from "../redux/actions/index"
+import { storeAudioPlayerInfo, togglePlaying} from "../redux/actions/index"
 
-import { getQueue, syncDB} from "../lib/syncQueue"
+import { getQueue, syncDB, syncQueueWithAudioPlayer} from "../lib/syncQueue"
 import Router from "next/router";
 import LoginPopup from "../components/LoginPopup";
+import { Table } from "react-bootstrap";
+import playCircleOutlined from "@iconify/icons-ant-design/play-circle-outlined";
+import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
+import Icon from "@iconify/react";
+import formatDuration from "../lib/formatDuration";
+import TrackOptionsButton from "../components/buttons/TrackOptionsButton";
+import convertDate from "../lib/convertDate";
+import QueueCurrentPlaylistOptionsButton from "../components/buttons/QueueCurrentPlaylistOptionsButton";
 
 
 const Queue = ({ userSession }) => {
@@ -31,6 +39,9 @@ const Queue = ({ userSession }) => {
     const [user, setUser] = useState({})
 
     const [showLoginPopup, setShowLoginPopup] = useState(false)
+    const playlist = false;
+    const [queueDisplayInfo, setQueueDisplayInfo] = useState({})
+
 
     useEffect(() => {
       const validateUserSession = async (session_id: string, email: string) => {
@@ -49,76 +60,6 @@ const Queue = ({ userSession }) => {
         }
       }
 
-      // const getQueue = async(email) =>{
-      //     const getQueueRes = await fetch("/api/queue/getQueue/", {
-      //         method: "POST", body: JSON.stringify({email: email})
-      //       })
-      //       let userQueueInfo = await getQueueRes.json()
-      //       console.log("getQueue result:", userQueueInfo)
-
-      //       // let currTrackInfo = {}
-      //       let currTrack : Track
-      //       let currentPlaylist = userQueueInfo.currentPlaylist
-      //       let queue = userQueueInfo.queue
-
-      //       if(userQueueInfo.currentTrack.length == 0){
-      //         if (currentPlaylist.tracks.length == 0){
-      //           // get first track from queue
-      //           if(queue.length == 0){
-      //             // nothing in queue. show empty player
-      //             console.log("currentTrack, currPlaylist and queue are empty in db.")
-
-      //           } else{
-      //             console.log("currentTrack and currPlaylist are empty in db. grabbing currTrack from queue")
-
-      //             currTrack = queue[0].tracks[0] 
-      //             // const trackRes = await fetch("/api/getTrack/" + currTrack, {method: "GET"})
-      //             // currentTrackInfo = await trackRes.json()
-      //             // console.log("currentTrack", currentTrackInfo)
-      //             queue[0].tracks.shift()
-      //           }
-
-      //         } else{
-      //           console.log("currentTrack is empty in db. grabbing currTrack from currPlaylist")
-      //           currTrack = currentPlaylist.tracks[0]
-      //           // const trackRes = await fetch("/api/getTrack/" + currTrack, {method: "GET"})
-      //           // currentTrackInfo = await trackRes.json()
-      //           // console.log("currentTrack", currentTrackInfo)
-      //           currentPlaylist.tracks.shift()
-      //         }
-      //       } else{
-      //         // const trackRes = await fetch("/api/getTrack/" + userQueueInfo.currentTrack, {method: "GET"})
-      //         // currentTrackInfo = await trackRes.json()
-      //         // console.log("currentTrack", currentTrackInfo)
-      //         currTrack = userQueueInfo.currentTrack
-              
-      //       }
-            
-      //       QueueStore.dispatch(
-      //         storeQueueInfo({
-      //           currentTrack: currTrack,
-      //           currentPlaylist: currentPlaylist,
-      //           queue: queue
-      //         })
-      //       )
-
-      //       let currAudioStore = AudioPlayerStore.getState()
-      //       console.log("currAudioStore", currAudioStore)
-      //       if (currAudioStore.audio == "" && currTrack.cloud_storage_url !== ""){
-      //         AudioPlayerStore.dispatch(
-      //           storeAudioPlayerInfo({
-      //             playing: false,
-      //             subreddit: "loremipsum",
-      //             trackName: currTrack.track_name,
-      //             filename: currTrack.filename,
-      //             audio: new Audio(currTrack.cloud_storage_url),
-      //             url: currTrack.cloud_storage_url,
-      //             email: userSession.email
-      //           })
-      //         );
-      //       }
-      // }
-
       if (userSession.session_id && userSession.email) {
         // console.log("UserSession: ", UserSessionStore.getState())
         if (!UserSessionStore.getState().validSession){
@@ -131,100 +72,306 @@ const Queue = ({ userSession }) => {
         setShowLoginPopup(true)
       }
 
-      getQueue(userSession.email)
-    }, []);
-    
+      const waitForGetQueue = async () =>{
+        let queueInfo = await getQueue(userSession.email)
+        console.log("queueInfo from getQueue", queueInfo)
+        setQueueDisplayInfo(queueInfo)
+      }
+
+      if (isEmpty(queueDisplayInfo)){
+        waitForGetQueue()
+      } 
+      
+      // setQueueDisplayInfo(queueInfo)
+    }, [queueDisplayInfo]);
+    console.log("queueDisplayInfo", queueDisplayInfo)
+
+
+    const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
+      const [playButton, setPlayButton] = useState(playCircleOutlined);
+      // console.log(index)
+      return (
+        <tr key={track.track_id}>
+          <td style={{ width: "5%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                paddingLeft: "12px",
+              }}
+            >
+              <button 
+                  onClick={() => options?.playTrack(track.track_id, index, track)}
+                  onMouseEnter={() => setPlayButton(playCircleFilled)}
+                  onMouseLeave={() => setPlayButton(playCircleOutlined)}
+                  style={{
+                    padding: "0px",
+                    width: "fit-content",
+                    backgroundColor: "transparent",
+                    border: "none"
+  
+                    }}>
+                <Icon
+                  style={{ width: "25px", height: "25px" }}
+                  icon={playButton}
+                />
+              </button>
+            </div>
+          </td>
+          <td style={{ width: "60%" }}>
+            {array[index]["track_name"] ? (
+              <div className="post-title">
+                {array[index]["track_name"]}
+              </div>
+            ) : (
+              <div className="filename">
+                {array[index]["filename"]}
+              </div>
+            )}
+          </td>
+          <td style={{ width: "10%" }}>
+            {array[index]["audio_length"] ? (
+              <div style={{display: "flex", alignItems: "center"}}>
+                <div className="audio-length">
+                  {formatDuration(array[index]["audio_length"])}
+                </div>
+              </div>
+            ) : (
+              <div className="audio-length-dummy">{"audioLength"}</div>
+            )}
+          </td>
+          <td style={{ width: "15%" }}>
+            {array[index]["date_posted"] ? (
+              <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
+                {convertDate(array[index]["date_posted"])}
+                <div style={{padding: "10px"}}><QueueCurrentPlaylistOptionsButton setQueueDisplayInfo={setQueueDisplayInfo} trackInfo={array[index]}/></div>
+              </div>
+            ) : (
+              <div className="date-posted-dummy">{"datePosted"}</div>
+            )}
+          </td>
+  
+          <style>{`
+            .table td{
+              padding: 10px;
+              vertical-align: unset;
+            }
+          `}</style>
+        </tr>
+      );
+    };
+  
+    const CurrentPlaylist = ({ playlist }: { playlist: QueuePlaylist }) => {
+      const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track) => {
+
+        let playing = AudioPlayerStore.getState().playing
+        AudioPlayerStore.dispatch(togglePlaying(!playing))
+
+        QueueStore.dispatch(
+          replaceCurrentTrack(track)
+        )
+        QueueStore.dispatch(
+          removeTrackFromCurrentPlaylist(trackID, index)
+        )
+        syncQueueWithAudioPlayer(true)
+        setQueueDisplayInfo(QueueStore.getState().QueueInfo)
+
+      }
+      return (
+        <div style={{ width: "100%" }}>
+          {/* <ListGroup variant="flush"></ListGroup> */}
+          <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
+            {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+            <thead>
+              <tr>
+                {/* <td></td>
+                <td>Title</td>
+                <td>Duration</td>
+                <td>Date posted</td> */}
+              </tr>
+            </thead>
+            <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+                      return renderTrackOnTable(track, index, array, {playTrack: playTrackFromCurrentPlaylist})
+                  })}
+            </tbody>
+          </Table>
+        </div>
+      );
+    };
+  
+    const CurrentSong = ({ track }: { track: Track }) => {
+      const playCurrentTrack = (trackID: string, index: number, track: Track) => {
+        // console.log("playing...")
+        let playing = AudioPlayerStore.getState().playing
+        AudioPlayerStore.dispatch(togglePlaying(!playing))
+      }
+      return (
+        <div style={{ width: "100%"}}>
+          {/* <ListGroup variant="flush"></ListGroup> */}
+          <Table style={{overflowY: "visible", overflowX: "visible"}}  hover >
+            {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+            <thead>
+              <tr>
+                {/* <td></td>
+                <td>Title</td>
+                <td>Duration</td>
+                <td>Date posted</td> */}
+              </tr>
+            </thead>
+            <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
+              console.log("track in currentSong.map", track, "array:", array)
+              return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack})
+            })
+            }</tbody>
+          </Table>
+        </div>
+      );
+    };
+  
+    const CurrentQueue = ({ queue }: { queue: Array<QueuePlaylist> }) => {
+      return (
+        <div style={{ width: "100%" }}>
+          
+          {queue.map(QueueChunk)}
+        </div>
+      );
+    };
+  
+    const QueueChunk = (playlist: QueuePlaylist, index: number) => {
+      return (
+        <div key={playlist.playlistID}>
+          {
+            <div style={{padding: "10px", paddingLeft: "50px"}}>{playlist.playlistName}</div>
+          }
+          
+          <div style={{ width: "95%", marginLeft: "auto" }}>
+            {/* <ListGroup variant="flush"></ListGroup> */}
+            <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
+              {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+              <thead>
+                <tr>
+                  {/* <td></td>
+                  <td>Title</td>
+                  <td>Duration</td>
+                  <td>Date posted</td> */}
+                </tr>
+              </thead>
+              <tbody>{playlist.tracks.map(renderTrackOnTable)}</tbody>
+            </Table>
+          </div>
+        </div>
+      );
+  
+    }
+
+
+
+
 
     return (
-  
       <Layout>
         <div>
           <LoginPopup show={showLoginPopup}
             onHide={() => {
               setShowLoginPopup(false);
               Router.push("/")
-
             }} />
         </div>
         <div className="page-container">
-          {isEmpty(user)
-              ? <div></div>
-              : <Sidebar user={user}></Sidebar>
-            }
-            <div className="main-page">
-                {isEmpty(user)
-                    ? <div></div>
-                    : <CustomNavbar user={user} />
-                }
-                <div className="heading">
-                    <h1> Queue </h1>
+          {isEmpty(user) ? <div></div> : <Sidebar user={user}></Sidebar>}
+          <div className="main-page">
+            {isEmpty(user) ? <div></div> : <CustomNavbar user={user} />}
+            <div></div>
+            <div className="page-body">
+              {isEmpty(queueDisplayInfo) ? (
+                <div></div>
+              ) : (
+                // <SubredditInfo albumCover={playlist["cover_url"]} playlist={playlist} />
+                <div style={{width: "90%"}}>
+                  <div style={{ padding: "10px", paddingLeft: "25px"}}>Current Track:</div>
+                  <CurrentSong track={queueDisplayInfo["currentTrack"]}/>
+                </div>
+              )}
+              {isEmpty(queueDisplayInfo) 
+              ?  <div></div>
+              :(
+                queueDisplayInfo["currentPlaylist"].tracks.length == 0 
+                ? <div></div> 
+                : (
+                    // <Tablelist playlist={playlist} />
+                    <div style={{width: "90%"}}>
+                      <div style={{padding: "10px", paddingLeft: "25px"}}>Currently Playing:</div>
+                      <CurrentPlaylist playlist={queueDisplayInfo["currentPlaylist"]}/>
+                    </div>
+                  )
+              )}
+                
+              {isEmpty(queueDisplayInfo) ? (
+                <div></div>
+              ) : (
+                // <Tablelist playlist={playlist} />
+                <div style={{width: "90%"}}>
+                  <div style={{padding: "10px", paddingLeft: "25px"}}>Queue:</div>
+                  <CurrentQueue queue={queueDisplayInfo["queue"]}/>
                 </div>
                 
-
-
-                <style>{`
-                .heading{
-                text-align:center;
-                }
-                .main-page{
-                width: 88%;
-                margin-top:30px;
-                margin-bottom:30px;
-                display:flex;
-                flex-direction:column;
-                justify-content:center;
-                align-content:center;
-                align-text:center;
-                align-self: flex-start;
-                }
-    
-            .page-container{
-                display: flex;
-                height: 100%;
-                
-            }
-            .button-container{
-                margin:20px;
-                text-align:center;
-            }
-            .image{
-                -webkit-user-select: none;
-                margin: auto;}
-                .heading{
-                text-align:center;
-            }
-            .musicPlayer{
-                text-align:center;
-                padding: 20px;
-            }
-            .grid-container{
-                padding:20px;
-                width: 80%;
-                display: flex;
-                justify-content:center;
-                align-self:center;
-                margin-right: 50px;
-                margin-left:50px;
-                max-width: 690px;
-            }
-            .navbar{
-                display:flex;
-                flex-direction: column;
-                align-items: stretch;
-            }
-        `}</style>
+              )}
             </div>
-        </div>
-        <div>
-            <Provider store={AudioPlayerStore}>
-                <AudioPlayerBarContainer />
-            </Provider>
-        </div>
-        
-      </Layout >
+          </div>
+          <Provider store={AudioPlayerStore}>
+            <AudioPlayerBarContainer />
+          </Provider>
+          {/* ; */}
+          <style>
+            {`.page-body{
+              margin-top: 30px;
+              margin-bottom: 100px;
+              display:flex;
+              flex-direction:column;
+              justify-content:nowrap;
+              align-items:center;
+              
+              overflow-y: scroll;
+              }
+              .main-page{
+                  width: 88%;
+                  margin-top:30px;
+                  margin-bottom:30px;
+                  display:flex;
+                  flex-direction:column;
+                  justify-content:center;
+                  align-content:center;
+                  align-text:center;
+                  align-self: flex-start;
+                  height: 100%;
+              }
   
+              .page-container{
+                  display: flex;
+                  height: 100%
+              }
+  
+              .album-cover{
+                  padding: 20px;
+              }
+              .navbar{
+                  display:flex;
+                  flex-direction: column;
+                  align-items: stretch;
+              }
+                      `}
+          </style>
+          <div>
+          </div>
+        </div>
+      </Layout>
     )
   }
+
+
+
+
+
 
   Queue.getInitialProps = async ({ req }) => {
     const cookies = parseCookies(req)
@@ -236,26 +383,10 @@ const Queue = ({ userSession }) => {
     };
   }
   
-function mapStateToProps(state) {
-  // console.log("mapStateToProps", state)
-  return state
-}
 
-const mapDispatchToProps = (dispatch) => ({
-    // changeAudioPlayerInfo: AudioPlayerInfo => dispatch(storeAudioPlayerInfo(AudioPlayerInfo)),
-    // togglePlaying: playing => dispatch(togglePlaying(playing))
-    changeQueueInfo: QueueInfo => dispatch(storeQueueInfo(QueueInfo)), 
-    // getQueueInfo, 
-    nextTrack: () => dispatch(replaceCurrentTrack()), 
-    playNewTrack: (track) => dispatch(replaceCurrentTrack(track)), 
-    addPlaylistToQueue: (newPlaylist) => dispatch(addPlaylistToQueue(newPlaylist)), 
-    clearCurrentPlaylist: () => dispatch(clearCurrentPlaylist()), 
-    removeTrackFromCurrentPlaylist: (trackID, index) => dispatch(removeTrackFromCurrentPlaylist(trackID, index)), 
-    removePlaylistFromQueue: (playlistID) => dispatch(removePlaylistFromQueue(playlistID)), 
-    removeTrackFromQueue: (playlistID, trackID, index) => dispatch(removeTrackFromQueue(playlistID, trackID, index))
-
-})
 
 // export default connect(mapStateToProps, mapDispatchToProps)(Queue)
 
 export default Queue
+
+

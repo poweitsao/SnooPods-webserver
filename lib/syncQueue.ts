@@ -92,6 +92,11 @@ export async function getQueue (email: string) {
       })
     );
   }
+
+  return {  currentTrack: currTrack,
+            currentPlaylist: currentPlaylist,
+            queue: queue  }
+
 }
 
 export function syncQueueWithAudioPlayer(playing: boolean) {
