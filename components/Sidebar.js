@@ -7,13 +7,23 @@ import useSWR, {trigger} from 'swr';
 import AddButton from "./buttons/AddButton"
 import DeleteButton from "./buttons/DeleteButton"
 import Router from "next/router"
+import { CollectionStore } from '../redux/store';
 
 const Sidebar = (props) => {
     const [mounted, setMounted] = useState(false)
     const [showDelete, setShowDelete] = useState([])
     const [email, setEmail] = useState(props.user.email)
     const {data} = useSWR("/api/user/collections/getCollections/"+ props.user.email)
+    // if (data){
 
+    //     CollectionStore.dispatch({
+    //         type: "STORE_COLLECTIONS",
+    //         collections: data
+    //     })
+
+    //     console.log("CollectionStore.getState()", CollectionStore.getState())
+        
+    // }
 
     useEffect(() => {
         setMounted(true)
@@ -39,7 +49,7 @@ const Sidebar = (props) => {
                 alignItems: "center",
             }}></div>
         // return <div>loading...</div>
-    }
+    } 
 
     const renderCollections = (collection, index) => {
         const collectionID = collection.collectionID

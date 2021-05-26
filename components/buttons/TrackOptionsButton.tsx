@@ -8,12 +8,16 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import {addPlaylistToQueue} from "../../redux/actions/queueActions"
-import {QueueStore, AudioPlayerStore, UserSessionStore} from "../../redux/store"
+import {QueueStore, AudioPlayerStore, UserSessionStore, CollectionStore} from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
+
 export default function TrackOptionsButton(props) {
+
+
     const {trackInfo}:{trackInfo: Track} = props
+    // console.log("TrackOptionsButton props", props)
 
     const addTrackToQueue = () =>{
         // console.log(trackInfo)
@@ -42,12 +46,30 @@ export default function TrackOptionsButton(props) {
         return '_' + Math.random().toString(36).substr(2, 9);
     };
 
+
+    const addTrackToCollection = () => {
+        console.log("adding track", trackInfo.track_name ," to collection")
+
+    }
+
+    const renderCollectionsSubmenu = (collection, index) => {
+        let collectionID = collection.collectionID
+        return(
+            <MenuItem key={index} onClick={addTrackToCollection}>{collection.collectionName}</MenuItem>
+        )
+
+    }
+
+    // const collections = CollectionStore.getState()
+    // console.log("collections", collections)
+
+
     return (
         <Menu menuButton={<MoreHorizIcon />}>
             <MenuItem onClick={addTrackToQueue}>Add to queue</MenuItem>
             <MenuItem>Go to Subreddit</MenuItem>
             <SubMenu label="Add to collection">
-            <MenuItem>Render collections dynamically</MenuItem>
+                {props.Collections.map(renderCollectionsSubmenu)}
                 {/* render this dynamically later */}
                 {/* <MenuItem>index.html</MenuItem>
                 <MenuItem>example.js</MenuItem>

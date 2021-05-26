@@ -5,7 +5,7 @@ import { server } from "../../config";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import Layout from "../../components/layout"
-import { AudioPlayerStore, QueueStore, UserSessionStore } from "../../redux/store";
+import { AudioPlayerStore, CollectionStore, QueueStore, UserSessionStore } from "../../redux/store";
 import Router from "next/router";
 import validateSession from "../../lib/validateUserSessionOnPage";
 import { getQueue } from "../../lib/syncQueue";
@@ -40,6 +40,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
     const [mounted, setMounted] = useState<Boolean>(false);
     const [user, setUser] = useState<UserSession | {}>({});
     const [showLoginPopup, setShowLoginPopup] = useState<Boolean>(false)
+
 
     useEffect(() => {
 
@@ -82,6 +83,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
       //   <div>playlist got!</div>
       // )
     }
+
 
 
 

@@ -10,7 +10,7 @@ import CustomNavbar from "../../components/CustomNavbar";
 import AudioPlayerBar from "../../components/AudioPlayerBar";
 import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
-import { AudioPlayerStore } from "../../redux/store";
+import { AudioPlayerStore, CollectionStore } from "../../redux/store";
 import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index";
 import Image from "react-bootstrap/Image";
 
@@ -42,6 +42,8 @@ import LoginPopup from "../../components/LoginPopup";
 
 import PlaylistOptionsButton from "../../components/buttons/PlaylistOptionsButton"
 import convertDate from "../../lib/convertDate";
+
+import TrackOptionsButtonContainer from "../../components/containers/TrackOptionsButtonContainer"
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {
@@ -99,7 +101,16 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
     }
     // console.log(data)
     getQueue(userSession.email)
-  }, []);
+
+    if(collections){
+      console.log("collections fro useSWR", collections)
+      CollectionStore.dispatch({
+        type:"STORE_COLLECTIONS",
+        collections: collections
+      })
+    }
+
+  }, [collections]);
   // console.log(playlist)
 
 
@@ -220,7 +231,13 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/poweits
           {playlist["tracks"][trackKey]["date_posted"] ? (
             <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
               {convertDate(playlist["tracks"][trackKey]["date_posted"])}
-              <div style={{padding: "10px"}}><TrackOptionsButton trackInfo={playlist.tracks[trackKey]}/></div>
+              <div style={{padding: "10px"}}>
+                <Provider store={CollectionStore}>
+                  <TrackOptionsButtonContainer trackInfo={playlist.tracks[trackKey]}/>
+                </Provider>
+
+                {/* <TrackOptionsButton /> */}
+                </div>
             </div>
           ) : (
             <div className="date-posted-dummy">{"datePosted"}</div>
