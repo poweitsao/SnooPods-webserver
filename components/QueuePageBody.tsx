@@ -6,7 +6,7 @@ import formatDuration from "../lib/formatDuration";
 import isEmpty from "../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../lib/syncQueue";
 import { togglePlaying } from "../redux/actions";
-import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack } from "../redux/actions/queueActions";
+import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue } from "../redux/actions/queueActions";
 import { AudioPlayerStore, QueueStore } from "../redux/store";
 import { Track, QueuePlaylist } from "../ts/interfaces";
 import Icon from "@iconify/react";
@@ -223,7 +223,14 @@ const QueuePageBody = (props) => {
         return (
           <div key={playlist.playlistID}>
             {
-              <div style={{padding: "10px", paddingLeft: "50px"}}>{playlist.playlistName}</div>
+              <div style={{padding: "10px", paddingLeft: "50px"}}>
+                {playlist.playlistName}
+                <button style={{marginLeft: "10px"}} onClick={() => {
+                  QueueStore.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
+                  syncDB(); 
+                  syncQueueWithAudioPlayer(true);
+                }}>clear</button>
+              </div>
             }
             
             <div style={{ width: "95%", marginLeft: "auto" }}>
@@ -263,7 +270,14 @@ const QueuePageBody = (props) => {
                 ? <div></div> 
                 : (
                     <div style={{width: "90%"}}>
-                      <div style={{padding: "10px", paddingLeft: "25px"}}>Currently Playing:</div>
+                      <div style={{padding: "10px", paddingLeft: "25px"}}>
+                        Currently Playing: 
+                        <button style={{marginLeft: "10px"}} onClick={() => {
+                          QueueStore.dispatch(clearCurrentPlaylist());
+                          syncDB(); 
+                          syncQueueWithAudioPlayer(true);
+                        }}>clear</button>
+                      </div>
                       <CurrentPlaylist playlist={currentPlaylist}/>
                     </div>
                   )
