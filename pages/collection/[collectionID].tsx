@@ -28,6 +28,8 @@ import isEmpty from "../../lib/isEmptyObject";
 import Sidebar from "../../components/Sidebar";
 import CustomNavbar from "../../components/CustomNavbar";
 
+import EditNameModal from "../../components/EditNameModal"
+import EditIcon from '@material-ui/icons/Edit';
 
 
 
@@ -245,7 +247,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
   
     const CollectionInfo = (props) => {
       const [mounted, setMounted] = useState(false)
-  
+      const [show, setShow] = useState(false);
   
       useEffect(() => {
           setMounted(true)
@@ -260,7 +262,18 @@ const CollectionPage = ({ userSession, collectionID }) => {
             height="256px"
           />
           <div className="subreddit-title">
+            <div style={{display: "flex", alignItems: "center"}}>
+              <h1>{props.playlist.collectionName}</h1>
+              <button style={{width: "fit-content", backgroundColor: "transparent",border: "none"}}
+                onClick={() => setShow(true)}>
+                <EditIcon/>
+              </button>
+            </div>
             <PlaylistOptionsButton playlist={props.playlist}/>
+            <EditNameModal 
+              show={show}
+              onHide={() => setShow(false)}
+            />
           </div>
           <style>{`
                   .subreddit-info-container{
