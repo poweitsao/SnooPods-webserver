@@ -248,7 +248,20 @@ const CollectionPage = ({ userSession, collectionID }) => {
     const CollectionInfo = (props) => {
       const [mounted, setMounted] = useState(false)
       const [show, setShow] = useState(false);
-  
+      
+      const sendNewName = (newName) => {
+        fetch("/api/user/collections/editCollection", 
+        { method: "POST", body: JSON.stringify({
+            action:"renameCollection",
+            fields: {
+                collectionID: playlist.collectionID,
+                newCollectionName: newName,
+                email: UserSessionStore.getState().email
+            }
+        }) 
+    })
+      }
+
       useEffect(() => {
           setMounted(true)
         }, [])
@@ -271,6 +284,8 @@ const CollectionPage = ({ userSession, collectionID }) => {
             </div>
             <PlaylistOptionsButton playlist={props.playlist}/>
             <EditNameModal 
+              name={props.playlist.collectionName}
+              runonsubmit={sendNewName}
               show={show}
               onHide={() => setShow(false)}
             />

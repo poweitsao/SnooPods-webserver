@@ -228,8 +228,22 @@ export const renameCollection = async(collectionID: string, newCollectionName: s
     let collectionRef = db.collection("collections").doc(collectionID)
     try{
         let collectionData = await collectionRef.get()
+        collectionData = collectionData.data()
         if (collectionData.ownerID == email){
             await db.collection("collections").doc(collectionID).update({collectionName: newCollectionName})
+            let userRef = db.collection("users").doc(email)
+            let userData = await userRef.get()
+            let userCollections = userData.data().collections
+            
+            for(var i = 0; i < userCollections.length; i ++){
+                if (userCollections[i].collectionID == collectionID){
+                    userCollections[i].collectionName = newCollectionName
+                }
+            }
+            console.log("userCollections", userCollections)
+
+            await db.collection("users").doc(email).update({collections: userCollections})
+
             return 200
         } else{
             return 403
