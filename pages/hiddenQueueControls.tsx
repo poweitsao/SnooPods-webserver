@@ -354,7 +354,7 @@ const hiddenQueueControls = ({ userSession }) => {
     };
   }
   
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   // console.log("mapStateToProps", state)
   return state
 }

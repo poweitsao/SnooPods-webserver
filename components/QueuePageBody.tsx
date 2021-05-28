@@ -21,6 +21,7 @@ const QueuePageBody = (props) => {
   console.log("QueuePageBody props", props)
   const {data: collections} = useSWR("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
   
+
   useEffect(() => {
     if(collections){
       console.log("collections fro useSWR", collections)
@@ -30,13 +31,11 @@ const QueuePageBody = (props) => {
       })
     }
   }, [collections]);
-    // const [queueDisplayInfo, setQueueDisplayInfo] = useState({})
 
-    const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
+      const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
         const [playButton, setPlayButton] = useState(playCircleOutlined);
-        // console.log(index)
         return (
-          <tr key={track.track_id}>
+          <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
             <td style={{ width: "5%" }}>
               <div
                 style={{
@@ -123,7 +122,6 @@ const QueuePageBody = (props) => {
             removeTrackFromCurrentPlaylist(trackID, index)
           )
           syncQueueWithAudioPlayer(true)
-          // setQueueDisplayInfo(QueueStore.getState().QueueInfo)
   
         }
         const removeFromCurrentPlaylist = (trackID: string, index: number, playlistID: string) =>{
@@ -143,10 +141,6 @@ const QueuePageBody = (props) => {
               {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
               <thead>
                 <tr>
-                  {/* <td></td>
-                  <td>Title</td>
-                  <td>Duration</td>
-                  <td>Date posted</td> */}
                 </tr>
               </thead>
               <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
@@ -179,19 +173,12 @@ const QueuePageBody = (props) => {
         }
         return (
           <div style={{ width: "100%"}}>
-            {/* <ListGroup variant="flush"></ListGroup> */}
             <Table style={{overflowY: "visible", overflowX: "visible"}}  hover >
-              {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
               <thead>
                 <tr>
-                  {/* <td></td>
-                  <td>Title</td>
-                  <td>Duration</td>
-                  <td>Date posted</td> */}
                 </tr>
               </thead>
               <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
-                // console.log("track in currentSong.map", track, "array:", array)
                 return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack, removeTrack:removeCurrentTrack })
               })
               }</tbody>
@@ -211,73 +198,64 @@ const QueuePageBody = (props) => {
     
       const QueueChunk = (playlist: QueuePlaylist, index: number) => {
   
-        const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
-  
-          let playing = AudioPlayerStore.getState().playing
-          AudioPlayerStore.dispatch(togglePlaying(!playing))
-  
-          QueueStore.dispatch(
-            replaceCurrentTrack(track)
-          )
-          QueueStore.dispatch(
-            removeTrackFromQueue(playlistID, trackID, index)
-          )
-          syncQueueWithAudioPlayer(true)
-          // setQueueDisplayInfo(QueueStore.getState().QueueInfo)
-  
-        }
+          const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
 
-        const removeFromCurrentQueueChunk = (trackID: string, index: number, playlistID: string) =>{
+            let playing = AudioPlayerStore.getState().playing
+            AudioPlayerStore.dispatch(togglePlaying(!playing))
 
-          QueueStore.dispatch(
-            removeTrackFromQueue(playlistID, trackID, index)
-          )
-          
-          syncDB()
-          syncQueueWithAudioPlayer(false)
-      }
-  
-        return (
-          <div key={playlist.playlistID}>
-            {
-              <div style={{padding: "10px", paddingLeft: "50px"}}>
-                {playlist.playlistName}
-                <button style={{marginLeft: "10px"}} onClick={() => {
-                  QueueStore.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
-                  syncDB(); 
-                  syncQueueWithAudioPlayer(true);
-                }}>clear</button>
-              </div>
-            }
+            QueueStore.dispatch(
+              replaceCurrentTrack(track)
+            )
+            QueueStore.dispatch(
+              removeTrackFromQueue(playlistID, trackID, index)
+            )
+            syncQueueWithAudioPlayer(true)
+
+          }
+
+          const removeFromCurrentQueueChunk = (trackID: string, index: number, playlistID: string) =>{
+
+            QueueStore.dispatch(
+              removeTrackFromQueue(playlistID, trackID, index)
+            )
             
-            <div style={{ width: "95%", marginLeft: "auto" }}>
-              {/* <ListGroup variant="flush"></ListGroup> */}
-              <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
-                {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
-                <thead>
-                  <tr>
-                    {/* <td></td>
-                    <td>Title</td>
-                    <td>Duration</td>
-                    <td>Date posted</td> */}
-                  </tr>
-                </thead>
-                <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
-                        return renderTrackOnTable(track, index, array, {playTrack: playTrackFromCurrentQueueChunk, removeTrack: removeFromCurrentQueueChunk, playlistID: playlist.playlistID})
-              })}</tbody>
-              </Table>
+            syncDB()
+            syncQueueWithAudioPlayer(false)
+          }
+  
+          return (
+            <div key={playlist.playlistID + "_" + playlist.tracks[index].track_id + "_" + (index).toString}>
+              {
+                <div style={{padding: "10px", paddingLeft: "50px"}}>
+                  {playlist.playlistName}
+                  <button style={{marginLeft: "10px"}} onClick={() => {
+                    QueueStore.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
+                    syncDB(); 
+                    syncQueueWithAudioPlayer(true);
+                  }}>clear</button>
+                </div>
+              }
+              
+              <div style={{ width: "95%", marginLeft: "auto" }}>
+                <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
+                  <thead>
+                    <tr>
+                    </tr>
+                  </thead>
+                  <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+                          return renderTrackOnTable(track, index, array, {playTrack: playTrackFromCurrentQueueChunk, removeTrack: removeFromCurrentQueueChunk, playlistID: playlist.playlistID})
+                })}</tbody>
+                </Table>
+              </div>
             </div>
-          </div>
-        );
-    
-      }
+          );
+        }
 
     return (
         <div className="page-body">
               {currentTrack.cloud_storage_url == "" ? (
                 <div>Nothing here.</div>
               ) : (
-                // <SubredditInfo albumCover={playlist["cover_url"]} playlist={playlist} />
                 <div style={{width: "90%"}}>
                   <div style={{ padding: "10px", paddingLeft: "25px"}}>Current Track:</div>
                   <CurrentSong track={currentTrack}/>
@@ -306,7 +284,6 @@ const QueuePageBody = (props) => {
                   <div style={{padding: "10px", paddingLeft: "25px"}}>Queue:</div>
                   <CurrentQueue queue={queue}/>
                 </div>
-                
               }
               <style>
                 {`.page-body{
@@ -319,8 +296,8 @@ const QueuePageBody = (props) => {
                 
                 overflow-y: scroll;
                 }`}
-          </style>
-            </div>
+              </style>
+        </div>
     )
 }
 

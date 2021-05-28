@@ -7,7 +7,8 @@ import useSWR, {trigger} from 'swr';
 import AddButton from "./buttons/AddButton"
 import DeleteButton from "./buttons/DeleteButton"
 import Router from "next/router"
-import { CollectionStore } from '../redux/store';
+import { LikedTracksStore } from '../redux/store';
+import {storeLikedTracks} from "../redux/actions/likedTracksActions"
 
 const Sidebar = (props) => {
     const [mounted, setMounted] = useState(false)
@@ -16,8 +17,11 @@ const Sidebar = (props) => {
     const {data: collections} = useSWR("/api/user/collections/getCollections/"+ props.user.email)
     const {data: likedTracks} = useSWR("/api/user/collections/getLikedTracks/"+ props.user.email)
     if(likedTracks){
-        console.log("likedTracks", likedTracks.tracks)
-
+        LikedTracksStore.dispatch({
+            type: "STORE_LIKED_TRACKS",
+            likedTracks
+        })
+        console.log("likedTracks", LikedTracksStore.getState())
     }
 
     useEffect(() => {

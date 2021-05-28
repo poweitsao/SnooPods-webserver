@@ -7,7 +7,7 @@ import QueuePageBody from "../QueuePageBody.tsx"
 //     AudioPlayerInfo: getAudioPlayerStatus()
 // })
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
     // console.log("mapStateToProps", state)
     return state
 }
