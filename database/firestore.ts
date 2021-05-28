@@ -302,6 +302,21 @@ export const removeTrackFromCollection = async(collectionID: string, trackID: st
     }
 }
 
+export const getUserLikedTracks = async (email: string) => {
+    let userRef = db.collection("users").doc(email)
+    console.log("getting user liked tracks of", email)
+    try {
+        let userData = await userRef.get()
+        userData = userData.data()
+        let userLikedTracksCollectionID = userData.likedTracksCollectionID
+        let {collectionData: likedTracks} = await getSingleUserCollection(email, userLikedTracksCollectionID)
+        console.log("liked tracks collectionData", likedTracks)
+        return {status: 200, likedTracks: likedTracks}
+    } catch (e) {
+        console.log("error in getUserLikedTracks" ,e)
+        return {status: 500, likedTracks: {}}
+    }
+}
 
 export const createCollection = async (collectionName: string, ownerID: string, tracks: Array<string>) => {
     // console.log("creating collection", collectionName)
@@ -468,5 +483,6 @@ module.exports = {
     pushQueueToDB,
     renameCollection, 
     addTrackToCollection, 
-    removeTrackFromCollection
+    removeTrackFromCollection,
+    getUserLikedTracks
 }
