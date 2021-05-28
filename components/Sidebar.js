@@ -15,6 +15,7 @@ const Sidebar = (props) => {
     const [showDelete, setShowDelete] = useState([])
     const [email, setEmail] = useState(props.user.email)
     const {data: collections} = useSWR("/api/user/collections/getCollections/"+ props.user.email)
+    // const collections = []
     const {data: likedTracks} = useSWR("/api/user/collections/likedTracks/get/"+ props.user.email)
 
 

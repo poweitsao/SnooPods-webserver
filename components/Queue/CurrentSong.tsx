@@ -22,7 +22,6 @@ const CurrentSong = (props) => {
 
     let { track }: { track: Track } = props
 
-    console.log("props in CurrentSong", props)
 
     const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
       // console.log("playing...")

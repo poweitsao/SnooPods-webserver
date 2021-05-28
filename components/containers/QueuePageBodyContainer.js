@@ -1,5 +1,5 @@
 import { connect } from "react-redux"
-import { QueueStore } from "../../redux/store"
+import { UserSessionStore } from "../../redux/store"
 import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index"
 import QueuePageBody from "../Queue/QueuePageBody.tsx"
 

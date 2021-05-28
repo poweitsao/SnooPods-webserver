@@ -462,7 +462,7 @@ export async function getSubredditPlaylist(subID) {
 }
 
 export async function getQueue(email: string){
-    console.log("email in getQueue", email)
+    // console.log("email in getQueue", email)
     let userRef = db.collection("users").doc(email)
     try {
         

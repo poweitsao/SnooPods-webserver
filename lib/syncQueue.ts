@@ -85,7 +85,7 @@ export async function getQueue (email: string) {
       })
     );
   } else if (currAudioStore.email == ""){
-    console.log("email in setAudioStoreEmail", email)
+    // console.log("email in setAudioStoreEmail", email)
     AudioPlayerStore.dispatch(
       setAudioStoreEmail({
         email

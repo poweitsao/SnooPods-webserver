@@ -106,7 +106,12 @@ const Queue = ({ userSession }) => {
               <div></div>
               
               <Provider store={QueueStore}>
-                <QueuePageBodyContainer/>
+                {
+                  isEmpty(user)
+                  ?<div></div>
+                  : <QueuePageBodyContainer user={user}/>
+                }
+                
               </Provider>
             </div>
           
