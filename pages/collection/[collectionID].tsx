@@ -3,7 +3,7 @@ import { Collection, Timestamp, Track, UserSession } from "../../ts/interfaces";
 import parseCookies from "../../lib/parseCookies";
 import { server } from "../../config";
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
+import useSWR, { trigger } from "swr";
 import Layout from "../../components/layout"
 import { AudioPlayerStore, CollectionStore, QueueStore, UserSessionStore } from "../../redux/store";
 import Router from "next/router";
@@ -36,8 +36,8 @@ import EditIcon from '@material-ui/icons/Edit';
 
 const CollectionPage = ({ userSession, collectionID }) => {
     const fetcher = (url) => fetch(url).then((r) => r.json());
-
-    const {data: playlist} = useSWR("/api/user/collections/get/" + userSession.email + "/" + collectionID, fetcher)
+    const fetchCollectionURL = "/api/user/collections/get/" + userSession.email + "/" + collectionID
+    const {data: playlist} = useSWR(fetchCollectionURL, fetcher)
 
     const [mounted, setMounted] = useState<Boolean>(false);
     const [user, setUser] = useState<UserSession | {}>({});
@@ -249,17 +249,19 @@ const CollectionPage = ({ userSession, collectionID }) => {
       const [mounted, setMounted] = useState(false)
       const [show, setShow] = useState(false);
       
-      const sendNewName = (newName) => {
-        fetch("/api/user/collections/editCollection", 
-        { method: "POST", body: JSON.stringify({
-            action:"renameCollection",
-            fields: {
-                collectionID: playlist.collectionID,
-                newCollectionName: newName,
-                email: UserSessionStore.getState().email
-            }
-        }) 
-    })
+      const sendNewName = async (newName: string) => {
+        await fetch("/api/user/collections/editCollection", 
+          { method: "POST", body: JSON.stringify({
+              action:"renameCollection",
+              fields: {
+                  collectionID: playlist.collectionID,
+                  newCollectionName: newName,
+                  email: UserSessionStore.getState().email
+              }
+          }) 
+        })
+
+        trigger(fetchCollectionURL)
       }
 
       useEffect(() => {
@@ -278,7 +280,8 @@ const CollectionPage = ({ userSession, collectionID }) => {
             <div style={{display: "flex", alignItems: "center"}}>
               <h1>{props.playlist.collectionName}</h1>
               <button style={{width: "fit-content", backgroundColor: "transparent",border: "none"}}
-                onClick={() => setShow(true)}>
+                      onClick={() => setShow(true)}
+              >
                 <EditIcon/>
               </button>
             </div>

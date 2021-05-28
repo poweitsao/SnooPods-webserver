@@ -2,11 +2,13 @@ import Modal from 'react-bootstrap/Modal'
 import Button from "react-bootstrap/Button"
 import React, { useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
+import { trigger } from 'swr'
+import { UserSessionStore } from '../redux/store'
 
 
 const EditNameModal = (props) => {
 
-    const {runonsubmit, name} = props 
+    const {runonsubmit, name, onHide, show} = props 
     const [newName, setNewName] = useState(name)
     
 
@@ -17,20 +19,22 @@ const EditNameModal = (props) => {
         
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (runonsubmit == undefined){
             console.log("runOnSubmit is undefined")
             console.log("submitting new name", newName)
 
         }else{
-            runonsubmit(newName)
+            await runonsubmit(newName)
+            trigger("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
         }
     }
 
     return (
         <Modal
-            {...props}
+            show={show} 
+            onHide={onHide}
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
@@ -50,7 +54,7 @@ const EditNameModal = (props) => {
                     
                     <Modal.Footer style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                         <Button onClick={props.onHide}>Close</Button>
-                        <Button variant="primary" type="submit" >
+                        <Button variant="primary" type="submit" onClick={props.onHide}>
                             Submit
                         </Button>
                     </Modal.Footer>
