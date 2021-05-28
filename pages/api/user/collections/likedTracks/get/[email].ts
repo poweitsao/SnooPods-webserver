@@ -1,4 +1,4 @@
-import {getUserLikedTracks} from "../../../../../database/firestore"
+import {getUserLikedTracks} from "../../../../../../database/firestore"
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

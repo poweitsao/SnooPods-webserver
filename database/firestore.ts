@@ -302,6 +302,34 @@ export const removeTrackFromCollection = async(collectionID: string, trackID: st
     }
 }
 
+export const toggleUserLikedTracks = async (trackID: string, email: string) => {
+    let userRef = db.collection("users").doc(email)
+    console.log("toggeling", email+"'s liked tracks for trackID", trackID)
+    try {
+        let userData = await userRef.get()
+        userData = userData.data()
+        let userLikedTracksCollectionID = userData.likedTracksCollectionID
+        let {collectionData: likedTracksCollection} = await getSingleUserCollection(email, userLikedTracksCollectionID)
+        console.log("liked tracks collectionData", likedTracksCollection)
+        let likedTracks = likedTracksCollection.tracks
+        if(likedTracks.includes(trackID)){
+            likedTracks = likedTracks.filter((trackIDinArray) => {return trackIDinArray !== trackID} )
+        } else{
+            likedTracks.push(trackID)
+        }
+
+        let likedTracksCollectionRef = db.collection("collections").doc(likedTracksCollection.collectionID)
+        await likedTracksCollectionRef.update({
+            tracks: likedTracks
+        })
+
+        return 200
+    } catch (e) {
+        console.log("error in getUserLikedTracks" ,e)
+        return 500
+    }
+}
+
 export const getUserLikedTracks = async (email: string) => {
     let userRef = db.collection("users").doc(email)
     console.log("getting user liked tracks of", email)
@@ -484,5 +512,6 @@ module.exports = {
     renameCollection, 
     addTrackToCollection, 
     removeTrackFromCollection,
-    getUserLikedTracks
+    getUserLikedTracks,
+    toggleUserLikedTracks
 }

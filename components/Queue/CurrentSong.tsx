@@ -4,7 +4,7 @@ import { Table } from 'react-bootstrap'
 import { syncDB, syncQueueWithAudioPlayer } from '../../lib/syncQueue'
 import { togglePlaying } from '../../redux/actions'
 import { pushNextTrack } from '../../redux/actions/queueActions'
-import { AudioPlayerStore, CollectionStore, QueueStore } from '../../redux/store'
+import { AudioPlayerStore, CollectionStore, QueueStore, UserSessionStore } from '../../redux/store'
 import { Track } from '../../ts/interfaces'
 import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled'
 import playCircleOutlined from '@iconify/icons-ant-design/play-circle-outlined'
@@ -13,7 +13,9 @@ import { connect, Provider } from 'react-redux'
 import convertDate from '../../lib/convertDate'
 import formatDuration from '../../lib/formatDuration'
 import QueuePlaylistOptionsButtonContainer from '../containers/QueuePlaylistOptionsButtonContainer'
-
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { trigger } from 'swr'
 
 
 const CurrentSong = (props) => {
@@ -40,6 +42,7 @@ const CurrentSong = (props) => {
 
     const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
         const [playButton, setPlayButton] = useState(playCircleOutlined);
+        // console.log("props in CurrentSong, render track on table", props)
         return (
           <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
             <td style={{ width: "5%" }}>
@@ -79,6 +82,23 @@ const CurrentSong = (props) => {
                 </div>
               )}
             </td>
+            
+            <td style={{ width: "5%" }}>
+                <button style={{
+                            padding: "0px",
+                            width: "fit-content",
+                            backgroundColor: "transparent",
+                            border: "none"
+                        }}
+                        onClick={ () => toggleLike(track)}
+
+                >
+                    {props.LikedTracks.includes(track.track_id)
+                        ? <FavoriteIcon/>
+                        : <FavoriteBorderIcon/>
+                    }
+                </button>
+            </td>
             <td style={{ width: "10%" }}>
               {array[index]["audio_length"] ? (
                 <div style={{display: "flex", alignItems: "center"}}>
@@ -114,6 +134,15 @@ const CurrentSong = (props) => {
           </tr>
         );
       };
+
+    const toggleLike = async (track: Track) => {
+        console.log("toggling like for:", track.track_id)
+        let email = UserSessionStore.getState().email
+        await fetch("/api/user/collections/likedTracks/toggleLike", 
+            {method: "POST", 
+            body: JSON.stringify({email: email, trackID: track.track_id })})
+        trigger("/api/user/collections/likedTracks/get/"+ email)
+    }
 
     return (
       <div style={{ width: "100%"}}>
