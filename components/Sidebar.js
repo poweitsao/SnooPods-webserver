@@ -13,42 +13,25 @@ const Sidebar = (props) => {
     const [mounted, setMounted] = useState(false)
     const [showDelete, setShowDelete] = useState([])
     const [email, setEmail] = useState(props.user.email)
-    const {data} = useSWR("/api/user/collections/getCollections/"+ props.user.email)
-    // if (data){
-
-    //     CollectionStore.dispatch({
-    //         type: "STORE_COLLECTIONS",
-    //         collections: data
-    //     })
-
-    //     console.log("CollectionStore.getState()", CollectionStore.getState())
-        
-    // }
+    const {data: collections} = useSWR("/api/user/collections/getCollections/"+ props.user.email)
 
     useEffect(() => {
         setMounted(true)
-        // let a = 
-        // console.log(a)
-        // console.log("collections", data)
 
-        if (data !== undefined){
-        // console.log("collections", data)
-        if (data.length !== showDelete.length){
-            setShowDelete([...Array(data.length)].map((_, i) => false))
-            
+        if (collections !== undefined){
+            if (collections.length !== showDelete.length){
+                setShowDelete([...Array(collections.length)].map((_, i) => false))
             }
         }
-      }, [data]);
-    //   if (data !== undefined){
-    //     console.log("collections", data)}
-    if(!data){
+      }, [collections]);
+
+    if(!collections){
         return <div className="sidebar" style={{
                 backgroundColor: "#EAECEF",
                 width: "14%",
                 flexDirection: "column",
                 alignItems: "center",
             }}></div>
-        // return <div>loading...</div>
     } 
 
     const renderCollections = (collection, index) => {
@@ -132,9 +115,7 @@ const Sidebar = (props) => {
                     <div style={{padding: "8px", paddingRight: "3px"}}>Your Collections</div>
                     <AddButton handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
                 </div>
-                {/* <Nav.Link style={{ paddingLeft: "25px", maxWidth: "100%",flex: "1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} onClick={() => { Router.push("/") }}>Collection 1234567678</Nav.Link>
-                <Nav.Link style={{ paddingLeft: "25px", maxWidth: "100%",flex: "1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} onClick={() => { Router.push("/") }}>Collection2131312312</Nav.Link> */}
-                {data?.map(renderCollections)}
+                {collections?.map(renderCollections)}
             </Nav>
                 <style jsx>
                 {`
@@ -148,9 +129,5 @@ const Sidebar = (props) => {
     )
 
 }
-
-// Sidebar.getInitialProps = async () =>{
-    
-// }
 
 export default Sidebar

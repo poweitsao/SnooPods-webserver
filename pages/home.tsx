@@ -158,7 +158,7 @@ const home = ({ userSession }) => {
     const validateUserSession = async (session_id: string, email: string) => {
       let userSession: UserSession = await validateSession(session_id, email);
       if (userSession.validSession){
-        console.log("user from validateUserSession", userSession)
+        // console.log("user from validateUserSession", userSession)
         setUser(userSession)
         
         UserSessionStore.dispatch({
