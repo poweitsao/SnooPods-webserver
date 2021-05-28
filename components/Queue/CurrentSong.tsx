@@ -1,0 +1,144 @@
+
+import React, { useState } from 'react'
+import { Table } from 'react-bootstrap'
+import { syncDB, syncQueueWithAudioPlayer } from '../../lib/syncQueue'
+import { togglePlaying } from '../../redux/actions'
+import { pushNextTrack } from '../../redux/actions/queueActions'
+import { AudioPlayerStore, CollectionStore, QueueStore } from '../../redux/store'
+import { Track } from '../../ts/interfaces'
+import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled'
+import playCircleOutlined from '@iconify/icons-ant-design/play-circle-outlined'
+import Icon from "@iconify/react";
+import { connect, Provider } from 'react-redux'
+import convertDate from '../../lib/convertDate'
+import formatDuration from '../../lib/formatDuration'
+import QueuePlaylistOptionsButtonContainer from '../containers/QueuePlaylistOptionsButtonContainer'
+
+
+
+const CurrentSong = (props) => {
+
+    let { track }: { track: Track } = props
+
+    console.log("props in CurrentSong", props)
+
+    const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
+      // console.log("playing...")
+      let playing = AudioPlayerStore.getState().playing
+      AudioPlayerStore.dispatch(togglePlaying(!playing))
+    }
+
+    const removeCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
+      let playing = AudioPlayerStore.getState().playing
+      AudioPlayerStore.dispatch(togglePlaying(!playing))
+      QueueStore.dispatch(
+        pushNextTrack()
+      )
+      syncDB()
+      syncQueueWithAudioPlayer(false)
+    }
+
+    const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
+        const [playButton, setPlayButton] = useState(playCircleOutlined);
+        return (
+          <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
+            <td style={{ width: "5%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  paddingLeft: "12px",
+                }}
+              >
+                <button 
+                    onClick={() => options?.playTrack(track.track_id, index, track, options?.playlistID)}
+                    onMouseEnter={() => setPlayButton(playCircleFilled)}
+                    onMouseLeave={() => setPlayButton(playCircleOutlined)}
+                    style={{
+                      padding: "0px",
+                      width: "fit-content",
+                      backgroundColor: "transparent",
+                      border: "none"
+    
+                      }}>
+                  <Icon
+                    style={{ width: "25px", height: "25px" }}
+                    icon={playButton}
+                  />
+                </button>
+              </div>
+            </td>
+            <td style={{ width: "60%" }}>
+              {array[index]["track_name"] ? (
+                <div className="post-title">
+                  {array[index]["track_name"]}
+                </div>
+              ) : (
+                <div className="filename">
+                  {array[index]["filename"]}
+                </div>
+              )}
+            </td>
+            <td style={{ width: "10%" }}>
+              {array[index]["audio_length"] ? (
+                <div style={{display: "flex", alignItems: "center"}}>
+                  <div className="audio-length">
+                    {formatDuration(array[index]["audio_length"])}
+                  </div>
+                </div>
+              ) : (
+                <div className="audio-length-dummy">{"audioLength"}</div>
+              )}
+            </td>
+            <td style={{ width: "15%" }}>
+              {array[index]["date_posted"] ? (
+                <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
+                  {convertDate(array[index]["date_posted"])}
+                  <div style={{padding: "10px"}}>
+                  <Provider store={CollectionStore}>
+                    <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
+                  </Provider>
+                    </div>
+                </div>
+              ) : (
+                <div className="date-posted-dummy">{"datePosted"}</div>
+              )}
+            </td>
+    
+            <style>{`
+              .table td{
+                padding: 10px;
+                vertical-align: unset;
+              }
+            `}</style>
+          </tr>
+        );
+      };
+
+    return (
+      <div style={{ width: "100%"}}>
+        <Table style={{overflowY: "visible", overflowX: "visible"}}  hover >
+          <thead>
+            <tr>
+            </tr>
+          </thead>
+          <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
+            return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack, removeTrack:removeCurrentTrack })
+          })
+          }</tbody>
+        </Table>
+      </div>
+    );
+  };
+
+
+function mapStateToProps(state, ownProps) {
+    // console.log("mapStateToProps", state)
+    return state
+}
+
+const mapDispatchToProps = (dispatch) => ({
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentSong)

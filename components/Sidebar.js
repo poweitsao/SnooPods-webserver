@@ -16,13 +16,7 @@ const Sidebar = (props) => {
     const [email, setEmail] = useState(props.user.email)
     const {data: collections} = useSWR("/api/user/collections/getCollections/"+ props.user.email)
     const {data: likedTracks} = useSWR("/api/user/collections/getLikedTracks/"+ props.user.email)
-    if(likedTracks){
-        LikedTracksStore.dispatch({
-            type: "STORE_LIKED_TRACKS",
-            likedTracks
-        })
-        console.log("likedTracks", LikedTracksStore.getState())
-    }
+
 
     useEffect(() => {
         setMounted(true)
@@ -32,7 +26,16 @@ const Sidebar = (props) => {
                 setShowDelete([...Array(collections.length)].map((_, i) => false))
             }
         }
-      }, [collections]);
+        if(likedTracks){
+            LikedTracksStore.dispatch({
+                type: "STORE_LIKED_TRACKS",
+                likedTracks: likedTracks.tracks
+            })
+            console.log("likedTracks", LikedTracksStore.getState())
+        }
+
+
+      }, [collections, likedTracks]);
 
     if(!collections){
         return <div className="sidebar" style={{

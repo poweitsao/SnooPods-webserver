@@ -7,13 +7,15 @@ import isEmpty from "../../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../../lib/syncQueue";
 import { togglePlaying } from "../../redux/actions";
 import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue } from "../../redux/actions/queueActions";
-import { AudioPlayerStore, CollectionStore, QueueStore, UserSessionStore } from "../../redux/store";
+import { AudioPlayerStore, CollectionStore, LikedTracksStore, QueueStore, UserSessionStore } from "../../redux/store";
 import { Track, QueuePlaylist } from "../../ts/interfaces";
 import Icon from "@iconify/react";
 import QueuePlaylistOptionsButtonContainer from "../containers/QueuePlaylistOptionsButtonContainer";
 import { Table } from "react-bootstrap";
 import { Provider } from "react-redux";
 import useSWR from "swr";
+
+import CurrentSong from "./CurrentSong"
 
 
 const QueuePageBody = (props) => {
@@ -154,38 +156,38 @@ const QueuePageBody = (props) => {
         );
       };
     
-      const CurrentSong = ({ track }: { track: Track }) => {
-        const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
-          // console.log("playing...")
-          let playing = AudioPlayerStore.getState().playing
-          AudioPlayerStore.dispatch(togglePlaying(!playing))
-        }
+      // const CurrentSong = ({ track }: { track: Track }) => {
+      //   const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
+      //     // console.log("playing...")
+      //     let playing = AudioPlayerStore.getState().playing
+      //     AudioPlayerStore.dispatch(togglePlaying(!playing))
+      //   }
 
-        const removeCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
-          // console.log("playing...")
-          let playing = AudioPlayerStore.getState().playing
-          AudioPlayerStore.dispatch(togglePlaying(!playing))
-          QueueStore.dispatch(
-            pushNextTrack()
-          )
-          syncDB()
-          syncQueueWithAudioPlayer(false)
-        }
-        return (
-          <div style={{ width: "100%"}}>
-            <Table style={{overflowY: "visible", overflowX: "visible"}}  hover >
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
-                return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack, removeTrack:removeCurrentTrack })
-              })
-              }</tbody>
-            </Table>
-          </div>
-        );
-      };
+      //   const removeCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
+      //     // console.log("playing...")
+      //     let playing = AudioPlayerStore.getState().playing
+      //     AudioPlayerStore.dispatch(togglePlaying(!playing))
+      //     QueueStore.dispatch(
+      //       pushNextTrack()
+      //     )
+      //     syncDB()
+      //     syncQueueWithAudioPlayer(false)
+      //   }
+      //   return (
+      //     <div style={{ width: "100%"}}>
+      //       <Table style={{overflowY: "visible", overflowX: "visible"}}  hover >
+      //         <thead>
+      //           <tr>
+      //           </tr>
+      //         </thead>
+      //         <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
+      //           return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack, removeTrack:removeCurrentTrack })
+      //         })
+      //         }</tbody>
+      //       </Table>
+      //     </div>
+      //   );
+      // };
     
       const CurrentQueue = ({ queue }: { queue: Array<QueuePlaylist> }) => {
         return (
@@ -258,7 +260,9 @@ const QueuePageBody = (props) => {
               ) : (
                 <div style={{width: "90%"}}>
                   <div style={{ padding: "10px", paddingLeft: "25px"}}>Current Track:</div>
-                  <CurrentSong track={currentTrack}/>
+                  <Provider store={LikedTracksStore}>
+                    <CurrentSong track={currentTrack}/>
+                  </Provider>
                 </div>
               )}
               {currentPlaylist.tracks.length == 0 
