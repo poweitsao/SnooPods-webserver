@@ -17,6 +17,7 @@ import useSWR, { trigger } from "swr";
 import PlayButton from "../buttons/PlayButton";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import toggleLike from "../../lib/toggleLike"
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
     console.log("likedTracks in renderTrackOnTable (CurrentPlaylist)", options.likedTracks)
@@ -55,7 +56,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
                               backgroundColor: "transparent",
                               border: "none"
                           }}
-                          onClick={() => toggleLike(track)}
+                          onClick={() => toggleLike(track, options.likedTracksCollectionID)}
   
                   >
                       {options.likedTracks.includes(track.track_id)
@@ -100,14 +101,14 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
     );
   };
 
-  const toggleLike = async (track: Track) => {
-    console.log("toggling like for:", track.track_id)
-    let email = UserSessionStore.getState().email
-    await fetch("/api/user/collections/likedTracks/toggleLike", 
-        {method: "POST", 
-        body: JSON.stringify({email: email, trackID: track.track_id })})
-    trigger("/api/user/collections/likedTracks/get/"+ email)
-  }
+  // const toggleLike = async (track: Track) => {
+  //   console.log("toggling like for:", track.track_id)
+  //   let email = UserSessionStore.getState().email
+  //   await fetch("/api/user/collections/likedTracks/toggleLike", 
+  //       {method: "POST", 
+  //       body: JSON.stringify({email: email, trackID: track.track_id })})
+  //   trigger("/api/user/collections/likedTracks/get/"+ email)
+  // }
 
   const CurrentPlaylist = (props) => {
     console.log("props in CurrentPlaylist", props)
@@ -147,7 +148,12 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
           </thead>
           <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
                     return renderTrackOnTable(track, index, array, 
-                      {playTrack: playTrackFromCurrentPlaylist, removeTrack: removeFromCurrentPlaylist, playlistID: playlist.playlistID, likedTracks: props.LikedTracks}
+                      {playTrack: playTrackFromCurrentPlaylist, 
+                        removeTrack: removeFromCurrentPlaylist, 
+                        playlistID: playlist.playlistID, 
+                        likedTracks: props.LikedTracks,
+                        likedTracksCollectionID: props.likedTracksCollectionID
+                      }
                     )
                 })}
           </tbody>

@@ -17,6 +17,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { trigger } from 'swr'
 import PlayButton from "../buttons/PlayButton"
+import toggleLike from "../../lib/toggleLike"
 
 
 const CurrentSong = (props) => {
@@ -78,7 +79,7 @@ const CurrentSong = (props) => {
                             backgroundColor: "transparent",
                             border: "none"
                         }}
-                        onClick={ () => toggleLike(track)}
+                        onClick={ () => toggleLike(track, props.likedTracksCollectionID)}
 
                 >
                     {props.LikedTracks.includes(track.track_id)
@@ -123,14 +124,14 @@ const CurrentSong = (props) => {
         );
       };
 
-    const toggleLike = async (track: Track) => {
-        console.log("toggling like for:", track.track_id)
-        let email = UserSessionStore.getState().email
-        await fetch("/api/user/collections/likedTracks/toggleLike", 
-            {method: "POST", 
-            body: JSON.stringify({email: email, trackID: track.track_id })})
-        trigger("/api/user/collections/likedTracks/get/"+ email)
-    }
+    // const toggleLike = async (track: Track) => {
+    //     console.log("toggling like for:", track.track_id)
+    //     let email = UserSessionStore.getState().email
+    //     await fetch("/api/user/collections/likedTracks/toggleLike", 
+    //         {method: "POST", 
+    //         body: JSON.stringify({email: email, trackID: track.track_id })})
+    //     trigger("/api/user/collections/likedTracks/get/"+ email)
+    // }
 
     return (
       <div style={{ width: "100%"}}>
@@ -140,7 +141,10 @@ const CurrentSong = (props) => {
             </tr>
           </thead>
           <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
-            return renderTrackOnTable(track, index, array, {playTrack: playCurrentTrack, removeTrack:removeCurrentTrack })
+            return renderTrackOnTable(track, index, array, {
+              playTrack: playCurrentTrack, 
+              removeTrack:removeCurrentTrack 
+            })
           })
           }</tbody>
         </Table>

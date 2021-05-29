@@ -33,10 +33,13 @@ import PlayButton from "./buttons/PlayButton"
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
+import toggleLike from "../lib/toggleLike"
+
 const CollectionTableList = (props) => {
     let {playlist} = props
     console.log("props in CollectionTableList", props)
     let likedTracks = props.LikedTracks
+    let likedTracksCollectionID = props.likedTracksCollectionID
 
     const playPodcast = (trackKey: string, trackIndex: number,  tracks: Array<Track>, collectionName: string) => {
         console.log("params in playPodcast",trackKey, trackIndex, tracks, collectionName )
@@ -127,7 +130,7 @@ const CollectionTableList = (props) => {
                             backgroundColor: "transparent",
                             border: "none"
                         }}
-                        onClick={() => toggleLike(track)}
+                        onClick={() => toggleLike(track, options.likedTracksCollectionID)}
 
                 >
                     {options.likedTracks.includes(track.track_id)
@@ -168,14 +171,26 @@ const CollectionTableList = (props) => {
     );
     };
 
-    const toggleLike = async (track: Track) => {
-        // console.log("toggling like for:", track.track_id)
-        let email = UserSessionStore.getState().email
-        await fetch("/api/user/collections/likedTracks/toggleLike", 
-            {method: "POST", 
-            body: JSON.stringify({email: email, trackID: track.track_id })})
-        trigger("/api/user/collections/likedTracks/get/"+ email)
-      }
+    // const toggleLike = async (track: Track, likedTracksCollectionID: string) => {
+    //     // console.log("toggling like for:", track.track_id)
+    //     let email = UserSessionStore.getState().email
+    //     await fetch("/api/user/collections/likedTracks/toggleLike", 
+    //         {method: "POST", 
+    //         body: JSON.stringify({email: email, trackID: track.track_id })})
+    //     trigger("/api/user/collections/likedTracks/get/"+ email)
+    //     trigger("/api/user/collections/get/" + email + "/" + likedTracksCollectionID)
+
+    //   }
+    // const toggleLike = async (track: Track, likedTracksCollectionID: string) => {
+    //     // console.log("toggling like for:", track.track_id)
+    //     let email = UserSessionStore.getState().email
+    //     await fetch("/api/user/collections/likedTracks/toggleLike", 
+    //         {method: "POST", 
+    //         body: JSON.stringify({email: email, trackID: track.track_id })})
+    //     trigger("/api/user/collections/likedTracks/get/"+ email)
+    //     trigger("/api/user/collections/get/" + email + "/" + likedTracksCollectionID)
+    
+    // }
 
     // console.log("playlist in Tablelist", playlist)
     return (
@@ -194,7 +209,12 @@ const CollectionTableList = (props) => {
           </thead>
           <tbody>{playlist.tracks.map(
             (track, index, array) => {
-              return renderTrackOnTable(track, index, array, {collectionName: playlist.collectionName, collectionID: playlist.collectionID, likedTracks: likedTracks})
+              return renderTrackOnTable(track, index, array, 
+                {   collectionName: playlist.collectionName, 
+                    collectionID: playlist.collectionID, 
+                    likedTracks: likedTracks, 
+                    likedTracksCollectionID: likedTracksCollectionID
+                })
               })}</tbody>
         </Table>
       </div>

@@ -32,7 +32,8 @@ const Sidebar = (props) => {
         if(likedTracks){
             LikedTracksStore.dispatch({
                 type: "STORE_LIKED_TRACKS",
-                likedTracks: likedTracks.tracks
+                likedTracks: likedTracks.tracks,
+                collectionID: likedTracks.collectionID
             })
             console.log("likedTracks", LikedTracksStore.getState())
         }

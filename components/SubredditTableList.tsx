@@ -48,9 +48,12 @@ import PlayButton from "./buttons/PlayButton"
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
+import toggleLike from "../lib/toggleLike"
+
 
 const SubredditTableList = (props) => {
-  const {playlist, subID, LikedTracks} : {playlist: Collection, subID: string, LikedTracks: Array<string>} = props
+  const {playlist, subID, LikedTracks, likedTracksCollectionID} : 
+  {playlist: Collection, subID: string, LikedTracks: Array<string>, likedTracksCollectionID: string} = props
 
 
   const playPodcast = (trackKey: string, trackIndex: number) => {
@@ -163,7 +166,7 @@ const SubredditTableList = (props) => {
                             backgroundColor: "transparent",
                             border: "none"
                         }}
-                        onClick={() => toggleLike(track)}
+                        onClick={() => toggleLike(track, options.likedTracksCollectionID)}
 
                 >
                     {options.likedTracks.includes(track.track_id)
@@ -210,14 +213,14 @@ const SubredditTableList = (props) => {
       );
   };
 
-  const toggleLike = async (track: Track) => {
-    // console.log("toggling like for:", track.track_id)
-    let email = UserSessionStore.getState().email
-    await fetch("/api/user/collections/likedTracks/toggleLike", 
-        {method: "POST", 
-        body: JSON.stringify({email: email, trackID: track.track_id })})
-    trigger("/api/user/collections/likedTracks/get/"+ email)
-  }
+  // const toggleLike = async (track: Track) => {
+  //   // console.log("toggling like for:", track.track_id)
+  //   let email = UserSessionStore.getState().email
+  //   await fetch("/api/user/collections/likedTracks/toggleLike", 
+  //       {method: "POST", 
+  //       body: JSON.stringify({email: email, trackID: track.track_id })})
+  //   trigger("/api/user/collections/likedTracks/get/"+ email)
+  // }
     
     return (
       <div style={{ width: "100%" }}>
@@ -235,7 +238,7 @@ const SubredditTableList = (props) => {
           </thead>
           <tbody>{
             playlist["keys"].map((trackKey, index) => { 
-              return renderTrackOnTable(trackKey, index, {likedTracks: LikedTracks})})
+              return renderTrackOnTable(trackKey, index, {likedTracks: LikedTracks, likedTracksCollectionID: likedTracksCollectionID})})
           }
           </tbody>
         </Table>

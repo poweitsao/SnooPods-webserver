@@ -17,7 +17,7 @@ import useSWR, { trigger } from "swr";
 import PlayButton from "../buttons/PlayButton";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-
+import toggleLike from '../../lib/toggleLike'
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
   // console.log("likedTracks in renderTrackOnTable", options.likedTracks)
@@ -56,7 +56,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
                             backgroundColor: "transparent",
                             border: "none"
                         }}
-                        onClick={() => toggleLike(track)}
+                        onClick={() => toggleLike(track, options.likedTracksCollectionID)}
 
                 >
                     {options.likedTracks.includes(track.track_id)
@@ -101,14 +101,14 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
   );
 };
 
-const toggleLike = async (track: Track) => {
-  // console.log("toggling like for:", track.track_id)
-  let email = UserSessionStore.getState().email
-  await fetch("/api/user/collections/likedTracks/toggleLike", 
-      {method: "POST", 
-      body: JSON.stringify({email: email, trackID: track.track_id })})
-  trigger("/api/user/collections/likedTracks/get/"+ email)
-}
+// const toggleLike = async (track: Track) => {
+//   // console.log("toggling like for:", track.track_id)
+//   let email = UserSessionStore.getState().email
+//   await fetch("/api/user/collections/likedTracks/toggleLike", 
+//       {method: "POST", 
+//       body: JSON.stringify({email: email, trackID: track.track_id })})
+//   trigger("/api/user/collections/likedTracks/get/"+ email)
+// }
 
 const CurrentQueue = (props) => {
   let { queue }: { queue: Array<QueuePlaylist> } = props
@@ -116,7 +116,12 @@ const CurrentQueue = (props) => {
   return (
     <div style={{ width: "100%" }}>
       
-      {queue.map((playlist, index) => {return QueueChunk(playlist, index, {likedTracks: props.LikedTracks})})}
+      {queue.map((playlist, index) => {
+        return QueueChunk(playlist, index, {
+          likedTracks: props.LikedTracks, 
+          likedTracksCollectionID: props.likedTracksCollectionID})
+        })
+      }
     </div>
   );
 };
@@ -175,7 +180,8 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
                     { playTrack: playTrackFromCurrentQueueChunk,
                       removeTrack: removeFromCurrentQueueChunk, 
                       playlistID: playlist.playlistID,
-                      likedTracks: options.likedTracks
+                      likedTracks: options.likedTracks,
+                      likedTracksCollectionID: options.likedTracksCollectionID
                     })
         })}</tbody>
         </Table>
