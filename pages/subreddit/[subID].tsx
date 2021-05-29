@@ -10,7 +10,7 @@ import CustomNavbar from "../../components/CustomNavbar";
 import AudioPlayerBar from "../../components/AudioPlayerBar";
 import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
-import { AudioPlayerStore, CollectionStore } from "../../redux/store";
+import { AudioPlayerStore, CollectionStore, LikedTracksStore } from "../../redux/store";
 import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index";
 import Image from "react-bootstrap/Image";
 
@@ -44,6 +44,8 @@ import PlaylistOptionsButton from "../../components/buttons/PlaylistOptionsButto
 import convertDate from "../../lib/convertDate";
 
 import TrackOptionsButtonContainer from "../../components/containers/TrackOptionsButtonContainer"
+
+import SubredditTableList from "../../components/SubredditTableList"
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {
@@ -109,164 +111,164 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 
 
 
-  const playPodcast = (trackKey: string, trackIndex: number) => {
+//   const playPodcast = (trackKey: string, trackIndex: number) => {
 
-    var queuePlaylistTracks = []
-    for(var i = trackIndex + 1; i <playlist.keys.length; i++ ){
-      queuePlaylistTracks.push(playlist.tracks[playlist.keys[i]])
-    }
+//     var queuePlaylistTracks = []
+//     for(var i = trackIndex + 1; i <playlist.keys.length; i++ ){
+//       queuePlaylistTracks.push(playlist.tracks[playlist.keys[i]])
+//     }
 
-    // console.log("queuePlaylistTracks", queuePlaylistTracks)
-    var currStore = QueueStore.getState()
-    // console.log("store before dispatch", currStore)
+//     // console.log("queuePlaylistTracks", queuePlaylistTracks)
+//     var currStore = QueueStore.getState()
+//     // console.log("store before dispatch", currStore)
 
-    if (queuePlaylistTracks.length > 0){
-      var playlistName = "r/" + subID
+//     if (queuePlaylistTracks.length > 0){
+//       var playlistName = "r/" + subID
 
-      var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
-      // console.log("queuePlaylist", queuePlaylist)
-      QueueStore.dispatch(
-        replaceCurrentPlaylist(queuePlaylist)
-      )
+//       var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
+//       // console.log("queuePlaylist", queuePlaylist)
+//       QueueStore.dispatch(
+//         replaceCurrentPlaylist(queuePlaylist)
+//       )
       
     
     
-    }
-    QueueStore.dispatch(
-      replaceCurrentTrack(playlist.tracks[trackKey])
-    )
-    currStore = QueueStore.getState()
-    let currTrack = currStore.QueueInfo.currentTrack
-    // syncDB(cookies.email)
-    AudioPlayerStore.dispatch(
-      storeAudioPlayerInfo({
-        playing: true,
-        subreddit: "loremipsum",
-        trackName: currTrack.track_name,
-        filename: currTrack.filename,
-        audio: new Audio(currTrack.cloud_storage_url),
-        url: currTrack.cloud_storage_url,
-        email: UserSessionStore.getState().email}
-      )
-    )
+//     }
+//     QueueStore.dispatch(
+//       replaceCurrentTrack(playlist.tracks[trackKey])
+//     )
+//     currStore = QueueStore.getState()
+//     let currTrack = currStore.QueueInfo.currentTrack
+//     // syncDB(cookies.email)
+//     AudioPlayerStore.dispatch(
+//       storeAudioPlayerInfo({
+//         playing: true,
+//         subreddit: "loremipsum",
+//         trackName: currTrack.track_name,
+//         filename: currTrack.filename,
+//         audio: new Audio(currTrack.cloud_storage_url),
+//         url: currTrack.cloud_storage_url,
+//         email: UserSessionStore.getState().email}
+//       )
+//     )
 
-  };
+//   };
 
-  const createQueuePlaylist = (tracks: Array<Track>, playlistName: string) => {
-    var playlistID = generateID()
-    return {
-      playlistID: playlistID,
-      playlistName: playlistName,
-      tracks: tracks
-    }
+//   const createQueuePlaylist = (tracks: Array<Track>, playlistName: string) => {
+//     var playlistID = generateID()
+//     return {
+//       playlistID: playlistID,
+//       playlistName: playlistName,
+//       tracks: tracks
+//     }
 
-  }
+//   }
 
-  const generateID = () => {
-    return '_' + Math.random().toString(36).substr(2, 9);
-};
+//   const generateID = () => {
+//     return '_' + Math.random().toString(36).substr(2, 9);
+// };
 
 
 
-  const renderTrackOnTable = (trackKey: string, index: number) => {
-    const [playButton, setPlayButton] = useState(playCircleOutlined);
-    // console.log(index)
-    return (
-      <tr key={trackKey}>
-        <td style={{ width: "5%" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              paddingLeft: "12px",
-            }}
-          >
-            <button 
-                onClick={() => playPodcast(trackKey, index)}
-                onMouseEnter={() => setPlayButton(playCircleFilled)}
-                onMouseLeave={() => setPlayButton(playCircleOutlined)}
-                style={{
-                  padding: "0px",
-                  width: "fit-content",
-                  backgroundColor: "transparent",
-                  border: "none"
+//   const renderTrackOnTable = (trackKey: string, index: number) => {
+//     const [playButton, setPlayButton] = useState(playCircleOutlined);
+//     // console.log(index)
+//     return (
+//       <tr key={trackKey}>
+//         <td style={{ width: "5%" }}>
+//           <div
+//             style={{
+//               display: "flex",
+//               justifyContent: "center",
+//               paddingLeft: "12px",
+//             }}
+//           >
+//             <button 
+//                 onClick={() => playPodcast(trackKey, index)}
+//                 onMouseEnter={() => setPlayButton(playCircleFilled)}
+//                 onMouseLeave={() => setPlayButton(playCircleOutlined)}
+//                 style={{
+//                   padding: "0px",
+//                   width: "fit-content",
+//                   backgroundColor: "transparent",
+//                   border: "none"
 
-                  }}>
-              <Icon
-                style={{ width: "25px", height: "25px" }}
-                icon={playButton}
-              />
-            </button>
-          </div>
-        </td>
-        <td style={{ width: "60%" }}>
-          {playlist["tracks"][trackKey]["track_name"] ? (
-            <div className="post-title">
-              {playlist["tracks"][trackKey]["track_name"]}
-            </div>
-          ) : (
-            <div className="filename">
-              {playlist["tracks"][trackKey]["filename"]}
-            </div>
-          )}
-        </td>
-        <td style={{ width: "10%" }}>
-          {playlist["tracks"][trackKey]["audio_length"] ? (
-            <div style={{display: "flex", alignItems: "center"}}>
-              <div className="audio-length">
-                {formatDuration(playlist["tracks"][trackKey]["audio_length"])}
-              </div>
-            </div>
-          ) : (
-            <div className="audio-length-dummy">{"audioLength"}</div>
-          )}
-        </td>
-        <td style={{ width: "15%" }}>
-          {playlist["tracks"][trackKey]["date_posted"] ? (
-            <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
-              {convertDate(playlist["tracks"][trackKey]["date_posted"])}
-              <div style={{padding: "10px"}}>
-                <Provider store={CollectionStore}>
-                  <TrackOptionsButtonContainer trackInfo={playlist.tracks[trackKey]}/>
-                </Provider>
+//                   }}>
+//               <Icon
+//                 style={{ width: "25px", height: "25px" }}
+//                 icon={playButton}
+//               />
+//             </button>
+//           </div>
+//         </td>
+//         <td style={{ width: "60%" }}>
+//           {playlist["tracks"][trackKey]["track_name"] ? (
+//             <div className="post-title">
+//               {playlist["tracks"][trackKey]["track_name"]}
+//             </div>
+//           ) : (
+//             <div className="filename">
+//               {playlist["tracks"][trackKey]["filename"]}
+//             </div>
+//           )}
+//         </td>
+//         <td style={{ width: "10%" }}>
+//           {playlist["tracks"][trackKey]["audio_length"] ? (
+//             <div style={{display: "flex", alignItems: "center"}}>
+//               <div className="audio-length">
+//                 {formatDuration(playlist["tracks"][trackKey]["audio_length"])}
+//               </div>
+//             </div>
+//           ) : (
+//             <div className="audio-length-dummy">{"audioLength"}</div>
+//           )}
+//         </td>
+//         <td style={{ width: "15%" }}>
+//           {playlist["tracks"][trackKey]["date_posted"] ? (
+//             <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
+//               {convertDate(playlist["tracks"][trackKey]["date_posted"])}
+//               <div style={{padding: "10px"}}>
+//                 <Provider store={CollectionStore}>
+//                   <TrackOptionsButtonContainer trackInfo={playlist.tracks[trackKey]}/>
+//                 </Provider>
 
-                {/* <TrackOptionsButton /> */}
-                </div>
-            </div>
-          ) : (
-            <div className="date-posted-dummy">{"datePosted"}</div>
-          )}
-        </td>
+//                 {/* <TrackOptionsButton /> */}
+//                 </div>
+//             </div>
+//           ) : (
+//             <div className="date-posted-dummy">{"datePosted"}</div>
+//           )}
+//         </td>
 
-        <style>{`
-          .table td{
-            padding: 10px;
-            vertical-align: unset;
-          }
-        `}</style>
-      </tr>
-    );
-  };
+//         <style>{`
+//           .table td{
+//             padding: 10px;
+//             vertical-align: unset;
+//           }
+//         `}</style>
+//       </tr>
+//     );
+//   };
 
-  const Tablelist = ({ playlist }: { playlist: Collection }) => {
-    return (
-      <div style={{ width: "100%" }}>
-        {/* <ListGroup variant="flush"></ListGroup> */}
-        <Table responsive hover>
-          {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
-          <thead>
-            <tr>
-              <td></td>
-              <td>Title</td>
-              <td>Duration</td>
-              <td>Date posted</td>
-            </tr>
-          </thead>
-          <tbody>{playlist["keys"].map(renderTrackOnTable)}</tbody>
-        </Table>
-      </div>
-    );
-  };
+//   const Tablelist = ({ playlist }: { playlist: Collection }) => {
+//     return (
+//       <div style={{ width: "100%" }}>
+//         {/* <ListGroup variant="flush"></ListGroup> */}
+//         <Table responsive hover>
+//           {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+//           <thead>
+//             <tr>
+//               <td></td>
+//               <td>Title</td>
+//               <td>Duration</td>
+//               <td>Date posted</td>
+//             </tr>
+//           </thead>
+//           <tbody>{playlist["keys"].map(renderTrackOnTable)}</tbody>
+//         </Table>
+//       </div>
+//     );
+//   };
 
   const SubredditInfo = (props) => {
     const [mounted, setMounted] = useState(false)
@@ -337,7 +339,11 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
             {playlist == undefined ? (
               <div></div>
             ) : (
-              <Tablelist playlist={playlist} />
+              <Provider store={LikedTracksStore}>
+                <SubredditTableList playlist={playlist}/>
+              </Provider>
+              // <Tablelist playlist={playlist} />
+
             )}
           </div>
         </div>
