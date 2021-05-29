@@ -20,7 +20,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
-  console.log("likedTracks in renderTrackOnTable", options.likedTracks)
+  // console.log("likedTracks in renderTrackOnTable", options.likedTracks)
   return (
     <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
       <td style={{ width: "5%" }}>
@@ -102,7 +102,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 };
 
 const toggleLike = async (track: Track) => {
-  console.log("toggling like for:", track.track_id)
+  // console.log("toggling like for:", track.track_id)
   let email = UserSessionStore.getState().email
   await fetch("/api/user/collections/likedTracks/toggleLike", 
       {method: "POST", 
@@ -112,7 +112,7 @@ const toggleLike = async (track: Track) => {
 
 const CurrentQueue = (props) => {
   let { queue }: { queue: Array<QueuePlaylist> } = props
-  console.log("props in CurrentQueue", props)
+  // console.log("props in CurrentQueue", props)
   return (
     <div style={{ width: "100%" }}>
       

@@ -17,6 +17,7 @@ import useSWR from "swr";
 
 import CurrentSong from "./CurrentSong"
 import CurrentQueue from "./CurrentQueue"
+import CurrentPlaylist from "./CurrentPlaylist"
 
 
 const QueuePageBody = (props) => {
@@ -40,127 +41,127 @@ const QueuePageBody = (props) => {
     }
   }, [collections]);
 
-      const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
-        const [playButton, setPlayButton] = useState(playCircleOutlined);
-        return (
-          <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
-            <td style={{ width: "5%" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  paddingLeft: "12px",
-                }}
-              >
-                <button 
-                    onClick={() => options?.playTrack(track.track_id, index, track, options?.playlistID)}
-                    onMouseEnter={() => setPlayButton(playCircleFilled)}
-                    onMouseLeave={() => setPlayButton(playCircleOutlined)}
-                    style={{
-                      padding: "0px",
-                      width: "fit-content",
-                      backgroundColor: "transparent",
-                      border: "none"
+      // const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
+      //   const [playButton, setPlayButton] = useState(playCircleOutlined);
+      //   return (
+      //     <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
+      //       <td style={{ width: "5%" }}>
+      //         <div
+      //           style={{
+      //             display: "flex",
+      //             justifyContent: "center",
+      //             paddingLeft: "12px",
+      //           }}
+      //         >
+      //           <button 
+      //               onClick={() => options?.playTrack(track.track_id, index, track, options?.playlistID)}
+      //               onMouseEnter={() => setPlayButton(playCircleFilled)}
+      //               onMouseLeave={() => setPlayButton(playCircleOutlined)}
+      //               style={{
+      //                 padding: "0px",
+      //                 width: "fit-content",
+      //                 backgroundColor: "transparent",
+      //                 border: "none"
     
-                      }}>
-                  <Icon
-                    style={{ width: "25px", height: "25px" }}
-                    icon={playButton}
-                  />
-                </button>
-              </div>
-            </td>
-            <td style={{ width: "60%" }}>
-              {array[index]["track_name"] ? (
-                <div className="post-title">
-                  {array[index]["track_name"]}
-                </div>
-              ) : (
-                <div className="filename">
-                  {array[index]["filename"]}
-                </div>
-              )}
-            </td>
-            <td style={{ width: "10%" }}>
-              {array[index]["audio_length"] ? (
-                <div style={{display: "flex", alignItems: "center"}}>
-                  <div className="audio-length">
-                    {formatDuration(array[index]["audio_length"])}
-                  </div>
-                </div>
-              ) : (
-                <div className="audio-length-dummy">{"audioLength"}</div>
-              )}
-            </td>
-            <td style={{ width: "15%" }}>
-              {array[index]["date_posted"] ? (
-                <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
-                  {convertDate(array[index]["date_posted"])}
-                  <div style={{padding: "10px"}}>
-                  <Provider store={CollectionStore}>
-                    <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
-                  </Provider>
-                    </div>
-                </div>
-              ) : (
-                <div className="date-posted-dummy">{"datePosted"}</div>
-              )}
-            </td>
+      //                 }}>
+      //             <Icon
+      //               style={{ width: "25px", height: "25px" }}
+      //               icon={playButton}
+      //             />
+      //           </button>
+      //         </div>
+      //       </td>
+      //       <td style={{ width: "60%" }}>
+      //         {array[index]["track_name"] ? (
+      //           <div className="post-title">
+      //             {array[index]["track_name"]}
+      //           </div>
+      //         ) : (
+      //           <div className="filename">
+      //             {array[index]["filename"]}
+      //           </div>
+      //         )}
+      //       </td>
+      //       <td style={{ width: "10%" }}>
+      //         {array[index]["audio_length"] ? (
+      //           <div style={{display: "flex", alignItems: "center"}}>
+      //             <div className="audio-length">
+      //               {formatDuration(array[index]["audio_length"])}
+      //             </div>
+      //           </div>
+      //         ) : (
+      //           <div className="audio-length-dummy">{"audioLength"}</div>
+      //         )}
+      //       </td>
+      //       <td style={{ width: "15%" }}>
+      //         {array[index]["date_posted"] ? (
+      //           <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
+      //             {convertDate(array[index]["date_posted"])}
+      //             <div style={{padding: "10px"}}>
+      //             <Provider store={CollectionStore}>
+      //               <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
+      //             </Provider>
+      //               </div>
+      //           </div>
+      //         ) : (
+      //           <div className="date-posted-dummy">{"datePosted"}</div>
+      //         )}
+      //       </td>
     
-            <style>{`
-              .table td{
-                padding: 10px;
-                vertical-align: unset;
-              }
-            `}</style>
-          </tr>
-        );
-      };
+      //       <style>{`
+      //         .table td{
+      //           padding: 10px;
+      //           vertical-align: unset;
+      //         }
+      //       `}</style>
+      //     </tr>
+      //   );
+      // };
     
-      const CurrentPlaylist = ({ playlist }: { playlist: QueuePlaylist }) => {
-        const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track, playlistID?: string) => {
+      // const CurrentPlaylist = ({ playlist }: { playlist: QueuePlaylist }) => {
+      //   const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track, playlistID?: string) => {
   
-          let playing = AudioPlayerStore.getState().playing
-          AudioPlayerStore.dispatch(togglePlaying(!playing))
+      //     let playing = AudioPlayerStore.getState().playing
+      //     AudioPlayerStore.dispatch(togglePlaying(!playing))
   
-          QueueStore.dispatch(
-            replaceCurrentTrack(track)
-          )
-          QueueStore.dispatch(
-            removeTrackFromCurrentPlaylist(trackID, index)
-          )
-          syncQueueWithAudioPlayer(true)
+      //     QueueStore.dispatch(
+      //       replaceCurrentTrack(track)
+      //     )
+      //     QueueStore.dispatch(
+      //       removeTrackFromCurrentPlaylist(trackID, index)
+      //     )
+      //     syncQueueWithAudioPlayer(true)
   
-        }
-        const removeFromCurrentPlaylist = (trackID: string, index: number, playlistID: string) =>{
+      //   }
+      //   const removeFromCurrentPlaylist = (trackID: string, index: number, playlistID: string) =>{
 
-          QueueStore.dispatch(
-              removeTrackFromCurrentPlaylist(trackID, index)
-          )
+      //     QueueStore.dispatch(
+      //         removeTrackFromCurrentPlaylist(trackID, index)
+      //     )
           
-          syncDB()
-          syncQueueWithAudioPlayer(false)
-      }
+      //     syncDB()
+      //     syncQueueWithAudioPlayer(false)
+      // }
 
-        return (
-          <div style={{ width: "100%" }}>
-            {/* <ListGroup variant="flush"></ListGroup> */}
-            <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
-              {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
-                        return renderTrackOnTable(track, index, array, 
-                          {playTrack: playTrackFromCurrentPlaylist, removeTrack: removeFromCurrentPlaylist, playlistID: playlist.playlistID}
-                        )
-                    })}
-              </tbody>
-            </Table>
-          </div>
-        );
-      };
+      //   return (
+      //     <div style={{ width: "100%" }}>
+      //       {/* <ListGroup variant="flush"></ListGroup> */}
+      //       <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
+      //         {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+      //         <thead>
+      //           <tr>
+      //           </tr>
+      //         </thead>
+      //         <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+      //                   return renderTrackOnTable(track, index, array, 
+      //                     {playTrack: playTrackFromCurrentPlaylist, removeTrack: removeFromCurrentPlaylist, playlistID: playlist.playlistID}
+      //                   )
+      //               })}
+      //         </tbody>
+      //       </Table>
+      //     </div>
+      //   );
+      // };
     
       // const CurrentSong = ({ track }: { track: Track }) => {
       //   const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
@@ -283,7 +284,9 @@ const QueuePageBody = (props) => {
                           syncQueueWithAudioPlayer(true);
                         }}>clear</button>
                       </div>
-                      {/* <CurrentPlaylist playlist={currentPlaylist}/> */}
+                      <Provider store={LikedTracksStore}>
+                        <CurrentPlaylist playlist={currentPlaylist}/>
+                      </Provider>
                     </div>
                   )
               }
