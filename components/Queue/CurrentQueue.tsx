@@ -122,6 +122,9 @@ const CurrentQueue = (props) => {
 };
 
 const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
+  // console.log("--------> QueueChunk", playlist)
+  // console.log("--------> QueueChunk trackID", playlist.tracks)
+
 
   const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
 
@@ -149,7 +152,7 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
   }
 
   return (
-    <div key={playlist.playlistID + "_" + playlist.tracks[index].track_id + "_" + (index).toString}>
+    <div key={playlist.playlistID + "_" + (index).toString}>
       {
         <div style={{padding: "10px", paddingLeft: "50px"}}>
           {playlist.playlistName}

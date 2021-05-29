@@ -283,7 +283,7 @@ const QueuePageBody = (props) => {
                           syncQueueWithAudioPlayer(true);
                         }}>clear</button>
                       </div>
-                      <CurrentPlaylist playlist={currentPlaylist}/>
+                      {/* <CurrentPlaylist playlist={currentPlaylist}/> */}
                     </div>
                   )
               }
