@@ -9,6 +9,7 @@ export async function syncDB () {
   if (email !== ""){
     console.log("sync queue", email)
     const currStore = QueueStore.getState()
+    console.log("syncQueue currStore.QueueInfo", currStore.QueueInfo)
     var res = await fetch("/api/queue/pushQueueToDB",
       { method: "POST", body: JSON.stringify({ email: email, queueInfo: currStore.QueueInfo }) })
   } else{
@@ -116,8 +117,23 @@ export function syncQueueWithAudioPlayer(playing: boolean) {
   }
 }
 
+export function forceSyncQueueWithAudioPlayer(playing: boolean) {
+  let queueCurrStore = QueueStore.getState()
+  var currTrack = queueCurrStore.QueueInfo.currentTrack
+  AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+    playing: playing,
+    subreddit: "r/LoremIpsum",
+    filename: currTrack.filename,
+    trackName: currTrack.track_name,
+    audio: new Audio(currTrack.cloud_storage_url),
+    url: currTrack.cloud_storage_url,
+  }))
+
+}
+
 module.exports = {
   syncDB,
   getQueue,
-  syncQueueWithAudioPlayer
+  syncQueueWithAudioPlayer,
+  forceSyncQueueWithAudioPlayer
 }

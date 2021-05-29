@@ -16,7 +16,7 @@ import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 import { QueueStore, UserSessionStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import isEmpty from '../lib/isEmptyObject';
-import {syncDB, syncQueueWithAudioPlayer} from "../lib/syncQueue";
+import {syncDB, syncQueueWithAudioPlayer, forceSyncQueueWithAudioPlayer} from "../lib/syncQueue";
 
 
 
@@ -179,7 +179,7 @@ const nextTrackFromQueue = () => {
     //     AudioPlayerStore.dispatch(togglePlaying(false))
     // }
     AudioPlayerStore.dispatch(togglePlaying(false))
-    syncQueueWithAudioPlayer(true)
+    forceSyncQueueWithAudioPlayer(true)
 }
 
 function AudioPlayerInfo(props) {
@@ -271,7 +271,7 @@ function AudioPlayerInfo(props) {
 
                         <Next handleClick={nextTrackFromQueue} />
 
-                        {/* <button onClick={testQueueStore}>test</button> */}
+                        <button onClick={testQueueStore}>test</button>
 
 
                     </div>

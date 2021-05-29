@@ -20,8 +20,7 @@ const CurrentQueue = (props) => {
   console.log("props in CurrentQueue", props)
     // console.log("key", JSON.stringify(queue))
     return (
-      <div key={JSON.stringify(queue)} style={{ width: "100%" }}>
-        
+      <div style={{ width: "100%" }}>
         {queue.map(QueueChunk)}
       </div>
     );

@@ -276,7 +276,8 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/"+ User
 
   const SubredditInfo = (props) => {
     const [mounted, setMounted] = useState(false)
-
+    var playlist = props.playlist
+    playlist.collectionName = "r/" + subID
 
     useEffect(() => {
         setMounted(true)

@@ -17,7 +17,15 @@ export default function PlaylistOptionsButton(props) {
 
     const addSubPlaylistToQueue = () =>{
         console.log("to be added to queue:", playlist)
-        var tracks : Array<Track> = playlist.tracks
+        var tracks : Array<Track> = []
+
+        for (const trackID in playlist.tracks) {
+            console.log(`${playlist.tracks[trackID]}`);
+            tracks.push(playlist.tracks[trackID])
+          }
+        // for(var i = 0; i < playlist.tracks.length; i++){
+            
+        // }
         
         var queuePlaylist = createQueuePlaylist(tracks, playlist.collectionName)
         console.log("queuePlaylist", queuePlaylist)
