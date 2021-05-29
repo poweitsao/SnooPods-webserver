@@ -12,11 +12,11 @@ import { Track, QueuePlaylist } from "../../ts/interfaces";
 import Icon from "@iconify/react";
 import QueuePlaylistOptionsButtonContainer from "../containers/QueuePlaylistOptionsButtonContainer";
 import { Table } from "react-bootstrap";
-import { Provider } from "react-redux";
+import { connect, Provider } from "react-redux";
 import useSWR from "swr";
 
 import CurrentSong from "./CurrentSong"
-// import CurrentQueue from "./CurrentQueue"
+import CurrentQueue from "./CurrentQueue"
 
 
 const QueuePageBody = (props) => {
@@ -195,69 +195,69 @@ const QueuePageBody = (props) => {
       //   );
       // };
     
-      const CurrentQueue = ({ queue }: { queue: Array<QueuePlaylist> }) => {
-        return (
-          <div style={{ width: "100%" }}>
+      // const CurrentQueue = ({ queue }: { queue: Array<QueuePlaylist> }) => {
+      //   return (
+      //     <div style={{ width: "100%" }}>
             
-            {queue.map(QueueChunk)}
-          </div>
-        );
-      };
+      //       {queue.map(QueueChunk)}
+      //     </div>
+      //   );
+      // };
     
-      const QueueChunk = (playlist: QueuePlaylist, index: number) => {
+      // const QueueChunk = (playlist: QueuePlaylist, index: number) => {
   
-        const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
+      //   const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
 
-          let playing = AudioPlayerStore.getState().playing
-          AudioPlayerStore.dispatch(togglePlaying(!playing))
+      //     let playing = AudioPlayerStore.getState().playing
+      //     AudioPlayerStore.dispatch(togglePlaying(!playing))
 
-          QueueStore.dispatch(
-            replaceCurrentTrack(track)
-          )
-          QueueStore.dispatch(
-            removeTrackFromQueue(playlistID, trackID, index)
-          )
-          syncQueueWithAudioPlayer(true)
+      //     QueueStore.dispatch(
+      //       replaceCurrentTrack(track)
+      //     )
+      //     QueueStore.dispatch(
+      //       removeTrackFromQueue(playlistID, trackID, index)
+      //     )
+      //     syncQueueWithAudioPlayer(true)
 
-        }
+      //   }
 
-        const removeFromCurrentQueueChunk = (trackID: string, index: number, playlistID: string) =>{
+      //   const removeFromCurrentQueueChunk = (trackID: string, index: number, playlistID: string) =>{
 
-          QueueStore.dispatch(
-            removeTrackFromQueue(playlistID, trackID, index)
-          )
+      //     QueueStore.dispatch(
+      //       removeTrackFromQueue(playlistID, trackID, index)
+      //     )
           
-          syncDB()
-          syncQueueWithAudioPlayer(false)
-        }
+      //     syncDB()
+      //     syncQueueWithAudioPlayer(false)
+      //   }
   
-        return (
-          <div key={playlist.playlistID + "_" + playlist.tracks[index].track_id + "_" + (index).toString}>
-            {
-              <div style={{padding: "10px", paddingLeft: "50px"}}>
-                {playlist.playlistName}
-                <button style={{marginLeft: "10px"}} onClick={() => {
-                  QueueStore.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
-                  syncDB(); 
-                  syncQueueWithAudioPlayer(true);
-                }}>clear</button>
-              </div>
-            }
+      //   return (
+      //     <div key={playlist.playlistID + "_" + playlist.tracks[index].track_id + "_" + (index).toString}>
+      //       {
+      //         <div style={{padding: "10px", paddingLeft: "50px"}}>
+      //           {playlist.playlistName}
+      //           <button style={{marginLeft: "10px"}} onClick={() => {
+      //             QueueStore.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
+      //             syncDB(); 
+      //             syncQueueWithAudioPlayer(true);
+      //           }}>clear</button>
+      //         </div>
+      //       }
             
-            <div style={{ width: "95%", marginLeft: "auto" }}>
-              <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
-                <thead>
-                  <tr>
-                  </tr>
-                </thead>
-                <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
-                        return renderTrackOnTable(track, index, array, {playTrack: playTrackFromCurrentQueueChunk, removeTrack: removeFromCurrentQueueChunk, playlistID: playlist.playlistID})
-              })}</tbody>
-              </Table>
-            </div>
-          </div>
-        );
-      }
+      //       <div style={{ width: "95%", marginLeft: "auto" }}>
+      //         <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
+      //           <thead>
+      //             <tr>
+      //             </tr>
+      //           </thead>
+      //           <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+      //                   return renderTrackOnTable(track, index, array, {playTrack: playTrackFromCurrentQueueChunk, removeTrack: removeFromCurrentQueueChunk, playlistID: playlist.playlistID})
+      //         })}</tbody>
+      //         </Table>
+      //       </div>
+      //     </div>
+      //   );
+      // }
 
     return (
         <div className="page-body">
@@ -292,9 +292,9 @@ const QueuePageBody = (props) => {
                 ? <div></div>
                 :<div style={{width: "90%"}}>
                   <div style={{padding: "10px", paddingLeft: "25px"}}>Queue:</div>
-                  {/* <Provider store={LikedTracksStore}> */}
+                  <Provider store={LikedTracksStore}>
                     <CurrentQueue queue={queue}/>
-                  {/* </Provider> */}
+                  </Provider>
                 </div>
               }
               <style>
@@ -314,3 +314,14 @@ const QueuePageBody = (props) => {
 }
 
 export default QueuePageBody
+
+// function mapStateToProps(state, ownProps) {
+//   // console.log("mapStateToProps", state)
+//   return state
+// }
+
+// const mapDispatchToProps = (dispatch) => ({
+
+// })
+
+// export default connect(mapStateToProps, mapDispatchToProps)(QueuePageBody)

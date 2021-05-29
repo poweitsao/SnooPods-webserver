@@ -18,7 +18,7 @@ export default function CollectionsTrackOptionsButton(props) {
 
 
     const {trackInfo, index, collectionID}:{trackInfo: Track, index: number, collectionID: string} = props
-    console.log("CollectionsTrackOptionsButton props", props)
+    // console.log("CollectionsTrackOptionsButton props", props)
 
     const addTrackToQueue = () =>{
         // console.log(trackInfo)

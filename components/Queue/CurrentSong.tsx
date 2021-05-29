@@ -16,6 +16,7 @@ import QueuePlaylistOptionsButtonContainer from '../containers/QueuePlaylistOpti
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { trigger } from 'swr'
+import PlayButton from "../buttons/PlayButton"
 
 
 const CurrentSong = (props) => {
@@ -40,7 +41,7 @@ const CurrentSong = (props) => {
     }
 
     const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
-        const [playButton, setPlayButton] = useState(playCircleOutlined);
+        // const [playButton, setPlayButton] = useState(playCircleOutlined);
         // console.log("props in CurrentSong, render track on table", props)
         return (
           <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
@@ -52,22 +53,11 @@ const CurrentSong = (props) => {
                   paddingLeft: "12px",
                 }}
               >
-                <button 
-                    onClick={() => options?.playTrack(track.track_id, index, track, options?.playlistID)}
-                    onMouseEnter={() => setPlayButton(playCircleFilled)}
-                    onMouseLeave={() => setPlayButton(playCircleOutlined)}
-                    style={{
-                      padding: "0px",
-                      width: "fit-content",
-                      backgroundColor: "transparent",
-                      border: "none"
-    
-                      }}>
-                  <Icon
-                    style={{ width: "25px", height: "25px" }}
-                    icon={playButton}
-                  />
-                </button>
+                <PlayButton 
+                  handleClick={() => options?.playTrack(track.track_id, index, track, options?.playlistID)}
+                  width="24px"        
+                  height="24px"  
+                />
               </div>
             </td>
             <td style={{ width: "60%" }}>
@@ -81,7 +71,6 @@ const CurrentSong = (props) => {
                 </div>
               )}
             </td>
-            
             <td style={{ width: "5%" }}>
                 <button style={{
                             padding: "0px",
