@@ -133,7 +133,7 @@ const Sidebar = (props) => {
             }}>
                 <Nav.Link style={{  }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
                 <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Search</Nav.Link>
-                <Nav.Link style={{  }} onClick={() => { Router.push("/collection/"+likedTracks.collectionID) }}>Liked Tracks</Nav.Link>
+                <Nav.Link style={{  }} onClick={() => { Router.push("/likedTracks/"+likedTracks.collectionID) }}>Liked Tracks</Nav.Link>
 
                 <div className="your-collections-title-container">
                     <div style={{padding: "8px", paddingRight: "3px"}}>Your Collections</div>
