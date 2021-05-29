@@ -7,7 +7,7 @@ import useSWR, {trigger} from 'swr';
 import AddButton from "./buttons/AddButton"
 import DeleteButton from "./buttons/DeleteButton"
 import Router from "next/router"
-import { LikedTracksStore } from '../redux/store';
+import { LikedTracksStore, CollectionStore } from '../redux/store';
 import {storeLikedTracks} from "../redux/actions/likedTracksActions"
 
 const Sidebar = (props) => {
@@ -34,7 +34,13 @@ const Sidebar = (props) => {
             })
             console.log("likedTracks", LikedTracksStore.getState())
         }
-
+        if(collections){
+            console.log("collections from useSWR", collections)
+            CollectionStore.dispatch({
+              type:"STORE_COLLECTIONS",
+              collections: collections
+            })
+          }
 
       }, [collections, likedTracks]);
 

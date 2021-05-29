@@ -17,7 +17,7 @@ export default function TrackOptionsButton(props) {
 
 
     const {trackInfo}:{trackInfo: Track} = props
-    // console.log("TrackOptionsButton props", props)
+    console.log("TrackOptionsButton props", props)
 
     const addTrackToQueue = () =>{
         // console.log(trackInfo)
@@ -75,15 +75,11 @@ export default function TrackOptionsButton(props) {
 
     }
 
-    // const collections = CollectionStore.getState()
-    // console.log("props", props)
-
-
     return (
         <Menu menuButton={<MoreHorizIcon />}>
             <MenuItem onClick={addTrackToQueue}>Add to queue</MenuItem>
             <MenuItem>Go to Subreddit</MenuItem>
-            <SubMenu label="Add to collection!!">
+            <SubMenu label="Add to collection">
                 {props.Collections.map(renderCollectionsSubmenu)}
                 {/* render this dynamically later */}
                 {/* <MenuItem>index.html</MenuItem>

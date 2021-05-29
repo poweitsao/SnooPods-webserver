@@ -64,9 +64,9 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
   const router = useRouter();
   const subID: string = router.query["subID"].toString();
 
-const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
-const {data: collections} = useSWR("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
-
+  const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
+// const {data: collections} = useSWR("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
+  
 
   useEffect(() => {
 
@@ -102,15 +102,9 @@ const {data: collections} = useSWR("/api/user/collections/getCollections/"+ User
     // console.log(data)
     getQueue(userSession.email)
 
-    if(collections){
-      console.log("collections fro useSWR", collections)
-      CollectionStore.dispatch({
-        type:"STORE_COLLECTIONS",
-        collections: collections
-      })
-    }
 
-  }, [collections]);
+
+  }, []);
   // console.log(playlist)
 
 
