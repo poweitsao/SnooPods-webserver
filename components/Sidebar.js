@@ -17,7 +17,9 @@ const Sidebar = (props) => {
     const {data: collections} = useSWR("/api/user/collections/getCollections/"+ props.user.email)
     // const collections = []
     const {data: likedTracks} = useSWR("/api/user/collections/likedTracks/get/"+ props.user.email)
-
+    // if(likedTracks){
+    //     console.log("likedTracks in sidebar", likedTracks)
+    // }
 
     useEffect(() => {
         setMounted(true)
@@ -130,6 +132,8 @@ const Sidebar = (props) => {
             }}>
                 <Nav.Link style={{  }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
                 <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Search</Nav.Link>
+                <Nav.Link style={{  }} onClick={() => { Router.push("/collection/"+likedTracks.collectionID) }}>Liked Tracks</Nav.Link>
+
                 <div className="your-collections-title-container">
                     <div style={{padding: "8px", paddingRight: "3px"}}>Your Collections</div>
                     <AddButton handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
