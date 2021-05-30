@@ -8,7 +8,15 @@ const storeLikedTracks = (likedTracks, collectionID) => {
     }
 }
 
+const emptyLikedTracks = () => {
+
+    return {
+        type: "EMPTY_LIKED_TRACKS_STORE"
+    }
+}
+
 
 module.exports = { 
-    storeLikedTracks
+    storeLikedTracks,
+    emptyLikedTracks
  }

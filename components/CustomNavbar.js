@@ -1,17 +1,18 @@
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Image, Dropdown } from 'react-bootstrap/'
 import React, { useState, useEffect } from "react"
-import store from "../redux/store"
 import ProfilePicMenu from "../components/ProfilePicMenu"
 import { useGoogleLogout, GoogleLogout } from 'react-google-login';
 import { CLIENT_ID } from "../lib/constants"
 import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 import Collapse from 'react-bootstrap/Collapse'
-import { RegisterStore } from "../redux/store"
+import { RegisterStore, AudioPlayerStore, QueueStore, UserSessionStore, CollectionStore, LikedTracksStore } from "../redux/store"
 import { storeRegisterationInfo } from "../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
 import { Divider } from '@material-ui/core';
+
+
 
 // import GoogleLogo from "../resources/google_logo"
 // const Navbar = (props) => {
@@ -35,6 +36,31 @@ const logout = () => {
     // console.log("Logout clicked")
     Cookie.remove("session_id")
     Cookie.remove("email")
+
+    RegisterStore.dispatch({
+        type: "EMPTY_REGISTERATION_STORE"
+    })
+
+    AudioPlayerStore.dispatch({
+        type: "EMPTY_AUDIO_STORE"
+    })
+
+    QueueStore.dispatch({
+        type: "EMPTY_QUEUE_STORE"
+    })
+
+    UserSessionStore.dispatch({
+        type: "EMPTY_USER_SESSION_STORE"
+    })
+
+    CollectionStore.dispatch({
+        type: "EMPTY_COLLECTION_STORE"
+    })
+
+    LikedTracksStore.dispatch({
+        type: "EMPTY_LIKED_TRACKS_STORE"
+    })
+
     Router.push("/")
 
 }
@@ -171,8 +197,6 @@ const LoginGroup = (props) => {
                 />
             </NavDropdown>
         </Nav>
-
-
     )
 }
 

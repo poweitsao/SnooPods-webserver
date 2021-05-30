@@ -1,6 +1,6 @@
 import { storeAudioPlayerInfo } from "../actions/index"
 
-const initialState = {
+const emptyAudioStore = {
     playing: false,
     subreddit: "",
     filename: "",
@@ -9,6 +9,8 @@ const initialState = {
     url: "",
     email: ""
 }
+
+const initialState = emptyAudioStore
 
 const audioPlayerInfoReducer = (state = initialState, action) => {
     // console.log("action:", action)
@@ -38,6 +40,11 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
                 ...state,
                 email: action.email.email
             }
+
+        case "EMPTY_AUDIO_STORE":
+            return emptyAudioStore   
+            
+        
         default:
             return state
     }

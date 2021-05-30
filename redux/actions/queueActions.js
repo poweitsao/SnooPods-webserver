@@ -83,6 +83,12 @@ const removeTrackFromQueue = (playlistID, trackID, index) => {
     }
 }
 
+const emptyQueue = () => {
+    return {
+        type:"EMPTY_QUEUE_STORE"
+    }
+}
+
 module.exports = { 
     storeQueueInfo,
     getQueueInfo,
@@ -93,5 +99,6 @@ module.exports = {
     removeTrackFromCurrentPlaylist,
     removePlaylistFromQueue,
     removeTrackFromQueue,
-    replaceCurrentPlaylist
+    replaceCurrentPlaylist,
+    emptyQueue
  }

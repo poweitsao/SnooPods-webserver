@@ -1,4 +1,3 @@
-import { nextTrack, storeAudioPlayerInfo } from "../actions"
 import {Track, QueuePlaylist, QueueObject} from "../../ts/interfaces"
 import {QueueStore} from "../store"
 
@@ -20,10 +19,11 @@ const emptyTrack : Track= {
     track_id: ""
 }
 
-
-const initialState = {
+const emptyCollectionList = {
     Collections: []
 }
+
+const initialState = emptyCollectionList
 
 let assignCollections = function(collections) {
     return Object.assign({}, { Collections: collections })
@@ -37,10 +37,16 @@ const collectionReducer = (state = initialState, action) => {
         case "STORE_COLLECTIONS":
             return assignCollections(
                 action.collections)
+
+        case "EMPTY_COLLECTION_STORE":
+            return emptyCollectionList
+
         default:
             return state
     }
 }
+
+
 
 export default collectionReducer;
 

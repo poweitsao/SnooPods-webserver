@@ -12,19 +12,6 @@ const emptyUserSession : UserSession  = {
 }
 
 
-const emptyTrack : Track= {
-    filename: "",
-    cloud_storage_url: "",
-    date_posted: {
-        _seconds: 0,
-        _nanoseconds: 0
-    },
-    audio_length: 0,
-    track_name: "",
-    track_id: ""
-}
-
-
 const initialState : UserSession  = emptyUserSession
 
 let assignUserSessionObject = function(sessionID: string, 
@@ -56,7 +43,9 @@ const userSessionInfoReducer = (state = initialState, action) => {
                 action.userSession.pictureURL,
                 action.userSession.validSession
                 )
-        
+        case "EMPTY_USER_SESSION_STORE":
+            return emptyUserSession
+            
         default:
             return state
     }

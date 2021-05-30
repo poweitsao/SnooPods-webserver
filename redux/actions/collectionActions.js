@@ -8,6 +8,13 @@ const storeCollections = (collections) => {
     }
 }
 
+const emptyCollections = () => {
+    // console.log("storing queue info to redux", QueueInfo)
+
+    return {
+        type: "EMPTY_COLLECTION_STORE"
+    }
+}
 
 module.exports = { 
     storeCollections

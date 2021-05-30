@@ -1,8 +1,9 @@
 
-
-const initialState = {
+const emptyLikedTracks = {
     LikedTracks: []
 }
+
+const initialState = emptyLikedTracks
 
 let assignLikedTracks = function(tracks: Array<string>, collectionID: string) {
     return Object.assign({}, { LikedTracks: tracks, likedTracksCollectionID: collectionID })
@@ -17,6 +18,10 @@ const LikedTracksReducer = (state = initialState, action) => {
             return assignLikedTracks(
                 action.likedTracks,
                 action.collectionID)
+
+        case "EMPTY_LIKED_TRACKS_STORE":
+            return emptyLikedTracks
+
         default:
             return state
     }

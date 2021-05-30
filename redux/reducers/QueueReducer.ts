@@ -1,4 +1,3 @@
-import { nextTrack, storeAudioPlayerInfo } from "../actions"
 import {Track, QueuePlaylist, QueueObject} from "../../ts/interfaces"
 import {QueueStore} from "../store"
 
@@ -21,13 +20,16 @@ const emptyTrack : Track= {
 }
 
 
-const initialState = {
+const emptyQueueStore = {
     QueueInfo:<QueueObject> {
         currentTrack: emptyTrack,
         currentPlaylist: emptyPlaylist,
         queue: []
     }
 }
+
+const initialState = emptyQueueStore
+
 
 let assignQueueObject = function(currentTrack: Track, currentPlaylist: QueuePlaylist, queue: Array<QueuePlaylist>) {
     return Object.assign({}, 
@@ -189,6 +191,10 @@ const queueInfoReducer = (state = initialState, action) => {
                     queue: queue
                 }
             }
+
+        case "EMPTY_QUEUE_STORE":
+            return emptyQueueStore
+
         default:
             return state
     }

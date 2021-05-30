@@ -4,3 +4,14 @@ const storeUserSessionInfo = (userSession) => {
         userSession
     }
 }
+
+const emptyUserSessionInfo = () => {
+    return {
+        type: "EMPTY_USER_SESSION_STORE"
+    }
+}
+
+module.exports = { 
+    storeUserSessionInfo,
+    emptyUserSessionInfo
+ }
