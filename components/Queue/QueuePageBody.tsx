@@ -18,6 +18,7 @@ import useSWR from "swr";
 import CurrentSong from "./CurrentSong"
 import CurrentQueue from "./CurrentQueue"
 import CurrentPlaylist from "./CurrentPlaylist"
+import CurrentPlaylistUsingQueue from "./CurrentPlaylistUsingQueue"
 
 
 const QueuePageBody = (props) => {
@@ -33,12 +34,14 @@ const QueuePageBody = (props) => {
 
   useEffect(() => {
     if(collections){
-      console.log("collections fro useSWR", collections)
+      // console.log("collections fro useSWR", collections)
       CollectionStore.dispatch({
         type:"STORE_COLLECTIONS",
         collections: collections
       })
     }
+
+    // console.log("currentPlaylist", currentPlaylist)
   }, [collections]);
 
       // const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
@@ -274,21 +277,18 @@ const QueuePageBody = (props) => {
               )}
               {currentPlaylist.tracks.length == 0 
                 ? <div></div> 
-                : (
+                : 
                     <div style={{width: "90%"}}>
                       <div style={{padding: "10px", paddingLeft: "25px"}}>
-                        Currently Playing: 
-                        <button style={{marginLeft: "10px"}} onClick={() => {
-                          QueueStore.dispatch(clearCurrentPlaylist());
-                          syncDB(); 
-                          syncQueueWithAudioPlayer(true);
-                        }}>clear</button>
-                      </div>
+                        Currently Playing: </div>
                       <Provider store={LikedTracksStore}>
-                        <CurrentPlaylist playlist={currentPlaylist}/>
+                        {/* <CurrentPlaylist playlist={currentPlaylist}/> */}
+                        
+                        <CurrentPlaylistUsingQueue playlist={[currentPlaylist]} />
+
                       </Provider>
                     </div>
-                  )
+                  
               }
                 
               {queue.length == 0

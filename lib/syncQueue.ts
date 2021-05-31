@@ -7,9 +7,9 @@ import { Track } from "../ts/interfaces"
 export async function syncDB () {
   let email = UserSessionStore.getState().email
   if (email !== ""){
-    console.log("sync queue", email)
+    // console.log("sync queue", email)
     const currStore = QueueStore.getState()
-    console.log("syncQueue currStore.QueueInfo", currStore.QueueInfo)
+    // console.log("syncQueue currStore.QueueInfo", currStore.QueueInfo)
     var res = await fetch("/api/queue/pushQueueToDB",
       { method: "POST", body: JSON.stringify({ email: email, queueInfo: currStore.QueueInfo }) })
   } else{

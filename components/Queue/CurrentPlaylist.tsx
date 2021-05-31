@@ -20,7 +20,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import toggleLike from "../../lib/toggleLike"
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
-    console.log("likedTracks in renderTrackOnTable (CurrentPlaylist)", options.likedTracks)
+    // console.log("likedTracks in renderTrackOnTable (CurrentPlaylist)", options.likedTracks)
     return (
       <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
         <td style={{ width: "5%" }}>
@@ -139,6 +139,14 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 
     return (
       <div style={{ width: "100%" }}>
+        {
+          <button style={{marginLeft: "10px"}} onClick={() => {
+            QueueStore.dispatch(clearCurrentPlaylist());
+            syncDB(); 
+            syncQueueWithAudioPlayer(true);
+          }}>clear</button>
+        }
+
         {/* <ListGroup variant="flush"></ListGroup> */}
         <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
           {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}

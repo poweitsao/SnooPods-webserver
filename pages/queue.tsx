@@ -76,7 +76,7 @@ const Queue = ({ userSession }) => {
 
       const waitForGetQueue = async () =>{
         let queueInfo = await getQueue(userSession.email)
-        console.log("queueInfo from getQueue", queueInfo)
+        // console.log("queueInfo from getQueue", queueInfo)
         // setQueueDisplayInfo(queueInfo)
       }
 

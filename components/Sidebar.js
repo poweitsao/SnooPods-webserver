@@ -35,10 +35,10 @@ const Sidebar = (props) => {
                 likedTracks: likedTracks.tracks,
                 collectionID: likedTracks.collectionID
             })
-            console.log("likedTracks", LikedTracksStore.getState())
+            // console.log("likedTracks", LikedTracksStore.getState())
         }
         if(collections){
-            console.log("collections from useSWR", collections)
+            // console.log("collections from useSWR", collections)
             CollectionStore.dispatch({
               type:"STORE_COLLECTIONS",
               collections: collections
