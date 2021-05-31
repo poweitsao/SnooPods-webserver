@@ -156,7 +156,7 @@ const PlaylistChunk = (playlist: QueuePlaylist, index: number, options: any) => 
         <div style={{padding: "10px", paddingLeft: "50px"}}>
           {playlist.playlistName}
           <button style={{marginLeft: "10px"}} onClick={() => {
-            QueueStore.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
+            QueueStore.dispatch(clearCurrentPlaylist()); 
             syncDB(); 
             syncQueueWithAudioPlayer(true);
           }}>clear</button>
