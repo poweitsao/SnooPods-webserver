@@ -493,6 +493,94 @@ export async function pushQueueToDB(email: string, queueInfo: Object){
 
 }
 
+export async function getUserSubLists(email: string){
+    let userRef = db.collection("users").doc(email)
+    console.log("getting user sublists of", email)
+    try {
+        let userData = await userRef.get()
+        userData = userData.data()
+        let userSubLists = userData.subscriptionLists
+        return userSubLists
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+
+}
+
+export async function getSingleUserSubList(email: string, subListID: string){
+    
+
+}
+
+export async function getSubListTracks(email: string, subListID: string){
+
+}
+
+export async function addNewSubList(subListName: string, email: string){
+    let newSubListID = await createSubList(subListName, email, [])
+    let userRef = db.collection("users").doc(email)
+    try{
+
+        await userRef.update({
+            subscriptionLists: admin.firestore.FieldValue.arrayUnion({"subscriptionListID": newSubListID, "subscriptionListName": subListName})
+        })
+        return 200
+    }catch(e){
+        console.error("error in addNewCollection", e)
+        return 500
+    }
+}
+
+const createSubList = async (subListName: string, ownerID: string, subreddits: Array<string>) => {
+    try{
+        const res = await db.collection("subscriptionLists").add({
+            subscriptionListID: "",
+            subscriptionListName: subListName,
+            ownerID: ownerID, 
+            subreddits: subreddits
+        })
+        var key = res.id 
+        await db.collection("subscriptionLists").doc(res.id).update({subscriptionListID: key})
+        return key
+    } catch(e){
+        console.error("error in createSubList", e)
+    }
+}
+
+export async function deleteSubList(subListName: string, subListID: string, email: string){
+    console.log("deleteSubList for firestore got", email, subListID)
+    let userRef = db.collection("users").doc(email)  
+
+    try{
+        userRef.update({subscriptionLists :admin.firestore.FieldValue.arrayRemove({"subscriptionListID": subListID, "subscriptionListName": subListName}) })
+    } catch(e){
+        console.log("error in deleteCollection, deleting collection from user", e)
+        return 500
+    }
+    try{
+        let subListRef = db.collection("subscriptionLists").doc(subListID)
+        await subListRef.delete()
+    } catch(e){
+        console.log("error in deleteCollection, deleting collection from collections", e)
+        return 500
+    }
+
+    return 200
+}
+
+export async function renameSubList(subListName: string, subListID: string, email: string){
+
+}
+
+export async function addSubToSubList(subListID: string, email: string, newSubID: string){
+
+}
+
+export async function removeSubFromSubList(subListID: string, email: string, subID: string){
+
+}
+
 module.exports = {
     getPodcast,
     getUser,
@@ -513,5 +601,13 @@ module.exports = {
     addTrackToCollection, 
     removeTrackFromCollection,
     getUserLikedTracks,
-    toggleUserLikedTracks
+    toggleUserLikedTracks,
+    getUserSubLists,
+    getSingleUserSubList,
+    getSubListTracks,
+    addNewSubList,
+    deleteSubList,
+    renameSubList,
+    addSubToSubList,
+    removeSubFromSubList
 }

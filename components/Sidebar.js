@@ -12,11 +12,16 @@ import {storeLikedTracks} from "../redux/actions/likedTracksActions"
 
 const Sidebar = (props) => {
     const [mounted, setMounted] = useState(false)
-    const [showDelete, setShowDelete] = useState([])
+    const [showCollectionDelete, setShowCollectionDelete] = useState([])
+    const [showSubListDelete, setshowSubListDelete] = useState([])
+
     const [email, setEmail] = useState(props.user.email)
     const {data: collections} = useSWR("/api/user/collections/getCollections/"+ props.user.email)
     // const collections = []
     const {data: likedTracks} = useSWR("/api/user/collections/likedTracks/get/"+ props.user.email)
+
+    const {data: subLists} = useSWR("/api/user/sublists/getSubLists/"+ props.user.email)
+
     // if(likedTracks){
     //     console.log("likedTracks in sidebar", likedTracks)
     // }
@@ -25,8 +30,8 @@ const Sidebar = (props) => {
         setMounted(true)
 
         if (collections !== undefined){
-            if (collections.length !== showDelete.length){
-                setShowDelete([...Array(collections.length)].map((_, i) => false))
+            if (collections.length !== showCollectionDelete.length){
+                setShowCollectionDelete([...Array(collections.length)].map((_, i) => false))
             }
         }
         if(likedTracks){
@@ -44,6 +49,18 @@ const Sidebar = (props) => {
               collections: collections
             })
           }
+
+
+        if(subLists){
+        console.log("subLists from useSWR", subLists)
+        if (subLists.length !== showSubListDelete.length){
+            setshowSubListDelete([...Array(subLists.length)].map((_, i) => false))
+        }
+        // CollectionStore.dispatch({
+        //     type:"STORE_COLLECTIONS",
+        //     collections: collections
+        // })
+        }
 
       }, [collections, likedTracks]);
 
@@ -65,23 +82,23 @@ const Sidebar = (props) => {
                 alignItems: "center",
                 maxWidth: "100%"}}
                  onMouseEnter={() => {
-                    let array = showDelete.map((item, itemIndex) => {
+                    let array = showCollectionDelete.map((item, itemIndex) => {
                         if (itemIndex == index){
                             return true
                         } else{
                             return false
                         }
                     })
-                    setShowDelete(array)
+                    setShowCollectionDelete(array)
                 }}
                 onMouseLeave={() => {
-                    let array = showDelete.map((item, itemIndex) => {
+                    let array = showCollectionDelete.map((item, itemIndex) => {
                         return false
                     })
-                    setShowDelete(array)
+                    setShowCollectionDelete(array)
                 }}
                 >
-                {showDelete[index]
+                {showCollectionDelete[index]
                     ?<DeleteButton width={"24px"} height={"24px"} handleClick={() =>{handleDeleteCollection(email, collectionID, collectionName )}}/>
                     :<div style={{width: "24px", height: "24px"}}></div>}
                     
@@ -118,6 +135,67 @@ const Sidebar = (props) => {
         trigger("/api/user/collections/getCollections/"+email)
     }
 
+    const renderSubLists = (subList, index) => {
+        // console.log("params in renderSubLists", subList, index)
+        const subListID = subList.subscriptionListID
+        const subListName = subList.subscriptionListName
+        return(
+            <div key={subListID} style={{
+                display: "flex",
+                alignItems: "center",
+                maxWidth: "100%"}}
+                 onMouseEnter={() => {
+                    let array = showSubListDelete.map((item, itemIndex) => {
+                        if (itemIndex == index){
+                            return true
+                        } else{
+                            return false
+                        }
+                    })
+                    setshowSubListDelete(array)
+                }}
+                onMouseLeave={() => {
+                    let array = showSubListDelete.map((item, itemIndex) => {
+                        return false
+                    })
+                    setshowSubListDelete(array)
+                }}
+                >
+                {showSubListDelete[index]
+                    ?<DeleteButton width={"24px"} height={"24px"} handleClick={() =>{handleDeleteSubList(email, subListID, subListName )}}/>
+                    :<div style={{width: "24px", height: "24px"}}></div>}
+                    
+                <Nav.Link
+                    style={{ 
+                        flex: "1", 
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap"
+                         }} 
+                                        
+                    // onClick={() => { Router.push("/subList/"+subList.subListID) 
+                    onClick={()=> {console.log("clicked", subListName, subListID)}}>
+                    {subListName}
+                </Nav.Link>
+            </div>
+        )
+    }
+
+    const handleAddSubList = async (email, subListName) =>{
+        await fetch("/api/user/sublists/addNewSubList/", {
+            method: "POST", body: JSON.stringify({email: email, subListName: subListName})
+        })
+        trigger("/api/user/sublists/getSubLists/"+ email)
+    }
+
+    const handleDeleteSubList = async (email, subListID, subListName) => {
+        console.log("deleting", subListID, "(" + subListName + ") for", email)
+        await fetch("/api/user/sublists/deleteSubList/", {
+            method: "DELETE", body: JSON.stringify({email: email, subListID: subListID, subListName: subListName})
+        })
+        trigger("/api/user/sublists/getSubLists/"+ email)
+    }
+
     return (
         <Navbar className="sidebar" style={{
             backgroundColor: "#EAECEF",
@@ -135,15 +213,20 @@ const Sidebar = (props) => {
                 <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Search</Nav.Link>
                 <Nav.Link style={{  }} onClick={() => { Router.push("/likedTracks/"+likedTracks.collectionID) }}>Liked Tracks</Nav.Link>
 
-                <div className="your-collections-title-container">
+                <div className="title-container">
                     <div style={{padding: "8px", paddingRight: "3px"}}>Your Collections</div>
                     <AddButton handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
                 </div>
                 {collections?.map(renderCollections)}
+                <div className="title-container">
+                    <div style={{padding: "8px", paddingRight: "3px"}}>Your SubLists</div>
+                    <AddButton handleClick={() => handleAddSubList(props.user.email, "New sublist")}/>
+                </div>
+                {subLists?.map(renderSubLists)}
             </Nav>
                 <style jsx>
                 {`
-                    .your-collections-title-container{
+                    .title-container{
                         display: flex;
                         align-items: center;
                     }
