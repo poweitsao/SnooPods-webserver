@@ -19,26 +19,26 @@ const emptyTrack : Track= {
     track_id: ""
 }
 
-const emptyCollectionList = {
-    Collections: []
+const emptySubListList = {
+    SubLists: []
 }
 
-const initialState = emptyCollectionList
+const initialState = emptySubListList
 
-let assignCollections = function(collections) {
-    return Object.assign({}, { Collections: collections })
+let assignSubLists = function(subLists) {
+    return Object.assign({}, { SubLists: subLists })
 }
 
-const collectionReducer = (state = initialState, action) => {
+const subListReducer = (state = initialState, action) => {
     
 
     switch (action.type) {
-        case "STORE_COLLECTIONS":
-            return assignCollections(
-                action.collections)
+        case "STORE_SUBLISTS":
+            return assignSubLists(
+                action.subLists)
 
-        case "EMPTY_COLLECTION_STORE":
-            return emptyCollectionList
+        case "EMPTY_SUBLIST_STORE":
+            return emptySubListList
 
         default:
             return state
@@ -47,5 +47,5 @@ const collectionReducer = (state = initialState, action) => {
 
 
 
-export default collectionReducer;
+export default subListReducer;
 

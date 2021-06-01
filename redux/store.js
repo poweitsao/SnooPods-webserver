@@ -5,6 +5,7 @@ import QueueReducer from "./reducers/QueueReducer"
 import userSessionInfoReducer from "./reducers/userSessionInfoReducer"
 import collectionReducer from "./reducers/CollectionReducer"
 import LikedTracksReducer from './reducers/LikedTracksReducer';
+import subListReducer from './reducers/SubListReducer'
 
 export const RegisterStore = createStore(registerReducer);
 
@@ -18,6 +19,9 @@ export const CollectionStore = createStore(collectionReducer)
 
 export const LikedTracksStore = createStore(LikedTracksReducer)
 
+export const SubListStore = createStore(subListReducer)
+
+
 
 module.exports = {
     RegisterStore,
@@ -25,7 +29,8 @@ module.exports = {
     QueueStore,
     UserSessionStore,
     CollectionStore,
-    LikedTracksStore
+    LikedTracksStore,
+    SubListStore
 };
 
 // const store = createStore(rootReducer);

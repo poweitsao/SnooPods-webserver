@@ -6,7 +6,7 @@ import { CLIENT_ID } from "../lib/constants"
 import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 import Collapse from 'react-bootstrap/Collapse'
-import { RegisterStore, AudioPlayerStore, QueueStore, UserSessionStore, CollectionStore, LikedTracksStore } from "../redux/store"
+import { RegisterStore, AudioPlayerStore, QueueStore, UserSessionStore, CollectionStore, LikedTracksStore, SubListStore } from "../redux/store"
 import { emptyAudioStore, emptyRegisterationInfo, storeRegisterationInfo } from "../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
@@ -18,7 +18,7 @@ import { emptyQueue } from '../redux/actions/queueActions';
 import {emptyUserSessionInfo} from "../redux/actions/userSessionActions"
 import {emptyCollections} from "../redux/actions/collectionActions"
 import {emptyLikedTracks} from "../redux/actions/likedTracksActions"
-
+import {emptySubLists} from "../redux/actions/SubListActions"
 
 
 const logout = () => {
@@ -37,6 +37,8 @@ const logout = () => {
     CollectionStore.dispatch(emptyCollections())
 
     LikedTracksStore.dispatch(emptyLikedTracks())
+
+    SubListStore.dispatch(emptySubLists())
 
     Router.push("/")
 

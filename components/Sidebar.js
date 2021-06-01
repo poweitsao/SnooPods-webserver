@@ -7,7 +7,7 @@ import useSWR, {trigger} from 'swr';
 import AddButton from "./buttons/AddButton"
 import DeleteButton from "./buttons/DeleteButton"
 import Router from "next/router"
-import { LikedTracksStore, CollectionStore } from '../redux/store';
+import { LikedTracksStore, CollectionStore, SubListStore } from '../redux/store';
 import {storeLikedTracks} from "../redux/actions/likedTracksActions"
 
 const Sidebar = (props) => {
@@ -52,14 +52,15 @@ const Sidebar = (props) => {
 
 
         if(subLists){
-        console.log("subLists from useSWR", subLists)
-        if (subLists.length !== showSubListDelete.length){
-            setshowSubListDelete([...Array(subLists.length)].map((_, i) => false))
-        }
-        // CollectionStore.dispatch({
-        //     type:"STORE_COLLECTIONS",
-        //     collections: collections
-        // })
+            console.log("subLists from useSWR", subLists)
+            if (subLists.length !== showSubListDelete.length){
+                setshowSubListDelete([...Array(subLists.length)].map((_, i) => false))
+            }
+            SubListStore.dispatch({
+                type:"STORE_SUBLISTS",
+                subLists: subLists
+            })
+            console.log("subLists from redux", SubListStore.getState())
         }
 
       }, [collections, likedTracks]);

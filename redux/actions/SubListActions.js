@@ -4,7 +4,7 @@ const storeSubLists = (subLists) => {
 
     return {
         type: "STORE_SUBLISTS",
-        collections
+        subLists
     }
 }
 
