@@ -11,12 +11,10 @@ import parseCookies from "../lib/parseCookies"
 import fetch from "isomorphic-unfetch"
 import { connect } from "react-redux"
 
-
-import { QueueStore, UserSessionStore } from "../redux/store";
+import store from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import {QueuePlaylist, Track, UserSession} from "../ts/interfaces"
 
-import { AudioPlayerStore } from "../redux/store";
 import { storeAudioPlayerInfo} from "../redux/actions/index"
 
 import { getQueue, syncDB} from "../lib/syncQueue"

@@ -1,5 +1,5 @@
 import { connect } from "react-redux"
-import { AudioPlayerStore } from "../../redux/store"
+import store from "../../redux/store"
 import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index"
 import AudioPlayerBar from "../AudioPlayerBar"
 

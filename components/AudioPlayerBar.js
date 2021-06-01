@@ -10,10 +10,9 @@ import Forward10 from "./custom-audio-player/src/Forward10"
 import Bar from "./custom-audio-player/src/Bar";
 import { useState, useEffect } from "react"
 import useAudioPlayer from './custom-audio-player/src/useAudioPlayer';
-import { AudioPlayerStore } from "../redux/store"
+import store from "../redux/store"
 import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 
-import { QueueStore, UserSessionStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import isEmpty from '../lib/isEmptyObject';
 import {syncDB, syncQueueWithAudioPlayer, forceSyncQueueWithAudioPlayer} from "../lib/syncQueue";

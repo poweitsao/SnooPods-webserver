@@ -1,16 +1,10 @@
 import { connect } from "react-redux"
-import { QueueStore } from "../../redux/store"
+import store from "../../redux/store"
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../../redux/actions/queueActions";
 import AudioPlayerBar from "../AudioPlayerBar"
 
 
-// const getAudioPlayerStatus = () => {
-//     return AudioPlayerStore.getState().AudioPlayerInfo;
-// }
 
-// const mapStateToProps = (state) => ({
-//     AudioPlayerInfo: getAudioPlayerStatus()
-// })
 
 function mapStateToProps(state) {
     // console.log("mapStateToProps", state)

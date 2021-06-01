@@ -1,4 +1,4 @@
-import { QueueStore, AudioPlayerStore, UserSessionStore } from "../redux/store"
+import store from "../redux/store"
 import { storeQueueInfo } from "../redux/actions/queueActions"
 import {storeAudioPlayerInfo} from "../redux/actions/index"
 import { Track } from "../ts/interfaces"

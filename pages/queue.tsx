@@ -12,11 +12,10 @@ import fetch from "isomorphic-unfetch"
 import { connect } from "react-redux"
 
 
-import { LikedTracksStore, QueueStore, UserSessionStore } from "../redux/store";
+import store from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import {Collection, QueuePlaylist, Track, UserSession} from "../ts/interfaces"
 
-import { AudioPlayerStore } from "../redux/store";
 import { storeAudioPlayerInfo, togglePlaying} from "../redux/actions/index"
 
 import { getQueue, syncDB, syncQueueWithAudioPlayer} from "../lib/syncQueue"

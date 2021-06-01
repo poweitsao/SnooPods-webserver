@@ -15,16 +15,13 @@ import isEmpty from "../lib/isEmptyObject"
 import LoginPopup from "../components/LoginPopup"
 import Sidebar from "../components/Sidebar"
 import useSWR from 'swr'
-import { AudioPlayerStore } from "../redux/store";
+import store from "../redux/store";
 // import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index";
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
-import { QueueStore } from "../redux/store";
 import {getQueue} from "../lib/syncQueue";
 
 import {UserSession} from "../ts/interfaces"
-
-import {UserSessionStore} from "../redux/store"
 
 
 

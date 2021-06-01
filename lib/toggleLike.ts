@@ -1,5 +1,5 @@
 import { trigger } from "swr"
-import { UserSessionStore } from "../redux/store"
+import store from "../redux/store"
 import { Track } from "../ts/interfaces"
 
 const toggleLike = async (track: Track, likedTracksCollectionID: string) => {

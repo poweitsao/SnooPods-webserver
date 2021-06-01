@@ -5,7 +5,7 @@ import { server } from "../../config";
 import React, { useEffect, useState } from "react";
 import useSWR, { trigger } from "swr";
 import Layout from "../../components/layout"
-import { AudioPlayerStore, CollectionStore, LikedTracksStore, QueueStore, UserSessionStore } from "../../redux/store";
+import store from "../../redux/store";
 import Router from "next/router";
 import validateSession from "../../lib/validateUserSessionOnPage";
 import { getQueue } from "../../lib/syncQueue";

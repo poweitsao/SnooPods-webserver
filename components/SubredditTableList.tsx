@@ -10,7 +10,7 @@ import CustomNavbar from "./CustomNavbar";
 import AudioPlayerBar from "./AudioPlayerBar";
 import AudioPlayerBarContainer from "./containers/AudioPlayerBarContainer";
 import { connect, Provider } from "react-redux";
-import { AudioPlayerStore, CollectionStore } from "../redux/store";
+import store from "../redux/store";
 import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index";
 import Image from "react-bootstrap/Image";
 
@@ -33,11 +33,10 @@ import Sidebar from "./Sidebar";
 import useSWR, { trigger } from "swr";
 import { server } from "../config";
 
-import { QueueStore } from "../redux/store";
+
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue, replaceCurrentPlaylist } from "../redux/actions/queueActions";
 import {syncDB, getQueue} from "../lib/syncQueue"
 
-import {UserSessionStore} from "../redux/store"
 import LoginPopup from "./LoginPopup";
 
 import PlaylistOptionsButton from "./buttons/PlaylistOptionsButton"

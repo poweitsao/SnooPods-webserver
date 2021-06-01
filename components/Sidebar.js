@@ -7,7 +7,7 @@ import useSWR, {trigger} from 'swr';
 import AddButton from "./buttons/AddButton"
 import DeleteButton from "./buttons/DeleteButton"
 import Router from "next/router"
-import { LikedTracksStore, CollectionStore, SubListStore } from '../redux/store';
+import store from '../redux/store';
 import {storeLikedTracks} from "../redux/actions/likedTracksActions"
 
 const Sidebar = (props) => {

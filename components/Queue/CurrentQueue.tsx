@@ -7,7 +7,7 @@ import isEmpty from "../../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../../lib/syncQueue";
 import { togglePlaying } from "../../redux/actions";
 import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue } from "../../redux/actions/queueActions";
-import { AudioPlayerStore, CollectionStore, LikedTracksStore, QueueStore, UserSessionStore } from "../../redux/store";
+import store from "../../redux/store";
 import { Track, QueuePlaylist } from "../../ts/interfaces";
 import Icon from "@iconify/react";
 import QueuePlaylistOptionsButtonContainer from "../containers/QueuePlaylistOptionsButtonContainer";
