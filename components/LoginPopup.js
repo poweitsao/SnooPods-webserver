@@ -19,7 +19,7 @@ async function onGoogleLoginSuccess(googleUser) {
             Router.reload()
         }
         else if (!res.registered) {
-            RegisterStore.dispatch(storeRegisterationInfo(res))
+            store.dispatch(storeRegisterationInfo(res))
             Router.push('/register')
         }
     }
