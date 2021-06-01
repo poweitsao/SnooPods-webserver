@@ -42,13 +42,13 @@ class AudioPlayerBar extends React.Component {
         return (
             <div>
                 <Navbar bg="light" fixed="bottom" >
-                    {this.props.audio
-                        ? <AudioPlayer url={this.props.url}
-                            trackName={this.props.trackName}
-                            subreddit={this.props.subreddit}
-                            audio={this.props.audio}
-                            playing={this.props.playing}
-                            changeAudioPlayerInfo={this.props.changeAudioPlayerInfo}
+                    {this.props.audioPlayerInfo.audio
+                        ? <AudioPlayer url={this.props.audioPlayerInfo.url}
+                            trackName={this.props.audioPlayerInfo.trackName}
+                            subreddit={this.props.audioPlayerInfo.subreddit}
+                            audio={this.props.audioPlayerInfo.audio}
+                            playing={this.props.audioPlayerInfo.playing}
+                            changeAudioPlayerInfo={this.props.audioPlayerInfo.changeAudioPlayerInfo}
                             togglePlaying={this.props.togglePlaying} />
 
                         : <AudioPlayer url={""}
@@ -118,9 +118,9 @@ const nextTrack = () => {
         var track = new Audio(podcast["cloud_storage_url"])
         track.setAttribute("id", "audio")
         currStore["audio"].setAttribute("id", "")
-        AudioPlayerStore.dispatch(togglePlaying(false))
+        store.dispatch(togglePlaying(false))
 
-        AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+        store.dispatch(storeAudioPlayerInfo({
             playing: true,
             subreddit: currStore["subreddit"],
             trackName: filename,
@@ -130,7 +130,7 @@ const nextTrack = () => {
             keyIndex: playlist["keys"].indexOf(filename)
         }))
     } else{
-        AudioPlayerStore.dispatch(togglePlaying(false))
+        store.dispatch(togglePlaying(false))
     }
 }
 
@@ -141,7 +141,7 @@ const nextTrackFromQueue = () => {
     console.log("before pushing", audioCurrStore)
     console.log("pushing next track")
 
-    QueueStore.dispatch(pushNextTrack())
+    store.dispatch(pushNextTrack())
 
     
 
@@ -161,7 +161,7 @@ const nextTrackFromQueue = () => {
     //     track.setAttribute("id", "audio")
     //     // audioCurrStore["audio"].setAttribute("id", "")
         
-    //     // AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+    //     // store.dispatch(storeAudioPlayerInfo({
     //     //     playing: true,
     //     //     subreddit: "r/LoremIpsum",
     //     //     filename: currTrack.filename,
@@ -175,9 +175,9 @@ const nextTrackFromQueue = () => {
     //     console.log("after pushing", audioCurrStore)
     //     console.log("pushing next track")
     // } else{
-    //     AudioPlayerStore.dispatch(togglePlaying(false))
+    //     store.dispatch(togglePlaying(false))
     // }
-    AudioPlayerStore.dispatch(togglePlaying(false))
+    store.dispatch(togglePlaying(false))
     forceSyncQueueWithAudioPlayer(true)
 }
 

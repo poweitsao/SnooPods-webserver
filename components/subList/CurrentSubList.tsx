@@ -82,7 +82,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
           <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
             {convertDate(array[index]["date_posted"])}
             <div style={{padding: "10px"}}>
-            <Provider store={CollectionStore}>
+            <Provider store={store}>
               <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} subListID={options?.subListID} removeTrack={options?.removeTrack}/>
             </Provider>
               </div>
@@ -119,8 +119,8 @@ const CurrentSubList = (props) => {
       
       {subList.map((subList, index) => {
         return SubListChunk(subList, index, {
-          likedTracks: props.LikedTracks, 
-          likedTracksCollectionID: props.likedTracksCollectionID})
+          likedTracks: props.likedTracksInfo.LikedTracks, 
+          likedTracksCollectionID: props.likedTracksInfo.likedTracksCollectionID})
         })
       }
     </div>
@@ -135,12 +135,12 @@ const SubListChunk = (subList: any, index: number, options: any) => {
   const playTrackFromCurrentSubListChunk = (trackID: string, index: number, track: Track, subListID:string) => {
 
     let playing = store.getState().audioPlayerInfo.playing
-    AudioPlayerStore.dispatch(togglePlaying(!playing))
+    store.dispatch(togglePlaying(!playing))
 
-    QueueStore.dispatch(
+    store.dispatch(
       replaceCurrentTrack(track)
     )
-    QueueStore.dispatch(
+    store.dispatch(
       removeTrackFromQueue(subListID, trackID, index)
     )
     syncQueueWithAudioPlayer(true)
@@ -149,7 +149,7 @@ const SubListChunk = (subList: any, index: number, options: any) => {
 
   const removeFromCurrentSubListChunk = (trackID: string, index: number, subListID: string) =>{
 
-    QueueStore.dispatch(
+    store.dispatch(
       removeTrackFromQueue(subListID, trackID, index)
     )
     
@@ -163,7 +163,7 @@ const SubListChunk = (subList: any, index: number, options: any) => {
         <div style={{padding: "10px", paddingLeft: "50px"}}>
           {subList.subListName}
           <button style={{marginLeft: "10px"}} onClick={() => {
-            QueueStore.dispatch(removePlaylistFromQueue(subList.collectionID)); 
+            store.dispatch(removePlaylistFromQueue(subList.collectionID)); 
             syncDB(); 
             syncQueueWithAudioPlayer(true);
           }}>clear</button>

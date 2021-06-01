@@ -40,7 +40,7 @@ export default function SubListOptionsButton(props) {
         
         var queuePlaylist = createQueuePlaylist(tracks, collection.collectionName)
         console.log("queuePlaylist", queuePlaylist)
-        QueueStore.dispatch(
+        store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
 

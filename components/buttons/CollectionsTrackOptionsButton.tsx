@@ -24,7 +24,7 @@ export default function CollectionsTrackOptionsButton(props) {
         // console.log(trackInfo)
         var queuePlaylist = createQueuePlaylist([trackInfo], "${singleTrack}")
         console.log("queuePlaylist", queuePlaylist)
-        QueueStore.dispatch(
+        store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
         

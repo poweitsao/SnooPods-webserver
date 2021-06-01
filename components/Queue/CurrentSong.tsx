@@ -22,19 +22,19 @@ import toggleLike from "../../lib/toggleLike"
 
 const CurrentSong = (props) => {
 
-    let { track }: { track: Track } = props
-
+    let { currentTrack }: { currentTrack: Track } = props.queueInfo.QueueInfo
+    // let track = currentTrack
 
     const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
       // console.log("playing...")
       let playing = store.getState().audioPlayerInfo.playing
-      AudioPlayerStore.dispatch(togglePlaying(!playing))
+      store.dispatch(togglePlaying(!playing))
     }
 
     const removeCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
       let playing = store.getState().audioPlayerInfo.playing
-      AudioPlayerStore.dispatch(togglePlaying(!playing))
-      QueueStore.dispatch(
+      store.dispatch(togglePlaying(!playing))
+      store.dispatch(
         pushNextTrack()
       )
       syncDB()
@@ -79,10 +79,10 @@ const CurrentSong = (props) => {
                             backgroundColor: "transparent",
                             border: "none"
                         }}
-                        onClick={ () => toggleLike(track, props.likedTracksCollectionID)}
+                        onClick={ () => toggleLike(track, props.likedTracksInfo.likedTracksCollectionID)}
 
                 >
-                    {props.LikedTracks.includes(track.track_id)
+                    {props.likedTracksInfo.LikedTracks.includes(track.track_id)
                         ? <FavoriteIcon/>
                         : <FavoriteBorderIcon/>
                     }
@@ -104,7 +104,7 @@ const CurrentSong = (props) => {
                 <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
                   {convertDate(array[index]["date_posted"])}
                   <div style={{padding: "10px"}}>
-                  <Provider store={CollectionStore}>
+                  <Provider store={store}>
                     <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
                   </Provider>
                     </div>
@@ -132,6 +132,11 @@ const CurrentSong = (props) => {
     //         body: JSON.stringify({email: email, trackID: track.track_id })})
     //     trigger("/api/user/collections/likedTracks/get/"+ email)
     // }
+    if(currentTrack.cloud_storage_url == ""){
+      return(
+        <div></div>
+      )
+    }
 
     return (
       <div style={{ width: "100%"}}>
@@ -140,7 +145,7 @@ const CurrentSong = (props) => {
             <tr>
             </tr>
           </thead>
-          <tbody>{[track].map((track: Track, index: number, array: Array<Track>) => {
+          <tbody>{[currentTrack].map((track: Track, index: number, array: Array<Track>) => {
             return renderTrackOnTable(track, index, array, {
               playTrack: playCurrentTrack, 
               removeTrack:removeCurrentTrack 

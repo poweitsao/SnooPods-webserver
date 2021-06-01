@@ -81,7 +81,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
           <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
             {convertDate(array[index]["date_posted"])}
             <div style={{padding: "10px"}}>
-            <Provider store={CollectionStore}>
+            <Provider store={store}>
               <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
             </Provider>
               </div>
@@ -111,7 +111,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 // }
 
 const CurrentQueue = (props) => {
-  let { queue }: { queue: Array<QueuePlaylist> } = props
+  let { queue }: { queue: Array<QueuePlaylist> } = props.queueInfo.QueueInfo
   console.log("props in CurrentQueue", props)
   // const [queue, setCurrentQueue] = useState(props.queue)
 
@@ -121,14 +121,19 @@ const CurrentQueue = (props) => {
   //     // console.log("queue has changed")
   //   }
   // }, [queue])
-
+  if(queue.length == 0){
+    return(
+      <div></div>
+    )
+  }
+  
   return (
     <div style={{ width: "100%" }}>
       
       {queue.map((playlist, index) => {
         return QueueChunk(playlist, index, {
-          likedTracks: props.LikedTracks, 
-          likedTracksCollectionID: props.likedTracksCollectionID})
+          likedTracks: props.likedTracksInfo.LikedTracks, 
+          likedTracksCollectionID: props.likedTracksInfo.likedTracksCollectionID})
         })
       }
     </div>
@@ -143,12 +148,12 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
   const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
 
     let playing = store.getState().audioPlayerInfo.playing
-    AudioPlayerStore.dispatch(togglePlaying(!playing))
+    store.dispatch(togglePlaying(!playing))
 
-    QueueStore.dispatch(
+    store.dispatch(
       replaceCurrentTrack(track)
     )
-    QueueStore.dispatch(
+    store.dispatch(
       removeTrackFromQueue(playlistID, trackID, index)
     )
     syncQueueWithAudioPlayer(true)
@@ -157,7 +162,7 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
 
   const removeFromCurrentQueueChunk = (trackID: string, index: number, playlistID: string) =>{
 
-    QueueStore.dispatch(
+    store.dispatch(
       removeTrackFromQueue(playlistID, trackID, index)
     )
     
@@ -165,13 +170,14 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
     syncQueueWithAudioPlayer(false)
   }
 
+
   return (
     <div key={playlist.playlistID + "_" + (index).toString}>
       {
         <div style={{padding: "10px", paddingLeft: "50px"}}>
           {playlist.playlistName}
           <button style={{marginLeft: "10px"}} onClick={() => {
-            QueueStore.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
+            store.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
             syncDB(); 
             syncQueueWithAudioPlayer(true);
           }}>clear</button>

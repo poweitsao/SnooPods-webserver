@@ -38,8 +38,8 @@ import toggleLike from "../lib/toggleLike"
 const CollectionTableList = (props) => {
     let {playlist} = props
     console.log("props in CollectionTableList", props)
-    let likedTracks = props.LikedTracks
-    let likedTracksCollectionID = props.likedTracksCollectionID
+    let likedTracks = props.likedTracksInfo.LikedTracks
+    let likedTracksCollectionID = props.likedTracksInfo.likedTracksCollectionID
 
     const playPodcast = (trackKey: string, trackIndex: number,  tracks: Array<Track>, collectionName: string) => {
         console.log("params in playPodcast",trackKey, trackIndex, tracks, collectionName )
@@ -54,19 +54,19 @@ const CollectionTableList = (props) => {
           var playlistName = collectionName
     
           var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
-          QueueStore.dispatch(
+          store.dispatch(
             replaceCurrentPlaylist(queuePlaylist)
           )
           
         }
-        QueueStore.dispatch(
+        store.dispatch(
           replaceCurrentTrack(tracks[trackIndex])
         )
         currStore = store.getState().queueInfo
         console.log("currStore after replace ", currStore )
         let currTrack = currStore.QueueInfo.currentTrack
         // syncDB(cookies.email)
-        AudioPlayerStore.dispatch(
+        store.dispatch(
           storeAudioPlayerInfo({
             playing: true,
             subreddit: "loremipsum",

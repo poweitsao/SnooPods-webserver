@@ -77,7 +77,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
       if (userSession.validSession){
         // console.log("user from validateUserSession", userSession)
         setUser(userSession)
-        UserSessionStore.dispatch({
+        store.dispatch({
           type:"STORE_USER_SESSION_INFO",
           userSession
         })
@@ -125,20 +125,20 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 
 //       var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
 //       // console.log("queuePlaylist", queuePlaylist)
-//       QueueStore.dispatch(
+//       store.dispatch(
 //         replaceCurrentPlaylist(queuePlaylist)
 //       )
       
     
     
 //     }
-//     QueueStore.dispatch(
+//     store.dispatch(
 //       replaceCurrentTrack(playlist.tracks[trackKey])
 //     )
 //     currStore = store.getState().queueInfo
 //     let currTrack = currStore.QueueInfo.currentTrack
 //     // syncDB(cookies.email)
-//     AudioPlayerStore.dispatch(
+//     store.dispatch(
 //       storeAudioPlayerInfo({
 //         playing: true,
 //         subreddit: "loremipsum",
@@ -337,7 +337,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
             {playlist == undefined ? (
               <div></div>
             ) : (
-              <Provider store={LikedTracksStore}>
+              <Provider store={store}>
                 <SubredditTableList playlist={playlist}/>
               </Provider>
               // <Tablelist playlist={playlist} />
@@ -345,7 +345,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
             )}
           </div>
         </div>
-        <Provider store={AudioPlayerStore}>
+        <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
         {/* ; */}

@@ -35,7 +35,7 @@ const Sidebar = (props) => {
             }
         }
         if(likedTracks){
-            LikedTracksStore.dispatch({
+            store.dispatch({
                 type: "STORE_LIKED_TRACKS",
                 likedTracks: likedTracks.tracks,
                 collectionID: likedTracks.collectionID
@@ -44,7 +44,7 @@ const Sidebar = (props) => {
         }
         if(collections){
             // console.log("collections from useSWR", collections)
-            CollectionStore.dispatch({
+            store.dispatch({
               type:"STORE_COLLECTIONS",
               collections: collections
             })
@@ -56,7 +56,7 @@ const Sidebar = (props) => {
             if (subLists.length !== showSubListDelete.length){
                 setshowSubListDelete([...Array(subLists.length)].map((_, i) => false))
             }
-            SubListStore.dispatch({
+            store.dispatch({
                 type:"STORE_SUBLISTS",
                 subLists: subLists
             })

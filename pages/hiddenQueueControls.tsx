@@ -37,7 +37,7 @@ const hiddenQueueControls = ({ userSession }) => {
           // console.log("user from validateUserSession", userSession)
           setUser(userSession)
           
-          UserSessionStore.dispatch({
+          store.dispatch({
             type:"STORE_USER_SESSION_INFO",
             userSession
           })
@@ -92,7 +92,7 @@ const hiddenQueueControls = ({ userSession }) => {
               
       //       }
             
-      //       QueueStore.dispatch(
+      //       store.dispatch(
       //         storeQueueInfo({
       //           currentTrack: currTrack,
       //           currentPlaylist: currentPlaylist,
@@ -103,7 +103,7 @@ const hiddenQueueControls = ({ userSession }) => {
       //       let currAudioStore = store.getState().audioPlayerInfo
       //       console.log("currAudioStore", currAudioStore)
       //       if (currAudioStore.audio == "" && currTrack.cloud_storage_url !== ""){
-      //         AudioPlayerStore.dispatch(
+      //         store.dispatch(
       //           storeAudioPlayerInfo({
       //             playing: false,
       //             subreddit: "loremipsum",
@@ -148,43 +148,43 @@ const hiddenQueueControls = ({ userSession }) => {
     }
 
     const pushNextTrackRedux = () =>{
-      QueueStore.dispatch(
+      store.dispatch(
         pushNextTrack()
       )
       syncDB()
     }
     const replaceCurrentTrackRedux = (track) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         replaceCurrentTrack(track)
       )
       syncDB()
     }
     const addPlaylistToQueueRedux = (newPlaylist) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         addPlaylistToQueue(newPlaylist)
       )
       syncDB()
     }
     const clearCurrentPlaylistRedux = () =>{
-      QueueStore.dispatch(
+      store.dispatch(
         clearCurrentPlaylist()
       )
       syncDB()
     }
     const removeTrackFromCurrentPlaylistRedux = (trackID, index) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         removeTrackFromCurrentPlaylist(trackID, index)
       )
       syncDB()
     }
     const removePlaylistFromQueueRedux = (playlistID) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         removePlaylistFromQueue(playlistID)
       )
       syncDB()
     }
     const removeTrackFromQueueRedux = (playlistID, trackID, index) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         removeTrackFromQueue(playlistID, trackID, index)
       )
       syncDB()
@@ -332,7 +332,7 @@ const hiddenQueueControls = ({ userSession }) => {
             </div>
         </div>
         <div>
-            <Provider store={AudioPlayerStore}>
+            <Provider store={store}>
                 <AudioPlayerBarContainer />
             </Provider>
         </div>

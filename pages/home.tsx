@@ -158,7 +158,7 @@ const home = ({ userSession }) => {
         // console.log("user from validateUserSession", userSession)
         setUser(userSession)
         
-        UserSessionStore.dispatch({
+        store.dispatch({
           type:"STORE_USER_SESSION_INFO",
           userSession
         })
@@ -295,7 +295,7 @@ const home = ({ userSession }) => {
         </div>
         <div>
 
-        <Provider store={AudioPlayerStore}>
+        <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
         </div>

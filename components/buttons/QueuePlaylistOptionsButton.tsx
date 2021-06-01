@@ -20,7 +20,7 @@ export default function QueuePlaylistOptionsButton(props) {
         // console.log(trackInfo)
         var queuePlaylist = createQueuePlaylist([trackInfo], "${singleTrack}")
         console.log("queuePlaylist", queuePlaylist)
-        QueueStore.dispatch(
+        store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
         syncDB()
@@ -74,7 +74,7 @@ export default function QueuePlaylistOptionsButton(props) {
 
             <MenuItem>Go to Subreddit</MenuItem>
             <SubMenu label="Add to collection">
-                {props.Collections.map(renderCollectionsSubmenu)}
+                {props.collectionInfo.Collections.map(renderCollectionsSubmenu)}
             {/* <MenuItem>Render collections dynamically</MenuItem> */}
                 {/* render this dynamically later */}
                 {/* <MenuItem>index.html</MenuItem>

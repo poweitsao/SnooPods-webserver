@@ -23,7 +23,7 @@ export default function TrackOptionsButton(props) {
         // console.log(trackInfo)
         var queuePlaylist = createQueuePlaylist([trackInfo], "${singleTrack}")
         console.log("queuePlaylist", queuePlaylist)
-        QueueStore.dispatch(
+        store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
         
@@ -80,7 +80,7 @@ export default function TrackOptionsButton(props) {
             <MenuItem onClick={addTrackToQueue}>Add to queue</MenuItem>
             <MenuItem>Go to Subreddit</MenuItem>
             <SubMenu label="Add to collection">
-                {props.Collections.map(renderCollectionsSubmenu)}
+                {props.collectionInfo.Collections.map(renderCollectionsSubmenu)}
                 {/* render this dynamically later */}
                 {/* <MenuItem>index.html</MenuItem>
                 <MenuItem>example.js</MenuItem>

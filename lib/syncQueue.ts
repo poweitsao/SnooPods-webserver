@@ -63,7 +63,7 @@ export async function getQueue (email: string) {
 
   }
 
-  QueueStore.dispatch(
+  store.dispatch(
     storeQueueInfo({
       currentTrack: currTrack,
       currentPlaylist: currentPlaylist,
@@ -74,7 +74,7 @@ export async function getQueue (email: string) {
   let currAudioStore = store.getState().audioPlayerInfo
   // console.log("currAudioStore", currAudioStore)
   if (currAudioStore.audio == "" && currTrack.cloud_storage_url !== "") {
-    AudioPlayerStore.dispatch(
+    store.dispatch(
       storeAudioPlayerInfo({
         playing: false,
         subreddit: "loremipsum",
@@ -87,7 +87,7 @@ export async function getQueue (email: string) {
   } 
   // else if (currAudioStore.email == ""){
   //   // console.log("email in setAudioStoreEmail", email)
-  //   AudioPlayerStore.dispatch(
+  //   store.dispatch(
   //     setAudioStoreEmail({
   //       email
   //     })
@@ -106,7 +106,7 @@ export function syncQueueWithAudioPlayer(playing: boolean) {
   
   if (audioCurrStore.url !== queueCurrStore.QueueInfo.currentTrack.cloud_storage_url){
     var currTrack = queueCurrStore.QueueInfo.currentTrack
-    AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+    store.dispatch(storeAudioPlayerInfo({
       playing: playing,
       subreddit: "r/LoremIpsum",
       filename: currTrack.filename,
@@ -120,7 +120,7 @@ export function syncQueueWithAudioPlayer(playing: boolean) {
 export function forceSyncQueueWithAudioPlayer(playing: boolean) {
   let queueCurrStore = store.getState().queueInfo
   var currTrack = queueCurrStore.QueueInfo.currentTrack
-  AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+  store.dispatch(storeAudioPlayerInfo({
     playing: playing,
     subreddit: "r/LoremIpsum",
     filename: currTrack.filename,

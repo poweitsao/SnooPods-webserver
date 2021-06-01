@@ -28,17 +28,17 @@ const logout = () => {
 
     store.dispatch(emptyRegisterationInfo())
 
-    AudioPlayerStore.dispatch(emptyAudioStore())
+    store.dispatch(emptyAudioStore())
 
-    QueueStore.dispatch(emptyQueue())
+    store.dispatch(emptyQueue())
 
-    UserSessionStore.dispatch(emptyUserSessionInfo())
+    store.dispatch(emptyUserSessionInfo())
 
-    CollectionStore.dispatch(emptyCollections())
+    store.dispatch(emptyCollections())
 
-    LikedTracksStore.dispatch(emptyLikedTracks())
+    store.dispatch(emptyLikedTracks())
 
-    SubListStore.dispatch(emptySubLists())
+    store.dispatch(emptySubLists())
 
     Router.push("/")
 

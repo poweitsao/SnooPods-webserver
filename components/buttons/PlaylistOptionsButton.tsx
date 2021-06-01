@@ -29,7 +29,7 @@ export default function PlaylistOptionsButton(props) {
         
         var queuePlaylist = createQueuePlaylist(tracks, playlist.collectionName)
         console.log("queuePlaylist", queuePlaylist)
-        QueueStore.dispatch(
+        store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
         syncDB()

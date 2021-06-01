@@ -56,7 +56,7 @@ const SubListPage = ({ userSession, subListID }) => {
         if (userSession.validSession){
           // console.log("user from validateUserSession", userSession)
           setUser(userSession)
-          UserSessionStore.dispatch({
+          store.dispatch({
             type:"STORE_USER_SESSION_INFO",
             userSession
           })
@@ -166,7 +166,7 @@ const SubListPage = ({ userSession, subListID }) => {
               <div></div>
             ) : (
               // <Tablelist playlist={playlist} />
-              <Provider store={LikedTracksStore}>
+              <Provider store={store}>
                 {/* <CollectionTableList playlist={playlist}/> */}
                 <CurrentSubList subList={subList.collections}/>
               </Provider>
@@ -174,7 +174,7 @@ const SubListPage = ({ userSession, subListID }) => {
             )}
           </div>
         </div>
-        <Provider store={AudioPlayerStore}>
+        <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
         {/* ; */}

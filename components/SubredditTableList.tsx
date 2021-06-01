@@ -51,9 +51,10 @@ import toggleLike from "../lib/toggleLike"
 
 
 const SubredditTableList = (props) => {
-  const {playlist, subID, LikedTracks, likedTracksCollectionID} : 
-  {playlist: Collection, subID: string, LikedTracks: Array<string>, likedTracksCollectionID: string} = props
+  const {playlist, subID} : 
+  {playlist: Collection, subID: string} = props
 
+  const { LikedTracks, likedTracksCollectionID } : {LikedTracks: Array<string>, likedTracksCollectionID: string} = props.likedTracksInfo
 
   const playPodcast = (trackKey: string, trackIndex: number) => {
 
@@ -71,20 +72,20 @@ const SubredditTableList = (props) => {
 
       var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
       // console.log("queuePlaylist", queuePlaylist)
-      QueueStore.dispatch(
+      store.dispatch(
         replaceCurrentPlaylist(queuePlaylist)
       )
       
     
     
     }
-    QueueStore.dispatch(
+    store.dispatch(
       replaceCurrentTrack(playlist.tracks[trackKey])
     )
     currStore = store.getState().queueInfo
     let currTrack = currStore.QueueInfo.currentTrack
     // syncDB(cookies.email)
-    AudioPlayerStore.dispatch(
+    store.dispatch(
       storeAudioPlayerInfo({
         playing: true,
         subreddit: "loremipsum",
@@ -190,7 +191,7 @@ const SubredditTableList = (props) => {
             <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
               {convertDate(track["date_posted"])}
               <div style={{padding: "10px"}}>
-                <Provider store={CollectionStore}>
+                <Provider store={store}>
                   <TrackOptionsButtonContainer trackInfo={playlist.tracks[trackKey]}/>
                 </Provider>
 

@@ -31,6 +31,7 @@ import convertDate from "../lib/convertDate";
 
 import QueuePageBodyContainer from "../components/containers/QueuePageBodyContainer"
 import { propTypes } from "react-bootstrap/esm/Image";
+import QueuePageBody from "../components/Queue/QueuePageBody";
 
 
 const Queue = ({ userSession }) => {
@@ -50,7 +51,7 @@ const Queue = ({ userSession }) => {
           // console.log("user from validateUserSession", userSession)
           setUser(userSession)
           
-          UserSessionStore.dispatch({
+          store.dispatch({
             type:"STORE_USER_SESSION_INFO",
             userSession
           })
@@ -103,17 +104,17 @@ const Queue = ({ userSession }) => {
               {isEmpty(user) ? <div></div> : <CustomNavbar user={user} />}
               <div></div>
               
-              <Provider store={QueueStore}>
+              {/* <Provider store={store}> */}
                 {
                   isEmpty(user)
                   ?<div></div>
-                  : <QueuePageBodyContainer user={user}/>
+                  : <QueuePageBody user={user}/>
                 }
                 
-              </Provider>
+              {/* </Provider> */}
             </div>
           
-          <Provider store={AudioPlayerStore}>
+          <Provider store={store}>
             <AudioPlayerBarContainer />
           </Provider>
           <style>
