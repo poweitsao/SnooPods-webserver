@@ -182,7 +182,6 @@ export async function getTracks(trackIDs: Array<string>) {
     }
     return {status: 200, tracks: tracks}
 
-
 }
 
 export const addNewCollection = async(collectionName: string, email: string) => {
@@ -310,7 +309,7 @@ export const toggleUserLikedTracks = async (trackID: string, email: string) => {
         userData = userData.data()
         let userLikedTracksCollectionID = userData.likedTracksCollectionID
         let {collectionData: likedTracksCollection} = await getSingleUserCollection(email, userLikedTracksCollectionID)
-        console.log("liked tracks collectionData", likedTracksCollection)
+        // console.log("liked tracks collectionData", likedTracksCollection)
         let likedTracks = likedTracksCollection.tracks
         if(likedTracks.includes(trackID)){
             likedTracks = likedTracks.filter((trackIDinArray) => {return trackIDinArray !== trackID} )
@@ -509,12 +508,51 @@ export async function getUserSubLists(email: string){
 }
 
 export async function getSingleUserSubList(email: string, subListID: string){
-    
+    let subListRef = db.collection("subscriptionLists").doc(subListID)
+    console.log("getting single subList", subListID)
+    try {
+        let subListData = await subListRef.get()
+        subListData = subListData.data()
+        // console.log("subListData", subListData)
+        if(subListData.ownerID == email){
+            return {status: 200, subListData: subListData}
+        } else{
+            return {status: 403, subListData: {}}
+        }
+        
+    } catch (e) {
+        console.log("error in getSingleUserSublists", e)
+        return {status: 500, subListData: {}}
+    }
 
 }
 
-export async function getSubListTracks(email: string, subListID: string){
+export async function getSubListCollections(latestCollectionsIDs: Array<string>){
 
+    try{
+
+        let collections = []
+        console.log("latestCollectionsIDs", latestCollectionsIDs)
+        for(var i = 0; i < latestCollectionsIDs.length; i++){
+            let singleCollectionRes = await getSingleUserCollection("admin", latestCollectionsIDs[i])
+            if(singleCollectionRes.status == 200){
+                let collectionData = singleCollectionRes.collectionData
+                let getTracksRes = await getTracks(collectionData.tracks)
+                collectionData.tracks = getTracksRes.tracks
+
+                collections.push(collectionData)
+            } else{
+                return {status: 500, subListCollections: []}
+            }
+        }
+
+        return {status: 200, subListCollections: collections} 
+        
+    } catch (e) {
+        console.error("error in getSubListCollections", e)
+    }
+
+    
 }
 
 export async function addNewSubList(subListName: string, email: string){
@@ -532,13 +570,13 @@ export async function addNewSubList(subListName: string, email: string){
     }
 }
 
-const createSubList = async (subListName: string, ownerID: string, subreddits: Array<string>) => {
+const createSubList = async (subListName: string, ownerID: string, subredditNewlyUpdatedCollectionIDs: Array<string>) => {
     try{
         const res = await db.collection("subscriptionLists").add({
             subscriptionListID: "",
             subscriptionListName: subListName,
             ownerID: ownerID, 
-            subreddits: subreddits
+            latestCollectionsFromSubreddits: subredditNewlyUpdatedCollectionIDs
         })
         var key = res.id 
         await db.collection("subscriptionLists").doc(res.id).update({subscriptionListID: key})
@@ -604,7 +642,7 @@ module.exports = {
     toggleUserLikedTracks,
     getUserSubLists,
     getSingleUserSubList,
-    getSubListTracks,
+    getSubListCollections,
     addNewSubList,
     deleteSubList,
     renameSubList,

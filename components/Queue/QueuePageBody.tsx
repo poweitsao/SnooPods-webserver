@@ -22,7 +22,18 @@ import CurrentPlaylistUsingQueue from "./CurrentPlaylistUsingQueue"
 
 
 const QueuePageBody = (props) => {
-  let {currentTrack, currentPlaylist, queue} = props.QueueInfo
+  // let {currentTrack, currentPlaylist, queue} = props.QueueInfo
+  const [currentTrack, setCurrentTrack] = useState(props.QueueInfo.currentTrack)
+  const [currentPlaylist, setCurrentPlaylist] = useState(props.QueueInfo.currentPlaylist)
+  const [queue, setQueue] = useState(props.QueueInfo.queue)
+
+  const [reloadCurrentTrack, setReloadCurrentTrack] = useState(false)
+  const [reloadCurrentPlaylist, setReloadCurrentPlaylist] = useState(false)
+  const [reloadQueue, setReloadQueue] = useState(false)
+
+
+
+
   console.log("QueuePageBody props", props)
   
   // console.log("email in QueuePageBody", props.user.email)
@@ -33,6 +44,29 @@ const QueuePageBody = (props) => {
   
 
   useEffect(() => {
+
+    if(currentTrack !== props.QueueInfo.currentTrack){
+      setCurrentTrack(props.QueueInfo.currentTrack)
+      // setReloadCurrentTrack(true)
+    }
+    if(currentPlaylist !== props.QueueInfo.currentPlaylist){
+      setCurrentPlaylist(props.QueueInfo.currentPlaylist)
+      // setReloadCurrentPlaylist(true)
+    }
+    if(queue !== props.QueueInfo.queue){
+      setQueue(props.QueueInfo.queue)
+      setReloadQueue(true)
+      console.log("queue has changed")
+    }
+
+    if(reloadQueue){
+      setReloadQueue(false)
+    }
+
+    console.log("queue", queue)
+    console.log("QueuePageBody props.QueueInfo.queue", props.QueueInfo.queue)
+
+
     if(collections){
       // console.log("collections fro useSWR", collections)
       CollectionStore.dispatch({
@@ -42,7 +76,7 @@ const QueuePageBody = (props) => {
     }
 
     // console.log("currentPlaylist", currentPlaylist)
-  }, [collections]);
+  }, [collections, props]);
 
       // const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
       //   const [playButton, setPlayButton] = useState(playCircleOutlined);
@@ -291,7 +325,7 @@ const QueuePageBody = (props) => {
                   
               }
                 
-              {queue.length == 0
+              {queue.length == 0 || reloadQueue
                 ? <div></div>
                 :<div style={{width: "90%"}}>
                   <div style={{padding: "10px", paddingLeft: "25px"}}>Queue:</div>

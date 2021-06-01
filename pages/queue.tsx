@@ -41,7 +41,6 @@ const Queue = ({ userSession }) => {
     const [user, setUser] = useState({})
 
     const [showLoginPopup, setShowLoginPopup] = useState(false)
-    const playlist = false;
     const [queueDisplayInfo, setQueueDisplayInfo] = useState({})
 
 

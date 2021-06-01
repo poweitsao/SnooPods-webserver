@@ -21,8 +21,9 @@ import toggleLike from '../../lib/toggleLike'
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
   // console.log("likedTracks in renderTrackOnTable", options.likedTracks)
+  console.log("array in renderTrackOnTable", array)
   return (
-    <tr key={options.playlistID + "_" + track.track_id + "_" + index.toString()}>
+    <tr key={options.subListID + "_" + track.track_id + "_" + index.toString()}>
       <td style={{ width: "5%" }}>
         <div
           style={{
@@ -32,7 +33,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
           }}
         >
           <PlayButton 
-            handleClick={() => options?.playTrack(track.track_id, index, track, options?.playlistID)}
+            handleClick={() => options?.playTrack(track.track_id, index, track, options?.subListID)}
             width="25px"
             height="25px"
           />
@@ -82,7 +83,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
             {convertDate(array[index]["date_posted"])}
             <div style={{padding: "10px"}}>
             <Provider store={CollectionStore}>
-              <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
+              <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} subListID={options?.subListID} removeTrack={options?.removeTrack}/>
             </Provider>
               </div>
           </div>
@@ -110,23 +111,14 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 //   trigger("/api/user/collections/likedTracks/get/"+ email)
 // }
 
-const CurrentQueue = (props) => {
-  let { queue }: { queue: Array<QueuePlaylist> } = props
-  console.log("props in CurrentQueue", props)
-  // const [queue, setCurrentQueue] = useState(props.queue)
-
-  // useEffect(() => {
-  //   if(queue !== props.queue){
-  //     setCurrentQueue(props.queue)
-  //     // console.log("queue has changed")
-  //   }
-  // }, [queue])
-
+const CurrentSubList = (props) => {
+  let { subList }: { subList: Array<any> } = props
+//   console.log("props in CurrentSubList", props)
   return (
     <div style={{ width: "100%" }}>
       
-      {queue.map((playlist, index) => {
-        return QueueChunk(playlist, index, {
+      {subList.map((subList, index) => {
+        return SubListChunk(subList, index, {
           likedTracks: props.LikedTracks, 
           likedTracksCollectionID: props.likedTracksCollectionID})
         })
@@ -135,12 +127,12 @@ const CurrentQueue = (props) => {
   );
 };
 
-const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
-  // console.log("--------> QueueChunk", playlist)
-  // console.log("--------> QueueChunk trackID", playlist.tracks)
+const SubListChunk = (subList: any, index: number, options: any) => {
+//   console.log("--------> SubListChunk", subList)
+//   console.log("--------> SubListChunk trackID", subList.tracks)
 
 
-  const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
+  const playTrackFromCurrentSubListChunk = (trackID: string, index: number, track: Track, subListID:string) => {
 
     let playing = AudioPlayerStore.getState().playing
     AudioPlayerStore.dispatch(togglePlaying(!playing))
@@ -149,16 +141,16 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
       replaceCurrentTrack(track)
     )
     QueueStore.dispatch(
-      removeTrackFromQueue(playlistID, trackID, index)
+      removeTrackFromQueue(subListID, trackID, index)
     )
     syncQueueWithAudioPlayer(true)
 
   }
 
-  const removeFromCurrentQueueChunk = (trackID: string, index: number, playlistID: string) =>{
+  const removeFromCurrentSubListChunk = (trackID: string, index: number, subListID: string) =>{
 
     QueueStore.dispatch(
-      removeTrackFromQueue(playlistID, trackID, index)
+      removeTrackFromQueue(subListID, trackID, index)
     )
     
     syncDB()
@@ -166,12 +158,12 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
   }
 
   return (
-    <div key={playlist.playlistID + "_" + (index).toString}>
+    <div key={subList.collectionID + "_" + (index).toString}>
       {
         <div style={{padding: "10px", paddingLeft: "50px"}}>
-          {playlist.playlistName}
+          {subList.subListName}
           <button style={{marginLeft: "10px"}} onClick={() => {
-            QueueStore.dispatch(removePlaylistFromQueue(playlist.playlistID)); 
+            QueueStore.dispatch(removePlaylistFromQueue(subList.collectionID)); 
             syncDB(); 
             syncQueueWithAudioPlayer(true);
           }}>clear</button>
@@ -184,11 +176,11 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
             <tr>
             </tr>
           </thead>
-          <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+          <tbody>{subList.tracks.map((track: Track, index: number, array: Array<Track>) => {
                   return renderTrackOnTable(track, index, array, 
-                    { playTrack: playTrackFromCurrentQueueChunk,
-                      removeTrack: removeFromCurrentQueueChunk, 
-                      playlistID: playlist.playlistID,
+                    { playTrack: playTrackFromCurrentSubListChunk,
+                      removeTrack: removeFromCurrentSubListChunk, 
+                      subListID: subList.collectionID,
                       likedTracks: options.likedTracks,
                       likedTracksCollectionID: options.likedTracksCollectionID
                     })
@@ -208,5 +200,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CurrentQueue)
-// export default CurrentQueue
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentSubList)
+// export default CurrentSubList

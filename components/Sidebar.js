@@ -52,7 +52,7 @@ const Sidebar = (props) => {
 
 
         if(subLists){
-            console.log("subLists from useSWR", subLists)
+            // console.log("subLists from useSWR", subLists)
             if (subLists.length !== showSubListDelete.length){
                 setshowSubListDelete([...Array(subLists.length)].map((_, i) => false))
             }
@@ -60,7 +60,7 @@ const Sidebar = (props) => {
                 type:"STORE_SUBLISTS",
                 subLists: subLists
             })
-            console.log("subLists from redux", SubListStore.getState())
+            // console.log("subLists from redux", SubListStore.getState())
         }
 
       }, [collections, likedTracks]);
@@ -125,10 +125,10 @@ const Sidebar = (props) => {
     }
 
     const handleDeleteCollection = async(email, collectionID, collectionName) =>{
-        console.log("delete collection clicked")
-        console.log(email)
-        console.log(collectionID)
-        console.log(collectionName)
+        // console.log("delete collection clicked")
+        // console.log(email)
+        // console.log(collectionID)
+        // console.log(collectionName)
 
         await fetch("/api/user/collections/deleteCollection/", {
             method: "DELETE", body: JSON.stringify({email: email, collectionID: collectionID, collectionName: collectionName})
@@ -138,7 +138,7 @@ const Sidebar = (props) => {
 
     const renderSubLists = (subList, index) => {
         // console.log("params in renderSubLists", subList, index)
-        console.log(showSubListDelete)
+        // console.log(showSubListDelete)
         const subListID = subList.subscriptionListID
         const subListName = subList.subscriptionListName
         return(
@@ -176,12 +176,18 @@ const Sidebar = (props) => {
                          }} 
                                         
                     // onClick={() => { Router.push("/subList/"+subList.subListID) 
-                    onClick={()=> {console.log("clicked", subListName, subListID)}}>
+                    onClick={()=> {Router.push("/subList/"+subList.subscriptionListID)}}>
                     {subListName}
                 </Nav.Link>
             </div>
         )
     }
+
+    // const testGetSublistCollections = async (email, subListID) => {
+    //     const res = await fetch("/api/user/sublists/get/" + email + "/" + subListID)
+    //     let response = await res.json()
+    //     console.log("sublistCollections", response)
+    // }
 
     const handleAddSubList = async (email, subListName) =>{
         await fetch("/api/user/sublists/addNewSubList/", {
