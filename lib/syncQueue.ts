@@ -5,10 +5,10 @@ import { Track } from "../ts/interfaces"
 
 
 export async function syncDB () {
-  let email = UserSessionStore.getState().email
+  let email = store.getState().userSessionInfo.email
   if (email !== ""){
     // console.log("sync queue", email)
-    const currStore = QueueStore.getState()
+    const currStore = store.getState().queueInfo
     // console.log("syncQueue currStore.QueueInfo", currStore.QueueInfo)
     var res = await fetch("/api/queue/pushQueueToDB",
       { method: "POST", body: JSON.stringify({ email: email, queueInfo: currStore.QueueInfo }) })
@@ -71,7 +71,7 @@ export async function getQueue (email: string) {
     })
   )
 
-  let currAudioStore = AudioPlayerStore.getState()
+  let currAudioStore = store.getState().audioPlayerInfo
   // console.log("currAudioStore", currAudioStore)
   if (currAudioStore.audio == "" && currTrack.cloud_storage_url !== "") {
     AudioPlayerStore.dispatch(
@@ -101,8 +101,8 @@ export async function getQueue (email: string) {
 }
 
 export function syncQueueWithAudioPlayer(playing: boolean) {
-  let audioCurrStore = AudioPlayerStore.getState()
-  let queueCurrStore = QueueStore.getState()
+  let audioCurrStore = store.getState().audioPlayerInfo
+  let queueCurrStore = store.getState().queueInfo
   
   if (audioCurrStore.url !== queueCurrStore.QueueInfo.currentTrack.cloud_storage_url){
     var currTrack = queueCurrStore.QueueInfo.currentTrack
@@ -118,7 +118,7 @@ export function syncQueueWithAudioPlayer(playing: boolean) {
 }
 
 export function forceSyncQueueWithAudioPlayer(playing: boolean) {
-  let queueCurrStore = QueueStore.getState()
+  let queueCurrStore = store.getState().queueInfo
   var currTrack = queueCurrStore.QueueInfo.currentTrack
   AudioPlayerStore.dispatch(storeAudioPlayerInfo({
     playing: playing,

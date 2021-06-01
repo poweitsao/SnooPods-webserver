@@ -27,12 +27,12 @@ const CurrentSong = (props) => {
 
     const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
       // console.log("playing...")
-      let playing = AudioPlayerStore.getState().playing
+      let playing = store.getState().audioPlayerInfo.playing
       AudioPlayerStore.dispatch(togglePlaying(!playing))
     }
 
     const removeCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
-      let playing = AudioPlayerStore.getState().playing
+      let playing = store.getState().audioPlayerInfo.playing
       AudioPlayerStore.dispatch(togglePlaying(!playing))
       QueueStore.dispatch(
         pushNextTrack()
@@ -126,7 +126,7 @@ const CurrentSong = (props) => {
 
     // const toggleLike = async (track: Track) => {
     //     console.log("toggling like for:", track.track_id)
-    //     let email = UserSessionStore.getState().email
+    //     let email = store.getState().userSessionInfo.email
     //     await fetch("/api/user/collections/likedTracks/toggleLike", 
     //         {method: "POST", 
     //         body: JSON.stringify({email: email, trackID: track.track_id })})

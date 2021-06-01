@@ -63,7 +63,7 @@ const SubredditTableList = (props) => {
     }
 
     // console.log("queuePlaylistTracks", queuePlaylistTracks)
-    var currStore = QueueStore.getState()
+    var currStore = store.getState().queueInfo
     // console.log("store before dispatch", currStore)
 
     if (queuePlaylistTracks.length > 0){
@@ -81,7 +81,7 @@ const SubredditTableList = (props) => {
     QueueStore.dispatch(
       replaceCurrentTrack(playlist.tracks[trackKey])
     )
-    currStore = QueueStore.getState()
+    currStore = store.getState().queueInfo
     let currTrack = currStore.QueueInfo.currentTrack
     // syncDB(cookies.email)
     AudioPlayerStore.dispatch(
@@ -92,7 +92,7 @@ const SubredditTableList = (props) => {
         filename: currTrack.filename,
         audio: new Audio(currTrack.cloud_storage_url),
         url: currTrack.cloud_storage_url,
-        email: UserSessionStore.getState().email}
+        email: store.getState().userSessionInfo.email}
       )
     )
 
@@ -214,7 +214,7 @@ const SubredditTableList = (props) => {
 
   // const toggleLike = async (track: Track) => {
   //   // console.log("toggling like for:", track.track_id)
-  //   let email = UserSessionStore.getState().email
+  //   let email = store.getState().userSessionInfo.email
   //   await fetch("/api/user/collections/likedTracks/toggleLike", 
   //       {method: "POST", 
   //       body: JSON.stringify({email: email, trackID: track.track_id })})

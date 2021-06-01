@@ -27,7 +27,7 @@ const EditNameModal = (props) => {
 
         }else{
             await runonsubmit(newName)
-            trigger("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
+            trigger("/api/user/collections/getCollections/"+ store.getState().userSessionInfo.email)
         }
     }
 

@@ -63,12 +63,12 @@ const CollectionPage = ({ userSession, collectionID }) => {
       }
   
       if (userSession.session_id && userSession.email) {
-        // console.log("UserSession: ", UserSessionStore.getState())
-        if (!UserSessionStore.getState().validSession){
+        // console.log("UserSession: ", store.getState().userSessionInfo)
+        if (!store.getState().userSessionInfo.validSession){
           validateUserSession(userSession.session_id, userSession.email);
         } else{
           console.log("not validating user session because it's already valid")
-          setUser(UserSessionStore.getState())
+          setUser(store.getState().userSessionInfo)
         }
         
   
@@ -93,7 +93,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
   //       queuePlaylistTracks.push(tracks[i])
   //     }
   
-  //     var currStore = QueueStore.getState()
+  //     var currStore = store.getState().queueInfo
   
   //     if (queuePlaylistTracks.length > 0){
   //       var playlistName = collectionName
@@ -107,7 +107,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
   //     QueueStore.dispatch(
   //       replaceCurrentTrack(tracks[trackIndex])
   //     )
-  //     currStore = QueueStore.getState()
+  //     currStore = store.getState().queueInfo
   //     console.log("currStore after replace ", currStore )
   //     let currTrack = currStore.QueueInfo.currentTrack
   //     // syncDB(cookies.email)
@@ -119,7 +119,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
   //         filename: currTrack.filename,
   //         audio: new Audio(currTrack.cloud_storage_url),
   //         url: currTrack.cloud_storage_url,
-  //         email: UserSessionStore.getState().email}
+  //         email: store.getState().userSessionInfo.email}
   //       )
   //     )
   
@@ -247,7 +247,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
               fields: {
                   collectionID: playlist.collectionID,
                   newCollectionName: newName,
-                  email: UserSessionStore.getState().email
+                  email: store.getState().userSessionInfo.email
               }
           }) 
         })

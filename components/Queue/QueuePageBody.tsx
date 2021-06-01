@@ -158,7 +158,7 @@ const QueuePageBody = (props) => {
       // const CurrentPlaylist = ({ playlist }: { playlist: QueuePlaylist }) => {
       //   const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track, playlistID?: string) => {
   
-      //     let playing = AudioPlayerStore.getState().playing
+      //     let playing = store.getState().audioPlayerInfo.playing
       //     AudioPlayerStore.dispatch(togglePlaying(!playing))
   
       //     QueueStore.dispatch(
@@ -203,13 +203,13 @@ const QueuePageBody = (props) => {
       // const CurrentSong = ({ track }: { track: Track }) => {
       //   const playCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
       //     // console.log("playing...")
-      //     let playing = AudioPlayerStore.getState().playing
+      //     let playing = store.getState().audioPlayerInfo.playing
       //     AudioPlayerStore.dispatch(togglePlaying(!playing))
       //   }
 
       //   const removeCurrentTrack = (trackID: string, index: number, track: Track, playlistID?: string) => {
       //     // console.log("playing...")
-      //     let playing = AudioPlayerStore.getState().playing
+      //     let playing = store.getState().audioPlayerInfo.playing
       //     AudioPlayerStore.dispatch(togglePlaying(!playing))
       //     QueueStore.dispatch(
       //       pushNextTrack()
@@ -246,7 +246,7 @@ const QueuePageBody = (props) => {
   
       //   const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
 
-      //     let playing = AudioPlayerStore.getState().playing
+      //     let playing = store.getState().audioPlayerInfo.playing
       //     AudioPlayerStore.dispatch(togglePlaying(!playing))
 
       //     QueueStore.dispatch(

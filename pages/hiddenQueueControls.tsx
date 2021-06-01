@@ -100,7 +100,7 @@ const hiddenQueueControls = ({ userSession }) => {
       //         })
       //       )
 
-      //       let currAudioStore = AudioPlayerStore.getState()
+      //       let currAudioStore = store.getState().audioPlayerInfo
       //       console.log("currAudioStore", currAudioStore)
       //       if (currAudioStore.audio == "" && currTrack.cloud_storage_url !== ""){
       //         AudioPlayerStore.dispatch(
@@ -118,12 +118,12 @@ const hiddenQueueControls = ({ userSession }) => {
       // }
 
       if (userSession.session_id && userSession.email) {
-        // console.log("UserSession: ", UserSessionStore.getState())
-        if (!UserSessionStore.getState().validSession){
+        // console.log("UserSession: ", store.getState().userSessionInfo)
+        if (!store.getState().userSessionInfo.validSession){
           validateUserSession(userSession.session_id, userSession.email);
         } else{
           console.log("not validating user session because it's already valid")
-          setUser(UserSessionStore.getState())
+          setUser(store.getState().userSessionInfo)
         }
       } else {
         setShowLoginPopup(true)
@@ -135,14 +135,14 @@ const hiddenQueueControls = ({ userSession }) => {
     // console.log(queueInfo)
     const getQueueInfoRedux = () =>{
       // console.log("getQueueInfo result", queueInfo)
-      const currStore =QueueStore.getState()
+      const currStore =store.getState().queueInfo
       console.log(currStore)
 
     }
 
     const getCurrentTrackRedux = () =>{
       // console.log("getQueueInfo result", queueInfo)
-      const currStore =QueueStore.getState()
+      const currStore =store.getState().queueInfo
       console.log(currStore.QueueInfo.currentTrack)
 
     }
@@ -191,7 +191,7 @@ const hiddenQueueControls = ({ userSession }) => {
     }
 
     // const syncDB = async (email: string) =>{
-    //   const currStore =QueueStore.getState()
+    //   const currStore =store.getState().queueInfo
     //   var res = await fetch("/api/queue/pushQueueToDB", {method: "POST", body: JSON.stringify({email: email, queueInfo: currStore.QueueInfo})})
     // }
 

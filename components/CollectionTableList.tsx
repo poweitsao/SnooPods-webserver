@@ -48,7 +48,7 @@ const CollectionTableList = (props) => {
           queuePlaylistTracks.push(tracks[i])
         }
     
-        var currStore = QueueStore.getState()
+        var currStore = store.getState().queueInfo
     
         if (queuePlaylistTracks.length > 0){
           var playlistName = collectionName
@@ -62,7 +62,7 @@ const CollectionTableList = (props) => {
         QueueStore.dispatch(
           replaceCurrentTrack(tracks[trackIndex])
         )
-        currStore = QueueStore.getState()
+        currStore = store.getState().queueInfo
         console.log("currStore after replace ", currStore )
         let currTrack = currStore.QueueInfo.currentTrack
         // syncDB(cookies.email)
@@ -74,7 +74,7 @@ const CollectionTableList = (props) => {
             filename: currTrack.filename,
             audio: new Audio(currTrack.cloud_storage_url),
             url: currTrack.cloud_storage_url,
-            email: UserSessionStore.getState().email}
+            email: store.getState().userSessionInfo.email}
           )
         )
     
@@ -173,7 +173,7 @@ const CollectionTableList = (props) => {
 
     // const toggleLike = async (track: Track, likedTracksCollectionID: string) => {
     //     // console.log("toggling like for:", track.track_id)
-    //     let email = UserSessionStore.getState().email
+    //     let email = store.getState().userSessionInfo.email
     //     await fetch("/api/user/collections/likedTracks/toggleLike", 
     //         {method: "POST", 
     //         body: JSON.stringify({email: email, trackID: track.track_id })})
@@ -183,7 +183,7 @@ const CollectionTableList = (props) => {
     //   }
     // const toggleLike = async (track: Track, likedTracksCollectionID: string) => {
     //     // console.log("toggling like for:", track.track_id)
-    //     let email = UserSessionStore.getState().email
+    //     let email = store.getState().userSessionInfo.email
     //     await fetch("/api/user/collections/likedTracks/toggleLike", 
     //         {method: "POST", 
     //         body: JSON.stringify({email: email, trackID: track.track_id })})

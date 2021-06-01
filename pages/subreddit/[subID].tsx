@@ -65,7 +65,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
   const subID: string = router.query["subID"].toString();
 
   const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
-// const {data: collections} = useSWR("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
+// const {data: collections} = useSWR("/api/user/collections/getCollections/"+ store.getState().userSessionInfo.email)
   
 
   useEffect(() => {
@@ -87,12 +87,12 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
     }
 
     if (userSession.session_id && userSession.email) {
-      // console.log("UserSession: ", UserSessionStore.getState())
-      if (!UserSessionStore.getState().validSession){
+      // console.log("UserSession: ", store.getState().userSessionInfo)
+      if (!store.getState().userSessionInfo.validSession){
         validateUserSession(userSession.session_id, userSession.email);
       } else{
         console.log("not validating user session because it's already valid")
-        setUser(UserSessionStore.getState())
+        setUser(store.getState().userSessionInfo)
       }
       
 
@@ -117,7 +117,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 //     }
 
 //     // console.log("queuePlaylistTracks", queuePlaylistTracks)
-//     var currStore = QueueStore.getState()
+//     var currStore = store.getState().queueInfo
 //     // console.log("store before dispatch", currStore)
 
 //     if (queuePlaylistTracks.length > 0){
@@ -135,7 +135,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 //     QueueStore.dispatch(
 //       replaceCurrentTrack(playlist.tracks[trackKey])
 //     )
-//     currStore = QueueStore.getState()
+//     currStore = store.getState().queueInfo
 //     let currTrack = currStore.QueueInfo.currentTrack
 //     // syncDB(cookies.email)
 //     AudioPlayerStore.dispatch(
@@ -146,7 +146,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 //         filename: currTrack.filename,
 //         audio: new Audio(currTrack.cloud_storage_url),
 //         url: currTrack.cloud_storage_url,
-//         email: UserSessionStore.getState().email}
+//         email: store.getState().userSessionInfo.email}
 //       )
 //     )
 

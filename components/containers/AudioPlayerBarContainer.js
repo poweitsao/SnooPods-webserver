@@ -5,7 +5,7 @@ import AudioPlayerBar from "../AudioPlayerBar"
 
 
 const getAudioPlayerStatus = () => {
-    return AudioPlayerStore.getState().AudioPlayerInfo;
+    return store.getState().audioPlayerInfo.AudioPlayerInfo;
 }
 
 // const mapStateToProps = (state) => ({

@@ -40,7 +40,7 @@ const Sidebar = (props) => {
                 likedTracks: likedTracks.tracks,
                 collectionID: likedTracks.collectionID
             })
-            // console.log("likedTracks", LikedTracksStore.getState())
+            // console.log("likedTracks", store.getState().likedTracksInfo)
         }
         if(collections){
             // console.log("collections from useSWR", collections)
@@ -60,7 +60,7 @@ const Sidebar = (props) => {
                 type:"STORE_SUBLISTS",
                 subLists: subLists
             })
-            // console.log("subLists from redux", SubListStore.getState())
+            // console.log("subLists from redux", store.getState().subListInfo)
         }
 
       }, [collections, likedTracks]);

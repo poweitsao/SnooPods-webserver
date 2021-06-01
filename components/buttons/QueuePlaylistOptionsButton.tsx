@@ -51,7 +51,7 @@ export default function QueuePlaylistOptionsButton(props) {
                 fields: {
                     collectionID: collectionID,
                     newTrackID: trackInfo.track_id,
-                    email: UserSessionStore.getState().email
+                    email: store.getState().userSessionInfo.email
                 }
             }) 
         })
@@ -65,7 +65,7 @@ export default function QueuePlaylistOptionsButton(props) {
 
     }
 
-    const collections = CollectionStore.getState()
+    const collections = store.getState().collectionInfo
 
     return (
         <Menu menuButton={<MoreHorizIcon />}>

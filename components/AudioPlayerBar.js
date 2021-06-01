@@ -107,7 +107,7 @@ function AudioPlayer(props) {
 }
 
 const nextTrack = () => {
-    const currStore = AudioPlayerStore.getState()
+    const currStore = store.getState().audioPlayerInfo
     var keyIndex = currStore["keyIndex"]
     var playlist = currStore["playlist"]
 
@@ -137,7 +137,7 @@ const nextTrack = () => {
 const nextTrackFromQueue = () => {
     // var keyIndex = currStore["keyIndex"]
     // var playlist = currStore["playlist"]
-    let audioCurrStore = AudioPlayerStore.getState()
+    let audioCurrStore = store.getState().audioPlayerInfo
     console.log("before pushing", audioCurrStore)
     console.log("pushing next track")
 
@@ -148,7 +148,7 @@ const nextTrackFromQueue = () => {
     syncDB()
 
         
-    var queueCurrStore = QueueStore.getState()
+    var queueCurrStore = store.getState().queueInfo
     var currTrack = queueCurrStore.QueueInfo.currentTrack
     // console.log("queueCurrStore from nextTrackFromQueue", queueCurrStore)
 
@@ -171,7 +171,7 @@ const nextTrackFromQueue = () => {
     //     // }))
         
 
-    //     let audioCurrStore = AudioPlayerStore.getState()
+    //     let audioCurrStore = store.getState().audioPlayerInfo
     //     console.log("after pushing", audioCurrStore)
     //     console.log("pushing next track")
     // } else{
@@ -187,13 +187,13 @@ function AudioPlayerInfo(props) {
     const subreddit = props.subreddit;
     const trackName = props.trackName;
     const audio = props.audio;
-    const duration = AudioPlayerStore.getState().audio.duration
+    const duration = store.getState().audioPlayerInfo.audio.duration
 
     useEffect(() => {
         // console.log("curTime", curTime)
         // console.log("duration", duration)
         // if (duration == undefined){
-        //     duration = AudioPlayerStore.getState().duration
+        //     duration = store.getState().audioPlayerInfo.duration
         // }
 
         if (curTime && duration && curTime === duration) {
@@ -232,7 +232,7 @@ function AudioPlayerInfo(props) {
     }
  
     const testQueueStore = () =>{
-        let queueCurrStore = QueueStore.getState()
+        let queueCurrStore = store.getState().queueInfo
         console.log("queueCurrStore", queueCurrStore)
     }
 
@@ -329,7 +329,7 @@ function EmptyAudioPlayerInfo(props) {
     const trackName = props.trackName;
     const audio = props.audio;
     const testQueueStore = () =>{
-        let queueCurrStore = QueueStore.getState()
+        let queueCurrStore = store.getState().queueInfo
         console.log("queueCurrStore", queueCurrStore)
     }
     return (

@@ -103,7 +103,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 
 // const toggleLike = async (track: Track) => {
 //   // console.log("toggling like for:", track.track_id)
-//   let email = UserSessionStore.getState().email
+//   let email = store.getState().userSessionInfo.email
 //   await fetch("/api/user/collections/likedTracks/toggleLike", 
 //       {method: "POST", 
 //       body: JSON.stringify({email: email, trackID: track.track_id })})
@@ -142,7 +142,7 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
 
   const playTrackFromCurrentQueueChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
 
-    let playing = AudioPlayerStore.getState().playing
+    let playing = store.getState().audioPlayerInfo.playing
     AudioPlayerStore.dispatch(togglePlaying(!playing))
 
     QueueStore.dispatch(

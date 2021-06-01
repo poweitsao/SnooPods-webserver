@@ -127,7 +127,7 @@ const PlaylistChunk = (playlist: QueuePlaylist, index: number, options: any) => 
 
   const playTrackFromCurrentPlaylistChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
 
-    let playing = AudioPlayerStore.getState().playing
+    let playing = store.getState().audioPlayerInfo.playing
     AudioPlayerStore.dispatch(togglePlaying(!playing))
 
     QueueStore.dispatch(
