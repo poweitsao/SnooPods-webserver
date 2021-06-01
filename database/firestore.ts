@@ -208,7 +208,7 @@ export const deleteCollection = async(collectionID: string, collectionName: stri
     let userRef = db.collection("users").doc(email)  
 
     try{
-        userRef.update({collections:admin.firestore.FieldValue.arrayRemove({"collectionID": collectionID, "collectionName": collectionName}) })
+        await userRef.update({collections:admin.firestore.FieldValue.arrayRemove({"collectionID": collectionID, "collectionName": collectionName}) })
     } catch(e){
         console.log("error in deleteCollection, deleting collection from user", e)
         return 500
@@ -548,21 +548,21 @@ const createSubList = async (subListName: string, ownerID: string, subreddits: A
     }
 }
 
-export async function deleteSubList(subListName: string, subListID: string, email: string){
-    console.log("deleteSubList for firestore got", email, subListID)
+export async function deleteSubList( subListID: string,subListName: string, email: string){
+    console.log("deleteSubList for firestore got", email,",", subListID,",", subListName)
     let userRef = db.collection("users").doc(email)  
 
     try{
-        userRef.update({subscriptionLists :admin.firestore.FieldValue.arrayRemove({"subscriptionListID": subListID, "subscriptionListName": subListName}) })
+        await userRef.update({subscriptionLists :admin.firestore.FieldValue.arrayRemove({"subscriptionListID": subListID, "subscriptionListName": subListName}) })
     } catch(e){
-        console.log("error in deleteCollection, deleting collection from user", e)
+        console.log("error in deleteSubList, deleting subList from user", e)
         return 500
     }
     try{
         let subListRef = db.collection("subscriptionLists").doc(subListID)
         await subListRef.delete()
     } catch(e){
-        console.log("error in deleteCollection, deleting collection from collections", e)
+        console.log("error in deleteSubList, deleting subList from subscriptionLists", e)
         return 500
     }
 

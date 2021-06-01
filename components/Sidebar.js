@@ -137,6 +137,7 @@ const Sidebar = (props) => {
 
     const renderSubLists = (subList, index) => {
         // console.log("params in renderSubLists", subList, index)
+        console.log(showSubListDelete)
         const subListID = subList.subscriptionListID
         const subListName = subList.subscriptionListName
         return(
