@@ -17,5 +17,6 @@ const emptyCollections = () => {
 }
 
 module.exports = { 
-    storeCollections
+    storeCollections,
+    emptyCollections
  }

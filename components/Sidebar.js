@@ -220,7 +220,7 @@ const Sidebar = (props) => {
                 </div>
                 {collections?.map(renderCollections)}
                 <div className="title-container">
-                    <div style={{padding: "8px", paddingRight: "3px"}}>Your SubLists</div>
+                    <div style={{padding: "8px", paddingRight: "3px"}}>Subscription Lists</div>
                     <AddButton handleClick={() => handleAddSubList(props.user.email, "New sublist")}/>
                 </div>
                 {subLists?.map(renderSubLists)}

@@ -7,59 +7,36 @@ import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 import Collapse from 'react-bootstrap/Collapse'
 import { RegisterStore, AudioPlayerStore, QueueStore, UserSessionStore, CollectionStore, LikedTracksStore } from "../redux/store"
-import { storeRegisterationInfo } from "../redux/actions/index"
+import { emptyAudioStore, emptyRegisterationInfo, storeRegisterationInfo } from "../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
 import { Divider } from '@material-ui/core';
 
-
-
-// import GoogleLogo from "../resources/google_logo"
-// const Navbar = (props) => {
-
-
-// }
-
-// export default Navbar;
-
-
-// import { Row, Col, Form } from 'react-bootstrap/'
-// // import Col from 'react-bootstrap/Form'
-// import Button from 'react-bootstrap/Button'
-// import React, { useState } from 'react';
-// import Router from "next/router"
-// import store from "../redux/store"
 import Cookie from "js-cookie"
 import isEmpty from '../lib/isEmptyObject';
+import { emptyQueue } from '../redux/actions/queueActions';
+import {emptyUserSessionInfo} from "../redux/actions/userSessionActions"
+import {emptyCollections} from "../redux/actions/collectionActions"
+import {emptyLikedTracks} from "../redux/actions/likedTracksActions"
+
+
 
 const logout = () => {
     // console.log("Logout clicked")
     Cookie.remove("session_id")
     Cookie.remove("email")
 
-    RegisterStore.dispatch({
-        type: "EMPTY_REGISTERATION_STORE"
-    })
+    RegisterStore.dispatch(emptyRegisterationInfo())
 
-    AudioPlayerStore.dispatch({
-        type: "EMPTY_AUDIO_STORE"
-    })
+    AudioPlayerStore.dispatch(emptyAudioStore())
 
-    QueueStore.dispatch({
-        type: "EMPTY_QUEUE_STORE"
-    })
+    QueueStore.dispatch(emptyQueue())
 
-    UserSessionStore.dispatch({
-        type: "EMPTY_USER_SESSION_STORE"
-    })
+    UserSessionStore.dispatch(emptyUserSessionInfo())
 
-    CollectionStore.dispatch({
-        type: "EMPTY_COLLECTION_STORE"
-    })
+    CollectionStore.dispatch(emptyCollections())
 
-    LikedTracksStore.dispatch({
-        type: "EMPTY_LIKED_TRACKS_STORE"
-    })
+    LikedTracksStore.dispatch(emptyLikedTracks())
 
     Router.push("/")
 
