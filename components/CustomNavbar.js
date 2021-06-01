@@ -6,7 +6,7 @@ import { CLIENT_ID } from "../lib/constants"
 import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 import Collapse from 'react-bootstrap/Collapse'
-import { RegisterStore, AudioPlayerStore, QueueStore, UserSessionStore, CollectionStore, LikedTracksStore, SubListStore } from "../redux/store"
+import store from "../redux/store"
 import { emptyAudioStore, emptyRegisterationInfo, storeRegisterationInfo } from "../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
@@ -26,19 +26,19 @@ const logout = () => {
     Cookie.remove("session_id")
     Cookie.remove("email")
 
-    RegisterStore.dispatch(emptyRegisterationInfo())
+    store.dispatch(emptyRegisterationInfo())
 
-    AudioPlayerStore.dispatch(emptyAudioStore())
+    store.dispatch(emptyAudioStore())
 
-    QueueStore.dispatch(emptyQueue())
+    store.dispatch(emptyQueue())
 
-    UserSessionStore.dispatch(emptyUserSessionInfo())
+    store.dispatch(emptyUserSessionInfo())
 
-    CollectionStore.dispatch(emptyCollections())
+    store.dispatch(emptyCollections())
 
-    LikedTracksStore.dispatch(emptyLikedTracks())
+    store.dispatch(emptyLikedTracks())
 
-    SubListStore.dispatch(emptySubLists())
+    store.dispatch(emptySubLists())
 
     Router.push("/")
 
@@ -198,7 +198,7 @@ async function onGoogleLoginSuccess(googleUser) {
             console.log("response in index.js", res)
             // const store = createStore(registerReducer)
 
-            RegisterStore.dispatch(storeRegisterationInfo(res))
+            store.dispatch(storeRegisterationInfo(res))
             // console.log("store: ", store.getState())
             console.log("Taking user to registeration page ")
             Router.push('/register')

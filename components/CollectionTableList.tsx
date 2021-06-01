@@ -4,7 +4,7 @@ import { server } from "../config";
 import React, { useEffect, useState } from "react";
 import useSWR, { trigger } from "swr";
 import Layout from "./layout"
-import { AudioPlayerStore, CollectionStore, QueueStore, UserSessionStore } from "../redux/store";
+import store from "../redux/store";
 import Router from "next/router";
 import validateSession from "../lib/validateUserSessionOnPage";
 import { getQueue } from "../lib/syncQueue";
@@ -38,8 +38,8 @@ import toggleLike from "../lib/toggleLike"
 const CollectionTableList = (props) => {
     let {playlist} = props
     console.log("props in CollectionTableList", props)
-    let likedTracks = props.LikedTracks
-    let likedTracksCollectionID = props.likedTracksCollectionID
+    let likedTracks = props.likedTracksInfo.LikedTracks
+    let likedTracksCollectionID = props.likedTracksInfo.likedTracksCollectionID
 
     const playPodcast = (trackKey: string, trackIndex: number,  tracks: Array<Track>, collectionName: string) => {
         console.log("params in playPodcast",trackKey, trackIndex, tracks, collectionName )
@@ -48,25 +48,25 @@ const CollectionTableList = (props) => {
           queuePlaylistTracks.push(tracks[i])
         }
     
-        var currStore = QueueStore.getState()
+        var currStore = store.getState().queueInfo
     
         if (queuePlaylistTracks.length > 0){
           var playlistName = collectionName
     
           var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
-          QueueStore.dispatch(
+          store.dispatch(
             replaceCurrentPlaylist(queuePlaylist)
           )
           
         }
-        QueueStore.dispatch(
+        store.dispatch(
           replaceCurrentTrack(tracks[trackIndex])
         )
-        currStore = QueueStore.getState()
+        currStore = store.getState().queueInfo
         console.log("currStore after replace ", currStore )
         let currTrack = currStore.QueueInfo.currentTrack
         // syncDB(cookies.email)
-        AudioPlayerStore.dispatch(
+        store.dispatch(
           storeAudioPlayerInfo({
             playing: true,
             subreddit: "loremipsum",
@@ -74,7 +74,7 @@ const CollectionTableList = (props) => {
             filename: currTrack.filename,
             audio: new Audio(currTrack.cloud_storage_url),
             url: currTrack.cloud_storage_url,
-            email: UserSessionStore.getState().email}
+            email: store.getState().userSessionInfo.email}
           )
         )
     
@@ -173,7 +173,7 @@ const CollectionTableList = (props) => {
 
     // const toggleLike = async (track: Track, likedTracksCollectionID: string) => {
     //     // console.log("toggling like for:", track.track_id)
-    //     let email = UserSessionStore.getState().email
+    //     let email = store.getState().userSessionInfo.email
     //     await fetch("/api/user/collections/likedTracks/toggleLike", 
     //         {method: "POST", 
     //         body: JSON.stringify({email: email, trackID: track.track_id })})
@@ -183,7 +183,7 @@ const CollectionTableList = (props) => {
     //   }
     // const toggleLike = async (track: Track, likedTracksCollectionID: string) => {
     //     // console.log("toggling like for:", track.track_id)
-    //     let email = UserSessionStore.getState().email
+    //     let email = store.getState().userSessionInfo.email
     //     await fetch("/api/user/collections/likedTracks/toggleLike", 
     //         {method: "POST", 
     //         body: JSON.stringify({email: email, trackID: track.track_id })})

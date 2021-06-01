@@ -15,16 +15,13 @@ import isEmpty from "../lib/isEmptyObject"
 import LoginPopup from "../components/LoginPopup"
 import Sidebar from "../components/Sidebar"
 import useSWR from 'swr'
-import { AudioPlayerStore } from "../redux/store";
+import store from "../redux/store";
 // import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index";
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
-import { QueueStore } from "../redux/store";
 import {getQueue} from "../lib/syncQueue";
 
 import {UserSession} from "../ts/interfaces"
-
-import {UserSessionStore} from "../redux/store"
 
 
 
@@ -161,7 +158,7 @@ const home = ({ userSession }) => {
         // console.log("user from validateUserSession", userSession)
         setUser(userSession)
         
-        UserSessionStore.dispatch({
+        store.dispatch({
           type:"STORE_USER_SESSION_INFO",
           userSession
         })
@@ -172,12 +169,12 @@ const home = ({ userSession }) => {
     }
 
     if (userSession.session_id && userSession.email) {
-      // console.log("UserSession: ", UserSessionStore.getState())
-      if (!UserSessionStore.getState().validSession){
+      // console.log("UserSession: ", store.getState().userSessionInfo)
+      if (!store.getState().userSessionInfo.validSession){
         validateUserSession(userSession.session_id, userSession.email);
       } else{
         console.log("not validating user session because it's already valid")
-        setUser(UserSessionStore.getState())
+        setUser(store.getState().userSessionInfo)
       }
       
 
@@ -195,11 +192,11 @@ const home = ({ userSession }) => {
   }, []);
 
   const getQueueStore = () =>{
-    let queueInfo = QueueStore.getState();
+    let queueInfo = store.getState().queueInfo;
     console.log(queueInfo)
   }
   const getUserSessionStore = () =>{
-    let UserSessionInfo = UserSessionStore.getState()
+    let UserSessionInfo = store.getState().userSessionInfo
     console.log(UserSessionInfo)
   }
   return (
@@ -298,7 +295,7 @@ const home = ({ userSession }) => {
         </div>
         <div>
 
-        <Provider store={AudioPlayerStore}>
+        <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
         </div>

@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button"
 import React, { useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 import { trigger } from 'swr'
-import { UserSessionStore } from '../redux/store'
+import store from '../redux/store'
 
 
 const EditNameModal = (props) => {
@@ -27,7 +27,7 @@ const EditNameModal = (props) => {
 
         }else{
             await runonsubmit(newName)
-            trigger("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
+            trigger("/api/user/collections/getCollections/"+ store.getState().userSessionInfo.email)
         }
     }
 

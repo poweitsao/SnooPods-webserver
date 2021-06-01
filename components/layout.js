@@ -4,7 +4,6 @@ import store from "../redux/store"
 import Sidebar from "../components/Sidebar"
 import useSWR, { SWRConfig } from 'swr'
 import fetch from "isomorphic-unfetch"
-import {QueueStore} from "../redux/store"
 // import withRedux from "next-redux-wrapper"
 
 const Layout = (props) => (

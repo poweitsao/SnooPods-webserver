@@ -64,7 +64,7 @@ const queueInfoReducer = (state = initialState, action) => {
             return state
 
         case "PUSH_NEXT_TRACK":
-            // const currStore =QueueStore.getState()
+            // const currStore =store.getState().queueInfo
             // console.log("currStore", currStore)
 
             // console.log("state", state)

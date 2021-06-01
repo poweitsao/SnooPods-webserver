@@ -10,7 +10,7 @@ import CustomNavbar from "../../components/CustomNavbar";
 import AudioPlayerBar from "../../components/AudioPlayerBar";
 import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
-import { AudioPlayerStore, CollectionStore, LikedTracksStore } from "../../redux/store";
+import store from "../../redux/store";
 import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index";
 import Image from "react-bootstrap/Image";
 
@@ -33,11 +33,9 @@ import Sidebar from "../../components/Sidebar";
 import useSWR from "swr";
 import { server } from "../../config";
 
-import { QueueStore } from "../../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue, replaceCurrentPlaylist } from "../../redux/actions/queueActions";
 import {syncDB, getQueue} from "../../lib/syncQueue"
 
-import {UserSessionStore} from "../../redux/store"
 import LoginPopup from "../../components/LoginPopup";
 
 import PlaylistOptionsButton from "../../components/buttons/PlaylistOptionsButton"
@@ -67,7 +65,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
   const subID: string = router.query["subID"].toString();
 
   const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
-// const {data: collections} = useSWR("/api/user/collections/getCollections/"+ UserSessionStore.getState().email)
+// const {data: collections} = useSWR("/api/user/collections/getCollections/"+ store.getState().userSessionInfo.email)
   
 
   useEffect(() => {
@@ -79,7 +77,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
       if (userSession.validSession){
         // console.log("user from validateUserSession", userSession)
         setUser(userSession)
-        UserSessionStore.dispatch({
+        store.dispatch({
           type:"STORE_USER_SESSION_INFO",
           userSession
         })
@@ -89,12 +87,12 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
     }
 
     if (userSession.session_id && userSession.email) {
-      // console.log("UserSession: ", UserSessionStore.getState())
-      if (!UserSessionStore.getState().validSession){
+      // console.log("UserSession: ", store.getState().userSessionInfo)
+      if (!store.getState().userSessionInfo.validSession){
         validateUserSession(userSession.session_id, userSession.email);
       } else{
         console.log("not validating user session because it's already valid")
-        setUser(UserSessionStore.getState())
+        setUser(store.getState().userSessionInfo)
       }
       
 
@@ -119,7 +117,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 //     }
 
 //     // console.log("queuePlaylistTracks", queuePlaylistTracks)
-//     var currStore = QueueStore.getState()
+//     var currStore = store.getState().queueInfo
 //     // console.log("store before dispatch", currStore)
 
 //     if (queuePlaylistTracks.length > 0){
@@ -127,20 +125,20 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 
 //       var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
 //       // console.log("queuePlaylist", queuePlaylist)
-//       QueueStore.dispatch(
+//       store.dispatch(
 //         replaceCurrentPlaylist(queuePlaylist)
 //       )
       
     
     
 //     }
-//     QueueStore.dispatch(
+//     store.dispatch(
 //       replaceCurrentTrack(playlist.tracks[trackKey])
 //     )
-//     currStore = QueueStore.getState()
+//     currStore = store.getState().queueInfo
 //     let currTrack = currStore.QueueInfo.currentTrack
 //     // syncDB(cookies.email)
-//     AudioPlayerStore.dispatch(
+//     store.dispatch(
 //       storeAudioPlayerInfo({
 //         playing: true,
 //         subreddit: "loremipsum",
@@ -148,7 +146,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 //         filename: currTrack.filename,
 //         audio: new Audio(currTrack.cloud_storage_url),
 //         url: currTrack.cloud_storage_url,
-//         email: UserSessionStore.getState().email}
+//         email: store.getState().userSessionInfo.email}
 //       )
 //     )
 
@@ -339,7 +337,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
             {playlist == undefined ? (
               <div></div>
             ) : (
-              <Provider store={LikedTracksStore}>
+              <Provider store={store}>
                 <SubredditTableList playlist={playlist}/>
               </Provider>
               // <Tablelist playlist={playlist} />
@@ -347,7 +345,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
             )}
           </div>
         </div>
-        <Provider store={AudioPlayerStore}>
+        <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
         {/* ; */}

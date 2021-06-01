@@ -8,7 +8,7 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import {addPlaylistToQueue} from "../../redux/actions/queueActions"
-import {QueueStore, AudioPlayerStore, UserSessionStore} from "../../redux/store"
+import store from "../../redux/store"
 import {QueuePlaylist, Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
@@ -40,7 +40,7 @@ export default function SubListOptionsButton(props) {
         
         var queuePlaylist = createQueuePlaylist(tracks, collection.collectionName)
         console.log("queuePlaylist", queuePlaylist)
-        QueueStore.dispatch(
+        store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
 

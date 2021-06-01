@@ -5,7 +5,7 @@ import { server } from "../../config";
 import React, { useEffect, useState } from "react";
 import useSWR, { trigger } from "swr";
 import Layout from "../../components/layout"
-import { AudioPlayerStore, CollectionStore, LikedTracksStore, QueueStore, UserSessionStore } from "../../redux/store";
+import store from "../../redux/store";
 import Router from "next/router";
 import validateSession from "../../lib/validateUserSessionOnPage";
 import { getQueue } from "../../lib/syncQueue";
@@ -56,7 +56,7 @@ const SubListPage = ({ userSession, subListID }) => {
         if (userSession.validSession){
           // console.log("user from validateUserSession", userSession)
           setUser(userSession)
-          UserSessionStore.dispatch({
+          store.dispatch({
             type:"STORE_USER_SESSION_INFO",
             userSession
           })
@@ -66,12 +66,12 @@ const SubListPage = ({ userSession, subListID }) => {
       }
   
       if (userSession.session_id && userSession.email) {
-        // console.log("UserSession: ", UserSessionStore.getState())
-        if (!UserSessionStore.getState().validSession){
+        // console.log("UserSession: ", store.getState().userSessionInfo)
+        if (!store.getState().userSessionInfo.validSession){
           validateUserSession(userSession.session_id, userSession.email);
         } else{
           console.log("not validating user session because it's already valid")
-          setUser(UserSessionStore.getState())
+          setUser(store.getState().userSessionInfo)
         }
         
   
@@ -98,7 +98,7 @@ const SubListPage = ({ userSession, subListID }) => {
     //           fields: {
     //               subListID: playlist.subListID,
     //               newCollectionName: newName,
-    //               email: UserSessionStore.getState().email
+    //               email: store.getState().userSessionInfo.email
     //           }
     //       }) 
     //     })
@@ -166,7 +166,7 @@ const SubListPage = ({ userSession, subListID }) => {
               <div></div>
             ) : (
               // <Tablelist playlist={playlist} />
-              <Provider store={LikedTracksStore}>
+              <Provider store={store}>
                 {/* <CollectionTableList playlist={playlist}/> */}
                 <CurrentSubList subList={subList.collections}/>
               </Provider>
@@ -174,7 +174,7 @@ const SubListPage = ({ userSession, subListID }) => {
             )}
           </div>
         </div>
-        <Provider store={AudioPlayerStore}>
+        <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
         {/* ; */}

@@ -8,7 +8,7 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import {addPlaylistToQueue} from "../../redux/actions/queueActions"
-import {QueueStore, AudioPlayerStore, UserSessionStore, CollectionStore} from "../../redux/store"
+import store from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 import { trigger } from 'swr';
@@ -24,7 +24,7 @@ export default function CollectionsTrackOptionsButton(props) {
         // console.log(trackInfo)
         var queuePlaylist = createQueuePlaylist([trackInfo], "${singleTrack}")
         console.log("queuePlaylist", queuePlaylist)
-        QueueStore.dispatch(
+        store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
         
@@ -51,14 +51,14 @@ export default function CollectionsTrackOptionsButton(props) {
     const addTrackToCollection = (collectionID: string) => {
         // console.log("adding track", trackInfo.track_name ," to collection")
         // console.log("addTrackToCollection fields", props)
-        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, UserSessionStore.getState().email)
+        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, store.getState().userSessionInfo.email)
         fetch("/api/user/collections/editCollection", 
             { method: "POST", body: JSON.stringify({
                 action:"addTrack",
                 fields: {
                     collectionID: collectionID,
                     newTrackID: trackInfo.track_id,
-                    email: UserSessionStore.getState().email
+                    email: store.getState().userSessionInfo.email
                 }
             }) 
         })
@@ -67,8 +67,8 @@ export default function CollectionsTrackOptionsButton(props) {
     const removeTrackFromCollection = async (collectionID: string, index: number) => {
         // console.log("adding track", trackInfo.track_name ," to collection")
         // console.log("addTrackToCollection fields", props)
-        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, UserSessionStore.getState().email)
-        removeTrackFetch(collectionID, trackInfo.track_id, index, UserSessionStore.getState().email)
+        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, store.getState().userSessionInfo.email)
+        removeTrackFetch(collectionID, trackInfo.track_id, index, store.getState().userSessionInfo.email)
     }
 
     const removeTrackFetch = async (collectionID: string, trackID: string, index: number, email: string) => {
@@ -98,7 +98,7 @@ export default function CollectionsTrackOptionsButton(props) {
 
     }
 
-    // const collections = CollectionStore.getState()
+    // const collections = store.getState().collectionInfo
     // console.log("collections", collections)
 
 

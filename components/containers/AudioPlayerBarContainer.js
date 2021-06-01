@@ -1,11 +1,11 @@
 import { connect } from "react-redux"
-import { AudioPlayerStore } from "../../redux/store"
+import store from "../../redux/store"
 import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index"
 import AudioPlayerBar from "../AudioPlayerBar"
 
 
 const getAudioPlayerStatus = () => {
-    return AudioPlayerStore.getState().AudioPlayerInfo;
+    return store.getState().audioPlayerInfo.AudioPlayerInfo;
 }
 
 // const mapStateToProps = (state) => ({

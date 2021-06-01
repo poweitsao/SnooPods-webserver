@@ -7,7 +7,7 @@ import isEmpty from "../../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../../lib/syncQueue";
 import { togglePlaying } from "../../redux/actions";
 import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue } from "../../redux/actions/queueActions";
-import { AudioPlayerStore, CollectionStore, LikedTracksStore, QueueStore, UserSessionStore } from "../../redux/store";
+import store from "../../redux/store";
 import { Track, QueuePlaylist } from "../../ts/interfaces";
 import Icon from "@iconify/react";
 import QueuePlaylistOptionsButtonContainer from "../containers/QueuePlaylistOptionsButtonContainer";
@@ -81,7 +81,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
             <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
               {convertDate(array[index]["date_posted"])}
               <div style={{padding: "10px"}}>
-              <Provider store={CollectionStore}>
+              <Provider store={store}>
                 <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
               </Provider>
                 </div>
@@ -103,7 +103,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 
   // const toggleLike = async (track: Track) => {
   //   console.log("toggling like for:", track.track_id)
-  //   let email = UserSessionStore.getState().email
+  //   let email = store.getState().userSessionInfo.email
   //   await fetch("/api/user/collections/likedTracks/toggleLike", 
   //       {method: "POST", 
   //       body: JSON.stringify({email: email, trackID: track.track_id })})
@@ -112,16 +112,17 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 
   const CurrentPlaylist = (props) => {
     console.log("props in CurrentPlaylist", props)
-    let { playlist }: { playlist: QueuePlaylist } = props
+    let { currentPlaylist }: { currentPlaylist: QueuePlaylist } = props.queueInfo.QueueInfo
+
     const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track, playlistID?: string) => {
 
-      let playing = AudioPlayerStore.getState().playing
-      AudioPlayerStore.dispatch(togglePlaying(!playing))
+      let playing = store.getState().audioPlayerInfo.playing
+      store.dispatch(togglePlaying(!playing))
 
-      QueueStore.dispatch(
+      store.dispatch(
         replaceCurrentTrack(track)
       )
-      QueueStore.dispatch(
+      store.dispatch(
         removeTrackFromCurrentPlaylist(trackID, index)
       )
       syncQueueWithAudioPlayer(true)
@@ -129,7 +130,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
     }
     const removeFromCurrentPlaylist = (trackID: string, index: number, playlistID: string) =>{
 
-      QueueStore.dispatch(
+      store.dispatch(
           removeTrackFromCurrentPlaylist(trackID, index)
       )
       
@@ -137,11 +138,17 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
       syncQueueWithAudioPlayer(false)
   }
 
+  if(currentPlaylist.tracks.length == 0){
+    return(
+      <div></div>
+    )
+  }
+
     return (
       <div style={{ width: "100%" }}>
         {
           <button style={{marginLeft: "10px"}} onClick={() => {
-            QueueStore.dispatch(clearCurrentPlaylist());
+            store.dispatch(clearCurrentPlaylist());
             syncDB(); 
             syncQueueWithAudioPlayer(true);
           }}>clear</button>
@@ -154,12 +161,12 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
             <tr>
             </tr>
           </thead>
-          <tbody>{playlist.tracks.map((track: Track, index: number, array: Array<Track>) => {
+          <tbody>{currentPlaylist.tracks.map((track: Track, index: number, array: Array<Track>) => {
                     return renderTrackOnTable(track, index, array, 
                       {playTrack: playTrackFromCurrentPlaylist, 
                         removeTrack: removeFromCurrentPlaylist, 
-                        playlistID: playlist.playlistID, 
-                        likedTracks: props.LikedTracks,
+                        playlistID: currentPlaylist.playlistID, 
+                        likedTracks: props.likedTracksInfo.LikedTracks,
                         likedTracksCollectionID: props.likedTracksCollectionID
                       }
                     )

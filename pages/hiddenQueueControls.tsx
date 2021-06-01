@@ -11,12 +11,10 @@ import parseCookies from "../lib/parseCookies"
 import fetch from "isomorphic-unfetch"
 import { connect } from "react-redux"
 
-
-import { QueueStore, UserSessionStore } from "../redux/store";
+import store from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import {QueuePlaylist, Track, UserSession} from "../ts/interfaces"
 
-import { AudioPlayerStore } from "../redux/store";
 import { storeAudioPlayerInfo} from "../redux/actions/index"
 
 import { getQueue, syncDB} from "../lib/syncQueue"
@@ -39,7 +37,7 @@ const hiddenQueueControls = ({ userSession }) => {
           // console.log("user from validateUserSession", userSession)
           setUser(userSession)
           
-          UserSessionStore.dispatch({
+          store.dispatch({
             type:"STORE_USER_SESSION_INFO",
             userSession
           })
@@ -94,7 +92,7 @@ const hiddenQueueControls = ({ userSession }) => {
               
       //       }
             
-      //       QueueStore.dispatch(
+      //       store.dispatch(
       //         storeQueueInfo({
       //           currentTrack: currTrack,
       //           currentPlaylist: currentPlaylist,
@@ -102,10 +100,10 @@ const hiddenQueueControls = ({ userSession }) => {
       //         })
       //       )
 
-      //       let currAudioStore = AudioPlayerStore.getState()
+      //       let currAudioStore = store.getState().audioPlayerInfo
       //       console.log("currAudioStore", currAudioStore)
       //       if (currAudioStore.audio == "" && currTrack.cloud_storage_url !== ""){
-      //         AudioPlayerStore.dispatch(
+      //         store.dispatch(
       //           storeAudioPlayerInfo({
       //             playing: false,
       //             subreddit: "loremipsum",
@@ -120,12 +118,12 @@ const hiddenQueueControls = ({ userSession }) => {
       // }
 
       if (userSession.session_id && userSession.email) {
-        // console.log("UserSession: ", UserSessionStore.getState())
-        if (!UserSessionStore.getState().validSession){
+        // console.log("UserSession: ", store.getState().userSessionInfo)
+        if (!store.getState().userSessionInfo.validSession){
           validateUserSession(userSession.session_id, userSession.email);
         } else{
           console.log("not validating user session because it's already valid")
-          setUser(UserSessionStore.getState())
+          setUser(store.getState().userSessionInfo)
         }
       } else {
         setShowLoginPopup(true)
@@ -137,63 +135,63 @@ const hiddenQueueControls = ({ userSession }) => {
     // console.log(queueInfo)
     const getQueueInfoRedux = () =>{
       // console.log("getQueueInfo result", queueInfo)
-      const currStore =QueueStore.getState()
+      const currStore =store.getState().queueInfo
       console.log(currStore)
 
     }
 
     const getCurrentTrackRedux = () =>{
       // console.log("getQueueInfo result", queueInfo)
-      const currStore =QueueStore.getState()
+      const currStore =store.getState().queueInfo
       console.log(currStore.QueueInfo.currentTrack)
 
     }
 
     const pushNextTrackRedux = () =>{
-      QueueStore.dispatch(
+      store.dispatch(
         pushNextTrack()
       )
       syncDB()
     }
     const replaceCurrentTrackRedux = (track) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         replaceCurrentTrack(track)
       )
       syncDB()
     }
     const addPlaylistToQueueRedux = (newPlaylist) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         addPlaylistToQueue(newPlaylist)
       )
       syncDB()
     }
     const clearCurrentPlaylistRedux = () =>{
-      QueueStore.dispatch(
+      store.dispatch(
         clearCurrentPlaylist()
       )
       syncDB()
     }
     const removeTrackFromCurrentPlaylistRedux = (trackID, index) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         removeTrackFromCurrentPlaylist(trackID, index)
       )
       syncDB()
     }
     const removePlaylistFromQueueRedux = (playlistID) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         removePlaylistFromQueue(playlistID)
       )
       syncDB()
     }
     const removeTrackFromQueueRedux = (playlistID, trackID, index) =>{
-      QueueStore.dispatch(
+      store.dispatch(
         removeTrackFromQueue(playlistID, trackID, index)
       )
       syncDB()
     }
 
     // const syncDB = async (email: string) =>{
-    //   const currStore =QueueStore.getState()
+    //   const currStore =store.getState().queueInfo
     //   var res = await fetch("/api/queue/pushQueueToDB", {method: "POST", body: JSON.stringify({email: email, queueInfo: currStore.QueueInfo})})
     // }
 
@@ -334,7 +332,7 @@ const hiddenQueueControls = ({ userSession }) => {
             </div>
         </div>
         <div>
-            <Provider store={AudioPlayerStore}>
+            <Provider store={store}>
                 <AudioPlayerBarContainer />
             </Provider>
         </div>

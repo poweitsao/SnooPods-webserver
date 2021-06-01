@@ -12,11 +12,10 @@ import fetch from "isomorphic-unfetch"
 import { connect } from "react-redux"
 
 
-import { LikedTracksStore, QueueStore, UserSessionStore } from "../redux/store";
+import store from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import {Collection, QueuePlaylist, Track, UserSession} from "../ts/interfaces"
 
-import { AudioPlayerStore } from "../redux/store";
 import { storeAudioPlayerInfo, togglePlaying} from "../redux/actions/index"
 
 import { getQueue, syncDB, syncQueueWithAudioPlayer} from "../lib/syncQueue"
@@ -32,6 +31,7 @@ import convertDate from "../lib/convertDate";
 
 import QueuePageBodyContainer from "../components/containers/QueuePageBodyContainer"
 import { propTypes } from "react-bootstrap/esm/Image";
+import QueuePageBody from "../components/Queue/QueuePageBody";
 
 
 const Queue = ({ userSession }) => {
@@ -51,7 +51,7 @@ const Queue = ({ userSession }) => {
           // console.log("user from validateUserSession", userSession)
           setUser(userSession)
           
-          UserSessionStore.dispatch({
+          store.dispatch({
             type:"STORE_USER_SESSION_INFO",
             userSession
           })
@@ -62,12 +62,12 @@ const Queue = ({ userSession }) => {
       }
 
       if (userSession.session_id && userSession.email) {
-        // console.log("UserSession: ", UserSessionStore.getState())
-        if (!UserSessionStore.getState().validSession){
+        // console.log("UserSession: ", store.getState().userSessionInfo)
+        if (!store.getState().userSessionInfo.validSession){
           validateUserSession(userSession.session_id, userSession.email);
         } else{
           console.log("not validating user session because it's already valid")
-          setUser(UserSessionStore.getState())
+          setUser(store.getState().userSessionInfo)
         }
       } else {
         setShowLoginPopup(true)
@@ -104,17 +104,17 @@ const Queue = ({ userSession }) => {
               {isEmpty(user) ? <div></div> : <CustomNavbar user={user} />}
               <div></div>
               
-              <Provider store={QueueStore}>
+              {/* <Provider store={store}> */}
                 {
                   isEmpty(user)
                   ?<div></div>
-                  : <QueuePageBodyContainer user={user}/>
+                  : <QueuePageBody user={user}/>
                 }
                 
-              </Provider>
+              {/* </Provider> */}
             </div>
           
-          <Provider store={AudioPlayerStore}>
+          <Provider store={store}>
             <AudioPlayerBarContainer />
           </Provider>
           <style>

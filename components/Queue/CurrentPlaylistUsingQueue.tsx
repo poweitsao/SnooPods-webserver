@@ -7,7 +7,7 @@ import isEmpty from "../../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../../lib/syncQueue";
 import { togglePlaying } from "../../redux/actions";
 import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue } from "../../redux/actions/queueActions";
-import { AudioPlayerStore, CollectionStore, LikedTracksStore, QueueStore, UserSessionStore } from "../../redux/store";
+import store from "../../redux/store";
 import { Track, QueuePlaylist } from "../../ts/interfaces";
 import Icon from "@iconify/react";
 import QueuePlaylistOptionsButtonContainer from "../containers/QueuePlaylistOptionsButtonContainer";
@@ -84,7 +84,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
           <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
             {convertDate(array[index]["date_posted"])}
             <div style={{padding: "10px"}}>
-            <Provider store={CollectionStore}>
+            <Provider store={store}>
               <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} playlistID={options?.playlistID} removeTrack={options?.removeTrack}/>
             </Provider>
               </div>
@@ -112,8 +112,8 @@ const CurrentPlaylistUsingQueue = (props) => {
       
       {playlist.map((playlist, index) => {
         return PlaylistChunk(playlist, index, {
-          likedTracks: props.LikedTracks, 
-          likedTracksCollectionID: props.likedTracksCollectionID})
+          likedTracks: props.likedTracksInfo.LikedTracks, 
+          likedTracksCollectionID: props.likedTracksInfo.likedTracksCollectionID})
         })
       }
     </div>
@@ -127,13 +127,13 @@ const PlaylistChunk = (playlist: QueuePlaylist, index: number, options: any) => 
 
   const playTrackFromCurrentPlaylistChunk = (trackID: string, index: number, track: Track, playlistID:string) => {
 
-    let playing = AudioPlayerStore.getState().playing
-    AudioPlayerStore.dispatch(togglePlaying(!playing))
+    let playing = store.getState().audioPlayerInfo.playing
+    store.dispatch(togglePlaying(!playing))
 
-    QueueStore.dispatch(
+    store.dispatch(
       replaceCurrentTrack(track)
     )
-    QueueStore.dispatch(
+    store.dispatch(
       removeTrackFromCurrentPlaylist(trackID, index)
     )
     syncQueueWithAudioPlayer(true)
@@ -142,7 +142,7 @@ const PlaylistChunk = (playlist: QueuePlaylist, index: number, options: any) => 
 
   const removeFromCurrentPlaylistChunk = (trackID: string, index: number, playlistID: string) =>{
 
-      QueueStore.dispatch(
+      store.dispatch(
           removeTrackFromCurrentPlaylist(trackID, index)
       )
       
@@ -156,7 +156,7 @@ const PlaylistChunk = (playlist: QueuePlaylist, index: number, options: any) => 
         <div style={{padding: "10px", paddingLeft: "50px"}}>
           {playlist.playlistName}
           <button style={{marginLeft: "10px"}} onClick={() => {
-            QueueStore.dispatch(clearCurrentPlaylist()); 
+            store.dispatch(clearCurrentPlaylist()); 
             syncDB(); 
             syncQueueWithAudioPlayer(true);
           }}>clear</button>

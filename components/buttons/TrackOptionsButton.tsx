@@ -8,7 +8,7 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import {addPlaylistToQueue} from "../../redux/actions/queueActions"
-import {QueueStore, AudioPlayerStore, UserSessionStore, CollectionStore} from "../../redux/store"
+import store from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 
@@ -23,7 +23,7 @@ export default function TrackOptionsButton(props) {
         // console.log(trackInfo)
         var queuePlaylist = createQueuePlaylist([trackInfo], "${singleTrack}")
         console.log("queuePlaylist", queuePlaylist)
-        QueueStore.dispatch(
+        store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
         
@@ -50,14 +50,14 @@ export default function TrackOptionsButton(props) {
     const addTrackToCollection = (collectionID: string) => {
         // console.log("adding track", trackInfo.track_name ," to collection")
         // console.log("addTrackToCollection fields", props)
-        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, UserSessionStore.getState().email)
+        console.log("addTrackToCollection fields", collectionID, trackInfo.track_id, store.getState().userSessionInfo.email)
         fetch("/api/user/collections/editCollection", 
             { method: "POST", body: JSON.stringify({
                 action:"addTrack",
                 fields: {
                     collectionID: collectionID,
                     newTrackID: trackInfo.track_id,
-                    email: UserSessionStore.getState().email
+                    email: store.getState().userSessionInfo.email
                 }
             }) 
         })
@@ -80,7 +80,7 @@ export default function TrackOptionsButton(props) {
             <MenuItem onClick={addTrackToQueue}>Add to queue</MenuItem>
             <MenuItem>Go to Subreddit</MenuItem>
             <SubMenu label="Add to collection">
-                {props.Collections.map(renderCollectionsSubmenu)}
+                {props.collectionInfo.Collections.map(renderCollectionsSubmenu)}
                 {/* render this dynamically later */}
                 {/* <MenuItem>index.html</MenuItem>
                 <MenuItem>example.js</MenuItem>

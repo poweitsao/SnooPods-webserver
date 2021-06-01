@@ -5,7 +5,7 @@ import { server } from "../../config";
 import React, { useEffect, useState } from "react";
 import useSWR, { trigger } from "swr";
 import Layout from "../../components/layout"
-import { AudioPlayerStore, CollectionStore, LikedTracksStore, QueueStore, UserSessionStore } from "../../redux/store";
+import store from "../../redux/store";
 import Router from "next/router";
 import validateSession from "../../lib/validateUserSessionOnPage";
 import { getQueue } from "../../lib/syncQueue";
@@ -53,7 +53,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
         if (userSession.validSession){
           // console.log("user from validateUserSession", userSession)
           setUser(userSession)
-          UserSessionStore.dispatch({
+          store.dispatch({
             type:"STORE_USER_SESSION_INFO",
             userSession
           })
@@ -63,12 +63,12 @@ const CollectionPage = ({ userSession, collectionID }) => {
       }
   
       if (userSession.session_id && userSession.email) {
-        // console.log("UserSession: ", UserSessionStore.getState())
-        if (!UserSessionStore.getState().validSession){
+        // console.log("UserSession: ", store.getState().userSessionInfo)
+        if (!store.getState().userSessionInfo.validSession){
           validateUserSession(userSession.session_id, userSession.email);
         } else{
           console.log("not validating user session because it's already valid")
-          setUser(UserSessionStore.getState())
+          setUser(store.getState().userSessionInfo)
         }
         
   
@@ -93,25 +93,25 @@ const CollectionPage = ({ userSession, collectionID }) => {
   //       queuePlaylistTracks.push(tracks[i])
   //     }
   
-  //     var currStore = QueueStore.getState()
+  //     var currStore = store.getState().queueInfo
   
   //     if (queuePlaylistTracks.length > 0){
   //       var playlistName = collectionName
   
   //       var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
-  //       QueueStore.dispatch(
+  //       store.dispatch(
   //         replaceCurrentPlaylist(queuePlaylist)
   //       )
         
   //     }
-  //     QueueStore.dispatch(
+  //     store.dispatch(
   //       replaceCurrentTrack(tracks[trackIndex])
   //     )
-  //     currStore = QueueStore.getState()
+  //     currStore = store.getState().queueInfo
   //     console.log("currStore after replace ", currStore )
   //     let currTrack = currStore.QueueInfo.currentTrack
   //     // syncDB(cookies.email)
-  //     AudioPlayerStore.dispatch(
+  //     store.dispatch(
   //       storeAudioPlayerInfo({
   //         playing: true,
   //         subreddit: "loremipsum",
@@ -119,7 +119,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
   //         filename: currTrack.filename,
   //         audio: new Audio(currTrack.cloud_storage_url),
   //         url: currTrack.cloud_storage_url,
-  //         email: UserSessionStore.getState().email}
+  //         email: store.getState().userSessionInfo.email}
   //       )
   //     )
   
@@ -248,7 +248,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
               fields: {
                   collectionID: playlist.collectionID,
                   newCollectionName: newName,
-                  email: UserSessionStore.getState().email
+                  email: store.getState().userSessionInfo.email
               }
           }) 
         })
@@ -324,13 +324,13 @@ const CollectionPage = ({ userSession, collectionID }) => {
               <div></div>
             ) : (
               // <Tablelist playlist={playlist} />
-              <Provider store={LikedTracksStore}>
+              <Provider store={store}>
                 <CollectionTableList playlist={playlist}/>
               </Provider>
             )}
           </div>
         </div>
-        <Provider store={AudioPlayerStore}>
+        <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
         {/* ; */}

@@ -10,10 +10,9 @@ import Forward10 from "./custom-audio-player/src/Forward10"
 import Bar from "./custom-audio-player/src/Bar";
 import { useState, useEffect } from "react"
 import useAudioPlayer from './custom-audio-player/src/useAudioPlayer';
-import { AudioPlayerStore } from "../redux/store"
+import store from "../redux/store"
 import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 
-import { QueueStore, UserSessionStore } from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import isEmpty from '../lib/isEmptyObject';
 import {syncDB, syncQueueWithAudioPlayer, forceSyncQueueWithAudioPlayer} from "../lib/syncQueue";
@@ -43,13 +42,13 @@ class AudioPlayerBar extends React.Component {
         return (
             <div>
                 <Navbar bg="light" fixed="bottom" >
-                    {this.props.audio
-                        ? <AudioPlayer url={this.props.url}
-                            trackName={this.props.trackName}
-                            subreddit={this.props.subreddit}
-                            audio={this.props.audio}
-                            playing={this.props.playing}
-                            changeAudioPlayerInfo={this.props.changeAudioPlayerInfo}
+                    {this.props.audioPlayerInfo.audio
+                        ? <AudioPlayer url={this.props.audioPlayerInfo.url}
+                            trackName={this.props.audioPlayerInfo.trackName}
+                            subreddit={this.props.audioPlayerInfo.subreddit}
+                            audio={this.props.audioPlayerInfo.audio}
+                            playing={this.props.audioPlayerInfo.playing}
+                            changeAudioPlayerInfo={this.props.audioPlayerInfo.changeAudioPlayerInfo}
                             togglePlaying={this.props.togglePlaying} />
 
                         : <AudioPlayer url={""}
@@ -108,7 +107,7 @@ function AudioPlayer(props) {
 }
 
 const nextTrack = () => {
-    const currStore = AudioPlayerStore.getState()
+    const currStore = store.getState().audioPlayerInfo
     var keyIndex = currStore["keyIndex"]
     var playlist = currStore["playlist"]
 
@@ -119,9 +118,9 @@ const nextTrack = () => {
         var track = new Audio(podcast["cloud_storage_url"])
         track.setAttribute("id", "audio")
         currStore["audio"].setAttribute("id", "")
-        AudioPlayerStore.dispatch(togglePlaying(false))
+        store.dispatch(togglePlaying(false))
 
-        AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+        store.dispatch(storeAudioPlayerInfo({
             playing: true,
             subreddit: currStore["subreddit"],
             trackName: filename,
@@ -131,25 +130,25 @@ const nextTrack = () => {
             keyIndex: playlist["keys"].indexOf(filename)
         }))
     } else{
-        AudioPlayerStore.dispatch(togglePlaying(false))
+        store.dispatch(togglePlaying(false))
     }
 }
 
 const nextTrackFromQueue = () => {
     // var keyIndex = currStore["keyIndex"]
     // var playlist = currStore["playlist"]
-    let audioCurrStore = AudioPlayerStore.getState()
+    let audioCurrStore = store.getState().audioPlayerInfo
     console.log("before pushing", audioCurrStore)
     console.log("pushing next track")
 
-    QueueStore.dispatch(pushNextTrack())
+    store.dispatch(pushNextTrack())
 
     
 
     syncDB()
 
         
-    var queueCurrStore = QueueStore.getState()
+    var queueCurrStore = store.getState().queueInfo
     var currTrack = queueCurrStore.QueueInfo.currentTrack
     // console.log("queueCurrStore from nextTrackFromQueue", queueCurrStore)
 
@@ -162,7 +161,7 @@ const nextTrackFromQueue = () => {
     //     track.setAttribute("id", "audio")
     //     // audioCurrStore["audio"].setAttribute("id", "")
         
-    //     // AudioPlayerStore.dispatch(storeAudioPlayerInfo({
+    //     // store.dispatch(storeAudioPlayerInfo({
     //     //     playing: true,
     //     //     subreddit: "r/LoremIpsum",
     //     //     filename: currTrack.filename,
@@ -172,13 +171,13 @@ const nextTrackFromQueue = () => {
     //     // }))
         
 
-    //     let audioCurrStore = AudioPlayerStore.getState()
+    //     let audioCurrStore = store.getState().audioPlayerInfo
     //     console.log("after pushing", audioCurrStore)
     //     console.log("pushing next track")
     // } else{
-    //     AudioPlayerStore.dispatch(togglePlaying(false))
+    //     store.dispatch(togglePlaying(false))
     // }
-    AudioPlayerStore.dispatch(togglePlaying(false))
+    store.dispatch(togglePlaying(false))
     forceSyncQueueWithAudioPlayer(true)
 }
 
@@ -188,13 +187,13 @@ function AudioPlayerInfo(props) {
     const subreddit = props.subreddit;
     const trackName = props.trackName;
     const audio = props.audio;
-    const duration = AudioPlayerStore.getState().audio.duration
+    const duration = store.getState().audioPlayerInfo.audio.duration
 
     useEffect(() => {
         // console.log("curTime", curTime)
         // console.log("duration", duration)
         // if (duration == undefined){
-        //     duration = AudioPlayerStore.getState().duration
+        //     duration = store.getState().audioPlayerInfo.duration
         // }
 
         if (curTime && duration && curTime === duration) {
@@ -233,7 +232,7 @@ function AudioPlayerInfo(props) {
     }
  
     const testQueueStore = () =>{
-        let queueCurrStore = QueueStore.getState()
+        let queueCurrStore = store.getState().queueInfo
         console.log("queueCurrStore", queueCurrStore)
     }
 
@@ -330,7 +329,7 @@ function EmptyAudioPlayerInfo(props) {
     const trackName = props.trackName;
     const audio = props.audio;
     const testQueueStore = () =>{
-        let queueCurrStore = QueueStore.getState()
+        let queueCurrStore = store.getState().queueInfo
         console.log("queueCurrStore", queueCurrStore)
     }
     return (
