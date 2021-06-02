@@ -20,6 +20,8 @@ import { storeAudioPlayerInfo} from "../redux/actions/index"
 import { getQueue, syncDB} from "../lib/syncQueue"
 import Router from "next/router";
 import LoginPopup from "../components/LoginPopup";
+import { syncHistory } from "../lib/syncHistory";
+import { addToHistory } from "../redux/actions/historyActions";
 
 
 const hiddenQueueControls = ({ userSession }) => {
@@ -158,6 +160,11 @@ const hiddenQueueControls = ({ userSession }) => {
         replaceCurrentTrack(track)
       )
       syncDB()
+      
+      store.dispatch(
+        addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+      )
+      syncHistory()
     }
     const addPlaylistToQueueRedux = (newPlaylist) =>{
       store.dispatch(

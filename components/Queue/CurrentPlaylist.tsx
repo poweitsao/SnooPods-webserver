@@ -128,6 +128,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
         removeTrackFromCurrentPlaylist(trackID, index)
       )
       syncQueueWithAudioPlayer(true)
+      
       store.dispatch(
         addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
       )

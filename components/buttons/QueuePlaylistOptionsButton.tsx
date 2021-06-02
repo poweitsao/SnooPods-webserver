@@ -11,6 +11,8 @@ import {addPlaylistToQueue, removeTrackFromCurrentPlaylist} from "../../redux/ac
 import store from "../../redux/store"
 import {Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
+import { syncHistory } from '../../lib/syncHistory';
+import { addToHistory } from '../../redux/actions/historyActions';
 
 export default function QueuePlaylistOptionsButton(props) {
     // console.log("props in QueuePlaylistOptionsButton", props)
@@ -19,12 +21,28 @@ export default function QueuePlaylistOptionsButton(props) {
     const addTrackToQueue = () =>{
         // console.log(trackInfo)
         var queuePlaylist = createQueuePlaylist([trackInfo], "${singleTrack}")
-        console.log("queuePlaylist", queuePlaylist)
+        // console.log("queuePlaylist", queuePlaylist)
+        let queueStore = store.getState().queueInfo.QueueInfo
+
+        let currentTrackUpdated = (
+            queueStore.currentPlaylist.tracks.length == 0 &&
+            queueStore.queue.length == 0 &&
+            queueStore.currentTrack.cloud_storage_url == ""
+            )
+
         store.dispatch(
             addPlaylistToQueue(queuePlaylist)
         )
         syncDB()
         syncQueueWithAudioPlayer(false)
+        
+        console.log("currentTrackUpdated", currentTrackUpdated)
+        if (currentTrackUpdated){
+            store.dispatch(
+                addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+              )
+            syncHistory()
+        }
     }
 
 

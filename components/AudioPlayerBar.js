@@ -16,7 +16,8 @@ import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import isEmpty from '../lib/isEmptyObject';
 import {syncDB, syncQueueWithAudioPlayer, forceSyncQueueWithAudioPlayer} from "../lib/syncQueue";
-
+import {addToHistory} from "../redux/actions/historyActions"
+import {syncHistory} from "../lib/syncHistory"
 
 
 
@@ -148,6 +149,10 @@ const nextTrackFromQueue = () => {
     
 
     syncDB()
+    store.dispatch(
+        addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+      )
+    syncHistory()
 
         
     var queueCurrStore = store.getState().queueInfo
@@ -181,6 +186,9 @@ const nextTrackFromQueue = () => {
     // }
     store.dispatch(togglePlaying(false))
     forceSyncQueueWithAudioPlayer(true)
+
+
+    
 }
 
 function AudioPlayerInfo(props) {
@@ -331,8 +339,8 @@ function EmptyAudioPlayerInfo(props) {
     const trackName = props.trackName;
     const audio = props.audio;
     const testQueueStore = () =>{
-        let queueCurrStore = store.getState().queueInfo
-        console.log("queueCurrStore", queueCurrStore)
+        let queueCurrStore = store.getState()
+        console.log("currStore", queueCurrStore)
     }
     return (
         <div>

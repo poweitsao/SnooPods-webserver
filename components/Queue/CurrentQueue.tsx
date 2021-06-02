@@ -18,6 +18,8 @@ import PlayButton from "../buttons/PlayButton";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import toggleLike from '../../lib/toggleLike'
+import { syncHistory } from "../../lib/syncHistory";
+import { addToHistory } from "../../redux/actions/historyActions";
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
   // console.log("likedTracks in renderTrackOnTable", options.likedTracks)
@@ -160,6 +162,10 @@ const QueueChunk = (playlist: QueuePlaylist, index: number, options: any) => {
     )
     syncQueueWithAudioPlayer(true)
 
+    store.dispatch(
+      addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+    )
+    syncHistory()    
   }
 
   const removeFromCurrentQueueChunk = (trackID: string, index: number, playlistID: string) =>{

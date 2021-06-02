@@ -17,17 +17,22 @@ const historyReducer = (state = initialState, action) => {
             return assignCollections(action.history)
 
         case "ADD_TO_HISTORY":
-            var newHistory = state.History
-            newHistory.push(action.newTrack)
-            // console.log("newHistory", newHistory)
-            if (newHistory.length > 10){
-                newHistory.shift()
+            if(action.newTrack == ""){
+                return state
+            } else{
+                var newHistory = state.History
+                newHistory.push(action.newTrack)
+                // console.log("newHistory", newHistory)
+                if (newHistory.length > 10){
+                    newHistory.shift()
+                }
+                
+                return {
+                    ...state,
+                    History: newHistory
+                }
             }
-            
-            return {
-                ...state,
-                History: newHistory
-            }
+
 
         case "EMPTY_HISTORY_STORE":
             return emptyHistoryList

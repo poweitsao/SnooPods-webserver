@@ -18,6 +18,8 @@ import PlayButton from "../buttons/PlayButton";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import toggleLike from '../../lib/toggleLike'
+import { addToHistory } from "../../redux/actions/historyActions";
+import { syncHistory } from "../../lib/syncHistory";
 
 //! This is a work around, because CurrentPlaylist was not working.
 //? Issue with CurrentPlaylist: props not updating when redux state changed in queue. not sure why
@@ -138,6 +140,10 @@ const PlaylistChunk = (playlist: QueuePlaylist, index: number, options: any) => 
     )
     syncQueueWithAudioPlayer(true)
 
+    store.dispatch(
+      addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+    )
+    syncHistory()
   }
 
   const removeFromCurrentPlaylistChunk = (trackID: string, index: number, playlistID: string) =>{

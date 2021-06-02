@@ -18,6 +18,8 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { trigger } from 'swr'
 import PlayButton from "../buttons/PlayButton"
 import toggleLike from "../../lib/toggleLike"
+import { syncHistory } from '../../lib/syncHistory'
+import { addToHistory } from '../../redux/actions/historyActions'
 
 
 const CurrentSong = (props) => {
@@ -39,6 +41,12 @@ const CurrentSong = (props) => {
       )
       syncDB()
       syncQueueWithAudioPlayer(false)
+
+      store.dispatch(
+          addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+        )
+      syncHistory()
+    
     }
 
     const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {

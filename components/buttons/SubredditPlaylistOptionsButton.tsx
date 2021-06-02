@@ -12,6 +12,8 @@ import store from "../../redux/store"
 import {QueuePlaylist, Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 import { connect } from 'react-redux';
+import { syncHistory } from '../../lib/syncHistory';
+import { addToHistory } from '../../redux/actions/historyActions';
 
 const SubredditPlaylistOptionsButton = (props) => {
     const {playlist}:{playlist: any} = props
@@ -42,6 +44,13 @@ const SubredditPlaylistOptionsButton = (props) => {
         // for(var i = 0; i < playlist.tracks.length; i++){
             
         // }
+        let queueStore = store.getState().queueInfo.QueueInfo
+        
+        let currentTrackUpdated = (
+            queueStore.currentPlaylist.tracks.length == 0 &&
+            queueStore.queue.length == 0 &&
+            queueStore.currentTrack.cloud_storage_url == ""
+            )
         
         var queuePlaylist = createQueuePlaylist(tracks, playlist.collectionName)
         console.log("queuePlaylist", queuePlaylist)
@@ -50,6 +59,13 @@ const SubredditPlaylistOptionsButton = (props) => {
         )
         syncDB()
         syncQueueWithAudioPlayer(false)
+
+        if (currentTrackUpdated){
+            store.dispatch(
+                addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+              )
+            syncHistory()
+        }
 
     }
 

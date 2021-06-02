@@ -18,6 +18,8 @@ import PlayButton from "../buttons/PlayButton";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import toggleLike from '../../lib/toggleLike'
+import { syncHistory } from "../../lib/syncHistory";
+import { addToHistory } from "../../redux/actions/historyActions";
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
   // console.log("likedTracks in renderTrackOnTable", options.likedTracks)
@@ -129,18 +131,22 @@ const CurrentSubList = (props) => {
 };
 
 const SubListChunk = (collection: any, index: number, options: any) => {
-  console.log("--------> SubListChunk", collection)
+  // console.log("--------> SubListChunk", collection)
 //   console.log("--------> SubListChunk trackID", subList.tracks)
 
 
   const playTrackFromCurrentSubListChunk = (trackID: string, index: number, track: Track, collection: any) => {
-    console.log("playTrackFromCurrentSubListChunk", collection)
+    // console.log("playTrackFromCurrentSubListChunk", collection)
     let playing = store.getState().audioPlayerInfo.playing
     store.dispatch(togglePlaying(!playing))
 
     store.dispatch(
       replaceCurrentTrack(track)
     )
+    store.dispatch(
+      addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+    )
+    syncHistory()
     // store.dispatch(
     //   removeTrackFromQueue(subListID, trackID, index)
     // )
@@ -154,6 +160,7 @@ const SubListChunk = (collection: any, index: number, options: any) => {
       replaceCurrentPlaylist(queueCollection)
     )
     syncQueueWithAudioPlayer(true)
+  
 
   }
   const generateID = () => {

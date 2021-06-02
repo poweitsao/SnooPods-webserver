@@ -11,6 +11,8 @@ import {addPlaylistToQueue} from "../../redux/actions/queueActions"
 import store from "../../redux/store"
 import {QueuePlaylist, Track} from "../../ts/interfaces"
 import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
+import { syncHistory } from '../../lib/syncHistory';
+import { addToHistory } from '../../redux/actions/historyActions';
 
 export default function SubListOptionsButton(props) {
     const {subList}:{subList: any} = props
@@ -38,6 +40,14 @@ export default function SubListOptionsButton(props) {
             
         // }
         
+        let queueStore = store.getState().queueInfo.QueueInfo
+        
+        let currentTrackUpdated = (
+            queueStore.currentPlaylist.tracks.length == 0 &&
+            queueStore.queue.length == 0 &&
+            queueStore.currentTrack.cloud_storage_url == ""
+            )
+        
         var queuePlaylist = createQueuePlaylist(tracks, collection.collectionName)
         console.log("queuePlaylist", queuePlaylist)
         store.dispatch(
@@ -46,6 +56,13 @@ export default function SubListOptionsButton(props) {
 
         syncDB()
         syncQueueWithAudioPlayer(false)
+
+        if (currentTrackUpdated){
+            store.dispatch(
+                addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+              )
+            syncHistory()
+        }
         
     }
 
