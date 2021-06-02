@@ -1,17 +1,17 @@
 import React from "react";
-import { SkipNext } from "@material-ui/icons";
+import { SkipPrevious } from "@material-ui/icons";
 
-export default function Next(props) {
+export default function Previous(props) {
     const { handleClick } = props;
 
     return (
         <div>
-            <button className="SkipNext_button" onClick={() => handleClick()}>
-                <SkipNext />
+            <button className="SkipPrev_button" onClick={() => handleClick()}>
+                <SkipPrevious />
             </button>
             <style>
                 {`
-        .SkipNext_button {
+        .SkipPrev_button {
           width: fit-content;
           background-color: transparent;
           border: none;

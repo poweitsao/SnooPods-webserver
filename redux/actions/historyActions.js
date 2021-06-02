@@ -15,6 +15,12 @@ const addToHistory = (newTrack) => {
     }
 }
 
+const removeLastTrack = () => {
+    return{
+        type: "REMOVE_LAST_TRACK"
+    }
+}
+
 const emptyHistory = () => {
 
     return {
@@ -25,5 +31,6 @@ const emptyHistory = () => {
 module.exports = { 
     storeHistory,
     emptyHistory,
-    addToHistory
+    addToHistory,
+    removeLastTrack
  }

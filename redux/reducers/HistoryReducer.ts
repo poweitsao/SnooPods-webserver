@@ -37,6 +37,17 @@ const historyReducer = (state = initialState, action) => {
                 }
             }
 
+        case "REMOVE_LAST_TRACK":
+
+            var newHistory = state.History
+            // var lastTrack = newHistory[newHistory.length - 1]
+            newHistory.pop()
+            
+            return {
+                ...state,
+                History: newHistory
+            }
+            
 
         case "EMPTY_HISTORY_STORE":
             return emptyHistoryList

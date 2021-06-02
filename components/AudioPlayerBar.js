@@ -6,6 +6,8 @@ import Play from "./custom-audio-player/src/Play";
 import Pause from "./custom-audio-player/src/Pause";
 import Replay10 from "./custom-audio-player/src/Replay10"
 import Next from "./custom-audio-player/src/Next"
+import Previous from "./custom-audio-player/src/Previous"
+
 import Forward10 from "./custom-audio-player/src/Forward10"
 import Bar from "./custom-audio-player/src/Bar";
 import { useState, useEffect } from "react"
@@ -16,8 +18,9 @@ import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import isEmpty from '../lib/isEmptyObject';
 import {syncDB, syncQueueWithAudioPlayer, forceSyncQueueWithAudioPlayer} from "../lib/syncQueue";
-import {addToHistory} from "../redux/actions/historyActions"
+import {addToHistory, removeLastTrack} from "../redux/actions/historyActions"
 import {syncHistory} from "../lib/syncHistory"
+import fetch from "isomorphic-unfetch"
 
 
 
@@ -246,6 +249,25 @@ function AudioPlayerInfo(props) {
         console.log("currStore", queueCurrStore)
     }
 
+    const previousTrack = async () => {
+        let history = store.getState().historyInfo.History
+        
+        if(history.length == 0){
+            // Set cur time to 0
+            setClickedTime(0)
+        } else{
+            var prevTrack = history[history.length - 1]
+            store.dispatch(removeLastTrack())
+            const trackRes = await fetch("/api/getTrack/" + prevTrack, {method: "GET"})
+            let prevTrackInfo = await trackRes.json()
+            store.dispatch(replaceCurrentTrack(prevTrackInfo))
+            syncQueueWithAudioPlayer(true)
+            syncHistory()
+        }
+         
+
+    }
+
     return (
         <div>
             <div className="player" style={{ width: "100%" }}>
@@ -254,6 +276,7 @@ function AudioPlayerInfo(props) {
                 </div>
                 <div className="center-piece">
                     <div className="controls">
+                        <Previous handleClick={previousTrack}/>
                         <Replay10 handleClick={() => {
                             setClickedTime(Math.max(curTime - 10, 0))
                         }} />
@@ -280,7 +303,7 @@ function AudioPlayerInfo(props) {
 
                         <Next handleClick={nextTrackFromQueue} />
 
-                        <button onClick={testQueueStore}>get currStore</button>
+                        {/* <button onClick={testQueueStore}>get currStore</button> */}
 
 
                     </div>
