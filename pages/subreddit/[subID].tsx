@@ -44,6 +44,7 @@ import convertDate from "../../lib/convertDate";
 import TrackOptionsButtonContainer from "../../components/containers/TrackOptionsButtonContainer"
 
 import SubredditTableList from "../../components/SubredditTableList"
+import SubredditPlaylistOptionsButton from "../../components/buttons/SubredditPlaylistOptionsButton";
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {
@@ -296,7 +297,9 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
             />
           </div>
           <div>
-            <PlaylistOptionsButton playlist={props.playlist} subID={subID}/>
+            <Provider store={store}>
+              <SubredditPlaylistOptionsButton playlist={props.playlist} subID={subID}/>
+            </Provider>
           </div>
         </div>
         <style>{`

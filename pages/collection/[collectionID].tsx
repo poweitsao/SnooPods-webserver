@@ -283,6 +283,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
               runonsubmit={sendNewName}
               show={show}
               onHide={() => setShow(false)}
+              fetchURL={"/api/user/collections/getCollections/"+ store.getState().userSessionInfo.email}
             />
           </div>
           <style>{`

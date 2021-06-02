@@ -41,7 +41,7 @@ const SubListPage = ({ userSession, subListID }) => {
     const fetcher = (url) => fetch(url).then((r) => r.json());
     const fetchCollectionURL = "/api/user/sublists/get/" + userSession.email + "/" + subListID
     const {data: subList} = useSWR(fetchCollectionURL, fetcher)
-
+    const [show, setShow] = useState(false)
     const [mounted, setMounted] = useState<Boolean>(false);
     const [user, setUser] = useState<UserSession | {}>({});
     const [showLoginPopup, setShowLoginPopup] = useState<Boolean>(false)
@@ -91,21 +91,36 @@ const SubListPage = ({ userSession, subListID }) => {
     const SubListInfo = (props) => {
       const [mounted, setMounted] = useState(false)
       
-    //   const sendNewName = async (newName: string) => {
-    //     await fetch("/api/user/collections/editCollection", 
-    //       { method: "POST", body: JSON.stringify({
-    //           action:"renameCollection",
-    //           fields: {
-    //               subListID: playlist.subListID,
-    //               newCollectionName: newName,
-    //               email: store.getState().userSessionInfo.email
-    //           }
-    //       }) 
-    //     })
+      // const sendNewName = async (newName: string) => {
+      //   await fetch("/api/user/collections/editCollection", 
+      //     { method: "POST", body: JSON.stringify({
+      //         action:"renameCollection",
+      //         fields: {
+      //             subListID: playlist.subListID,
+      //             newCollectionName: newName,
+      //             email: store.getState().userSessionInfo.email
+      //         }
+      //     }) 
+      //   })
 
-    //     trigger(fetchCollectionURL)
-    //   }
+      //   trigger(fetchCollectionURL)
+      // }
 
+      const renameSubList = async ( newSubListName: string) => {
+        let email = store.getState().userSessionInfo.email
+        await fetch("/api/user/sublists/editSubList", {
+            method: "POST", 
+            body: JSON.stringify({
+                action: "renameSubList",
+                fields: {
+                    newSubListName: newSubListName, 
+                    subListID: subListID, 
+                    email: email
+                }
+        })})
+        trigger(fetchCollectionURL)
+
+    }
       useEffect(() => {
           setMounted(true)
         }, [])
@@ -121,10 +136,20 @@ const SubListPage = ({ userSession, subListID }) => {
           <div className="sublist-title">
             <div style={{display: "flex", alignItems: "center"}}>
               <h1>{props.subList.subscriptionListName}</h1>
+              <button style={{width: "fit-content", backgroundColor: "transparent",border: "none"}}
+                      onClick={() => setShow(true)}
+              >
+                <EditIcon/>
+              </button>
             </div>
-            {/* <PlaylistOptionsButton playlist={props.subList}/> */}
             <SubListOptionsButton subList={props.subList}/>
-            
+            <EditNameModal 
+              name={subList.subscriptionListName}
+              runonsubmit={renameSubList}
+              show={show}
+              onHide={() => setShow(false)}
+              fetchURL={"/api/user/sublists/getSubLists/"+ store.getState().userSessionInfo.email}
+            />
             
           </div>
           <style>{`
@@ -168,7 +193,7 @@ const SubListPage = ({ userSession, subListID }) => {
               // <Tablelist playlist={playlist} />
               <Provider store={store}>
                 {/* <CollectionTableList playlist={playlist}/> */}
-                <CurrentSubList subList={subList.collections}/>
+                <CurrentSubList subList={subList.collections} subListID={subList.subscriptionListID}/>
               </Provider>
                 // <div>SubListTableList</div>
             )}

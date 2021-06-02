@@ -6,7 +6,7 @@ import formatDuration from "../../lib/formatDuration";
 import isEmpty from "../../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../../lib/syncQueue";
 import { togglePlaying } from "../../redux/actions";
-import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue } from "../../redux/actions/queueActions";
+import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue, replaceCurrentPlaylist } from "../../redux/actions/queueActions";
 import store from "../../redux/store";
 import { Track, QueuePlaylist } from "../../ts/interfaces";
 import Icon from "@iconify/react";
@@ -21,7 +21,7 @@ import toggleLike from '../../lib/toggleLike'
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
   // console.log("likedTracks in renderTrackOnTable", options.likedTracks)
-  console.log("array in renderTrackOnTable", array)
+  // console.log("array in renderTrackOnTable", array)
   return (
     <tr key={options.subListID + "_" + track.track_id + "_" + index.toString()}>
       <td style={{ width: "5%" }}>
@@ -33,7 +33,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
           }}
         >
           <PlayButton 
-            handleClick={() => options?.playTrack(track.track_id, index, track, options?.subListID)}
+            handleClick={() => options?.playTrack(track.track_id, index, track, options?.collection)}
             width="25px"
             height="25px"
           />
@@ -83,7 +83,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
             {convertDate(array[index]["date_posted"])}
             <div style={{padding: "10px"}}>
             <Provider store={store}>
-              <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} subListID={options?.subListID} removeTrack={options?.removeTrack}/>
+              {/* <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} subListID={options?.subListID} removeTrack={options?.removeTrack}/> */}
             </Provider>
               </div>
           </div>
@@ -112,61 +112,79 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 // }
 
 const CurrentSubList = (props) => {
-  let { subList }: { subList: Array<any> } = props
-//   console.log("props in CurrentSubList", props)
+  let { subList, subListID }: { subList: Array<any>, subListID: string } = props
+  // console.log("props in CurrentSubList", props)
   return (
     <div style={{ width: "100%" }}>
       
       {subList.map((subList, index) => {
         return SubListChunk(subList, index, {
           likedTracks: props.likedTracksInfo.LikedTracks, 
-          likedTracksCollectionID: props.likedTracksInfo.likedTracksCollectionID})
+          likedTracksCollectionID: props.likedTracksInfo.likedTracksCollectionID,
+          subListID: subListID})
         })
       }
     </div>
   );
 };
 
-const SubListChunk = (subList: any, index: number, options: any) => {
-//   console.log("--------> SubListChunk", subList)
+const SubListChunk = (collection: any, index: number, options: any) => {
+  console.log("--------> SubListChunk", collection)
 //   console.log("--------> SubListChunk trackID", subList.tracks)
 
 
-  const playTrackFromCurrentSubListChunk = (trackID: string, index: number, track: Track, subListID:string) => {
-
+  const playTrackFromCurrentSubListChunk = (trackID: string, index: number, track: Track, collection: any) => {
+    console.log("playTrackFromCurrentSubListChunk", collection)
     let playing = store.getState().audioPlayerInfo.playing
     store.dispatch(togglePlaying(!playing))
 
     store.dispatch(
       replaceCurrentTrack(track)
     )
+    // store.dispatch(
+    //   removeTrackFromQueue(subListID, trackID, index)
+    // )
+    let queueCollection = {}
+    queueCollection["collectionID"] = generateID()
+    queueCollection["collectionName"] = collection.collectionName
+    let tracks = collection.tracks
+    tracks = tracks.slice(index + 1)
+    queueCollection["tracks"] = tracks
     store.dispatch(
-      removeTrackFromQueue(subListID, trackID, index)
+      replaceCurrentPlaylist(queueCollection)
     )
     syncQueueWithAudioPlayer(true)
 
   }
-
-  const removeFromCurrentSubListChunk = (trackID: string, index: number, subListID: string) =>{
-
-    store.dispatch(
-      removeTrackFromQueue(subListID, trackID, index)
+  const generateID = () => {
+    return '_' + Math.random().toString(36).substr(2, 9);
+};
+  const removeSubredditFromSubList = async (subListID: string, subCollectionIDToRemove: string) => {
+    console.log("removeSubredditFromSubList", subListID, subCollectionIDToRemove)
+    let email = store.getState().userSessionInfo.email
+    await fetch("/api/user/sublists/editSubList", {
+        method: "POST", 
+        body: JSON.stringify({
+            action: "removeSubreddit",
+            fields: {
+                subListID: subListID, 
+                subCollectionIDToRemove: subCollectionIDToRemove, 
+                email: email
+            }
+        })
+      }
     )
-    
-    syncDB()
-    syncQueueWithAudioPlayer(false)
-  }
+    trigger("/api/user/sublists/get/" + email + "/" + subListID)
 
+}
   return (
-    <div key={subList.collectionID + "_" + (index).toString}>
+    <div key={collection.collectionID + "_" + (index).toString}>
       {
         <div style={{padding: "10px", paddingLeft: "50px"}}>
-          {subList.subListName}
+          {collection.collectionName}
           <button style={{marginLeft: "10px"}} onClick={() => {
-            store.dispatch(removePlaylistFromQueue(subList.collectionID)); 
-            syncDB(); 
-            syncQueueWithAudioPlayer(true);
-          }}>clear</button>
+            removeSubredditFromSubList(options.subListID, collection.collectionID)
+          }}>unsubscribe</button>
         </div>
       }
       
@@ -176,11 +194,11 @@ const SubListChunk = (subList: any, index: number, options: any) => {
             <tr>
             </tr>
           </thead>
-          <tbody>{subList.tracks.map((track: Track, index: number, array: Array<Track>) => {
+          <tbody>{collection.tracks.map((track: Track, index: number, array: Array<Track>) => {
                   return renderTrackOnTable(track, index, array, 
                     { playTrack: playTrackFromCurrentSubListChunk,
-                      removeTrack: removeFromCurrentSubListChunk, 
-                      subListID: subList.collectionID,
+                      collectionID: collection.collectionID,
+                      collection: collection,
                       likedTracks: options.likedTracks,
                       likedTracksCollectionID: options.likedTracksCollectionID
                     })

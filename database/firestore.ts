@@ -607,16 +607,99 @@ export async function deleteSubList( subListID: string,subListName: string, emai
     return 200
 }
 
-export async function renameSubList(subListName: string, subListID: string, email: string){
+export async function renameSubList(newSubListName: string, subListID: string, email: string){
+    let subListRef = db.collection("subscriptionLists").doc(subListID)
+    try{
+        let subListData = await subListRef.get()
+        subListData = subListData.data()
+        if (subListData.ownerID == email){
+            await db.collection("subscriptionLists").doc(subListID).update({subscriptionListName: newSubListName})
+            let userRef = db.collection("users").doc(email)
+            let userData = await userRef.get()
+            let userSubLists = userData.data().subscriptionLists
+            
+            for(var i = 0; i < userSubLists.length; i ++){
+                if (userSubLists[i].subscriptionListID == subListID){
+                    userSubLists[i].subscriptionListName = newSubListName
+                }
+            }
+            console.log("userSubLists", userSubLists)
+
+            await db.collection("users").doc(email).update({subscriptionLists: userSubLists})
+
+            return 200
+        } else{
+            return 403
+        }
+    } catch (e){
+        console.error("error in renameSubList", e)
+        return 500
+    }
 
 }
 
-export async function addSubToSubList(subListID: string, email: string, newSubID: string){
+export async function addSubToSubList(subListID: string,  newSubID: string, email: string){
+    let subListRef = db.collection("subscriptionLists").doc(subListID)
 
+    let subredditRef = db.collection("subreddits").doc(newSubID)
+    
+    try{
+
+        let subredditData = await subredditRef.get()
+        subredditData = subredditData.data()
+        let newSubCollectionID = subredditData.newestUpdatesCollectionID
+
+        let subListData = await subListRef.get()
+        subListData = subListData.data()
+        
+        console.log("ownerID:", subListData.ownerID)
+        if (subListData.ownerID == email){
+            subListData.latestCollectionsFromSubreddits.push(newSubCollectionID)
+            await db.collection("subscriptionLists").doc(subListID).set(
+                subListData
+            )
+            return 200
+
+        } else{
+            return 403
+        }
+    } catch (e){
+        console.error("error in addSubToSubList", e)
+        return 500
+    }
 }
 
-export async function removeSubFromSubList(subListID: string, email: string, subID: string){
+export async function removeSubFromSubList(subListID: string, subCollectionID: string, email: string){
+    let subListRef = db.collection("subscriptionLists").doc(subListID)
 
+    // let subredditRef = db.collection("subreddits").doc(subID)
+
+    try{
+        // let subredditData = await subredditRef.get()
+        // subredditData = subredditData.data()
+        // let subCollectionID = subredditData.newestUpdatesCollectionID
+
+        let subListData = await subListRef.get()
+        subListData = subListData.data()
+        
+        console.log("ownerID:", subListData.ownerID)
+        if (subListData.ownerID == email){
+            var newSubredditsArray = subListData.latestCollectionsFromSubreddits.filter(
+                (collectionID: string) => {return collectionID !== subCollectionID }  
+            )
+            subListData.latestCollectionsFromSubreddits = newSubredditsArray
+            await db.collection("subscriptionLists").doc(subListID).set(
+                subListData
+            )
+            return 200
+
+        } else{
+            return 403
+        }
+    } catch (e){
+        console.error("error in addSubToSubList", e)
+        return 500
+    }
 }
 
 module.exports = {

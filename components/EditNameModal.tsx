@@ -8,7 +8,7 @@ import store from '../redux/store'
 
 const EditNameModal = (props) => {
 
-    const {runonsubmit, name, onHide, show} = props 
+    const {runonsubmit, name, onHide, show, fetchURL} = props 
     const [newName, setNewName] = useState(name)
     
 
@@ -21,13 +21,14 @@ const EditNameModal = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        props.onHide()
         if (runonsubmit == undefined){
             console.log("runOnSubmit is undefined")
             console.log("submitting new name", newName)
 
         }else{
             await runonsubmit(newName)
-            trigger("/api/user/collections/getCollections/"+ store.getState().userSessionInfo.email)
+            trigger(fetchURL)
         }
     }
 
@@ -54,7 +55,7 @@ const EditNameModal = (props) => {
                     
                     <Modal.Footer style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                         <Button onClick={props.onHide}>Close</Button>
-                        <Button variant="primary" type="submit" onClick={props.onHide}>
+                        <Button variant="primary" type="submit">
                             Submit
                         </Button>
                     </Modal.Footer>
