@@ -140,6 +140,9 @@ const CurrentSong = (props) => {
 
     return (
       <div style={{ width: "100%"}}>
+        <div style={{width: "90%"}}>
+          <div style={{ padding: "10px", paddingLeft: "25px"}}>Current Track:</div>    
+        </div>
         <Table style={{overflowY: "visible", overflowX: "visible"}}  hover >
           <thead>
             <tr>

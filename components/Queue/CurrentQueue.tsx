@@ -129,7 +129,9 @@ const CurrentQueue = (props) => {
   
   return (
     <div style={{ width: "100%" }}>
-      
+      <div style={{width: "90%"}}>
+        <div style={{ padding: "10px", paddingLeft: "25px"}}>Current Queue:</div>    
+      </div>
       {queue.map((playlist, index) => {
         return QueueChunk(playlist, index, {
           likedTracks: props.likedTracksInfo.LikedTracks, 

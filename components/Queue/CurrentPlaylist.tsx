@@ -18,6 +18,8 @@ import PlayButton from "../buttons/PlayButton";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import toggleLike from "../../lib/toggleLike"
+import { addToHistory } from "../../redux/actions/historyActions";
+import { syncHistory } from "../../lib/syncHistory";
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
     // console.log("likedTracks in renderTrackOnTable (CurrentPlaylist)", options.likedTracks)
@@ -126,6 +128,10 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
         removeTrackFromCurrentPlaylist(trackID, index)
       )
       syncQueueWithAudioPlayer(true)
+      store.dispatch(
+        addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+      )
+      syncHistory()
 
     }
     const removeFromCurrentPlaylist = (trackID: string, index: number, playlistID: string) =>{
@@ -146,13 +152,18 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
 
     return (
       <div style={{ width: "100%" }}>
-        {
-          <button style={{marginLeft: "10px"}} onClick={() => {
-            store.dispatch(clearCurrentPlaylist());
-            syncDB(); 
-            syncQueueWithAudioPlayer(true);
-          }}>clear</button>
-        }
+        <div style={{width: "90%"}}>
+          <div style={{ padding: "10px", paddingLeft: "25px"}}>Current Playlist:
+           
+          
+              <button style={{marginLeft: "10px"}} onClick={() => {
+                store.dispatch(clearCurrentPlaylist());
+                syncDB(); 
+                syncQueueWithAudioPlayer(true);
+              }}>clear</button>
+            </div>   
+          
+        </div>
 
         {/* <ListGroup variant="flush"></ListGroup> */}
         <Table style={{overflowY: "visible", overflowX: "visible"}}  hover>
