@@ -21,6 +21,8 @@ const Sidebar = (props) => {
     const {data: likedTracks} = useSWR("/api/user/collections/likedTracks/get/"+ props.user.email)
 
     const {data: subLists} = useSWR("/api/user/sublists/getSubLists/"+ props.user.email)
+    const {data: history} = useSWR("/api/user/history/get/"+ props.user.email)
+
 
     // if(likedTracks){
     //     console.log("likedTracks in sidebar", likedTracks)
@@ -62,8 +64,15 @@ const Sidebar = (props) => {
             })
             // console.log("subLists from redux", store.getState().subListInfo)
         }
+        if(history){
+            
+            store.dispatch({
+                type:"STORE_HISTORY",
+                history: history
+            })
+        }
 
-      }, [collections, likedTracks]);
+      }, [collections, likedTracks, subLists, history]);
 
     if(!collections){
         return <div className="sidebar" style={{

@@ -1,5 +1,4 @@
 import {Track, QueuePlaylist, QueueObject} from "../../ts/interfaces"
-import {QueueStore} from "../store"
 
 const emptyPlaylist : QueuePlaylist= {
     playlistID: "",

@@ -10,6 +10,7 @@ import validateSession from "../lib/validateUserSessionOnPage";
 import { getQueue } from "../lib/syncQueue";
 import { replaceCurrentPlaylist, replaceCurrentTrack } from "../redux/actions/queueActions";
 import { storeAudioPlayerInfo } from "../redux/actions";
+import { addToHistory } from "../redux/actions/historyActions"
 import playCircleOutlined from "@iconify/icons-ant-design/play-circle-outlined";
 import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
 import { Icon } from "@iconify/react";
@@ -34,15 +35,16 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import toggleLike from "../lib/toggleLike"
+import { syncHistory } from "../lib/syncHistory";
 
 const CollectionTableList = (props) => {
     let {playlist} = props
-    console.log("props in CollectionTableList", props)
+    // console.log("props in CollectionTableList", props)
     let likedTracks = props.likedTracksInfo.LikedTracks
     let likedTracksCollectionID = props.likedTracksInfo.likedTracksCollectionID
 
     const playPodcast = (trackKey: string, trackIndex: number,  tracks: Array<Track>, collectionName: string) => {
-        console.log("params in playPodcast",trackKey, trackIndex, tracks, collectionName )
+        // console.log("params in playPodcast",trackKey, trackIndex, tracks, collectionName )
         var queuePlaylistTracks = []
         for(var i = trackIndex + 1; i <tracks.length; i++ ){
           queuePlaylistTracks.push(tracks[i])
@@ -77,6 +79,11 @@ const CollectionTableList = (props) => {
             email: store.getState().userSessionInfo.email}
           )
         )
+
+        store.dispatch(
+          addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+        )
+        syncHistory()
     
     };
     

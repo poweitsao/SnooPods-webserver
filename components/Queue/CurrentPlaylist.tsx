@@ -111,7 +111,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
   // }
 
   const CurrentPlaylist = (props) => {
-    console.log("props in CurrentPlaylist", props)
+    // console.log("props in CurrentPlaylist", props)
     let { currentPlaylist }: { currentPlaylist: QueuePlaylist } = props.queueInfo.QueueInfo
 
     const playTrackFromCurrentPlaylist = (trackID: string, index: number, track: Track, playlistID?: string) => {

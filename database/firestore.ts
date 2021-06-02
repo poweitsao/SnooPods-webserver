@@ -702,6 +702,29 @@ export async function removeSubFromSubList(subListID: string, subCollectionID: s
     }
 }
 
+export async function getUserHistory(email: string){
+    let userRef = db.collection("users").doc(email)
+    try{
+        let userData = await userRef.get()
+        userData = userData.data()
+        return {status: 200, history: userData.history}
+    } catch (e) {
+        console.error("error in getUserHistory", e)
+        return {status: 500, history: []}
+    }
+}
+
+export async function updateUserHistory(email: string, newHistory: Array<string>){
+    let userRef = db.collection("users").doc(email)
+    try{
+        await userRef.set({history: newHistory}, { merge: true })
+        return {status: 200}
+    } catch (e) {
+        console.error("error in updateUserHistory", e)
+        return {status: 500}
+    }
+}
+
 module.exports = {
     getPodcast,
     getUser,
@@ -730,5 +753,7 @@ module.exports = {
     deleteSubList,
     renameSubList,
     addSubToSubList,
-    removeSubFromSubList
+    removeSubFromSubList,
+    getUserHistory,
+    updateUserHistory
 }

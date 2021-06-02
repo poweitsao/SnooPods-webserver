@@ -26,6 +26,7 @@ class AudioPlayerBar extends React.Component {
         super(props)
 
     }
+    
 
     componentDidUpdate(prevProps, prevState) {
         // console.log(" the props in audio bar", this.props)
@@ -36,6 +37,7 @@ class AudioPlayerBar extends React.Component {
         
         //! sync with db when playing!
         syncDB()
+        
     }
 
     render() {
@@ -232,8 +234,8 @@ function AudioPlayerInfo(props) {
     }
  
     const testQueueStore = () =>{
-        let queueCurrStore = store.getState().queueInfo
-        console.log("queueCurrStore", queueCurrStore)
+        let queueCurrStore = store.getState()
+        console.log("currStore", queueCurrStore)
     }
 
     return (
@@ -270,7 +272,7 @@ function AudioPlayerInfo(props) {
 
                         <Next handleClick={nextTrackFromQueue} />
 
-                        <button onClick={testQueueStore}>test</button>
+                        <button onClick={testQueueStore}>get currStore</button>
 
 
                     </div>

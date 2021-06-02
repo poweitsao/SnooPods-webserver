@@ -48,6 +48,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import toggleLike from "../lib/toggleLike"
+import { addToHistory } from "../redux/actions/historyActions";
+import { syncHistory } from "../lib/syncHistory";
 
 
 const SubredditTableList = (props) => {
@@ -96,6 +98,10 @@ const SubredditTableList = (props) => {
         email: store.getState().userSessionInfo.email}
       )
     )
+    store.dispatch(
+      addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+    )
+    syncHistory()
 
   };
 

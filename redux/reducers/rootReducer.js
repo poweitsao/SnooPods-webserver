@@ -6,6 +6,7 @@ import QueueReducer from "./QueueReducer"
 import registerReducer from "./registerReducer"
 import SubListReducer from "./SubListReducer"
 import userSessionInfoReducer from "./userSessionInfoReducer"
+import historyReducer from "./HistoryReducer"
 
 
 const rootReducer = combineReducers({
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     queueInfo: QueueReducer,
     registerInfo: registerReducer,
     subListInfo: SubListReducer,
-    userSessionInfo: userSessionInfoReducer
+    userSessionInfo: userSessionInfoReducer,
+    historyInfo: historyReducer
 
 });
 

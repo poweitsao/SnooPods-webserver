@@ -114,7 +114,7 @@ const SubredditPlaylistOptionsButton = (props) => {
 
     const renderSubListsSubMenu = (subList: any, index: number) => {
         let subListID = subList.subscriptionListID
-        console.log("subList in renderSubListsSubMenu", subList)
+        // console.log("subList in renderSubListsSubMenu", subList)
         return(
             <MenuItem key={index} 
                     onClick={() => {
