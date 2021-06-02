@@ -21,6 +21,10 @@ const historyReducer = (state = initialState, action) => {
                 return state
             } else{
                 var newHistory = state.History
+                newHistory = newHistory.filter((trackID) => {
+                    return trackID !== action.newTrack
+                })
+
                 newHistory.push(action.newTrack)
                 // console.log("newHistory", newHistory)
                 if (newHistory.length > 10){
