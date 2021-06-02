@@ -279,6 +279,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
             </div>
             <PlaylistOptionsButton playlist={props.playlist}/>
             <EditNameModal 
+              type={"collection"}
               name={props.playlist.collectionName}
               runonsubmit={sendNewName}
               show={show}

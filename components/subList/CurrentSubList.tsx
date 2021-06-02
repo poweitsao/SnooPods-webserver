@@ -20,6 +20,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import toggleLike from '../../lib/toggleLike'
 import { syncHistory } from "../../lib/syncHistory";
 import { addToHistory } from "../../redux/actions/historyActions";
+import SubListTrackOptionsButton from "../buttons/SubListTrackOptionsButton";
 
 const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, options?: any) => {
   // console.log("likedTracks in renderTrackOnTable", options.likedTracks)
@@ -85,7 +86,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
             {convertDate(array[index]["date_posted"])}
             <div style={{padding: "10px"}}>
             <Provider store={store}>
-              {/* <QueuePlaylistOptionsButtonContainer trackInfo={array[index]} index={index} subListID={options?.subListID} removeTrack={options?.removeTrack}/> */}
+              <SubListTrackOptionsButton trackInfo={array[index]} index={index} collectionID={options?.collectionID}/>
             </Provider>
               </div>
           </div>

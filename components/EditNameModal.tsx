@@ -8,7 +8,7 @@ import store from '../redux/store'
 
 const EditNameModal = (props) => {
 
-    const {runonsubmit, name, onHide, show, fetchURL} = props 
+    const {runonsubmit, name, onHide, show, fetchURL, type} = props 
     const [newName, setNewName] = useState(name)
     
 
@@ -41,14 +41,14 @@ const EditNameModal = (props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Please pick a new name for your collection.
+                    {"Please pick a new name for your " + type + "."}
           </Modal.Title>
             </Modal.Header>
             <Modal.Body style={{ display: "flex", justifyContent: "center" }}>
                 <Form onSubmit={handleSubmit} autoComplete="off">
                     <Row >
                         <Form.Group as={Col} controlId="formGridFirstName">
-                            <Form.Label>New Collection Name</Form.Label>
+                            <Form.Label>New Name</Form.Label>
                             <Form.Control name="newCollectionName" type="name" defaultValue={name} onChange={handleInputChange} />
                         </Form.Group>
                     </Row>

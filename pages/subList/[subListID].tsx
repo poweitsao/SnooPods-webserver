@@ -144,6 +144,7 @@ const SubListPage = ({ userSession, subListID }) => {
             </div>
             <SubListOptionsButton subList={props.subList}/>
             <EditNameModal 
+              type={"mix"}
               name={subList.subscriptionListName}
               runonsubmit={renameSubList}
               show={show}
