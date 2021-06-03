@@ -234,10 +234,10 @@ const home = ({ userSession }) => {
               : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
           </div>
 
-          <div className="button-container">
+          {/* <div className="button-container">
             <button onClick={getQueueStore}>get queueStore</button>
             <button onClick={() => {console.log("user", user)}}>get user</button>
-          </div>
+          </div> */}
 
           <style>{`
           .heading{

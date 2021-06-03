@@ -402,10 +402,10 @@ function EmptyAudioPlayerInfo(props) {
                 </div>
                 <div className="center-piece">
                     <div className="controls">
-                        <Replay10 handleClick={() => {}} />
+                        {/* <Replay10 handleClick={() => {}} /> */}
                         <Play handleClick={() => {}} />
-                        <Forward10 handleClick={() => {}} />
-                        <button onClick={testQueueStore}>test</button>
+                        {/* <Forward10 handleClick={() => {}} /> */}
+                        {/* <button onClick={testQueueStore}>test</button> */}
                     </div>
                     <div className="track-duration-info">
                         {/* <Bar curTime={0} duration={0} onTimeUpdate={() =>{}} /> */}
