@@ -20,7 +20,7 @@ import CollectionsTrackOptionsButton from "../../components/buttons/CollectionsT
 import { Table } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import LaunchIcon from "@material-ui/icons/Launch";
-import PlaylistOptionsButton from "../../components/buttons/PlaylistOptionsButton";
+import CollectionOptionsButton from "../../components/buttons/CollectionOptionsButton";
 import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
 import LoginPopup from "../../components/LoginPopup";
@@ -277,7 +277,11 @@ const CollectionPage = ({ userSession, collectionID }) => {
                 <EditIcon/>
               </button>
             </div>
-            <PlaylistOptionsButton playlist={props.playlist}/>
+            <CollectionOptionsButton 
+              playlist={props.playlist} 
+              collectionID={playlist.collectionID} 
+              collectionName={playlist.collectionName}
+            />
             <EditNameModal 
               type={"collection"}
               name={props.playlist.collectionName}
