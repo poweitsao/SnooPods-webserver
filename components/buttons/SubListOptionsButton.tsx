@@ -59,7 +59,7 @@ export default function SubListOptionsButton(props) {
 
         if (currentTrackUpdated){
             store.dispatch(
-                addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+                addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
               )
             syncHistory()
         }

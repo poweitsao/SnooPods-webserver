@@ -37,7 +37,7 @@ import HistoryTableList from "../components/HistoryTableList";
 
 const HistoryPage = ({ userSession, collectionID }) => {
     const fetcher = (url) => fetch(url).then((r) => r.json());
-    const fetchCollectionURL = "/api/user/history/getTracks/" + userSession.email
+    const fetchCollectionURL = "/api/user/history/get/" + userSession.email
 
     const {data: tracks} = useSWR(fetchCollectionURL, fetcher)
 

@@ -41,7 +41,7 @@ function SubListTrackOptionsButton(props) {
         console.log("currentTrackUpdated", currentTrackUpdated)
         if (currentTrackUpdated){
             store.dispatch(
-                addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+                addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
               )
             syncHistory()
         }

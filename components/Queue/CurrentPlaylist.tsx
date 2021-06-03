@@ -130,7 +130,7 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
       syncQueueWithAudioPlayer(true)
       
       store.dispatch(
-        addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+        addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
       )
       syncHistory()
 

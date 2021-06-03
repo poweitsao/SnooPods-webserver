@@ -153,7 +153,7 @@ const nextTrackFromQueue = () => {
 
     syncDB()
     store.dispatch(
-        addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+        addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
       )
     syncHistory()
 
@@ -258,13 +258,41 @@ function AudioPlayerInfo(props) {
         } else{
             var prevTrack = history[history.length - 1]
             store.dispatch(removeLastTrack())
-            const trackRes = await fetch("/api/getTrack/" + prevTrack, {method: "GET"})
-            let prevTrackInfo = await trackRes.json()
-            store.dispatch(replaceCurrentTrack(prevTrackInfo))
+            console.log("prevTrack", prevTrack)
+            
+            store.dispatch(replaceCurrentTrack(prevTrack))
+            syncDB()
             syncQueueWithAudioPlayer(true)
             syncHistory()
-            console.log("synced")
+            // console.log("synced")
+            // var queueCurrStore = store.getState().queueInfo
+            // var currTrack = queueCurrStore.QueueInfo.currentTrack
+            store.dispatch(togglePlaying(false))
+            forceSyncQueueWithAudioPlayer(true)
         }
+
+
+
+    // let audioCurrStore = store.getState().audioPlayerInfo
+    // console.log("before pushing", audioCurrStore)
+    // console.log("pushing next track")
+
+    // store.dispatch(pushNextTrack())
+
+    
+
+    // syncDB()
+    // store.dispatch(
+    //     addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
+    //   )
+    // syncHistory()
+
+        
+    // var queueCurrStore = store.getState().queueInfo
+    // var currTrack = queueCurrStore.QueueInfo.currentTrack
+    // store.dispatch(togglePlaying(false))
+    // forceSyncQueueWithAudioPlayer(true)
+
          
 
     }

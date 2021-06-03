@@ -64,7 +64,7 @@ const HistoryTableList = (props) => {
         )
 
         store.dispatch(
-          addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+          addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
         )
         syncHistory()
         trigger("/api/user/history/getTracks/" + store.getState().userSessionInfo.email)

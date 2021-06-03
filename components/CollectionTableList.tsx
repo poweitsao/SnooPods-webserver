@@ -81,7 +81,7 @@ const CollectionTableList = (props) => {
         )
 
         store.dispatch(
-          addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+          addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
         )
         syncHistory()
     

@@ -1,3 +1,4 @@
+import { Track } from "../../ts/interfaces"
 
 const emptyHistoryList = {
     History: []
@@ -5,7 +6,7 @@ const emptyHistoryList = {
 
 const initialState = emptyHistoryList
 
-let assignCollections = function(history: Array<string>) {
+let assignCollections = function(history: Array<Track>) {
     return Object.assign({}, { History: history })
 }
 
@@ -17,12 +18,12 @@ const historyReducer = (state = initialState, action) => {
             return assignCollections(action.history)
 
         case "ADD_TO_HISTORY":
-            if(action.newTrack == "" || action.newTrack== null || action.newTrack== undefined){
+            if( action.newTrack== null || action.newTrack== undefined){
                 return state
             } else{
-                var newHistory = state.History
-                newHistory = newHistory.filter((trackID) => {
-                    return trackID !== action.newTrack
+                var newHistory: Array<Track> = state.History
+                newHistory = newHistory.filter((track: Track) => {
+                    return track.track_id !== action.newTrack.track_id
                 })
 
                 newHistory.push(action.newTrack)
@@ -39,7 +40,7 @@ const historyReducer = (state = initialState, action) => {
 
         case "REMOVE_LAST_TRACK":
 
-            var newHistory = state.History
+            var newHistory: Array<Track> = state.History
             // var lastTrack = newHistory[newHistory.length - 1]
             if (newHistory.length > 0){
                 newHistory.pop()

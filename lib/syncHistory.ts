@@ -1,11 +1,12 @@
 import { trigger } from "swr"
 import store from "../redux/store"
 import fetch from "isomorphic-unfetch"
+import { Track } from "../ts/interfaces"
 
 export const syncHistory = async () => {
     // let newHistory = store.getState().historyInfo.History
     // newHistory.push("powei")
-    let newHistory: Array<string> = store.getState().historyInfo.History
+    let newHistory: Array<Track> = store.getState().historyInfo.History
     await fetch("/api/user/history/update", 
         { method: "POST", 
           body: JSON.stringify({ 

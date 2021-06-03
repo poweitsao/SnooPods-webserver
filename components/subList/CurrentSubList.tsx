@@ -145,7 +145,7 @@ const SubListChunk = (collection: any, index: number, options: any) => {
       replaceCurrentTrack(track)
     )
     store.dispatch(
-      addToHistory(store.getState().queueInfo.QueueInfo.currentTrack.track_id)
+      addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
     )
     syncHistory()
     // store.dispatch(

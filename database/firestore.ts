@@ -337,7 +337,7 @@ export const getUserLikedTracks = async (email: string) => {
         userData = userData.data()
         let userLikedTracksCollectionID = userData.likedTracksCollectionID
         let {collectionData: likedTracks} = await getSingleUserCollection(email, userLikedTracksCollectionID)
-        console.log("liked tracks collectionData", likedTracks)
+        // console.log("liked tracks collectionData", likedTracks)
         return {status: 200, likedTracks: likedTracks}
     } catch (e) {
         console.log("error in getUserLikedTracks" ,e)
@@ -714,7 +714,7 @@ export async function getUserHistory(email: string){
     }
 }
 
-export async function updateUserHistory(email: string, newHistory: Array<string>){
+export async function updateUserHistory(email: string, newHistory: Array<Track>){
     let userRef = db.collection("users").doc(email)
     try{
         await userRef.set({history: newHistory}, { merge: true })
