@@ -725,6 +725,34 @@ export async function updateUserHistory(email: string, newHistory: Array<string>
     }
 }
 
+export async function getHistoryTracks(email){
+    let userRef = db.collection("users").doc(email)
+    try{
+        let userData = await userRef.get()
+        userData = userData.data()
+        let tracks = []
+        for(var i = 0; i < userData.history.length; i++){
+            let trackRef = db.collection("tracks").doc(userData.history[i])
+            let trackData = await trackRef.get()
+            trackData = trackData.data()
+            let track:Track = {
+                filename: trackData["filename"],
+                cloud_storage_url: trackData["cloudStorageURL"],
+                date_posted: trackData["datePosted"],
+                audio_length: trackData["audioLength"],
+                track_name: trackData["trackName"],
+                track_id: trackData["trackID"]
+            }
+            tracks.push(track)
+
+        }
+        return {status: 200, tracks: tracks}
+    } catch (e) {
+        console.error("error in getHistoryTracks", e)
+        return {status: 500, tracks: []}
+    }
+}
+
 module.exports = {
     getPodcast,
     getUser,
@@ -755,5 +783,6 @@ module.exports = {
     addSubToSubList,
     removeSubFromSubList,
     getUserHistory,
-    updateUserHistory
+    updateUserHistory,
+    getHistoryTracks
 }

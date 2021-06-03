@@ -263,6 +263,7 @@ function AudioPlayerInfo(props) {
             store.dispatch(replaceCurrentTrack(prevTrackInfo))
             syncQueueWithAudioPlayer(true)
             syncHistory()
+            console.log("synced")
         }
          
 

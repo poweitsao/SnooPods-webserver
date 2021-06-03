@@ -17,7 +17,7 @@ const historyReducer = (state = initialState, action) => {
             return assignCollections(action.history)
 
         case "ADD_TO_HISTORY":
-            if(action.newTrack == ""){
+            if(action.newTrack == "" || action.newTrack== null || action.newTrack== undefined){
                 return state
             } else{
                 var newHistory = state.History
@@ -41,7 +41,9 @@ const historyReducer = (state = initialState, action) => {
 
             var newHistory = state.History
             // var lastTrack = newHistory[newHistory.length - 1]
-            newHistory.pop()
+            if (newHistory.length > 0){
+                newHistory.pop()
+            }
             
             return {
                 ...state,
