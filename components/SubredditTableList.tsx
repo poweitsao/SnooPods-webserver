@@ -128,7 +128,7 @@ const SubredditTableList = (props) => {
       // const [playButton, setPlayButton] = useState(playCircleOutlined);
       // console.log(index)
     return (
-      <tr key={track.track_name}>
+      <tr key={track.track_id}>
         <td style={{ width: "5%" }}>
           <div
             style={{

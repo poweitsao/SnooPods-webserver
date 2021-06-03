@@ -6,19 +6,33 @@ import Slider from '@material-ui/core/Slider';
 import VolumeDown from '@material-ui/icons/VolumeDown';
 import VolumeUp from '@material-ui/icons/VolumeUp';
 import store from '../redux/store';
+import fetch from "isomorphic-unfetch"
+import { trigger } from 'swr';
 
 
 
-export default function ContinuousSlider() {
+export default function ContinuousSlider(props) {
 //   const classes = useStyles();
-  const [value, setValue] = React.useState(store.getState().audioPlayerInfo.audio.volume*100);
+  console.log("SLIDER PROPS", props.volume*100)
+  // console.log("typeof props.volume", typeof(props.volume))
+  if(typeof(props.volume) !== undefined && store.getState().audioPlayerInfo.audio !== ""){
+    let audio = store.getState().audioPlayerInfo.audio
+    audio.volume = (props.volume)
+  }
+  
+  const [value, setValue] = React.useState(props.volume*100);
   console.log("audio volume from audioStore", store.getState().audioPlayerInfo.audio.volume)
 
-  const handleChange = (event, newValue) => {
+  const handleChange = async (event, newValue) => {
         console.log("new volume", newValue)
         setValue(newValue);
         let audio = store.getState().audioPlayerInfo.audio
         audio.volume = (newValue)/100
+        await fetch("/api/volume/update", {
+          method: "POST", 
+          body: JSON.stringify({email: store.getState().userSessionInfo.email, newVolume: newValue/100})
+        })
+        trigger("/api/volume/get/" + store.getState().userSessionInfo.email)
   };
 
   return (

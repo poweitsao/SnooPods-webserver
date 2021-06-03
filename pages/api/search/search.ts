@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method === "POST") {
         let {query} = JSON.parse(req.body)
-        console.log("request sent to getQueue", query)
+        console.log("request sent to search", query)
 
         // console.log("req.query:" + req.query["subID"])
         let querySearchResponse = await searchCategoriesAndSubreddits(query)

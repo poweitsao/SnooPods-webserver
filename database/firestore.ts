@@ -814,6 +814,29 @@ export async function getCategorySubreddits(categoryID: string){
 
 }
 
+export async function getUserVolume(email: string){
+    let userRef = db.collection("users").doc(email)
+    try{
+        let userData = await userRef.get()
+        userData = userData.data()
+        return {status: 200, volume: userData.volume}
+    } catch(e){
+        console.error("error in getUserVolume", e)
+        return {status: 500, volume: 1}
+    }
+}
+
+export async function updateUserVolume(email: string, newVolume: number){
+    let userRef = db.collection("users").doc(email)
+    try{
+        await userRef.set({volume: newVolume}, { merge: true })
+        return {status: 200}
+    } catch(e){
+        console.error("error in updateUserVolume", e)
+        return {status: 500}
+    }
+}
+
 module.exports = {
     getPodcast,
     getUser,
@@ -847,5 +870,7 @@ module.exports = {
     updateUserHistory,
     getHistoryTracks,
     searchCategoriesAndSubreddits,
-    getCategorySubreddits
+    getCategorySubreddits,
+    getUserVolume,
+    updateUserVolume
 }

@@ -23,6 +23,7 @@ import {syncHistory} from "../lib/syncHistory"
 import fetch from "isomorphic-unfetch"
 
 import VolumeSlider from "../components/VolumeSlider"
+import useSWR, { trigger } from "swr";
 
 
 
@@ -43,6 +44,8 @@ class AudioPlayerBar extends React.Component {
 
         //! sync with db when playing!
         syncDB()
+        console.log(this.props)
+
         
     }
 
@@ -58,7 +61,8 @@ class AudioPlayerBar extends React.Component {
                             playing={this.props.audioPlayerInfo.playing}
                             pictureURL={this.props.audioPlayerInfo.picture_url}
                             changeAudioPlayerInfo={this.props.audioPlayerInfo.changeAudioPlayerInfo}
-                            togglePlaying={this.props.togglePlaying} />
+                            togglePlaying={this.props.togglePlaying}
+                            email={this.props.userSessionInfo.email} />
 
                         : <AudioPlayer url={""}
                         trackName={""}
@@ -67,7 +71,8 @@ class AudioPlayerBar extends React.Component {
                         playing={""}
                         pictureURL={""}
                         changeAudioPlayerInfo={""}
-                        togglePlaying={""} />
+                        togglePlaying={""}
+                        email={this.props.userSessionInfo.email} />
                     }
                 </Navbar>
             </div>
@@ -79,6 +84,16 @@ function AudioPlayer(props) {
     const [source, setSource] = useState("")
     const [reload, setReload] = useState(false)
     const [audio, setAudio] = useState(undefined)
+    const fetcher = (url) => fetch(url).then((r) => r.json());
+
+    // console.log("audiopalyer email", props.email)
+    const fetchURL = "/api/volume/get/" + props.email
+    const {data: volume} = useSWR(props.email !== ""? fetchURL: null, fetcher)
+
+    // console.log("userSWR volume", volume)
+    
+    
+
     useEffect(() => {
 
         
@@ -94,6 +109,17 @@ function AudioPlayer(props) {
         else if (props.url === source && reload) {
             setReload(false)
         }
+
+        if(props.audio){
+            if(volume){
+                if (props.audio.volume !== volume){
+                    props.audio.volume = volume
+                }
+            }
+            
+        }
+        
+
     })
     // console.log(props)
     return (
@@ -110,7 +136,8 @@ function AudioPlayer(props) {
                         playing={props.playing}
                         pictureURL={props.pictureURL}
                         changeAudioPlayerInfo={props.changeAudioPlayerInfo}
-                        togglePlaying={props.togglePlaying} />
+                        togglePlaying={props.togglePlaying}
+                        volume={volume} />
                 )
             }
         </div>
@@ -154,6 +181,7 @@ function AudioPlayerInfo(props) {
     const audio = props.audio;
     const pictureURL = props.pictureURL
     const duration = store.getState().audioPlayerInfo.audio.duration
+    const volume = props.volume
 
     useEffect(() => {
         // console.log("curTime", curTime)
@@ -294,7 +322,8 @@ function AudioPlayerInfo(props) {
                     </div>
                 </div>
                 <div className="volume">
-                    <VolumeSlider/>
+                    {volume? <VolumeSlider volume={volume}/> : <div></div>}
+                    
                 </div>
             </div>
             <style >
