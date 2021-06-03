@@ -21,10 +21,10 @@ class RegisterationForm extends React.Component {
     // }
     componentDidMount() {
 
-        const store = store.getState().registerInfo
-        console.table(store.payload)
-        const userPayload = store.payload
-        const userID = store.userID
+        const registerStore = store.getState().registerInfo
+        console.table(registerStore.payload)
+        const userPayload = registerStore.payload
+        const userID = registerStore.userID
 
         // console.log(userPayload)
         if (userPayload) {

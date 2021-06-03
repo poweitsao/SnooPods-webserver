@@ -32,7 +32,9 @@ const emptyTrack : Track= {
     },
     audio_length: 0,
     track_name: "",
-    track_id: ""
+    track_id: "",
+    subreddit: "",
+    picture_url: ""
   }
 
 export async function getPodcast(subreddit, podcast) {
@@ -85,7 +87,10 @@ export async function getTrack(trackID: string){
         date_posted: trackData["datePosted"],
         audio_length: trackData["audioLength"],
         track_name: trackData["trackName"],
-        track_id: trackData["trackID"]
+        track_id: trackData["trackID"],
+        subreddit: trackData["subreddit"],
+        picture_url: trackData["pictureURL"]
+
     }
     return track
 }
@@ -171,7 +176,9 @@ export async function getTracks(trackIDs: Array<string>) {
                 cloud_storage_url: trackInfo.cloudStorageURL,
                 date_posted: trackInfo.datePosted,
                 track_id: trackInfo.trackID,
-                track_name: trackInfo.trackName
+                track_name: trackInfo.trackName,
+                subreddit: trackInfo.subreddit,
+                picture_url: trackInfo.pictureURL
             }
             // console.log("track", track)
             tracks.push(track)
@@ -428,7 +435,10 @@ export async function getSubredditPlaylist(subID) {
             date_posted: trackData["datePosted"],
             audio_length: trackData["audioLength"],
             track_name: trackData["trackName"],
-            track_id: trackData["trackID"]
+            track_id: trackData["trackID"],
+            subreddit: trackData["subreddit"],
+            picture_url: trackData["pictureURL"]
+    
         }
 
         // console.log(track)
@@ -741,7 +751,10 @@ export async function getHistoryTracks(email){
                 date_posted: trackData["datePosted"],
                 audio_length: trackData["audioLength"],
                 track_name: trackData["trackName"],
-                track_id: trackData["trackID"]
+                track_id: trackData["trackID"],
+                subreddit: trackData["subreddit"],
+                picture_url: trackData["pictureURL"]
+        
             }
             tracks.push(track)
 

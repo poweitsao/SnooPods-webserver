@@ -12,8 +12,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    // changeAudioPlayerInfo: AudioPlayerInfo => dispatch(storeAudioPlayerInfo(AudioPlayerInfo)),
-    // togglePlaying: playing => dispatch(togglePlaying(playing))
+
     changeQueueInfo: QueueInfo => dispatch(storeQueueInfo(QueueInfo)), 
     // getQueueInfo, 
     nextTrack: () => dispatch(replaceCurrentTrack()), 

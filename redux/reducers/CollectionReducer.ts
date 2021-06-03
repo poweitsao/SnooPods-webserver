@@ -15,8 +15,10 @@ const emptyTrack : Track= {
     },
     audio_length: 0,
     track_name: "",
-    track_id: ""
-}
+    track_id: "",
+    subreddit: "",
+    picture_url: ""
+  }
 
 const emptyCollectionList = {
     Collections: []

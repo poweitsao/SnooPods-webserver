@@ -13,7 +13,7 @@ import Bar from "./custom-audio-player/src/Bar";
 import { useState, useEffect } from "react"
 import useAudioPlayer from './custom-audio-player/src/useAudioPlayer';
 import store from "../redux/store"
-import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index"
+import {togglePlaying } from "../redux/actions/index"
 
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import isEmpty from '../lib/isEmptyObject';
@@ -112,33 +112,6 @@ function AudioPlayer(props) {
     )
 }
 
-const nextTrack = () => {
-    const currStore = store.getState().audioPlayerInfo
-    var keyIndex = currStore["keyIndex"]
-    var playlist = currStore["playlist"]
-
-    if (keyIndex < playlist["keys"].length - 1) {
-        var filename = currStore["playlist"]["keys"][keyIndex + 1]
-        var podcast = currStore["playlist"]["tracks"][filename]
-
-        var track = new Audio(podcast["cloud_storage_url"])
-        track.setAttribute("id", "audio")
-        currStore["audio"].setAttribute("id", "")
-        store.dispatch(togglePlaying(false))
-
-        store.dispatch(storeAudioPlayerInfo({
-            playing: true,
-            subreddit: currStore["subreddit"],
-            trackName: filename,
-            audio: track,
-            url: podcast["cloud_storage_url"],
-            playlist: playlist,
-            keyIndex: playlist["keys"].indexOf(filename)
-        }))
-    } else{
-        store.dispatch(togglePlaying(false))
-    }
-}
 
 const nextTrackFromQueue = () => {
     // var keyIndex = currStore["keyIndex"]
@@ -160,33 +133,7 @@ const nextTrackFromQueue = () => {
         
     var queueCurrStore = store.getState().queueInfo
     var currTrack = queueCurrStore.QueueInfo.currentTrack
-    // console.log("queueCurrStore from nextTrackFromQueue", queueCurrStore)
 
-    // console.log("currTrack after push", currTrack)
-    // if (currTrack.cloud_storage_url !== "") { 
-    //     // var filename = currStore["playlist"]["keys"][keyIndex + 1]
-    //     // var podcast = currStore["playlist"]["tracks"][filename]
-
-    //     var track = new Audio(currTrack.cloud_storage_url)
-    //     track.setAttribute("id", "audio")
-    //     // audioCurrStore["audio"].setAttribute("id", "")
-        
-    //     // store.dispatch(storeAudioPlayerInfo({
-    //     //     playing: true,
-    //     //     subreddit: "r/LoremIpsum",
-    //     //     filename: currTrack.filename,
-    //     //     trackName: currTrack.track_name,
-    //     //     audio: track,
-    //     //     url: currTrack.cloud_storage_url,
-    //     // }))
-        
-
-    //     let audioCurrStore = store.getState().audioPlayerInfo
-    //     console.log("after pushing", audioCurrStore)
-    //     console.log("pushing next track")
-    // } else{
-    //     store.dispatch(togglePlaying(false))
-    // }
     store.dispatch(togglePlaying(false))
     forceSyncQueueWithAudioPlayer(true)
 

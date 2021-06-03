@@ -10,7 +10,6 @@ import Router from "next/router";
 import validateSession from "../../lib/validateUserSessionOnPage";
 import { getQueue } from "../../lib/syncQueue";
 import { replaceCurrentPlaylist, replaceCurrentTrack } from "../../redux/actions/queueActions";
-import { storeAudioPlayerInfo } from "../../redux/actions";
 import playCircleOutlined from "@iconify/icons-ant-design/play-circle-outlined";
 import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
 import { Icon } from "@iconify/react";

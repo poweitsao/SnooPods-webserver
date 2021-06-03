@@ -77,11 +77,13 @@ export async function getQueue (email: string) {
     store.dispatch(
       storeAudioPlayerInfo({
         playing: false,
-        subreddit: "loremipsum",
         trackName: currTrack.track_name,
         filename: currTrack.filename,
         audio: new Audio(currTrack.cloud_storage_url),
-        url: currTrack.cloud_storage_url
+        url: currTrack.cloud_storage_url,
+        subreddit: currTrack.subreddit,
+        pictureURL: currTrack.picture_url
+        
       })
     );
   } 
@@ -108,11 +110,12 @@ export function syncQueueWithAudioPlayer(playing: boolean) {
     var currTrack = queueCurrStore.QueueInfo.currentTrack
     store.dispatch(storeAudioPlayerInfo({
       playing: playing,
-      subreddit: "r/LoremIpsum",
       filename: currTrack.filename,
       trackName: currTrack.track_name,
       audio: new Audio(currTrack.cloud_storage_url),
       url: currTrack.cloud_storage_url,
+      subreddit: currTrack.subreddit,
+      pictureURL: currTrack.picture_url
     }))
   }
 }
@@ -122,11 +125,12 @@ export function forceSyncQueueWithAudioPlayer(playing: boolean) {
   var currTrack = queueCurrStore.QueueInfo.currentTrack
   store.dispatch(storeAudioPlayerInfo({
     playing: playing,
-    subreddit: "r/LoremIpsum",
     filename: currTrack.filename,
     trackName: currTrack.track_name,
     audio: new Audio(currTrack.cloud_storage_url),
     url: currTrack.cloud_storage_url,
+    subreddit: currTrack.subreddit,
+    pictureURL: currTrack.picture_url
   }))
 
 }

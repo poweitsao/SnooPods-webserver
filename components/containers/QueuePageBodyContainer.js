@@ -1,6 +1,4 @@
 import { connect } from "react-redux"
-// import { UserSessionStore } from "../../redux/store"
-import { storeAudioPlayerInfo, togglePlaying } from "../../redux/actions/index"
 import QueuePageBody from "../Queue/QueuePageBody.tsx"
 
 // const mapStateToProps = (state) => ({

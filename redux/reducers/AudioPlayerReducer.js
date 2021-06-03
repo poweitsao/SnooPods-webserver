@@ -1,13 +1,13 @@
-import { storeAudioPlayerInfo } from "../actions/index"
 
 const emptyAudioStore = {
     playing: false,
-    subreddit: "",
     filename: "",
     trackName: "",
     audio: "",
     url: "",
-    email: ""
+    email: "",
+    subreddit: "",
+    picture_url:""
 }
 
 const initialState = emptyAudioStore
@@ -18,11 +18,13 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
         case "STORE_AUDIO_PLAYER_INFO":
             return Object.assign({}, state, {
                 playing: action.AudioPlayerInfo.playing,
-                subreddit: action.AudioPlayerInfo.subreddit,
                 filename: action.AudioPlayerInfo.filename,
                 trackName: action.AudioPlayerInfo.trackName,
                 audio: action.AudioPlayerInfo.audio,
-                url: action.AudioPlayerInfo.url
+                url: action.AudioPlayerInfo.url,
+                subreddit: action.AudioPlayerInfo.subreddit,
+                picture_url: action.AudioPlayerInfo.pictureURL,
+                
             })
         case "TOGGLE_PLAYING":
             // console.log("state in AudioPlayerReducer", state)

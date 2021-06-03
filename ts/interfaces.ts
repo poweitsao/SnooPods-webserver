@@ -9,7 +9,9 @@ export interface Track{
     date_posted: Timestamp,
     audio_length: number,
     track_name: string,
-    track_id: string
+    track_id: string,
+    subreddit: string,
+    picture_url: string
 }
 
 export interface Collection {

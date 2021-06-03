@@ -54,12 +54,14 @@ const HistoryTableList = (props) => {
         store.dispatch(
           storeAudioPlayerInfo({
             playing: true,
-            subreddit: "loremipsum",
             trackName: currTrack.track_name,
             filename: currTrack.filename,
             audio: new Audio(currTrack.cloud_storage_url),
             url: currTrack.cloud_storage_url,
-            email: store.getState().userSessionInfo.email}
+            email: store.getState().userSessionInfo.email,
+            subreddit: currTrack.subreddit,
+            pictureURL: currTrack.picture_url
+            },
           )
         )
 

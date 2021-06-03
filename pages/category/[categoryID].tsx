@@ -16,7 +16,6 @@ import LoginPopup from "../../components/LoginPopup"
 import Sidebar from "../../components/Sidebar"
 import useSWR from 'swr'
 import store from "../../redux/store";
-// import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index";
 import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
 import {getQueue} from "../../lib/syncQueue";

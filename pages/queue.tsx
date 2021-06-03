@@ -16,7 +16,6 @@ import store from "../redux/store";
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue } from "../redux/actions/queueActions";
 import {Collection, QueuePlaylist, Track, UserSession} from "../ts/interfaces"
 
-import { storeAudioPlayerInfo, togglePlaying} from "../redux/actions/index"
 
 import { getQueue, syncDB, syncQueueWithAudioPlayer} from "../lib/syncQueue"
 import Router from "next/router";
