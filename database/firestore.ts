@@ -331,7 +331,7 @@ export const toggleUserLikedTracks = async (trackID: string, email: string) => {
 
 export const getUserLikedTracks = async (email: string) => {
     let userRef = db.collection("users").doc(email)
-    console.log("getting user liked tracks of", email)
+    // console.log("getting user liked tracks of", email)
     try {
         let userData = await userRef.get()
         userData = userData.data()
@@ -755,6 +755,7 @@ export async function getHistoryTracks(email){
 
 export async function searchCategoriesAndSubreddits(query: string){
     const categoriesRef = db.collection("categories")   
+    query = query.toLowerCase()
     try{
         const snapshot = await categoriesRef.get();
         var categories = []
@@ -762,12 +763,17 @@ export async function searchCategoriesAndSubreddits(query: string){
         snapshot.forEach(doc => {
             // console.log(doc.id, '=>', doc.data());
             var categoryData = doc.data()
-            if( categoryData.categoryName.search(query) >= 0){
-                categories.push(categoryData.categoryName)
+            var categoryName = categoryData.categoryName.toLowerCase()
+            if( categoryName.search(query) >= 0){
+                categories.push({
+                    categoryName: categoryData.categoryName, 
+                    categoryID: categoryData.categoryID
+                })
             }
 
             for(var i = 0; i < categoryData.subreddits.length; i++){
-                if( categoryData.subreddits[i].search(query) >= 0){
+                var subredditName = categoryData.subreddits[i].toLowerCase()
+                if( subredditName.search(query) >= 0){
                     subreddits.push(categoryData.subreddits[i])
                 }
             }
@@ -779,6 +785,19 @@ export async function searchCategoriesAndSubreddits(query: string){
         return {status: 500, categories: [], subreddits: []}
 
     }
+}
+
+export async function getCategorySubreddits(categoryID: string){
+    const categoryRef = db.collection("categories").doc(categoryID)
+    try{
+        let categoryData = await categoryRef.get()
+        categoryData = categoryData.data()
+        return {status: 200, categoryData: categoryData}
+    } catch(e) {
+        console.error("error in getCategorySubreddits", e)
+        return {status: 500, categoryData: {}}
+    }
+
 }
 
 module.exports = {
@@ -813,5 +832,6 @@ module.exports = {
     getUserHistory,
     updateUserHistory,
     getHistoryTracks,
-    searchCategoriesAndSubreddits
+    searchCategoriesAndSubreddits,
+    getCategorySubreddits
 }

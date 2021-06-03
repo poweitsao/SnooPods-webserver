@@ -143,6 +143,7 @@ const home = ({ userSession }) => {
 
   const [mounted, setMounted] = useState(false)
   const [searchResult, setSearchResult] = useState({"categories": [], "subreddits": []})
+  const [searchTerm, setSearchTerm] = useState("")
 
 //   const {data: endpoint2} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
   // console.log(mounted)
@@ -185,28 +186,42 @@ const home = ({ userSession }) => {
 
    
     // console.log("usersessionstore", )
-
-
+    const delayDebounceFn = setTimeout(() => {
+        console.log(searchTerm)
+        // Send Axios request here
+        search()
+      }, 500)        
+      return () => clearTimeout(delayDebounceFn)
     
-  }, []);
+  }, [searchTerm]);
 
 
-    const renderSearchResult = (searchResult) => {
+    const renderSubredditSearchResult = (searchResult) => {
         return(
-            <div key={searchResult}>{searchResult}</div>
+            <a key={searchResult} href={"/subreddit/"+searchResult}>{searchResult}</a>
         )
     }
 
-    const search = async (event) => {
-        const { value } = event.target
+    const renderCategorySearchResult = (searchResult) => {
+        return(
+            <a key={searchResult} href={"/category/"+searchResult.categoryID}>{searchResult.categoryName}</a>
 
-        let searchQueryResponse = await fetch("/api/search/search", 
-            {method: "POST", body: JSON.stringify({query: value})}
         )
-        let searchQueryResult = await searchQueryResponse.json()
-        console.log("searchQueryResult", searchQueryResult)
-        setSearchResult(searchQueryResult)
-        
+    }
+
+    const search = async () => {
+
+        if (searchTerm){
+            let searchQueryResponse = await fetch("/api/search/search", 
+                {method: "POST", body: JSON.stringify({query: searchTerm})}
+            )
+            let searchQueryResult = await searchQueryResponse.json()
+            console.log("searchQueryResult", searchQueryResult)
+            setSearchResult(searchQueryResult)
+        } else if (searchTerm == ""){
+            setSearchResult({"categories": [], "subreddits": []})
+
+        }
     }
 
 
@@ -223,7 +238,12 @@ const home = ({ userSession }) => {
       </div>
       <div className="page-container">
         {!user["validSession"]
-            ? <div></div>
+            ? <div className="sidebar" style={{
+                backgroundColor: "#EAECEF",
+                width: "14%",
+                flexDirection: "column",
+                alignItems: "center",
+              }}></div>
             : <Sidebar user={user}></Sidebar>
           }
          
@@ -236,7 +256,7 @@ const home = ({ userSession }) => {
           
         
           <div className="heading">
-            <h1> Featured Subreddits </h1>
+            <h1> Explore </h1>
           </div>
 
           {/* <div className="grid-container">
@@ -244,14 +264,16 @@ const home = ({ userSession }) => {
               ? <div></div>
               : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
           </div> */}
-            <input onChange={search}></input>
-          <div>
-              <div>categories</div>
-              {searchResult.categories.map(renderSearchResult)}
-          </div>
-          <div>
-            <div>subreddits</div>
-              {searchResult.subreddits.map(renderSearchResult)}
+          <div className="search-container">
+            <input onChange={(e) => setSearchTerm(e.target.value)}></input>
+            <div className="search-result-category">
+                <h3>categories</h3>
+                {searchResult.categories.map(renderCategorySearchResult)}
+            </div>
+            <div className="search-result-category">
+                <h3>subreddits</h3>
+                {searchResult.subreddits.map(renderSubredditSearchResult)}
+            </div>
           </div>
 
           {/* <div className="button-container">
@@ -309,6 +331,20 @@ const home = ({ userSession }) => {
           display:flex;
           flex-direction: column;
           align-items: stretch;
+        }
+        .search-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .search-result-category{
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
     `}</style>
         </div>
