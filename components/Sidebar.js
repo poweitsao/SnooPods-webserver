@@ -74,7 +74,7 @@ const Sidebar = (props) => {
 
       }, [collections, likedTracks, subLists, history]);
 
-    if(!collections){
+    if(!collections|| !likedTracks || !subLists || !history){
         return <div className="sidebar" style={{
                 backgroundColor: "#EAECEF",
                 width: "14%",
@@ -227,7 +227,7 @@ const Sidebar = (props) => {
                 maxWidth: "100%", 
             }}>
                 <Nav.Link style={{  }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
-                <Nav.Link style={{  }} onClick={() => { Router.push("/") }}>Search</Nav.Link>
+                <Nav.Link style={{  }} onClick={() => { Router.push("/explore") }}>Explore</Nav.Link>
                 <Nav.Link style={{  }} onClick={() => { Router.push("/likedTracks/"+likedTracks.collectionID) }}>Liked Tracks</Nav.Link>
 
                 <div className="title-container">

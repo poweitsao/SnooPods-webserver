@@ -212,7 +212,12 @@ const home = ({ userSession }) => {
       </div>
       <div className="page-container">
         {!user["validSession"]
-            ? <div></div>
+            ? <div className="sidebar" style={{
+                backgroundColor: "#EAECEF",
+                width: "14%",
+                flexDirection: "column",
+                alignItems: "center",
+              }}></div>
             : <Sidebar user={user}></Sidebar>
           }
          

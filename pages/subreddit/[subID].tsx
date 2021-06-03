@@ -327,7 +327,14 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
           }} />
       </div>
       <div className="page-container">
-        {isEmpty(user) ? <div></div> : <Sidebar user={user}></Sidebar>}
+        {isEmpty(user) 
+          ? <div className="sidebar" style={{
+            backgroundColor: "#EAECEF",
+            width: "14%",
+            flexDirection: "column",
+            alignItems: "center",
+          }}></div>           
+          : <Sidebar user={user}></Sidebar>}
         <div className="main-page">
           {isEmpty(user) ? <div></div> : <CustomNavbar user={user} />}
 
