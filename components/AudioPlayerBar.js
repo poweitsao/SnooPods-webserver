@@ -22,6 +22,8 @@ import {addToHistory, removeLastTrack} from "../redux/actions/historyActions"
 import {syncHistory} from "../lib/syncHistory"
 import fetch from "isomorphic-unfetch"
 
+import VolumeSlider from "../components/VolumeSlider"
+
 
 
 
@@ -38,7 +40,7 @@ class AudioPlayerBar extends React.Component {
         //     // console.log("audio changed")
         // }
 
-        
+
         //! sync with db when playing!
         syncDB()
         
@@ -54,6 +56,7 @@ class AudioPlayerBar extends React.Component {
                             subreddit={this.props.audioPlayerInfo.subreddit}
                             audio={this.props.audioPlayerInfo.audio}
                             playing={this.props.audioPlayerInfo.playing}
+                            pictureURL={this.props.audioPlayerInfo.picture_url}
                             changeAudioPlayerInfo={this.props.audioPlayerInfo.changeAudioPlayerInfo}
                             togglePlaying={this.props.togglePlaying} />
 
@@ -62,6 +65,7 @@ class AudioPlayerBar extends React.Component {
                         subreddit={""}
                         audio={null}
                         playing={""}
+                        pictureURL={""}
                         changeAudioPlayerInfo={""}
                         togglePlaying={""} />
                     }
@@ -104,6 +108,7 @@ function AudioPlayer(props) {
                         subreddit={props.subreddit}
                         audio={props.audio}
                         playing={props.playing}
+                        pictureURL={props.pictureURL}
                         changeAudioPlayerInfo={props.changeAudioPlayerInfo}
                         togglePlaying={props.togglePlaying} />
                 )
@@ -147,6 +152,7 @@ function AudioPlayerInfo(props) {
     const subreddit = props.subreddit;
     const trackName = props.trackName;
     const audio = props.audio;
+    const pictureURL = props.pictureURL
     const duration = store.getState().audioPlayerInfo.audio.duration
 
     useEffect(() => {
@@ -248,7 +254,7 @@ function AudioPlayerInfo(props) {
         <div>
             <div className="player" style={{ width: "100%" }}>
                 <div className="track-info">
-                    <Track trackName={trackName} subreddit={"r/"+subreddit} />
+                    <Track pictureURL={pictureURL} trackName={trackName} subreddit={"r/"+subreddit} />
                 </div>
                 <div className="center-piece">
                     <div className="controls">
@@ -288,7 +294,7 @@ function AudioPlayerInfo(props) {
                     </div>
                 </div>
                 <div className="volume">
-                    <p>Volume</p>
+                    <VolumeSlider/>
                 </div>
             </div>
             <style >
@@ -316,7 +322,7 @@ function AudioPlayerInfo(props) {
           .volume{
             display:flex;
             justify-content: flex-end;
-            width:35%;
+            width:25%;
             margin-right:5%;
             font-size: 25;
           }
@@ -359,7 +365,7 @@ function EmptyAudioPlayerInfo(props) {
                     </div>
                 </div>
                 <div className="volume">
-                    <p>Volume</p>
+                    <VolumeSlider/>
                 </div>
             </div>
             <style >

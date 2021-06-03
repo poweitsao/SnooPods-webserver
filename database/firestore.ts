@@ -113,7 +113,8 @@ export async function createUser(user) {
             likedTracksCollectionID: likedTracksCollectionID,
             pictureURL: user.picture_url,
             queue: [],
-            subscriptionLists: []
+            subscriptionLists: [],
+            volume: 1
         })
         let sessionID = await createSession(user.email)
 
