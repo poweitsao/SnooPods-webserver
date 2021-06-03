@@ -18,7 +18,7 @@ const historyReducer = (state = initialState, action) => {
             return assignCollections(action.history)
 
         case "ADD_TO_HISTORY":
-            if( action.newTrack== null || action.newTrack== undefined){
+            if( action.newTrack.cloud_storage_url == "" || action.newTrack== null || action.newTrack== undefined){
                 return state
             } else{
                 var newHistory: Array<Track> = state.History
