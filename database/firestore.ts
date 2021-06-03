@@ -753,6 +753,34 @@ export async function getHistoryTracks(email){
     }
 }
 
+export async function searchCategoriesAndSubreddits(query: string){
+    const categoriesRef = db.collection("categories")   
+    try{
+        const snapshot = await categoriesRef.get();
+        var categories = []
+        var subreddits = []
+        snapshot.forEach(doc => {
+            // console.log(doc.id, '=>', doc.data());
+            var categoryData = doc.data()
+            if( categoryData.categoryName.search(query) >= 0){
+                categories.push(categoryData.categoryName)
+            }
+
+            for(var i = 0; i < categoryData.subreddits.length; i++){
+                if( categoryData.subreddits[i].search(query) >= 0){
+                    subreddits.push(categoryData.subreddits[i])
+                }
+            }
+        });
+        return {status: 200, categories: categories, subreddits: subreddits}
+        
+    } catch(e){
+        console.error("error in searchCategoriesAndSubreddits", e)
+        return {status: 500, categories: [], subreddits: []}
+
+    }
+}
+
 module.exports = {
     getPodcast,
     getUser,
@@ -784,5 +812,6 @@ module.exports = {
     removeSubFromSubList,
     getUserHistory,
     updateUserHistory,
-    getHistoryTracks
+    getHistoryTracks,
+    searchCategoriesAndSubreddits
 }
