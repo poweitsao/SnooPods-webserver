@@ -7,6 +7,8 @@ import registerReducer from "./registerReducer"
 import SubListReducer from "./SubListReducer"
 import userSessionInfoReducer from "./userSessionInfoReducer"
 import historyReducer from "./HistoryReducer"
+import VolumeReducer from "./VolumeReducer"
+import volumeReducer from './VolumeReducer';
 
 
 const rootReducer = combineReducers({
@@ -17,7 +19,8 @@ const rootReducer = combineReducers({
     registerInfo: registerReducer,
     subListInfo: SubListReducer,
     userSessionInfo: userSessionInfoReducer,
-    historyInfo: historyReducer
+    historyInfo: historyReducer,
+    volumeInfo: volumeReducer
 
 });
 

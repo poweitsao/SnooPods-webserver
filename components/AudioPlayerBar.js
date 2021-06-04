@@ -24,6 +24,8 @@ import fetch from "isomorphic-unfetch"
 
 import VolumeSlider from "../components/VolumeSlider"
 import useSWR, { trigger } from "swr";
+import {storeVolume} from "../redux/actions/volumeActions"
+import { Provider } from 'react-redux';
 
 
 
@@ -84,11 +86,9 @@ function AudioPlayer(props) {
     const [source, setSource] = useState("")
     const [reload, setReload] = useState(false)
     const [audio, setAudio] = useState(undefined)
-    const fetcher = (url) => fetch(url).then((r) => r.json());
 
     // console.log("audiopalyer email", props.email)
-    const fetchURL = "/api/volume/get/" + props.email
-    const {data: volume} = useSWR(props.email !== ""? fetchURL: null, fetcher)
+
 
     // console.log("userSWR volume", volume)
     
@@ -110,15 +110,15 @@ function AudioPlayer(props) {
             setReload(false)
         }
 
-        if(props.audio){
-            if(volume){
-                if (props.audio.volume !== volume){
-                    props.audio.volume = volume
-                }
-            }
+        // if(props.audio){
+        //     if(volume){
+        //         if (props.audio.volume !== volume){
+        //             props.audio.volume = volume
+        //         }
+        //     }
             
-        }
-        
+        // }
+
 
     })
     // console.log(props)
@@ -136,8 +136,7 @@ function AudioPlayer(props) {
                         playing={props.playing}
                         pictureURL={props.pictureURL}
                         changeAudioPlayerInfo={props.changeAudioPlayerInfo}
-                        togglePlaying={props.togglePlaying}
-                        volume={volume} />
+                        togglePlaying={props.togglePlaying} />
                 )
             }
         </div>
@@ -181,13 +180,34 @@ function AudioPlayerInfo(props) {
     const audio = props.audio;
     const pictureURL = props.pictureURL
     const duration = store.getState().audioPlayerInfo.audio.duration
-    const volume = props.volume
+
+    const [volume, setVolume] = useState(1)
+    // const volume = props.volume
+    // const fetcher = (url) => fetch(url).then((r) => r.json());
+
+    // const fetchURL = "/api/volume/get/" + store.getState().userSessionInfo.email
+    // const {data: volume} = useSWR(store.getState().userSessionInfo.email? fetchURL: null, fetcher)
 
     useEffect(() => {
         // console.log("curTime", curTime)
         // console.log("duration", duration)
         // if (duration == undefined){
         //     duration = store.getState().audioPlayerInfo.duration
+        // }
+        // const getVolume = async () => {
+        //     let getVolumeRes = await fetch("/api/volume/get/" + store.getState().userSessionInfo.email)
+        //     let getVolumeResponse = await getVolumeRes.json()
+        //     // setVolume(getVolumeResponse)
+        //     if(store.getState().volumeInfo.volume !== getVolumeResponse){
+        //         store.dispatch(storeVolume(getVolumeResponse))
+        //     }
+        // }
+        // console.log(volume)
+        // if(volume){
+        //     if (store.getState().volumeInfo.volume !== volume){
+                
+                
+        //     }
         // }
 
         if (curTime && duration && curTime === duration) {
@@ -199,6 +219,11 @@ function AudioPlayerInfo(props) {
             // testQueueStore()
             // audio.currentTime = 0;
         }
+
+        // if(store.getState().userSessionInfo.email !== ""){
+        //     getVolume()
+        // }
+
     })
 
     if (audio !== null && props.playing && duration) {
@@ -322,7 +347,16 @@ function AudioPlayerInfo(props) {
                     </div>
                 </div>
                 <div className="volume">
-                    {volume? <VolumeSlider volume={volume}/> : <div></div>}
+                    {volume!== undefined
+                        ?(  <Provider store={store}>
+                                <VolumeSlider /> 
+                            </Provider>)
+                        :<div></div>
+
+                    }
+
+                        
+                       
                     
                 </div>
             </div>
@@ -394,7 +428,7 @@ function EmptyAudioPlayerInfo(props) {
                     </div>
                 </div>
                 <div className="volume">
-                    <VolumeSlider/>
+                    <div style={{width: "200px"}}></div>
                 </div>
             </div>
             <style >
