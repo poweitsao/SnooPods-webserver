@@ -411,55 +411,67 @@ export async function getFeaturedSubreddits() {
 
 export async function getSubredditPlaylist(subID) {
     // console.log("subID in firestore:" + subID)
-    let docRef = db.collection("subreddits").doc(subID)
-    let doc = await docRef.get()
+    let subredditRef = db.collection("subreddits").doc(subID)
+    try{
+        let subredditData = await subredditRef.get()
+        subredditData = subredditData.data()
+        let collectionRef = db.collection("collections").doc(subredditData.mainCollectionID)
+        let collectionData = await collectionRef.get()
+        collectionData = collectionData.data()
+        // console.log("collectionData", collectionData)
+        subredditData.trackIDs = collectionData.tracks
+        return subredditData
+    } catch(e){
+        console.error("error in getSubredditPlaylist", e)
+    }
 
-    let mainCollectionID: string = doc.data().mainCollectionID
+
+    // let mainCollectionID: string = doc.data().mainCollectionID
     
-    let collectionRef = db.collection("collections").doc(mainCollectionID)
-    let collectionDoc = await collectionRef.get()
-    let tracks : Array<string> = collectionDoc.data().tracks
+    // let collectionRef = db.collection("collections").doc(mainCollectionID)
+    // let collectionDoc = await collectionRef.get()
+    // let tracks : Array<string> = collectionDoc.data().tracks
 
 
-    let collection = <Collection>{keys:[], tracks:{}};
-    // console.log(doc)
-    for (const [index, track_id] of tracks.entries()) {
-        let trackRef = db.collection("tracks").doc(track_id)
-        let trackDoc = await trackRef.get()
+    // let collection = <Collection>{keys:[], tracks:{}};
+    // // console.log(doc)
+    // for (const [index, track_id] of tracks.entries()) {
+    //     let trackRef = db.collection("tracks").doc(track_id)
+    //     let trackDoc = await trackRef.get()
 
         
-        // console.log(doc.id, '=>', doc.data());
-        let trackData = trackDoc.data()
-        let track:Track = {
-            filename: trackData["filename"],
-            cloud_storage_url: trackData["cloudStorageURL"],
-            date_posted: trackData["datePosted"],
-            audio_length: trackData["audioLength"],
-            track_name: trackData["trackName"],
-            track_id: trackData["trackID"],
-            subreddit: trackData["subreddit"],
-            picture_url: trackData["pictureURL"]
+    //     // console.log(doc.id, '=>', doc.data());
+    //     let trackData = trackDoc.data()
+    //     let track:Track = {
+    //         filename: trackData["filename"],
+    //         cloud_storage_url: trackData["cloudStorageURL"],
+    //         date_posted: trackData["datePosted"],
+    //         audio_length: trackData["audioLength"],
+    //         track_name: trackData["trackName"],
+    //         track_id: trackData["trackID"],
+    //         subreddit: trackData["subreddit"],
+    //         picture_url: trackData["pictureURL"]
     
-        }
+    //     }
 
-        // console.log(track)
-        // console.log(collection)
-        collection["keys"].push(track_id)
-        collection["tracks"][track_id] = track
+    //     // console.log(track)
+    //     // console.log(collection)
+    //     collection["keys"].push(track_id)
+    //     collection["tracks"][track_id] = track
 
-    }
-    // collection
-    // console.log("doc", doc)
+    // }
+    // // collection
+    // // console.log("doc", doc)
 
-    let subredditsDocRef = db.collection("subreddits").doc(subID)
-    let subredditsDoc = await subredditsDocRef.get()
-    if (!subredditsDoc.exists) {
-        console.log("No album picture found")
-    } else {
-        collection["cover_url"] = subredditsDoc.data()["pictureURL"]
-    }
-    // console.log("collection info:", collection)
-    return collection
+    // let subredditsDocRef = db.collection("subreddits").doc(subID)
+    // let subredditsDoc = await subredditsDocRef.get()
+    // if (!subredditsDoc.exists) {
+    //     console.log("No album picture found")
+    // } else {
+    //     collection["cover_url"] = subredditsDoc.data()["pictureURL"]
+    // }
+    // // console.log("collection info:", collection)
+    // return collection
 
     // if (!doc.exists) {
     //     console.log('No such document!');

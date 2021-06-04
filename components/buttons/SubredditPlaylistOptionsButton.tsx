@@ -33,14 +33,21 @@ const SubredditPlaylistOptionsButton = (props) => {
 
     // }, [props])
 
-    const addSubPlaylistToQueue = () =>{
+    const addSubPlaylistToQueue = async () =>{
         console.log("to be added to queue:", playlist)
-        var tracks : Array<Track> = []
+        // var tracks : Array<Track> = []
 
-        for (const trackID in playlist.tracks) {
-            console.log(`${playlist.tracks[trackID]}`);
-            tracks.push(playlist.tracks[trackID])
-          }
+        // for (const trackID in playlist.tracks) {
+        //     console.log(`${playlist.tracks[trackID]}`);
+        //     tracks.push(playlist.tracks[trackID])
+        //   }
+        console.log("trackIDs", playlist.trackIDs)
+        const getTracksRes = await fetch("/api/getTracks", {method: "POST", body:JSON.stringify({trackIDs: playlist.trackIDs})})
+        // const jsonResult = await getTracksRes.json()
+        // console.log("jsonResult", jsonResult)
+        const tracks : Array<Track> = await getTracksRes.json()
+        
+
         // for(var i = 0; i < playlist.tracks.length; i++){
             
         // }
@@ -141,7 +148,7 @@ const SubredditPlaylistOptionsButton = (props) => {
 
     return (
         <Menu menuButton={<MoreHorizIcon />}>
-            <MenuItem onClick={addSubPlaylistToQueue}>Add to queue</MenuItem>
+            <MenuItem onClick={() => {addSubPlaylistToQueue()}}>Add to queue</MenuItem>
             <SubMenu label="Add to Daily Mix">
                 {subLists.map(renderSubListsSubMenu)}
                 {/* {props.subListInfo !== undefined
@@ -157,12 +164,12 @@ const SubredditPlaylistOptionsButton = (props) => {
                 <MenuItem>example.js</MenuItem>
                 <MenuItem>about.css</MenuItem> */}
             </SubMenu>
-            <SubMenu label="test">
+            {/* <SubMenu label="test">
                 <MenuItem onClick={() => {addSubredditToSubList("dMvBlvK9sTphwj5IhgiY")}}>Test Add</MenuItem>
                 <MenuItem onClick={() => {removeSubredditFromSubList("dMvBlvK9sTphwj5IhgiY", subID)}}>Test Delete</MenuItem>
                 <MenuItem onClick={() => {renameSubList("dMvBlvK9sTphwj5IhgiY", "My name!!!")}}>Test Rename</MenuItem>
 
-            </SubMenu>
+            </SubMenu> */}
         </Menu>
     );
 }

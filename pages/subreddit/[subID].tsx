@@ -54,7 +54,7 @@ function isEmpty(obj: Object) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
-const Subreddit = ({ userSession, subredditPlaylist }) => {
+const Subreddit = ({ userSession, playlist }) => {
   // let emptyPlaylist: Collection = { keys: [], tracks: {}, collectionName: "" , cover_url: ""};
   // const [playlist, setPlaylist] = useState<Collection>(emptyPlaylist);
   const [mounted, setMounted] = useState<Boolean>(false);
@@ -63,8 +63,8 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
 
   const router = useRouter();
   const subID: string = router.query["subID"].toString();
-
-  const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
+  console.log("playlist", playlist)
+  // const {data: playlist} = useSWR("/api/subredditPlaylist/" + subID, {initialData:subredditPlaylist })
 // const {data: collections} = useSWR("/api/user/collections/getCollections/"+ store.getState().userSessionInfo.email)
   
 
@@ -112,6 +112,13 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
     var playlist = props.playlist
     playlist.collectionName = "r/" + subID
 
+    const getTracksTest = async() => {
+      let tracks = ["08uYngvdWCiSlEjZhIG0", "0eEsDfEDvIrSGlcOlMDk", "0uzt5WvEySS800XE2eWA" ]
+      let getTracksResponse = await fetch("/api/getTracks", {method: "POST", body: JSON.stringify({trackIDs: tracks})})
+      let result = await getTracksResponse.json()
+      console.log("getTracksTest result", result)
+    }
+
     useEffect(() => {
         setMounted(true)
       }, [])
@@ -138,6 +145,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
             <Provider store={store}>
               <SubredditPlaylistOptionsButton playlist={props.playlist} subID={subID}/>
             </Provider>
+            <button onClick={getTracksTest}>getTracksTest</button>
           </div>
         </div>
         <style>{`
@@ -180,7 +188,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
             {playlist == undefined ? (
               <div></div>
             ) : (
-              <SubredditInfo albumCover={playlist["cover_url"]} playlist={playlist} />
+              <SubredditInfo albumCover={playlist["pictureURL"]} playlist={playlist} />
             )}
             {playlist == undefined ? (
               <div></div>
@@ -188,6 +196,7 @@ const Subreddit = ({ userSession, subredditPlaylist }) => {
               <Provider store={store}>
                 <SubredditTableList playlist={playlist}/>
               </Provider>
+              // <div></div>
               // <Tablelist playlist={playlist} />
 
             )}
@@ -250,14 +259,14 @@ Subreddit.getInitialProps = async ({ req, query }) => {
   const res = await fetch(server+"/api/subredditPlaylist/" + subID, {
         method: "GET",
       });
-  let result: Collection = await res.json();
+  let result = await res.json();
 
   return {
     userSession: {
       session_id: cookies.session_id,
       email: cookies.email,
     },
-    subredditPlaylist: result
+    playlist: result
   };
 };
 

@@ -35,7 +35,7 @@ import { server } from "../config";
 
 
 import { storeQueueInfo, getQueueInfo, pushNextTrack, replaceCurrentTrack, addPlaylistToQueue, clearCurrentPlaylist, removeTrackFromCurrentPlaylist, removePlaylistFromQueue, removeTrackFromQueue, replaceCurrentPlaylist } from "../redux/actions/queueActions";
-import {syncDB, getQueue} from "../lib/syncQueue"
+import { syncDB, getQueue } from "../lib/syncQueue"
 
 import LoginPopup from "./LoginPopup";
 
@@ -51,25 +51,34 @@ import toggleLike from "../lib/toggleLike"
 import { addToHistory } from "../redux/actions/historyActions";
 import { syncHistory } from "../lib/syncHistory";
 
+import InfiniteScroll from 'react-infinite-scroller';
+import { getTrack } from "../database/firestore";
+
 
 const SubredditTableList = (props) => {
-  const {playlist, subID} : 
-  {playlist: Collection, subID: string} = props
+  const { playlist, subID }:
+    { playlist: any, subID: string } = props
 
-  const { LikedTracks, likedTracksCollectionID } : {LikedTracks: Array<string>, likedTracksCollectionID: string} = props.likedTracksInfo
+  const trackIDs: Array<string> = playlist.trackIDs
 
-  const playPodcast = (trackKey: string, trackIndex: number) => {
+  const { LikedTracks, likedTracksCollectionID }: { LikedTracks: Array<string>, likedTracksCollectionID: string } = props.likedTracksInfo
+
+  const playPodcast = async (track: Track, trackIndex: number, trackIDs: Array<string>) => {
 
     var queuePlaylistTracks = []
-    for(var i = trackIndex + 1; i <playlist.keys.length; i++ ){
-      queuePlaylistTracks.push(playlist.tracks[playlist.keys[i]])
-    }
+    var trackIDsAfter = trackIDs.slice(trackIndex)
+    const getTracksRes = await fetch("/api/getTracks", {method: "POST", body:JSON.stringify({trackIDs: trackIDsAfter})})
+    var getTrackResult = await getTracksRes.json()
+    // for (var i = trackIndex + 1; i < playlist.keys.length; i++) {
+    //   queuePlaylistTracks.push(playlist.tracks[playlist.keys[i]])
+    // }
+    queuePlaylistTracks = getTrackResult.slice(1)
 
     // console.log("queuePlaylistTracks", queuePlaylistTracks)
     var currStore = store.getState().queueInfo
     // console.log("store before dispatch", currStore)
 
-    if (queuePlaylistTracks.length > 0){
+    if (queuePlaylistTracks.length > 0) {
       var playlistName = "r/" + subID
 
       var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
@@ -77,12 +86,12 @@ const SubredditTableList = (props) => {
       store.dispatch(
         replaceCurrentPlaylist(queuePlaylist)
       )
-      
-    
-    
+
+
+
     }
     store.dispatch(
-      replaceCurrentTrack(playlist.tracks[trackKey])
+      replaceCurrentTrack(getTrackResult[0])
     )
     currStore = store.getState().queueInfo
     let currTrack = currStore.QueueInfo.currentTrack
@@ -97,7 +106,7 @@ const SubredditTableList = (props) => {
         email: store.getState().userSessionInfo.email,
         subreddit: currTrack.subreddit,
         pictureURL: currTrack.picture_url
-        },
+      },
       )
     )
     store.dispatch(
@@ -121,12 +130,9 @@ const SubredditTableList = (props) => {
     return '_' + Math.random().toString(36).substr(2, 9);
   };
 
-  const renderTrackOnTable = (trackKey: string, index: number, options?:any) => {
-    let track = playlist.tracks[trackKey]
-    // console.log("----> renderTrackOnTable. likedTracks:", track.track_name)
+  const renderTrackOnTable = (track: Track, index: number, options?: any) => {
+    // let track = playlist.tracks[trackKey]
 
-      // const [playButton, setPlayButton] = useState(playCircleOutlined);
-      // console.log(index)
     return (
       <tr key={track.track_id}>
         <td style={{ width: "5%" }}>
@@ -137,23 +143,8 @@ const SubredditTableList = (props) => {
               paddingLeft: "12px",
             }}
           >
-              {/* <button 
-                  onClick={() => playPodcast(trackKey, index)}
-                  onMouseEnter={() => setPlayButton(playCircleFilled)}
-                  onMouseLeave={() => setPlayButton(playCircleOutlined)}
-                  style={{
-                    padding: "0px",
-                    width: "fit-content",
-                    backgroundColor: "transparent",
-                    border: "none"
 
-                    }}>
-                <Icon
-                  style={{ width: "25px", height: "25px" }}
-                  icon={playButton}
-                />
-              </button> */}
-            <PlayButton handleClick={() => playPodcast(trackKey, index)}/>
+            <PlayButton handleClick={() => playPodcast(track, index, trackIDs)} />
           </div>
         </td>
         <td style={{ width: "60%" }}>
@@ -168,24 +159,24 @@ const SubredditTableList = (props) => {
           )}
         </td>
         <td style={{ width: "5%" }}>
-                <button style={{
-                            padding: "0px",
-                            width: "fit-content",
-                            backgroundColor: "transparent",
-                            border: "none"
-                        }}
-                        onClick={() => toggleLike(track, options.likedTracksCollectionID)}
-
-                >
-                    {options.likedTracks.includes(track.track_id)
-                        ? <FavoriteIcon/>
-                        : <FavoriteBorderIcon/>
-                    }
-                </button>
-            </td>
+          <button
+            style={{
+              padding: "0px",
+              width: "fit-content",
+              backgroundColor: "transparent",
+              border: "none"
+            }}
+            onClick={() => toggleLike(track, options.likedTracksCollectionID)}
+          >
+            {options.likedTracks.includes(track.track_id)
+              ? <FavoriteIcon />
+              : <FavoriteBorderIcon />
+            }
+          </button>
+        </td>
         <td style={{ width: "10%" }}>
           {track["audio_length"] ? (
-            <div style={{display: "flex", alignItems: "center"}}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <div className="audio-length">
                 {formatDuration(track["audio_length"])}
               </div>
@@ -196,30 +187,43 @@ const SubredditTableList = (props) => {
         </td>
         <td style={{ width: "15%" }}>
           {track["date_posted"] ? (
-            <div className="date-posted" style={{display: "flex", alignItems: "center"}}>
+            <div className="date-posted" style={{ display: "flex", alignItems: "center" }}>
               {convertDate(track["date_posted"])}
-              <div style={{padding: "10px"}}>
+              <div style={{ padding: "10px" }}>
                 <Provider store={store}>
-                  <TrackOptionsButtonContainer trackInfo={playlist.tracks[trackKey]}/>
+                  <TrackOptionsButtonContainer trackInfo={track} />
                 </Provider>
 
-                {/* <TrackOptionsButton /> */}
-                </div>
+              </div>
             </div>
-            ) : (
+          ) : (
             <div className="date-posted-dummy">{"datePosted"}</div>
-            )}
-          </td>
+          )}
+        </td>
 
-          <style>{`
+        <style>{`
             .table td{
               padding: 10px;
               vertical-align: unset;
             }
           `}</style>
-        </tr>
-      );
+      </tr>
+    );
   };
+
+  const loadMore = async () => {
+    var trackIDsToLoad = []
+    if(trackIDIndex + 10 <= trackIDs.length){
+      trackIDsToLoad = trackIDs.slice(trackIDIndex, trackIDIndex+ 10)
+    } else{
+      trackIDsToLoad = trackIDs.slice(trackIDIndex)
+
+    }
+    const getTracksRes = await fetch("/api/getTracks", {method: "POST", body:JSON.stringify({trackIDs: trackIDsToLoad})})
+    var getTracksResult = await getTracksRes.json()
+    setTrackIDIndex(trackIDIndex + getTracksResult.length)
+    setTracks(tracks => [...tracks, ...getTracksResult])
+  }
 
   // const toggleLike = async (track: Track) => {
   //   // console.log("toggling like for:", track.track_id)
@@ -229,30 +233,63 @@ const SubredditTableList = (props) => {
   //       body: JSON.stringify({email: email, trackID: track.track_id })})
   //   trigger("/api/user/collections/likedTracks/get/"+ email)
   // }
-    
-    return (
-      <div style={{ width: "100%" }}>
-        {/* <ListGroup variant="flush"></ListGroup> */}
-        <Table responsive hover>
-          {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
-          <thead>
-            <tr>
-              <td></td>
-              <td>Title</td>
-              <td></td>
-              <td>Duration</td>
-              <td>Date posted</td>
-            </tr>
-          </thead>
-          <tbody>{
-            playlist["keys"].map((trackKey, index) => { 
-              return renderTrackOnTable(trackKey, index, {likedTracks: LikedTracks, likedTracksCollectionID: likedTracksCollectionID})})
+
+  const [tracks, setTracks] = useState<Array<Track>>([])
+  const [trackIDIndex, setTrackIDIndex] = useState(0)
+  
+
+  useEffect(()=>{
+    const getInitialTracks = async () => {
+      var currentTrackIDs
+      if (trackIDs.length > 10){
+        currentTrackIDs = trackIDs.slice(0, 9)
+      }
+      const getTracksRes = await fetch("/api/getTracks", {method: "POST", body:JSON.stringify({trackIDs: currentTrackIDs})})
+
+      const newTracks : Array<Track> = await getTracksRes.json()
+      console.log("newTracks", newTracks)
+      setTrackIDIndex(trackIDIndex + newTracks.length)
+      setTracks(newTracks)
+    }
+
+    getInitialTracks()
+
+  }, [])
+
+
+  return (
+    <div style={{ width: "100%" }}>
+      {/* <ListGroup variant="flush"></ListGroup> */}
+      <Table responsive hover>
+        {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+        <thead>
+          <tr>
+            <td></td>
+            <td>Title</td>
+            <td></td>
+            <td>Duration</td>
+            <td>Date posted</td>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <InfiniteScroll
+                pageStart={0}
+                loadMore={loadMore}
+                hasMore={trackIDIndex < trackIDs.length}
+                >
+          
+          {
+            tracks.map((trackKey, index) => {
+              return renderTrackOnTable(trackKey, index, { likedTracks: LikedTracks, likedTracksCollectionID: likedTracksCollectionID })
+            })
           }
-          </tbody>
-        </Table>
-      </div>
-    );
-    
+          </InfiniteScroll>
+        </tbody>
+      </Table>
+    </div>
+  );
+
 }
 
 function mapStateToProps(state, ownProps) {
