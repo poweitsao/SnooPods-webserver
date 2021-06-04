@@ -318,7 +318,7 @@ const SubredditTableList = (props) => {
             
           </tbody>
         </Table>
-        <button onClick={() => {console.log(trackIDIndex, trackIDs.length)}}>has more?</button>
+        {/* <button onClick={() => {console.log(trackIDIndex, trackIDs.length)}}>has more?</button> */}
     </InfiniteScroll>
     </div>
 

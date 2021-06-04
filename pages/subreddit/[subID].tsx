@@ -145,7 +145,7 @@ const Subreddit = ({ userSession, playlist }) => {
             <Provider store={store}>
               <SubredditPlaylistOptionsButton playlist={props.playlist} subID={subID}/>
             </Provider>
-            <button onClick={getTracksTest}>getTracksTest</button>
+            {/* <button onClick={getTracksTest}>getTracksTest</button> */}
           </div>
         </div>
         <style>{`
