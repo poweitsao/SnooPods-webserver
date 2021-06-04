@@ -51,7 +51,7 @@ import toggleLike from "../lib/toggleLike"
 import { addToHistory } from "../redux/actions/historyActions";
 import { syncHistory } from "../lib/syncHistory";
 
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { getTrack } from "../database/firestore";
 
 
@@ -134,7 +134,7 @@ const SubredditTableList = (props) => {
     // let track = playlist.tracks[trackKey]
 
     return (
-      <tr key={track.track_id}>
+      <tr key={track.track_id + index.toString()}>
         <td style={{ width: "5%" }}>
           <div
             style={{
@@ -211,7 +211,8 @@ const SubredditTableList = (props) => {
     );
   };
 
-  const loadMore = async () => {
+  const loadMore = () => {
+    console.log("loadMore called")
     var trackIDsToLoad = []
     if(trackIDIndex + 10 <= trackIDs.length){
       trackIDsToLoad = trackIDs.slice(trackIDIndex, trackIDIndex+ 10)
@@ -219,10 +220,26 @@ const SubredditTableList = (props) => {
       trackIDsToLoad = trackIDs.slice(trackIDIndex)
 
     }
-    const getTracksRes = await fetch("/api/getTracks", {method: "POST", body:JSON.stringify({trackIDs: trackIDsToLoad})})
-    var getTracksResult = await getTracksRes.json()
-    setTrackIDIndex(trackIDIndex + getTracksResult.length)
-    setTracks(tracks => [...tracks, ...getTracksResult])
+    console.log("hi")
+    // trackIDIndex += trackIDsToLoad.length
+    setTrackIDIndex(trackIDIndex + trackIDsToLoad.length)
+
+
+    fetch("/api/getTracks", 
+      {method: "POST", body:JSON.stringify({trackIDs: trackIDsToLoad})}
+    ).then((getTracksRes) => {
+      getTracksRes.json().then(
+        (getTracksResult) => {
+          console.log("new track index", trackIDIndex, "+", getTracksResult.length)
+          console.log("hi2")
+          setTracks(tracks => [...tracks, ...getTracksResult])
+        }
+      )
+    })
+    // var getTracksResult = await getTracksRes.json()
+
+
+
   }
 
   // const toggleLike = async (track: Track) => {
@@ -236,6 +253,7 @@ const SubredditTableList = (props) => {
 
   const [tracks, setTracks] = useState<Array<Track>>([])
   const [trackIDIndex, setTrackIDIndex] = useState(0)
+  // var trackIDIndex = 0
   
 
   useEffect(()=>{
@@ -255,39 +273,56 @@ const SubredditTableList = (props) => {
     getInitialTracks()
 
   }, [])
-
+  const loading = <div key={"loading"}>loading...</div>
 
   return (
     <div style={{ width: "100%" }}>
-      {/* <ListGroup variant="flush"></ListGroup> */}
-      <Table responsive hover>
-        {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
-        <thead>
-          <tr>
-            <td></td>
-            <td>Title</td>
-            <td></td>
-            <td>Duration</td>
-            <td>Date posted</td>
-          </tr>
-        </thead>
-        <tbody>
+    <InfiniteScroll
+    dataLength={tracks.length}
+    next={loadMore}
+    hasMore={trackIDIndex < trackIDs.length}
+    loader={loading}
+    scrollableTarget="page-body"
+    style={{ width: "100%" }}>
+    {/* <InfiniteScroll
+      initialLoad={true}
+      loadMore={loadMore}
+      hasMore={trackIDIndex < trackIDs.length}
+      loader={loading}
+      threshold={100}
+      style={{ width: "100%" }}
+    > */}
+
+        {/* <ListGroup variant="flush"></ListGroup> */}
+
+        <Table responsive hover>
+          {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+          <thead>
+            <tr>
+              <td></td>
+              <td>Title</td>
+              <td></td>
+              <td>Duration</td>
+              <td>Date posted</td>
+            </tr>
+          </thead>
+          <tbody>
+            
           
-        <InfiniteScroll
-                pageStart={0}
-                loadMore={loadMore}
-                hasMore={trackIDIndex < trackIDs.length}
-                >
-          
-          {
-            tracks.map((trackKey, index) => {
-              return renderTrackOnTable(trackKey, index, { likedTracks: LikedTracks, likedTracksCollectionID: likedTracksCollectionID })
-            })
-          }
-          </InfiniteScroll>
-        </tbody>
-      </Table>
+            
+            {
+              tracks.map((trackKey, index) => {
+                return renderTrackOnTable(trackKey, index, { likedTracks: LikedTracks, likedTracksCollectionID: likedTracksCollectionID })
+              })
+            }
+            
+          </tbody>
+        </Table>
+        <button onClick={() => {console.log(trackIDIndex, trackIDs.length)}}>has more?</button>
+    </InfiniteScroll>
     </div>
+
+
   );
 
 }

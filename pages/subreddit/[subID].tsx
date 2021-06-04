@@ -184,7 +184,7 @@ const Subreddit = ({ userSession, playlist }) => {
         <div className="main-page">
           {isEmpty(user) ? <div></div> : <CustomNavbar user={user} />}
 
-          <div className="page-body">
+          <div className="page-body" id="page-body">
             {playlist == undefined ? (
               <div></div>
             ) : (

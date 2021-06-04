@@ -46,7 +46,7 @@ class AudioPlayerBar extends React.Component {
 
         //! sync with db when playing!
         syncDB()
-        console.log(this.props)
+        // console.log(this.props)
 
         
     }
