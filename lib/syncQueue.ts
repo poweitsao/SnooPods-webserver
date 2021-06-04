@@ -41,24 +41,16 @@ export async function getQueue (email: string) {
         console.log("currentTrack and currPlaylist are empty in db. grabbing currTrack from queue")
 
         currTrack = queue[0].tracks[0]
-        // const trackRes = await fetch("/api/getTrack/" + currTrack, {method: "GET"})
-        // currentTrackInfo = await trackRes.json()
-        // console.log("currentTrack", currentTrackInfo)
         queue[0].tracks.shift()
       }
 
     } else {
       console.log("currentTrack is empty in db. grabbing currTrack from currPlaylist")
       currTrack = currentPlaylist.tracks[0]
-      // const trackRes = await fetch("/api/getTrack/" + currTrack, {method: "GET"})
-      // currentTrackInfo = await trackRes.json()
-      // console.log("currentTrack", currentTrackInfo)
       currentPlaylist.tracks.shift()
     }
   } else {
-    // const trackRes = await fetch("/api/getTrack/" + userQueueInfo.currentTrack, {method: "GET"})
-    // currentTrackInfo = await trackRes.json()
-    // console.log("currentTrack", currentTrackInfo)
+
     currTrack = userQueueInfo.currentTrack
 
   }
