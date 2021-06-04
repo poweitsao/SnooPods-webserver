@@ -23,7 +23,10 @@ function Track(props) {
     <div>
       <div className="track">
         <div className="trackImage">
-          <Image src={pictureURL} width="60px" height="60px"/>
+          {pictureURL
+            ?<Image src={pictureURL} width="60px" height="60px"/>
+            : <div></div>}
+          
         </div>
         <div className="track-words">
           <p className="track__title">{displayTrackName}</p>

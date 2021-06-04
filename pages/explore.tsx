@@ -21,6 +21,8 @@ import { Provider } from "react-redux";
 import {getQueue} from "../lib/syncQueue";
 
 import {UserSession} from "../ts/interfaces"
+import CategoryGridMenu from "../components/CategoryGridMenu";
+import SubredditGridMenu from "../components/SubredditGridMenu";
 
 
 
@@ -267,11 +269,14 @@ const home = ({ userSession }) => {
             <input onChange={(e) => setSearchTerm(e.target.value)}></input>
             <div className="search-result-category">
                 <h3>categories</h3>
-                {searchResult.categories.map(renderCategorySearchResult)}
+                {/* {searchResult.categories.map(renderCategorySearchResult)} */}
+                <CategoryGridMenu categories={searchResult.categories}/>
             </div>
             <div className="search-result-category">
                 <h3>subreddits</h3>
-                {searchResult.subreddits.map(renderSubredditSearchResult)}
+                {/* {searchResult.subreddits.map(renderSubredditSearchResult)} */}
+                <SubredditGridMenu subreddits={searchResult.subreddits}/>
+
             </div>
           </div>
 
