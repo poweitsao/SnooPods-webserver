@@ -194,7 +194,7 @@ const Subreddit = ({ userSession, playlist }) => {
               <div></div>
             ) : (
               <Provider store={store}>
-                <SubredditTableList playlist={playlist}/>
+                <SubredditTableList playlist={playlist} />
               </Provider>
               // <div></div>
               // <Tablelist playlist={playlist} />

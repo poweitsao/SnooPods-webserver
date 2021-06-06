@@ -52,12 +52,13 @@ import { addToHistory } from "../redux/actions/historyActions";
 import { syncHistory } from "../lib/syncHistory";
 
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getTrack } from "../database/firestore";
 
 
 const SubredditTableList = (props) => {
-  const { playlist, subID }:
-    { playlist: any, subID: string } = props
+  const { playlist }:
+    { playlist: any} = props
+
+  const {email} = props.userSessionInfo
 
   const trackIDs: Array<string> = playlist.trackIDs
 
@@ -67,33 +68,37 @@ const SubredditTableList = (props) => {
 
     var queuePlaylistTracks = []
     var trackIDsAfter = trackIDs.slice(trackIndex)
-    const getTracksRes = await fetch("/api/tracks/getTracks", {method: "POST", body:JSON.stringify({trackIDs: trackIDsAfter})})
-    var getTrackResult = await getTracksRes.json()
-    // for (var i = trackIndex + 1; i < playlist.keys.length; i++) {
-    //   queuePlaylistTracks.push(playlist.tracks[playlist.keys[i]])
+    var playlistName = playlist.collectionName
+
+    const addToCurrentPlaylistRes = await fetch("/api/queue/addToCurrentPlaylist", 
+      {method: "POST", body: JSON.stringify({email: email, trackIDs: trackIDsAfter, playlistName: playlistName})
+    })
+    var result = await addToCurrentPlaylistRes.json()
+
+
+    // queuePlaylistTracks = getTrackResult.slice(1)
+
+    // // console.log("queuePlaylistTracks", queuePlaylistTracks)
+    // var currStore = store.getState().queueInfo
+    // // console.log("store before dispatch", currStore)
+
+    // if (queuePlaylistTracks.length > 0) {
+    //   var playlistName = "r/" + subID
+
+    //   var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
+    //   // console.log("queuePlaylist", queuePlaylist)
+    //   store.dispatch(
+    //     replaceCurrentPlaylist(queuePlaylist)
+    //   )
+
+
+
     // }
-    queuePlaylistTracks = getTrackResult.slice(1)
-
-    // console.log("queuePlaylistTracks", queuePlaylistTracks)
+    // store.dispatch(
+    //   replaceCurrentTrack(getTrackResult[0])
+    // )
+    await getQueue(store.getState().userSessionInfo.email)
     var currStore = store.getState().queueInfo
-    // console.log("store before dispatch", currStore)
-
-    if (queuePlaylistTracks.length > 0) {
-      var playlistName = "r/" + subID
-
-      var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
-      // console.log("queuePlaylist", queuePlaylist)
-      store.dispatch(
-        replaceCurrentPlaylist(queuePlaylist)
-      )
-
-
-
-    }
-    store.dispatch(
-      replaceCurrentTrack(getTrackResult[0])
-    )
-    currStore = store.getState().queueInfo
     let currTrack = currStore.QueueInfo.currentTrack
     // syncDB(cookies.email)
     store.dispatch(

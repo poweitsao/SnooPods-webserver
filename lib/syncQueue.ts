@@ -23,7 +23,7 @@ export async function getQueue (email: string) {
     method: "POST", body: JSON.stringify({ email: email })
   })
   let userQueueInfo = await getQueueRes.json()
-  // console.log("getQueue result:", userQueueInfo)
+  console.log("getQueue result:", userQueueInfo)
 
   // let currTrackInfo = {}
   let currTrack: Track

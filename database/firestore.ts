@@ -525,7 +525,7 @@ export async function addToQueue(email: string, trackIDs: Array<string>, playlis
         let getTracksRes
 
         if(trackIDs.length > cutoff){
-            getTracksRes = await getTracks(trackIDs.slice(0, 5))
+            getTracksRes = await getTracks(trackIDs.slice(0, cutoff))
         } else{
             getTracksRes = await getTracks(trackIDs)
         }
@@ -545,14 +545,14 @@ export async function addToQueue(email: string, trackIDs: Array<string>, playlis
                         "tracks": immediateTracks
                     })
 
-        userRef.set({currentTrack: currentTrack, queue: userQueue}, {merge: true})
+        await userRef.set({currentTrack: currentTrack, queue: userQueue}, {merge: true})
         if(trackIDs.length > cutoff){
-            backgroundAddToQueue(email, trackIDs.slice(5), playlistID)
+            backgroundAddToQueue(email, trackIDs.slice(cutoff), playlistID)
         }
 
         return {status: 200, tracks: immediateTracks}
     } catch(e){
-        console.error("error in backgroundAddToQueue", e)
+        console.error("error in addToQueue", e)
         return {status: 500, tracks: []}
     }
 }
@@ -584,6 +584,85 @@ export async function backgroundAddToQueue(email: string, trackIDs: Array<string
 
         }
         console.log("backgroundAddToQueue complete")
+        
+    } catch(e){
+        console.error("error in backgroundAddToQueue", e)
+    }
+}
+
+export async function addToCurrentPlaylist(email: string, trackIDs: Array<string>, playlistName: string){
+    let userRef = db.collection("users").doc(email)
+    try{
+        let userData = await userRef.get()
+        userData = userData.data()
+        let immediateTracks: Array<Track> = []
+        let cutoff = 6
+        let getTracksRes
+
+        if(trackIDs.length > cutoff){
+            getTracksRes = await getTracks(trackIDs.slice(0, cutoff))
+        } else{
+            getTracksRes = await getTracks(trackIDs)
+        }
+        
+        immediateTracks = getTracksRes.tracks
+        let userCurrentPlaylist = userData.currentPlaylist
+        let playlistID = generateID()
+        // let currentTrack = userData.currentTrack
+        // console.log("currentTrack", currentTrack)
+        
+        let currentTrack = immediateTracks[0]
+        immediateTracks = immediateTracks.slice(1)
+        
+
+        userCurrentPlaylist = {"playlistID": playlistID, 
+                                "playlistName": playlistName, 
+                                "tracks": immediateTracks}
+
+        console.log("userCurrentPlaylist", userCurrentPlaylist)
+        
+
+        await userRef.set({currentTrack: currentTrack, currentPlaylist: userCurrentPlaylist}, {merge: true})
+        if(trackIDs.length > cutoff){
+            backgroundAddToCurrentPlaylist(email, trackIDs.slice(cutoff), playlistID)
+        }
+
+        return {status: 200, tracks: immediateTracks}
+    } catch(e){
+        console.error("error in addToCurrentPlaylist", e)
+        return {status: 500, tracks: []}
+    }
+}
+
+export async function backgroundAddToCurrentPlaylist(email: string, trackIDs: Array<string>, playlistID: string){
+    let userRef = db.collection("users").doc(email)
+    try{
+        for (var trackIDIndex = 0; trackIDIndex < trackIDs.length; trackIDIndex ++){
+            let userData = await userRef.get()
+            userData = userData.data()
+            let nextIndex = Math.min(trackIDIndex + 10, trackIDs.length)
+            let getTracksRes = await getTracks(trackIDs.slice(trackIDIndex, nextIndex))
+            if(getTracksRes.status == 200){
+                trackIDIndex = nextIndex
+                let userCurrentPlaylist = userData.currentPlaylist
+
+                let newCurrentPlaylistTracks = userCurrentPlaylist.tracks.concat(getTracksRes.tracks)
+                userCurrentPlaylist.tracks = newCurrentPlaylistTracks
+                userRef.set({
+                    currentPlaylist: userCurrentPlaylist 
+                }, { merge: true })
+                // for(var i = 0; i < userQueue.length; i ++){
+                //     if (userQueue[i].playlistID == playlistID){
+                //         
+                //     }
+
+                // }
+
+
+            }
+
+        }
+        console.log("backgroundAddToCurrentPlaylist complete")
         
     } catch(e){
         console.error("error in backgroundAddToQueue", e)
@@ -960,5 +1039,6 @@ module.exports = {
     getCategorySubreddits,
     getUserVolume,
     updateUserVolume,
-    addToQueue
+    addToQueue,
+    addToCurrentPlaylist
 }

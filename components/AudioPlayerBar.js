@@ -145,7 +145,7 @@ function AudioPlayer(props) {
 }
 
 
-const nextTrackFromQueue = () => {
+const nextTrackFromQueue = async () => {
     // var keyIndex = currStore["keyIndex"]
     // var playlist = currStore["playlist"]
     store.dispatch(togglePlaying(false))
@@ -153,7 +153,7 @@ const nextTrackFromQueue = () => {
     let audioCurrStore = store.getState().audioPlayerInfo
     console.log("before pushing", audioCurrStore)
     console.log("pushing next track")
-    // getQueue(store.getState().userSessionInfo.email)
+    await getQueue(store.getState().userSessionInfo.email)
     store.dispatch(pushNextTrack())
 
     

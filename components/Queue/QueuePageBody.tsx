@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import convertDate from "../../lib/convertDate";
 import formatDuration from "../../lib/formatDuration";
 import isEmpty from "../../lib/isEmptyObject";
-import { syncDB, syncQueueWithAudioPlayer } from "../../lib/syncQueue";
+import { getQueue, syncDB, syncQueueWithAudioPlayer } from "../../lib/syncQueue";
 import { togglePlaying } from "../../redux/actions";
 import { replaceCurrentTrack, removeTrackFromCurrentPlaylist, removeTrackFromQueue, pushNextTrack, clearCurrentPlaylist, removePlaylistFromQueue } from "../../redux/actions/queueActions";
 import store from "../../redux/store";
@@ -299,6 +299,9 @@ const QueuePageBody = (props) => {
 
     return (
         <div className="page-body">
+          <div style={{width: "100%"}}>
+            <button onClick={()=>getQueue(store.getState().userSessionInfo.email)}>refresh</button>
+          </div>
               {/* {currentTrack.cloud_storage_url == "" ? (
                 <div>Nothing here.</div>
               ) : (
