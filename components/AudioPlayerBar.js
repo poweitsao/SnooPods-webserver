@@ -26,6 +26,7 @@ import VolumeSlider from "../components/VolumeSlider"
 import useSWR, { trigger } from "swr";
 import {storeVolume} from "../redux/actions/volumeActions"
 import { Provider } from 'react-redux';
+import { getQueue } from '../lib/syncQueue';
 
 
 
@@ -147,10 +148,12 @@ function AudioPlayer(props) {
 const nextTrackFromQueue = () => {
     // var keyIndex = currStore["keyIndex"]
     // var playlist = currStore["playlist"]
+    store.dispatch(togglePlaying(false))
+
     let audioCurrStore = store.getState().audioPlayerInfo
     console.log("before pushing", audioCurrStore)
     console.log("pushing next track")
-
+    // getQueue(store.getState().userSessionInfo.email)
     store.dispatch(pushNextTrack())
 
     
@@ -213,11 +216,14 @@ function AudioPlayerInfo(props) {
         if (curTime && duration && curTime === duration) {
             // setPlaying(false);
             // audio.pause();
+            // store.dispatch(togglePlaying(false))
             console.log("next")
-            setCurTime(0);
+            // store.dispatch(togglePlaying(false))
+            audio.pause();
+
+            // setCurTime(10);
             nextTrackFromQueue()
             // testQueueStore()
-            // audio.currentTime = 0;
         }
 
         // if(store.getState().userSessionInfo.email !== ""){
