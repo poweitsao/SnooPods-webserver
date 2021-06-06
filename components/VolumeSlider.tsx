@@ -16,7 +16,7 @@ import { storeVolume } from '../redux/actions/volumeActions';
 function VolumeSlider(props) {
 //   const classes = useStyles();
   const {volume}:{volume: number} = props.volumeInfo
-  console.log("volume from props", props.volumeInfo)
+  // console.log("volume from props", props.volumeInfo)
   // console.log("typeof props.volume", typeof(props.volume))
   // if(typeof(props.volume) !== undefined && store.getState().audioPlayerInfo.audio !== ""){
   //   let audio = store.getState().audioPlayerInfo.audio

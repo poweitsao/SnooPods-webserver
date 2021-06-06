@@ -1003,6 +1003,17 @@ export async function updateUserVolume(email: string, newVolume: number){
     }
 }
 
+export async function getCollection(collectionID: string){
+    let collectionRef = db.collection("collections").doc(collectionID)
+    try{
+        let collectionData = await collectionRef.get()
+        collectionData = collectionData.data()
+        return collectionData
+    } catch(e){
+        console.error("error in getCollectionTrackIDs", e)
+    }
+}
+
 module.exports = {
     getPodcast,
     getUser,
@@ -1040,5 +1051,6 @@ module.exports = {
     getUserVolume,
     updateUserVolume,
     addToQueue,
-    addToCurrentPlaylist
+    addToCurrentPlaylist,
+    getCollection
 }

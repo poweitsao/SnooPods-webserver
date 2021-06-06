@@ -75,28 +75,6 @@ const SubredditTableList = (props) => {
     })
     var result = await addToCurrentPlaylistRes.json()
 
-
-    // queuePlaylistTracks = getTrackResult.slice(1)
-
-    // // console.log("queuePlaylistTracks", queuePlaylistTracks)
-    // var currStore = store.getState().queueInfo
-    // // console.log("store before dispatch", currStore)
-
-    // if (queuePlaylistTracks.length > 0) {
-    //   var playlistName = "r/" + subID
-
-    //   var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
-    //   // console.log("queuePlaylist", queuePlaylist)
-    //   store.dispatch(
-    //     replaceCurrentPlaylist(queuePlaylist)
-    //   )
-
-
-
-    // }
-    // store.dispatch(
-    //   replaceCurrentTrack(getTrackResult[0])
-    // )
     await getQueue(store.getState().userSessionInfo.email)
     var currStore = store.getState().queueInfo
     let currTrack = currStore.QueueInfo.currentTrack
@@ -263,7 +241,7 @@ const SubredditTableList = (props) => {
 
   useEffect(()=>{
     const getInitialTracks = async () => {
-      var currentTrackIDs
+      var currentTrackIDs = trackIDs
       if (trackIDs.length > 10){
         currentTrackIDs = trackIDs.slice(0, 9)
       }

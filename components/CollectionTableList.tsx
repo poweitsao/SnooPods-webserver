@@ -36,66 +36,78 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import toggleLike from "../lib/toggleLike"
 import { syncHistory } from "../lib/syncHistory";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const CollectionTableList = (props) => {
+    const {email} = props.userSessionInfo
+
     let {playlist} = props
+    const trackIDs: Array<string> = playlist.tracks
     // console.log("props in CollectionTableList", props)
     let likedTracks = props.likedTracksInfo.LikedTracks
     let likedTracksCollectionID = props.likedTracksInfo.likedTracksCollectionID
 
-    const playPodcast = (trackKey: string, trackIndex: number,  tracks: Array<Track>, collectionName: string) => {
-        // console.log("params in playPodcast",trackKey, trackIndex, tracks, collectionName )
-        var queuePlaylistTracks = []
-        for(var i = trackIndex + 1; i <tracks.length; i++ ){
-          queuePlaylistTracks.push(tracks[i])
+    useEffect(()=>{
+      const getInitialTracks = async () => {
+        var currentTrackIDs = trackIDs
+        if (trackIDs.length > 10){
+          currentTrackIDs = trackIDs.slice(0, 9)
         }
-    
-        var currStore = store.getState().queueInfo
-    
-        if (queuePlaylistTracks.length > 0){
-          var playlistName = collectionName
-    
-          var queuePlaylist = createQueuePlaylist(queuePlaylistTracks, playlistName)
-          store.dispatch(
-            replaceCurrentPlaylist(queuePlaylist)
-          )
-          
-        }
-        store.dispatch(
-          replaceCurrentTrack(tracks[trackIndex])
-        )
-        currStore = store.getState().queueInfo
-        console.log("currStore after replace ", currStore )
-        let currTrack = currStore.QueueInfo.currentTrack
-        // syncDB(cookies.email)
-        store.dispatch(
-          storeAudioPlayerInfo({
-            playing: true,
-            trackName: currTrack.track_name,
-            filename: currTrack.filename,
-            audio: new Audio(currTrack.cloud_storage_url),
-            url: currTrack.cloud_storage_url,
-            email: store.getState().userSessionInfo.email,
-            subreddit: currTrack.subreddit,
-            pictureURL: currTrack.picture_url
-          }
-          )
-        )
+        console.log("currentTrackIDs", currentTrackIDs)
+        const getTracksRes = await fetch("/api/tracks/getTracks", {method: "POST", body:JSON.stringify({trackIDs: currentTrackIDs})})
+  
+        const newTracks : Array<Track> = await getTracksRes.json()
+        console.log("newTracks", newTracks)
+        setTrackIDIndex(trackIDIndex + newTracks.length)
+        setTracks(newTracks)
+      }
+  
+      getInitialTracks()
+  
+    }, [])
 
-        store.dispatch(
-          addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
-        )
-        syncHistory()
+    const playPodcast = async (trackKey: string, trackIndex: number,  tracks: Array<Track>, collectionName: string) => {
     
+
+      var queuePlaylistTracks = []
+      var trackIDsAfter = trackIDs.slice(trackIndex)
+      var playlistName = collectionName
+  
+      const addToCurrentPlaylistRes = await fetch("/api/queue/addToCurrentPlaylist", 
+        {method: "POST", body: JSON.stringify({email: email, trackIDs: trackIDsAfter, playlistName: playlistName})
+      })
+      var result = await addToCurrentPlaylistRes.json()
+  
+      await getQueue(store.getState().userSessionInfo.email)
+      var currStore = store.getState().queueInfo
+      let currTrack = currStore.QueueInfo.currentTrack
+      // syncDB(cookies.email)
+      store.dispatch(
+        storeAudioPlayerInfo({
+          playing: true,
+          trackName: currTrack.track_name,
+          filename: currTrack.filename,
+          audio: new Audio(currTrack.cloud_storage_url),
+          url: currTrack.cloud_storage_url,
+          email: store.getState().userSessionInfo.email,
+          subreddit: currTrack.subreddit,
+          pictureURL: currTrack.picture_url
+        },
+        )
+      )
+      store.dispatch(
+        addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
+      )
+      syncHistory()
     };
     
     const createQueuePlaylist = (tracks: Array<Track>, playlistName: string) => {
-    var playlistID = generateID()
-    return {
-        playlistID: playlistID,
-        playlistName: playlistName,
-        tracks: tracks
-    }
+      var playlistID = generateID()
+      return {
+          playlistID: playlistID,
+          playlistName: playlistName,
+          tracks: tracks
+      }
 
     }
     
@@ -180,6 +192,40 @@ const CollectionTableList = (props) => {
     );
     };
 
+
+    const loadMore = () => {
+      console.log("loadMore called")
+      var trackIDsToLoad = []
+      if(trackIDIndex + 10 <= trackIDs.length){
+        trackIDsToLoad = trackIDs.slice(trackIDIndex, trackIDIndex+ 10)
+      } else{
+        trackIDsToLoad = trackIDs.slice(trackIDIndex)
+  
+      }
+      console.log("hi")
+      // trackIDIndex += trackIDsToLoad.length
+      setTrackIDIndex(trackIDIndex + trackIDsToLoad.length)
+  
+  
+      fetch("/api/tracks/getTracks", 
+        {method: "POST", body:JSON.stringify({trackIDs: trackIDsToLoad})}
+      ).then((getTracksRes) => {
+        getTracksRes.json().then(
+          (getTracksResult) => {
+            console.log("new track index", trackIDIndex, "+", getTracksResult.length)
+            console.log("hi2")
+            setTracks(tracks => [...tracks, ...getTracksResult])
+          }
+        )
+      })
+      // var getTracksResult = await getTracksRes.json()
+  
+  
+  
+    }
+
+    const [tracks, setTracks] = useState<Array<Track>>([])
+    const [trackIDIndex, setTrackIDIndex] = useState(0)
     // const toggleLike = async (track: Track, likedTracksCollectionID: string) => {
     //     // console.log("toggling like for:", track.track_id)
     //     let email = store.getState().userSessionInfo.email
@@ -202,33 +248,48 @@ const CollectionTableList = (props) => {
     // }
 
     // console.log("playlist in Tablelist", playlist)
+    const loading = <div key={"loading"}>loading...</div>
+
     return (
       <div style={{ width: "100%" }}>
         {/* <ListGroup variant="flush"></ListGroup> */}
-        <Table responsive hover>
-          {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
-          <thead>
-            <tr>
-              <td></td>
-              <td>Title</td>
-              <td></td>
-              <td>Duration</td>
-              <td>Date posted</td>
-            </tr>
-          </thead>
-          <tbody>{playlist.tracks.map(
-            (track, index, array) => {
-              return renderTrackOnTable(track, index, array, 
-                {   collectionName: playlist.collectionName, 
-                    collectionID: playlist.collectionID, 
-                    likedTracks: likedTracks, 
-                    likedTracksCollectionID: likedTracksCollectionID
-                })
-              })}</tbody>
-        </Table>
+        <InfiniteScroll
+          dataLength={tracks.length}
+          next={loadMore}
+          hasMore={trackIDIndex < trackIDs.length}
+          loader={loading}
+          scrollableTarget="page-body"
+          style={{ width: "100%" }}
+          >
+          <Table responsive hover>
+            {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+            <thead>
+              <tr>
+                <td></td>
+                <td>Title</td>
+                <td></td>
+                <td>Duration</td>
+                <td>Date posted</td>
+              </tr>
+            </thead>
+            <tbody>{tracks.map(
+              (track, index, array) => {
+                return renderTrackOnTable(track, index, array, 
+                  {   collectionName: playlist.collectionName, 
+                      collectionID: playlist.collectionID, 
+                      likedTracks: likedTracks, 
+                      likedTracksCollectionID: likedTracksCollectionID
+                  })
+                })}</tbody>
+          </Table>
+        </InfiniteScroll>
+
+
+
       </div>
     );
 }
+
 
 
 function mapStateToProps(state, ownProps) {
