@@ -25,6 +25,7 @@ const logout = () => {
     // console.log("Logout clicked")
     Cookie.remove("session_id")
     Cookie.remove("email")
+    store.dispatch(emptyUserSessionInfo())
 
     store.dispatch(emptyRegisterationInfo())
 
@@ -32,7 +33,6 @@ const logout = () => {
 
     store.dispatch(emptyQueue())
 
-    store.dispatch(emptyUserSessionInfo())
 
     store.dispatch(emptyCollections())
 

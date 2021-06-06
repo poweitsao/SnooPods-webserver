@@ -515,6 +515,81 @@ export async function pushQueueToDB(email: string, queueInfo: Object){
 
 }
 
+export async function addToQueue(email: string, trackIDs: Array<string>, playlistName: string){
+    let userRef = db.collection("users").doc(email)
+    try{
+        let userData = await userRef.get()
+        userData = userData.data()
+        let immediateTracks: Array<Track> = []
+        let cutoff = 5
+        let getTracksRes
+
+        if(trackIDs.length > cutoff){
+            getTracksRes = await getTracks(trackIDs.slice(0, 5))
+        } else{
+            getTracksRes = await getTracks(trackIDs)
+        }
+        
+        immediateTracks = getTracksRes.tracks
+        let userQueue = userData.queue
+        let playlistID = generateID()
+        let currentTrack = userData.currentTrack
+        console.log("currentTrack", currentTrack)
+        if(!currentTrack.cloud_storage_url){
+            currentTrack = immediateTracks[0]
+            immediateTracks = immediateTracks.slice(1)
+        }
+
+        userQueue.push({"playlistID": playlistID, 
+                        "playlistName": playlistName, 
+                        "tracks": immediateTracks
+                    })
+
+        userRef.set({currentTrack: currentTrack, queue: userQueue}, {merge: true})
+        if(trackIDs.length > cutoff){
+            backgroundAddToQueue(email, trackIDs.slice(5), playlistID)
+        }
+
+        return {status: 200, tracks: immediateTracks}
+    } catch(e){
+        console.error("error in backgroundAddToQueue", e)
+        return {status: 500, tracks: []}
+    }
+}
+
+
+export async function backgroundAddToQueue(email: string, trackIDs: Array<string>, playlistID: string){
+    let userRef = db.collection("users").doc(email)
+    try{
+        for (var trackIDIndex = 0; trackIDIndex < trackIDs.length; trackIDIndex ++){
+            let userData = await userRef.get()
+            userData = userData.data()
+            let nextIndex = Math.min(trackIDIndex + 10, trackIDs.length)
+            let getTracksRes = await getTracks(trackIDs.slice(trackIDIndex, nextIndex))
+            if(getTracksRes.status == 200){
+                trackIDIndex = nextIndex
+                let userQueue = userData.queue
+                for(var i = 0; i < userQueue.length; i ++){
+                    if (userQueue[i].playlistID == playlistID){
+                        let newQueueTracks = userQueue[i].tracks.concat(getTracksRes.tracks)
+                        userQueue[i].tracks = newQueueTracks
+                        userRef.set({
+                            queue: userQueue 
+                        }, { merge: true })
+                    }
+
+                }
+
+            }
+
+        }
+        console.log("backgroundAddToQueue complete")
+        
+    } catch(e){
+        console.error("error in backgroundAddToQueue", e)
+    }
+}
+
 export async function getUserSubLists(email: string){
     let userRef = db.collection("users").doc(email)
     console.log("getting user sublists of", email)
@@ -884,5 +959,6 @@ module.exports = {
     searchCategoriesAndSubreddits,
     getCategorySubreddits,
     getUserVolume,
-    updateUserVolume
+    updateUserVolume,
+    addToQueue
 }

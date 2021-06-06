@@ -67,7 +67,7 @@ const SubredditTableList = (props) => {
 
     var queuePlaylistTracks = []
     var trackIDsAfter = trackIDs.slice(trackIndex)
-    const getTracksRes = await fetch("/api/getTracks", {method: "POST", body:JSON.stringify({trackIDs: trackIDsAfter})})
+    const getTracksRes = await fetch("/api/tracks/getTracks", {method: "POST", body:JSON.stringify({trackIDs: trackIDsAfter})})
     var getTrackResult = await getTracksRes.json()
     // for (var i = trackIndex + 1; i < playlist.keys.length; i++) {
     //   queuePlaylistTracks.push(playlist.tracks[playlist.keys[i]])
@@ -225,7 +225,7 @@ const SubredditTableList = (props) => {
     setTrackIDIndex(trackIDIndex + trackIDsToLoad.length)
 
 
-    fetch("/api/getTracks", 
+    fetch("/api/tracks/getTracks", 
       {method: "POST", body:JSON.stringify({trackIDs: trackIDsToLoad})}
     ).then((getTracksRes) => {
       getTracksRes.json().then(
@@ -262,7 +262,7 @@ const SubredditTableList = (props) => {
       if (trackIDs.length > 10){
         currentTrackIDs = trackIDs.slice(0, 9)
       }
-      const getTracksRes = await fetch("/api/getTracks", {method: "POST", body:JSON.stringify({trackIDs: currentTrackIDs})})
+      const getTracksRes = await fetch("/api/tracks/getTracks", {method: "POST", body:JSON.stringify({trackIDs: currentTrackIDs})})
 
       const newTracks : Array<Track> = await getTracksRes.json()
       console.log("newTracks", newTracks)

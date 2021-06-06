@@ -1,6 +1,6 @@
-import {getTracks} from "../../database/firestore"
+import {getTracks} from "../../../database/firestore"
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {Track} from "../../ts/interfaces"
+import {Track} from "../../../ts/interfaces"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

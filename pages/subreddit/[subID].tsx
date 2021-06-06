@@ -114,7 +114,7 @@ const Subreddit = ({ userSession, playlist }) => {
 
     const getTracksTest = async() => {
       let tracks = ["08uYngvdWCiSlEjZhIG0", "0eEsDfEDvIrSGlcOlMDk", "0uzt5WvEySS800XE2eWA" ]
-      let getTracksResponse = await fetch("/api/getTracks", {method: "POST", body: JSON.stringify({trackIDs: tracks})})
+      let getTracksResponse = await fetch("/api/tracks/getTracks", {method: "POST", body: JSON.stringify({trackIDs: tracks})})
       let result = await getTracksResponse.json()
       console.log("getTracksTest result", result)
     }

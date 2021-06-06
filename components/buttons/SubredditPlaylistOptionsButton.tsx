@@ -14,6 +14,7 @@ import {syncDB, syncQueueWithAudioPlayer} from "../../lib/syncQueue"
 import { connect } from 'react-redux';
 import { syncHistory } from '../../lib/syncHistory';
 import { addToHistory } from '../../redux/actions/historyActions';
+import { getQueue } from '../../lib/syncQueue';
 
 const SubredditPlaylistOptionsButton = (props) => {
     const {playlist}:{playlist: any} = props
@@ -21,36 +22,25 @@ const SubredditPlaylistOptionsButton = (props) => {
     const subLists = props.subListInfo.SubLists
     const subID = props.subID
     const email = props.userSessionInfo.email
-    // console.log("props", props)
 
-    // useEffect(()=>{
-    //     if(subLists !== props.subListInfo && props.subListInfo.SubLists.length > 0){
-            
-    //         setSubList(props.subListInfo.SubLists)
-    //     }
-    //     console.log("props.subListInfo", props.subListInfo.SubLists)
-    //     console.log("props.subListInfo", typeof(props.subListInfo.SubLists))
-
-    // }, [props])
 
     const addSubPlaylistToQueue = async () =>{
         console.log("to be added to queue:", playlist)
-        // var tracks : Array<Track> = []
 
-        // for (const trackID in playlist.tracks) {
-        //     console.log(`${playlist.tracks[trackID]}`);
-        //     tracks.push(playlist.tracks[trackID])
-        //   }
         console.log("trackIDs", playlist.trackIDs)
-        const getTracksRes = await fetch("/api/getTracks", {method: "POST", body:JSON.stringify({trackIDs: playlist.trackIDs})})
+        
+        const addToQueueRes = await fetch("/api/queue/addToQueue", {method: "POST", body:JSON.stringify({trackIDs: playlist.trackIDs, email: email, playlistName: playlist.collectionName})})
+        // var tracks : Array<Track> = await addToQueueRes.json()
+        // if (playlist.trackIDs.length <= 5){
+            
+            
+        // } else{
+        //     //! get first 5 tracks, then update queue in background
+        //     const getTracksRes = await fetch("/api/tracks/getTracks", {method: "POST", body:JSON.stringify({trackIDs: playlist.trackIDs})})
+        //     tracks = await getTracksRes.json()
+        // }
         // const jsonResult = await getTracksRes.json()
         // console.log("jsonResult", jsonResult)
-        const tracks : Array<Track> = await getTracksRes.json()
-        
-
-        // for(var i = 0; i < playlist.tracks.length; i++){
-            
-        // }
         let queueStore = store.getState().queueInfo.QueueInfo
         
         let currentTrackUpdated = (
@@ -58,12 +48,16 @@ const SubredditPlaylistOptionsButton = (props) => {
             queueStore.queue.length == 0 &&
             queueStore.currentTrack.cloud_storage_url == ""
             )
+        await getQueue(email)
+
+
+
         
-        var queuePlaylist = createQueuePlaylist(tracks, playlist.collectionName)
-        console.log("queuePlaylist", queuePlaylist)
-        store.dispatch(
-            addPlaylistToQueue(queuePlaylist)
-        )
+        // var queuePlaylist = createQueuePlaylist(tracks, playlist.collectionName)
+        // console.log("queuePlaylist", queuePlaylist)
+        // store.dispatch(
+        //     addPlaylistToQueue(queuePlaylist)
+        // )
         syncDB()
         syncQueueWithAudioPlayer(false)
 
@@ -99,36 +93,6 @@ const SubredditPlaylistOptionsButton = (props) => {
                 fields: {
                     subListID: subListID, 
                     newSubID: subID, 
-                    email: email
-                }
-        })})
-
-    }
-
-    const removeSubredditFromSubList = async (subListID: string, subIDToRemove: string) => {
-
-        await fetch("/api/user/sublists/editSubList", {
-            method: "POST", 
-            body: JSON.stringify({
-                action: "removeSubreddit",
-                fields: {
-                    subListID: subListID, 
-                    subIDToRemove: subIDToRemove, 
-                    email: email
-                }
-        })})
-
-    }
-
-    const renameSubList = async (subListID: string, newSubListName: string) => {
-
-        await fetch("/api/user/sublists/editSubList", {
-            method: "POST", 
-            body: JSON.stringify({
-                action: "renameSubList",
-                fields: {
-                    newSubListName: newSubListName, 
-                    subListID: subListID, 
                     email: email
                 }
         })})
