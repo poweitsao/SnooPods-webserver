@@ -1,7 +1,13 @@
-const storeUserInfo = (userInfo) => {
+const storeRegisterationInfo = (userInfo) => {
     return {
-        type: "STORE_USER_INFO",
+        type: "STORE_REGISTERATION_INFO",
         userInfo
+    }
+}
+
+const emptyRegisterationInfo = () => {
+    return {
+        type: "EMPTY_REGISTERATION_STORE"
     }
 }
 
@@ -19,6 +25,13 @@ const togglePlaying = (playingStatus) => {
     }
 }
 
+const setAudioStoreEmail = (email) => {
+    console.error("audio store set email called. is deprecated")
+    return {
+        type: "SET_AUDIO_STORE_EMAIL",
+    }
+}
+
 const nextTrack = (AudioPlayerInfo) => {
     return {
         type: "NEXT_TRACK",
@@ -26,4 +39,18 @@ const nextTrack = (AudioPlayerInfo) => {
     }
 }
 
-module.exports = { storeUserInfo, storeAudioPlayerInfo, togglePlaying, nextTrack }
+const emptyAudioStore = () => {
+    return {
+        type: "EMPTY_AUDIO_STORE"
+    }
+}
+
+module.exports = { 
+    storeRegisterationInfo, 
+    emptyRegisterationInfo,
+    storeAudioPlayerInfo, 
+    togglePlaying, 
+    nextTrack, 
+    setAudioStoreEmail, 
+    emptyAudioStore 
+}

@@ -3,7 +3,7 @@ import { Row, Col, Form } from 'react-bootstrap/'
 import Button from 'react-bootstrap/Button'
 import React, { useState } from 'react';
 import Router from "next/router"
-import { RegisterStore } from "../redux/store"
+import store from "../redux/store"
 import Cookie from "js-cookie"
 
 
@@ -21,11 +21,10 @@ class RegisterationForm extends React.Component {
     // }
     componentDidMount() {
 
-        // console.log("store: ", RegisterStore.getState())
-        const store = RegisterStore.getState()
-        console.table(store.payload)
-        const userPayload = store.payload
-        const userID = store.userID
+        const registerStore = store.getState().registerInfo
+        console.table(registerStore.payload)
+        const userPayload = registerStore.payload
+        const userID = registerStore.userID
 
         // console.log(userPayload)
         if (userPayload) {

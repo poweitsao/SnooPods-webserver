@@ -1,4 +1,4 @@
-import Layout from "../components/layout"
+import IndexLayout from "../components/IndexLayout"
 import React, { useState, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import Router from 'next/router';
@@ -14,8 +14,8 @@ import headphonesAlt from '@iconify/icons-fa-solid/headphones-alt';
 import validateSession from "../lib/validateUserSessionOnPage"
 import CustomNavbar from "../components/CustomNavbar"
 
-import { storeUserInfo } from "../redux/actions/index"
-import { RegisterStore } from "../redux/store"
+import { storeRegisterationInfo } from "../redux/actions/index"
+import store from "../redux/store"
 
 const Index = ({ userSession }) => {
   useEffect(() => {
@@ -31,7 +31,7 @@ const Index = ({ userSession }) => {
   async function onGoogleLoginSuccess(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
 
-    let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
+    let response = await fetch("/api/user/verifyGoogleSession/" + id_token, { method: "GET" }, { revalidateOnMount: false })
     if (response.status == 200) {
       let res = await response.json()
       if (res.registered) {
@@ -45,9 +45,9 @@ const Index = ({ userSession }) => {
       else if (!res.registered) {
         // res.userID = id_token
         // console.log("response in index.js", res)
-        // const store = createStore(userInfoReducer)
+        // const store = createStore(registerReducer)
 
-        RegisterStore.dispatch(storeUserInfo(res))
+        store.dispatch(storeRegisterationInfo(res))
         // console.log("store: ", store.getState())
         // console.log("Taking user to registeration page ")
         Router.push('/register')
@@ -63,7 +63,7 @@ const Index = ({ userSession }) => {
   }
 
   return (
-    <Layout>
+    <IndexLayout>
       <div>
         <CustomNavbar />
         {/* <CustomNavbar /> */}
@@ -130,7 +130,7 @@ const Index = ({ userSession }) => {
 
 `}</style>
       </div>
-    </Layout >
+    </IndexLayout >
 
   )
 }

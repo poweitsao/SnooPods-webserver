@@ -39,7 +39,7 @@ const About = ({ userSession }) => {
           <h1 style={{ fontSize: 60, fontWeight: "bold", color: "black" }}> ABOUT </h1>
           <div className="page-body" style={{ display: "flex", justifyContent: "center", width: "90%", paddingBottom: "30px" }}>
             <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
-              <Image style={{ width: "300px", overflow: "hidden" }} thumbnail src="https://storage.googleapis.com/listen-to-reddit-test/images/profile_pic.jpg" />
+              <Image style={{ width: "300px", overflow: "hidden" }} thumbnail src="https://storage.googleapis.com/snoopods-us/images/profile_pic.jpg" />
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <a href="https://www.linkedin.com/in/poweitsao/" style={{ paddingLeft: "20px", paddingRight: "20px" }}>

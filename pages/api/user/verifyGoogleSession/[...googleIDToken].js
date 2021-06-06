@@ -1,5 +1,5 @@
-import verify from "../../../database/verifyGoogleID"
-import { getUser, createSession } from "../../../database/firestore"
+import verify from "../../../../database/verifyGoogleID"
+import { getUser, createSession } from "../../../../database/firestore"
 
 
 export default async function handler(req, res) {

@@ -69,7 +69,7 @@ const ProfilePicGroup = (props) => {
                         display: "flex"
 
                     }}> */}
-                    <Image src={props.user.picture_url}
+                    <Image src={props.user.pictureURL}
                         roundedCircle
                         style={{
                             width: "40px", height: "40px", marginRight: "10px",
@@ -169,7 +169,7 @@ const LoginGroup = () => {
 async function onGoogleLoginSuccess(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
 
-    let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
+    let response = await fetch("/api/user/verifyGoogleSession/" + id_token, { method: "GET" }, { revalidateOnMount: false })
     if (response.status == 200) {
         let res = await response.json()
         if (res.registered) {
@@ -183,9 +183,9 @@ async function onGoogleLoginSuccess(googleUser) {
         else if (!res.registered) {
             // res.userID = id_token
             console.log("response in index.js", res)
-            // const store = createStore(userInfoReducer)
+            // const store = createStore(registerReducer)
 
-            RegisterStore.dispatch(storeUserInfo(res))
+            store.dispatch(storeRegisterationInfo(res))
             // console.log("store: ", store.getState())
             console.log("Taking user to registeration page ")
             Router.push('/register')
@@ -202,7 +202,7 @@ const onGoogleLoginFailed = (response) => {
 
 const NavBarContent = (props) => {
     const { height, width } = useWindowDimensions();
-    console.log("props in navbarcontent", props)
+    // console.log("props in navbarcontent", props)
     if (width <= 991) {
         return (
             <Navbar bg="light" expand="lg" fixed="top" style={{

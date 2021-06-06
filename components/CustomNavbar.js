@@ -1,40 +1,45 @@
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Image, Dropdown } from 'react-bootstrap/'
 import React, { useState, useEffect } from "react"
-import store from "../redux/store"
 import ProfilePicMenu from "../components/ProfilePicMenu"
 import { useGoogleLogout, GoogleLogout } from 'react-google-login';
 import { CLIENT_ID } from "../lib/constants"
 import Router from "next/router"
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 import Collapse from 'react-bootstrap/Collapse'
-import { RegisterStore } from "../redux/store"
-import { storeUserInfo } from "../redux/actions/index"
+import store from "../redux/store"
+import { emptyAudioStore, emptyRegisterationInfo, storeRegisterationInfo } from "../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
 import { Divider } from '@material-ui/core';
 
-// import GoogleLogo from "../resources/google_logo"
-// const Navbar = (props) => {
-
-
-// }
-
-// export default Navbar;
-
-
-// import { Row, Col, Form } from 'react-bootstrap/'
-// // import Col from 'react-bootstrap/Form'
-// import Button from 'react-bootstrap/Button'
-// import React, { useState } from 'react';
-// import Router from "next/router"
-// import store from "../redux/store"
 import Cookie from "js-cookie"
 import isEmpty from '../lib/isEmptyObject';
+import { emptyQueue } from '../redux/actions/queueActions';
+import {emptyUserSessionInfo} from "../redux/actions/userSessionActions"
+import {emptyCollections} from "../redux/actions/collectionActions"
+import {emptyLikedTracks} from "../redux/actions/likedTracksActions"
+import {emptySubLists} from "../redux/actions/SubListActions"
+
 
 const logout = () => {
     // console.log("Logout clicked")
     Cookie.remove("session_id")
     Cookie.remove("email")
+    store.dispatch(emptyUserSessionInfo())
+
+    store.dispatch(emptyRegisterationInfo())
+
+    store.dispatch(emptyAudioStore())
+
+    store.dispatch(emptyQueue())
+
+
+    store.dispatch(emptyCollections())
+
+    store.dispatch(emptyLikedTracks())
+
+    store.dispatch(emptySubLists())
+
     Router.push("/")
 
 }
@@ -71,7 +76,7 @@ const ProfilePicGroup = (props) => {
         <div className="profile-pic-group">
             <Nav style={{ whiteSpace: "nowrap" }}>
                 <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "37px" }}>
-                    <Image src={props.user.picture_url}
+                    <Image src={props.user.pictureURL}
                         roundedCircle
                         style={{
                             width: "40px", height: "40px", marginRight: "10px",
@@ -171,15 +176,13 @@ const LoginGroup = (props) => {
                 />
             </NavDropdown>
         </Nav>
-
-
     )
 }
 
 async function onGoogleLoginSuccess(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
 
-    let response = await fetch("/api/user/" + id_token, { method: "GET" }, { revalidateOnMount: false })
+    let response = await fetch("/api/user/verifyGoogleSession/" + id_token, { method: "GET" }, { revalidateOnMount: false })
     if (response.status == 200) {
         let res = await response.json()
         if (res.registered) {
@@ -193,9 +196,9 @@ async function onGoogleLoginSuccess(googleUser) {
         else if (!res.registered) {
             // res.userID = id_token
             console.log("response in index.js", res)
-            // const store = createStore(userInfoReducer)
+            // const store = createStore(registerReducer)
 
-            RegisterStore.dispatch(storeUserInfo(res))
+            store.dispatch(storeRegisterationInfo(res))
             // console.log("store: ", store.getState())
             console.log("Taking user to registeration page ")
             Router.push('/register')
@@ -207,7 +210,7 @@ async function onGoogleLoginSuccess(googleUser) {
 }
 
 const onGoogleLoginFailed = (response) => {
-
+    console.log("Google login failed", response)
 }
 
 const MobileNavBar = (props) => {
@@ -237,6 +240,8 @@ const MobileNavBar = (props) => {
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                             <div className="center-button">
                                 <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
+                                <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
+                                <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
                                 <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link>
 
                             </div>
@@ -282,6 +287,8 @@ const MobileNavBar = (props) => {
 }
 
 const DesktopNavBar = (props) => {
+    // console.log("DesktopNavBar props", props)
+
     return (
         <Navbar bg="white" expand="lg" style={{
             display: "flex",
@@ -318,7 +325,10 @@ const DesktopNavBar = (props) => {
                     </NavDropdown>
                 </div> */}
                     <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
+                    <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
+                    <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
                     <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link>
+
                     <Divider orientation="vertical" flexItem={true} />
                     <div style={{ marginRight: "auto", paddingLeft: "20px" }}>
                         {props.user && !isEmpty(props.user)

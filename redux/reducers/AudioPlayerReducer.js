@@ -1,8 +1,16 @@
-import { storeAudioPlayerInfo } from "../actions"
 
-const initialState = {
-    AudioPlayerInfo: {}
+const emptyAudioStore = {
+    playing: false,
+    filename: "",
+    trackName: "",
+    audio: "",
+    url: "",
+    email: "",
+    subreddit: "",
+    picture_url:""
 }
+
+const initialState = emptyAudioStore
 
 const audioPlayerInfoReducer = (state = initialState, action) => {
     // console.log("action:", action)
@@ -10,15 +18,16 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
         case "STORE_AUDIO_PLAYER_INFO":
             return Object.assign({}, state, {
                 playing: action.AudioPlayerInfo.playing,
-                subreddit: action.AudioPlayerInfo.subreddit,
                 filename: action.AudioPlayerInfo.filename,
                 trackName: action.AudioPlayerInfo.trackName,
                 audio: action.AudioPlayerInfo.audio,
                 url: action.AudioPlayerInfo.url,
-                playlist: action.AudioPlayerInfo.playlist,
-                keyIndex: action.AudioPlayerInfo.keyIndex
+                subreddit: action.AudioPlayerInfo.subreddit,
+                picture_url: action.AudioPlayerInfo.pictureURL,
+                
             })
         case "TOGGLE_PLAYING":
+            // console.log("state in AudioPlayerReducer", state)
             return {
                 ...state,
                 playing: action.playingStatus
@@ -27,6 +36,17 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
             return {
                 ...state
             }
+
+        case "SET_AUDIO_STORE_EMAIL":
+            return {
+                ...state,
+                email: action.email.email
+            }
+
+        case "EMPTY_AUDIO_STORE":
+            return emptyAudioStore   
+            
+        
         default:
             return state
     }
@@ -34,7 +54,7 @@ const audioPlayerInfoReducer = (state = initialState, action) => {
 
 export default audioPlayerInfoReducer;
 
-// const userInfoReducer = (state = initialState, action) => {
+// const registerReducer = (state = initialState, action) => {
 //     switch (action.type) {
 //         case "STORE_USER_INFO":
 //             return Object.assign({}, state, {
@@ -47,4 +67,4 @@ export default audioPlayerInfoReducer;
 //     }
 // }
 
-// export default userInfoReducer
+// export default registerReducer
