@@ -13,7 +13,7 @@ import AudioPlayerBar from "../components/AudioPlayerBar"
 import fetch from "isomorphic-unfetch"
 import isEmpty from "../lib/isEmptyObject"
 import LoginPopup from "../components/LoginPopup"
-import Sidebar from "../components/Sidebar"
+import Sidebar from "../components/sidebar/Sidebar"
 import useSWR from 'swr'
 import store from "../redux/store";
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
@@ -21,6 +21,7 @@ import { Provider } from "react-redux";
 import {getQueue} from "../lib/syncQueue";
 
 import {UserSession} from "../ts/interfaces"
+import EmptySideBar from "../components/sidebar/emptySideBar";
 
 
 
@@ -211,12 +212,7 @@ const home = ({ userSession }) => {
       </div>
       <div className="page-container">
         {!user["validSession"]
-            ? <div className="sidebar" style={{
-                backgroundColor: "#EAECEF",
-                width: "14%",
-                flexDirection: "column",
-                alignItems: "center",
-              }}></div>
+            ? <EmptySideBar/>
             : <Sidebar user={user}></Sidebar>
           }
          

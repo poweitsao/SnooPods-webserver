@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Provider } from 'react-redux';
 import store from "../redux/store"
-import Sidebar from "../components/Sidebar"
+import Sidebar from "./sidebar/Sidebar"
 import useSWR, { SWRConfig } from 'swr'
 import fetch from "isomorphic-unfetch"
 // import withRedux from "next-redux-wrapper"

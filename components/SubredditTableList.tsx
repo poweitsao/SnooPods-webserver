@@ -29,7 +29,7 @@ import { Collection, Timestamp, Track, UserSession } from "../ts/interfaces";
 import useWindowDimensions from "./hooks/useWindowDimensions";
 import TrackOptionsButton from "./buttons/TrackOptionsButton"
 
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import useSWR, { trigger } from "swr";
 import { server } from "../config";
 

@@ -28,7 +28,7 @@ import { Collection, Timestamp, Track, UserSession } from "../../ts/interfaces";
 import useWindowDimensions from "../../components/hooks/useWindowDimensions";
 import TrackOptionsButton from "../../components/buttons/TrackOptionsButton"
 
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/sidebar/Sidebar";
 import useSWR from "swr";
 import { server } from "../../config";
 
@@ -44,6 +44,7 @@ import TrackOptionsButtonContainer from "../../components/containers/TrackOption
 
 import SubredditTableList from "../../components/SubredditTableList"
 import SubredditPlaylistOptionsButton from "../../components/buttons/SubredditPlaylistOptionsButton";
+import EmptySideBar from "../../components/sidebar/emptySideBar";
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {
@@ -174,12 +175,7 @@ const Subreddit = ({ userSession, playlist }) => {
       </div>
       <div className="page-container">
         {isEmpty(user) 
-          ? <div className="sidebar" style={{
-            backgroundColor: "#EAECEF",
-            width: "14%",
-            flexDirection: "column",
-            alignItems: "center",
-          }}></div>           
+          ? <EmptySideBar/>           
           : <Sidebar user={user}></Sidebar>}
         <div className="main-page">
           {isEmpty(user) ? <div></div> : <CustomNavbar user={user} />}

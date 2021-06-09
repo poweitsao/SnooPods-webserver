@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav } from "react-bootstrap"
-import { server } from '../config';
+import { server } from '../../config';
 import fetch from "isomorphic-unfetch";
-import isEmpty from '../lib/isEmptyObject';
+import isEmpty from '../../lib/isEmptyObject';
 import useSWR, {trigger} from 'swr';
-import AddButton from "./buttons/AddButton"
-import DeleteButton from "./buttons/DeleteButton"
+import AddButton from "../buttons/AddButton"
+import DeleteButton from "../buttons/DeleteButton"
 import Router from "next/router"
-import store from '../redux/store';
-import {storeLikedTracks} from "../redux/actions/likedTracksActions"
+import store from '../../redux/store';
+import {storeLikedTracks} from "../../redux/actions/likedTracksActions"
+import EmptySideBar from './emptySideBar';
 
 const Sidebar = (props) => {
     const [mounted, setMounted] = useState(false)
@@ -75,12 +76,7 @@ const Sidebar = (props) => {
       }, [collections, likedTracks, subLists, history]);
 
     if(!collections|| !likedTracks || !subLists || !history){
-        return <div className="sidebar" style={{
-                backgroundColor: "#EAECEF",
-                width: "14%",
-                flexDirection: "column",
-                alignItems: "center",
-            }}></div>
+        return <EmptySideBar/>
     } 
 
     const renderCollections = (collection, index) => {
@@ -216,7 +212,8 @@ const Sidebar = (props) => {
     return (
         <Navbar className="sidebar" style={{
             backgroundColor: "#EAECEF",
-            width: "14%",
+            width: "13.75%",
+            height:"90.47%",
             flexDirection: "column",
             alignItems: "center",
         }}>

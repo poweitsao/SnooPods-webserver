@@ -3,7 +3,7 @@ import CustomNavbar from "../components/CustomNavbar"
 import React, { useState, useEffect } from 'react';
 import validateSession from "../lib/validateUserSessionOnPage"
 import isEmpty from "../lib/isEmptyObject"
-import Sidebar from "../components/Sidebar"
+import Sidebar from "../components/sidebar/Sidebar"
 
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
 import { Provider, useStore, useSelector } from "react-redux";
@@ -31,6 +31,7 @@ import convertDate from "../lib/convertDate";
 import QueuePageBodyContainer from "../components/containers/QueuePageBodyContainer"
 import { propTypes } from "react-bootstrap/esm/Image";
 import QueuePageBody from "../components/Queue/QueuePageBody";
+import EmptySideBar from "../components/sidebar/emptySideBar";
 
 
 const Queue = ({ userSession }) => {
@@ -98,12 +99,7 @@ const Queue = ({ userSession }) => {
         </div>
         <div className="page-container">
           {isEmpty(user) 
-          ? <div className="sidebar" style={{
-            backgroundColor: "#EAECEF",
-            width: "14%",
-            flexDirection: "column",
-            alignItems: "center",
-          }}></div> 
+          ? <EmptySideBar/>
           : <Sidebar user={user}></Sidebar>}
           
             <div className="main-page">

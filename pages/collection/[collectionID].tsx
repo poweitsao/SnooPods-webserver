@@ -24,13 +24,14 @@ import AudioPlayerBarContainer from "../../components/containers/AudioPlayerBarC
 import { Provider } from "react-redux";
 import LoginPopup from "../../components/LoginPopup";
 import isEmpty from "../../lib/isEmptyObject";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/sidebar/Sidebar";
 import CustomNavbar from "../../components/CustomNavbar";
 
 import EditNameModal from "../../components/EditNameModal"
 import EditIcon from '@material-ui/icons/Edit';
 
 import CollectionTableList from "../../components/CollectionTableList"
+import EmptySideBar from "../../components/sidebar/emptySideBar";
 
 
 const CollectionPage = ({ userSession, collectionID }) => {
@@ -163,12 +164,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
       </div>
       <div className="page-container">
         {isEmpty(user) 
-          ? <div className="sidebar" style={{
-            backgroundColor: "#EAECEF",
-            width: "14%",
-            flexDirection: "column",
-            alignItems: "center",
-          }}></div>  
+          ? <EmptySideBar/> 
           : <Sidebar user={user}></Sidebar>
         }
         <div className="main-page">

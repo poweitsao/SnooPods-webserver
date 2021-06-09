@@ -25,7 +25,7 @@ import AudioPlayerBarContainer from "./containers/AudioPlayerBarContainer";
 import { connect, Provider } from "react-redux";
 import LoginPopup from "./LoginPopup";
 import isEmpty from "../lib/isEmptyObject";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import CustomNavbar from "./CustomNavbar";
 
 import EditNameModal from "./EditNameModal"
