@@ -144,7 +144,6 @@ const CategoryPage = ({ userSession, categoryID }) => {
             margin-bottom:30px;
             display:flex;
             flex-direction:column;
-            justify-content:center;
             align-content:center;
             align-text:center;
             align-self: flex-start;
