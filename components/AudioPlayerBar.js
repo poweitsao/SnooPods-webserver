@@ -54,8 +54,8 @@ class AudioPlayerBar extends React.Component {
 
     render() {
         return (
-            <div>
-                <Navbar bg="light" fixed="bottom" >
+            <div >
+                <Navbar bg="light" fixed="bottom" style={{width: "100%", height: "9.52%"}}>
                     {this.props.audioPlayerInfo.audio
                         ? <AudioPlayer url={this.props.audioPlayerInfo.url}
                             trackName={this.props.audioPlayerInfo.trackName}
