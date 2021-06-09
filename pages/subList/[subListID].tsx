@@ -208,8 +208,6 @@ const SubListPage = ({ userSession, subListID }) => {
         {/* ; */}
         <style>
           {`.page-body{
-            margin-top: 30px;
-            margin-bottom: 100px;
             display:flex;
             flex-direction:column;
             justify-content:nowrap;
