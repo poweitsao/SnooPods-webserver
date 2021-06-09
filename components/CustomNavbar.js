@@ -296,7 +296,8 @@ const DesktopNavBar = (props) => {
             alignItems: "stretch",
             paddingLeft: "20px",
             paddingRight: "20px",
-            fontSize: 20
+            fontSize: 20,
+            height: "8.69%"
         }}>
 
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -332,8 +333,8 @@ const DesktopNavBar = (props) => {
                     <Divider orientation="vertical" flexItem={true} />
                     <div style={{ marginRight: "auto", paddingLeft: "20px" }}>
                         {props.user && !isEmpty(props.user)
-                            ? <ProfilePicGroup user={props.user} />
-                            : <LoginGroup paddingLeft="0px" />
+                            ?<ProfilePicGroup user={props.user} />
+                            :<LoginGroup paddingLeft="0px" />
                         }
                     </div>
                 </Nav>

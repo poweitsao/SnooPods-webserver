@@ -139,15 +139,13 @@ const CategoryPage = ({ userSession, categoryID }) => {
             text-align:center;
           }
           .main-page{
-            width: 88%;
-            margin-top:30px;
-            margin-bottom:30px;
+            width: 86.25%;
+            height: 91.26%;
             display:flex;
             flex-direction:column;
             align-content:center;
             align-text:center;
             align-self: flex-start;
-
           }
 
         .page-container{
