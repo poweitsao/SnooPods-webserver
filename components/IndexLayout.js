@@ -3,7 +3,7 @@
 import Head from 'next/head';
 import { Provider } from 'react-redux';
 import store from "../redux/store"
-import Sidebar from "./Sidebar"
+import Sidebar from "./sidebar/Sidebar"
 
 const IndexLayout = (props) => (
     <div className="screen-container">
