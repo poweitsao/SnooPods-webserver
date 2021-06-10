@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
 import momentDurationFormatSetup from "moment-duration-format";
+import {useState} from "react"
 
 function calculateCurPercentage(duration, curTime) {
   if (duration && curTime) {
@@ -14,6 +15,8 @@ export default function Bar(props) {
   const { duration, curTime, onTimeUpdate } = props;
 
   const curPercentage = calculateCurPercentage(duration, curTime)
+  const [barLeftColor, setBarLeftColor] = useState("#e8e8e8")
+  const [knobSize, setKnobSize] = useState("5px")
 
   function formatDuration(duration) {
     return moment
@@ -52,44 +55,36 @@ export default function Bar(props) {
         <div
           className="bar__progress"
           style={{
-            background: `linear-gradient(to right, #e8e8e8 ${curPercentage}%, #c4c4c4 0)`
+            background: `linear-gradient(to right, ${barLeftColor} ${curPercentage}%, #c4c4c4 0)`
           }}
-          onMouseDown={e => handleTimeDrag(e)}
+          onMouseDown={
+            e => {
+              handleTimeDrag(e)
+              setKnobSize("8px")
+              setBarLeftColor("#2651D2")
+          }}
+          onMouseUp={
+            () => setBarLeftColor("#e8e8e8")
+          }
+
+          onMouseEnter={
+            () => {
+                    setKnobSize("10px")
+                    setBarLeftColor("#2651D2")
+                  }
+          }
+          onMouseLeave={
+            () => {
+                    setKnobSize("5px")
+                    setBarLeftColor("#e8e8e8")
+                  }
+          }
         >
           <span
             className="bar__progress__knob"
             style={{ left: `calc(${curPercentage}% - 3.5px)` }}
           />
         </div>
-        {/* {duration
-          ? <div
-            className="bar__progress"
-            style={{
-              background: `linear-gradient(to right, orange ${curPercentage}%, black 0)`
-            }}
-            onMouseDown={e => handleTimeDrag(e)}
-          >
-            <span
-              className="bar__progress__knob"
-              style={{ left: `${curPercentage - (2.2)}%` }}
-            />
-          </div>
-
-          : <div
-            className="bar__progress"
-            style={{
-              background: `linear-gradient(to right, orange 0%, black 0)`
-            }}
-            onMouseDown={e => handleTimeDrag(e)}
-          >
-            <span
-              className="bar__progress__knob"
-              style={{ left: `${curPercentage - (2.2)}%` }}
-            />
-          </div>
-        } */}
-
-
 
 
         <span className="bar__time">{formatDuration(duration)}</span>
@@ -102,6 +97,7 @@ export default function Bar(props) {
           display: flex;
           justify-content:space-around;
           align-items: center;
+          cursor: default;
         }
         .bar__time {
           color: #c4c4c4;
@@ -109,6 +105,7 @@ export default function Bar(props) {
           padding-left: 15px;
           padding-right: 15px;
           font-family: Roboto, sans-serif;
+          cursor: default;
         }
 
         .bar__progress {
@@ -119,17 +116,17 @@ export default function Bar(props) {
           display: flex;
           align-items: center;
           cursor: pointer;
+          cursor: default;
         }
 
         .bar__progress__knob {
           position: relative;
-          height: 7px;
-          width: 7px;
-          border: 1px solid black;
+          height: ${knobSize};
+          width: ${knobSize};
+          border: 0px solid black;
           border-radius: 50%;
-          background-color: white;
-
-
+          background-color: #e8e8e8;
+          cursor: default;
         }
       `}
       </style>
