@@ -108,10 +108,9 @@ export default function Bar(props) {
           font-size: 16px;
           padding-left: 15px;
           padding-right: 15px;
-          font-family: 'Roboto', sans-serif;
-
+          font-family: Roboto, sans-serif;
         }
-    
+
         .bar__progress {
           flex: 1;
           border-radius: 5px;

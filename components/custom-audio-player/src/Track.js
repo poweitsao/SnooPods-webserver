@@ -46,7 +46,7 @@ function Track(props) {
         color: black;
         font-weight: normal;
         font-size: 11px;
-        font-family: 'Roboto', sans-serif;
+        font-family: Roboto, sans-serif;
         color: white;
       }
 
@@ -65,7 +65,7 @@ function Track(props) {
         color: black;
         font-weight: normal;
         font-size: 14px;
-        font-family: 'Roboto', sans-serif;
+        font-family: Roboto, sans-serif;
         color: white;
       }
 

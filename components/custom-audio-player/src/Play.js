@@ -24,7 +24,7 @@ export default function Play(props) {
       .custom-play-button{
         flex-grow: 0;
           padding: 50% 50% 50% 50%;
-        background-image: linear-gradient(to top, #2156d9, #4630a0);
+        background-image: linear-gradient(to bottom, #2156d9, #4630a0);
         border-radius: 50%;
         display: flex;
         justify-content: center;
