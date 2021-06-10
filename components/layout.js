@@ -13,6 +13,7 @@ const Layout = (props) => (
             <Head>
                 <title>SnooPods</title>
                 <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
+                <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
             </Head>
             <SWRConfig value={{fetcher: (url) => fetch(url).then((r) => r.json())}}>
                 

@@ -7,7 +7,7 @@ export default function Next(props) {
     return (
         <div>
             <button className="SkipNext_button" onClick={() => handleClick()}>
-                <SkipNext />
+                <SkipNext style={{color: "white"}}/>
             </button>
             <style>
                 {`
@@ -15,6 +15,7 @@ export default function Next(props) {
           width: fit-content;
           background-color: transparent;
           border: none;
+          padding-left: 40px;
         }`}
             </style>
         </div>

@@ -55,7 +55,14 @@ class AudioPlayerBar extends React.Component {
     render() {
         return (
             <div >
-                <Navbar bg="light" fixed="bottom" style={{width: "100%", height: "9.52%"}}>
+                <Navbar 
+                    bg="light" 
+                    fixed="bottom" 
+                    style={{width: "100%", 
+                            height: "9.52%",
+                            padding: "unset",
+                            display: "flex",
+                            justifyContent: "center"}}>
                     {this.props.audioPlayerInfo.audio
                         ? <AudioPlayer url={this.props.audioPlayerInfo.url}
                             trackName={this.props.audioPlayerInfo.trackName}
@@ -110,15 +117,6 @@ function AudioPlayer(props) {
         else if (props.url === source && reload) {
             setReload(false)
         }
-
-        // if(props.audio){
-        //     if(volume){
-        //         if (props.audio.volume !== volume){
-        //             props.audio.volume = volume
-        //         }
-        //     }
-            
-        // }
 
 
     })
@@ -185,50 +183,18 @@ function AudioPlayerInfo(props) {
     const duration = store.getState().audioPlayerInfo.audio.duration
 
     const [volume, setVolume] = useState(1)
-    // const volume = props.volume
-    // const fetcher = (url) => fetch(url).then((r) => r.json());
 
-    // const fetchURL = "/api/volume/get/" + store.getState().userSessionInfo.email
-    // const {data: volume} = useSWR(store.getState().userSessionInfo.email? fetchURL: null, fetcher)
 
     useEffect(() => {
-        // console.log("curTime", curTime)
-        // console.log("duration", duration)
-        // if (duration == undefined){
-        //     duration = store.getState().audioPlayerInfo.duration
-        // }
-        // const getVolume = async () => {
-        //     let getVolumeRes = await fetch("/api/volume/get/" + store.getState().userSessionInfo.email)
-        //     let getVolumeResponse = await getVolumeRes.json()
-        //     // setVolume(getVolumeResponse)
-        //     if(store.getState().volumeInfo.volume !== getVolumeResponse){
-        //         store.dispatch(storeVolume(getVolumeResponse))
-        //     }
-        // }
-        // console.log(volume)
-        // if(volume){
-        //     if (store.getState().volumeInfo.volume !== volume){
-                
-                
-        //     }
-        // }
 
         if (curTime && duration && curTime === duration) {
-            // setPlaying(false);
-            // audio.pause();
-            // store.dispatch(togglePlaying(false))
+
             console.log("next")
-            // store.dispatch(togglePlaying(false))
             audio.pause();
 
-            // setCurTime(10);
             nextTrackFromQueue()
-            // testQueueStore()
         }
 
-        // if(store.getState().userSessionInfo.email !== ""){
-        //     getVolume()
-        // }
 
     })
 
@@ -276,51 +242,26 @@ function AudioPlayerInfo(props) {
             syncDB()
             syncQueueWithAudioPlayer(true)
             syncHistory()
-            // console.log("synced")
-            // var queueCurrStore = store.getState().queueInfo
-            // var currTrack = queueCurrStore.QueueInfo.currentTrack
+
             store.dispatch(togglePlaying(false))
             forceSyncQueueWithAudioPlayer(true)
         }
 
 
-
-    // let audioCurrStore = store.getState().audioPlayerInfo
-    // console.log("before pushing", audioCurrStore)
-    // console.log("pushing next track")
-
-    // store.dispatch(pushNextTrack())
-
-    
-
-    // syncDB()
-    // store.dispatch(
-    //     addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
-    //   )
-    // syncHistory()
-
-        
-    // var queueCurrStore = store.getState().queueInfo
-    // var currTrack = queueCurrStore.QueueInfo.currentTrack
-    // store.dispatch(togglePlaying(false))
-    // forceSyncQueueWithAudioPlayer(true)
-
-         
-
     }
 
     return (
         <div>
-            <div className="player" style={{ width: "100%" }}>
+            <div className="player" style={{ width: "100%", backgroundColor:"#1d2460" }}>
                 <div className="track-info">
                     <Track pictureURL={pictureURL} trackName={trackName} subreddit={"r/"+subreddit} />
                 </div>
                 <div className="center-piece">
                     <div className="controls">
                         <Previous handleClick={previousTrack}/>
-                        <Replay10 handleClick={() => {
+                        {/* <Replay10 handleClick={() => {
                             setClickedTime(Math.max(curTime - 10, 0))
-                        }} />
+                        }} /> */}
 
                         {props.playing ?
                             <Pause handleClick={() => {
@@ -333,14 +274,14 @@ function AudioPlayerInfo(props) {
                                 audio.play();
                             }} />
                         }
-                        <Forward10 handleClick={() => {
+                        {/* <Forward10 handleClick={() => {
                             if (curTime + 10 > duration) {
                                 console.log("duration:", duration)
                                 setClickedTime(duration)
                             } else {
                                 setClickedTime(curTime + 10)
                             }
-                        }} />
+                        }} /> */}
 
                         <Next handleClick={nextTrackFromQueue} />
 
@@ -372,8 +313,6 @@ function AudioPlayerInfo(props) {
             display:flex;
             justify-content: space-between;
             align-items:center;
-            padding-top: 10px;
-            padding-bottom:10px;
             background-color: #EAECEF;
           }
           .center-piece{
@@ -400,6 +339,7 @@ function AudioPlayerInfo(props) {
           }
           .controls {
             display: flex; 
+            align-items: center;
           }`}
             </style>
         </div>
@@ -477,29 +417,5 @@ function EmptyAudioPlayerInfo(props) {
     );
 }
 
-// AudioPlayerBar.getInitialProps = async ({ req }) => {
-//     // console.log("req", req)
-//     const cookies = parseCookies(req)
-  
-//     // const res = await fetch(server + "/api/podcasts/getFeatured", { method: "GET" })
-//     //   if (res.status === 200) {
-  
-//     //     var featured = await res.json()
-//     //     console.log("featured in home: ", featured)
-//     //     // setFeaturedSubreddits(featured);
-//     //   } else{
-//     //     var featured = {} 
-//     //   }
-  
-//     return {
-//       userSession: {
-//         "session_id": cookies.session_id,
-//         "email": cookies.email
-//       }
-//       // featured: data,
-//       // revalidate: 60 //seconds
-//     };
-//   }
-  
 
 export default AudioPlayerBar

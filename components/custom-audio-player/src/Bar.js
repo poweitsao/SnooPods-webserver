@@ -52,13 +52,13 @@ export default function Bar(props) {
         <div
           className="bar__progress"
           style={{
-            background: `linear-gradient(to right, orange ${curPercentage}%, black 0)`
+            background: `linear-gradient(to right, #e8e8e8 ${curPercentage}%, #c4c4c4 0)`
           }}
           onMouseDown={e => handleTimeDrag(e)}
         >
           <span
             className="bar__progress__knob"
-            style={{ left: `${curPercentage - (1.375)}%` }}
+            style={{ left: `calc(${curPercentage}% - 3.5px)` }}
           />
         </div>
         {/* {duration
@@ -104,10 +104,11 @@ export default function Bar(props) {
           align-items: center;
         }
         .bar__time {
-          color: black;
+          color: #c4c4c4;
           font-size: 16px;
           padding-left: 15px;
           padding-right: 15px;
+          font-family: 'Roboto', sans-serif;
 
         }
     
@@ -115,7 +116,7 @@ export default function Bar(props) {
           flex: 1;
           border-radius: 5px;
           width: 100px;
-          height: 7px;
+          height: 5px;
           display: flex;
           align-items: center;
           cursor: pointer;
@@ -123,11 +124,12 @@ export default function Bar(props) {
 
         .bar__progress__knob {
           position: relative;
-          height: 10px;
-          width: 10px;
-          border: 1.5px solid black;
+          height: 7px;
+          width: 7px;
+          border: 1px solid black;
           border-radius: 50%;
-          background-color: orange;
+          background-color: white;
+
 
         }
       `}

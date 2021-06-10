@@ -7,7 +7,7 @@ export default function Previous(props) {
     return (
         <div>
             <button className="SkipPrev_button" onClick={() => handleClick()}>
-                <SkipPrevious />
+                <SkipPrevious style={{color: "white"}}/>
             </button>
             <style>
                 {`
@@ -15,6 +15,7 @@ export default function Previous(props) {
           width: fit-content;
           background-color: transparent;
           border: none;
+          padding-right: 40px;
         }`}
             </style>
         </div>

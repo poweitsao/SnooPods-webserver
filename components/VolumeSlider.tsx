@@ -125,13 +125,13 @@ function VolumeSlider(props) {
       <div className="volume-slider">
         <Grid container spacing={2} style={{display: "flex", alignItems: "center"}}>
           <Grid item>
-            <VolumeDown />
+            <VolumeDown style={{color: "white"}}/>
           </Grid>
           <Grid item xs style={{display: "flex", alignItems: "center"}}>
-            <Slider value={props.volumeInfo.volume*100} onChange={handleChange} aria-labelledby="continuous-slider" />
+            <Slider style={{color:"#c4c4c4"}} value={props.volumeInfo.volume*100} onChange={handleChange} aria-labelledby="continuous-slider" />
           </Grid>
           <Grid item>
-            <VolumeUp />
+            <VolumeUp style={{color: "white"}}/>
           </Grid>
         </Grid>
         <style>

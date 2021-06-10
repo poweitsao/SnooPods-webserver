@@ -24,7 +24,7 @@ function Track(props) {
       <div className="track">
         <div className="trackImage">
           {pictureURL
-            ?<Image src={pictureURL} width="60px" height="60px"/>
+            ?<Image src={pictureURL} width="90px" height="90px"/>
             : <div></div>}
           
         </div>
@@ -45,7 +45,9 @@ function Track(props) {
         margin: 0;
         color: black;
         font-weight: normal;
-        font-size: 15px;
+        font-size: 11px;
+        font-family: 'Roboto', sans-serif;
+        color: white;
       }
 
       .trackImage{
@@ -62,7 +64,9 @@ function Track(props) {
         margin: 0;
         color: black;
         font-weight: normal;
-        font-size: 12px;
+        font-size: 14px;
+        font-family: 'Roboto', sans-serif;
+        color: white;
       }
 
       `}
