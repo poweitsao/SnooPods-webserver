@@ -31,7 +31,7 @@ import EditNameModal from "../../components/EditNameModal"
 import EditIcon from '@material-ui/icons/Edit';
 
 import CollectionTableList from "../../components/CollectionTableList"
-import EmptySideBar from "../../components/sidebar/emptySideBar";
+import EmptySideBar from "../../components/sidebar/EmptySideBar";
 
 
 const CollectionPage = ({ userSession, collectionID }) => {

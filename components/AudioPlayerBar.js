@@ -122,7 +122,7 @@ function AudioPlayer(props) {
     })
     // console.log(props)
     return (
-        <div>
+        <div style={{height: "100%"}}>
             {reload
                 ? <div style={{ width: "100%", height: "100%" }}></div>
                 : (props.url == ""

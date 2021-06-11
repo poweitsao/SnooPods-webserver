@@ -31,7 +31,7 @@ import convertDate from "../lib/convertDate";
 import QueuePageBodyContainer from "../components/containers/QueuePageBodyContainer"
 import { propTypes } from "react-bootstrap/esm/Image";
 import QueuePageBody from "../components/Queue/QueuePageBody";
-import EmptySideBar from "../components/sidebar/emptySideBar";
+import EmptySideBar from "../components/sidebar/EmptySideBar";
 
 
 const Queue = ({ userSession }) => {

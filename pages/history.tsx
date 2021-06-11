@@ -32,7 +32,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import CollectionTableList from "../components/CollectionTableList"
 import HistoryTableList from "../components/HistoryTableList";
-import EmptySideBar from "../components/sidebar/emptySideBar";
+import EmptySideBar from "../components/sidebar/EmptySideBar";
 
 
 const HistoryPage = ({ userSession, collectionID }) => {

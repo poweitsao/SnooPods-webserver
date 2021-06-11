@@ -21,7 +21,7 @@ import { Provider } from "react-redux";
 import {getQueue} from "../lib/syncQueue";
 
 import {UserSession} from "../ts/interfaces"
-import EmptySideBar from "../components/sidebar/emptySideBar";
+import EmptySideBar from "../components/sidebar/EmptySideBar";
 
 
 

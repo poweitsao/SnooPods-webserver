@@ -44,7 +44,7 @@ import TrackOptionsButtonContainer from "../../components/containers/TrackOption
 
 import SubredditTableList from "../../components/SubredditTableList"
 import SubredditPlaylistOptionsButton from "../../components/buttons/SubredditPlaylistOptionsButton";
-import EmptySideBar from "../../components/sidebar/emptySideBar";
+import EmptySideBar from "../../components/sidebar/EmptySideBar";
 
 function isEmpty(obj: Object) {
   for (var prop in obj) {

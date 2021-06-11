@@ -23,7 +23,7 @@ import {getQueue} from "../lib/syncQueue";
 import {UserSession} from "../ts/interfaces"
 import CategoryGridMenu from "../components/CategoryGridMenu";
 import SubredditGridMenu from "../components/SubredditGridMenu";
-import EmptySideBar from "../components/sidebar/emptySideBar";
+import EmptySideBar from "../components/sidebar/EmptySideBar";
 
 
 

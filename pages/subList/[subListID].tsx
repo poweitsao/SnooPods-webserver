@@ -34,7 +34,7 @@ import CollectionTableList from "../../components/CollectionTableList"
 import CurrentSubList from "../../components/subList/CurrentSubList";
 
 import SubListOptionsButton from "../../components/buttons/SubListOptionsButton"
-import EmptySideBar from "../../components/sidebar/emptySideBar";
+import EmptySideBar from "../../components/sidebar/EmptySideBar";
 
 
 const SubListPage = ({ userSession, subListID }) => {

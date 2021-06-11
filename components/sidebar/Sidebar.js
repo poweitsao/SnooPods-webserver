@@ -9,7 +9,34 @@ import DeleteButton from "../buttons/DeleteButton"
 import Router from "next/router"
 import store from '../../redux/store';
 import {storeLikedTracks} from "../../redux/actions/likedTracksActions"
-import EmptySideBar from './emptySideBar';
+import EmptySideBar from './EmptySideBar';
+
+const MyMusicOption = ({redirect, name}) => {
+    return(
+        <div className="my-music-option-container">
+            <div className="my-music-option-icon"></div>
+                <Nav.Link 
+                    style={{color: "#5c6096", padding: "unset", paddingLeft: "25px", paddingTop: "9.5px", paddingBottom:"9.5px", width: "100%"}} 
+                    onClick={() => { Router.push(redirect) }}>
+                    {name}
+                </Nav.Link>
+            <style>{`
+                .my-music-option-container{
+                    display: flex;
+                    align-items: center;  
+                    font-family: Lato, sans-serif;
+                    font-size: 14px;
+                    padding-left: 9.4%;
+                }
+                .my-music-option-icon{
+                    background: white;
+                    width: 22px;
+                    height: 22px;   
+                }
+            `}</style>
+        </div>
+    )
+}
 
 const Sidebar = (props) => {
     const [mounted, setMounted] = useState(false)
@@ -113,7 +140,8 @@ const Sidebar = (props) => {
                         flex: "1", 
                         overflow: "hidden",
                         textOverflow: "ellipsis",
-                        whiteSpace: "nowrap"
+                        whiteSpace: "nowrap",
+                        color:"#5c6096"
                          }} 
                                         
                     onClick={() => { Router.push("/collection/"+collection.collectionID) 
@@ -177,7 +205,8 @@ const Sidebar = (props) => {
                         flex: "1", 
                         overflow: "hidden",
                         textOverflow: "ellipsis",
-                        whiteSpace: "nowrap"
+                        whiteSpace: "nowrap",
+                        "color": "#5c6096"
                          }} 
                                         
                     // onClick={() => { Router.push("/subList/"+subList.subListID) 
@@ -211,38 +240,78 @@ const Sidebar = (props) => {
 
     return (
         <Navbar className="sidebar" style={{
-            backgroundColor: "#EAECEF",
+            backgroundImage: "linear-gradient(to bottom, #1d2460, #131639)",
             width: "13.75%",
-            height:"90.47%",
+            height:"90.5%",
             flexDirection: "column",
             alignItems: "center",
+            padding: "unset",
+            
         }}>
             <Nav style={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-start",
                 maxWidth: "100%", 
+                color: "#5c6096",
+                marginTop: "10.5vh",
+                width: "77%"
             }}>
-                <Nav.Link style={{  }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
-                <Nav.Link style={{  }} onClick={() => { Router.push("/explore") }}>Explore</Nav.Link>
-                <Nav.Link style={{  }} onClick={() => { Router.push("/likedTracks/"+likedTracks.collectionID) }}>Liked Tracks</Nav.Link>
+                <div className="my-music">
+                    <div className="my-music-title">My Music</div>
 
-                <div className="title-container">
-                    <div style={{padding: "8px", paddingRight: "3px"}}>Your Collections</div>
-                    <AddButton handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
+                    <MyMusicOption name="Home" redirect="/home"/>
+                    <MyMusicOption name="Explore" redirect="/explore"/>
+                    <MyMusicOption name="Liked Tracks" redirect={"/likedTracks/"+likedTracks.collectionID}/>
+                    <MyMusicOption name="Library" redirect="/home"/>
+
                 </div>
-                {collections?.map(renderCollections)}
-                <div className="title-container">
-                    <div style={{padding: "8px", paddingRight: "3px"}}>Daily Mixes</div>
-                    <AddButton handleClick={() => handleAddSubList(props.user.email, "New sublist")}/>
-                </div>
-                {subLists?.map(renderSubLists)}
-            </Nav>
+                </Nav>
+                <Nav style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    maxWidth: "100%", 
+                    color: "#5c6096",
+                    marginTop: "7vh"
+                }}>
+                    <div className="my-playlists">
+                        <div className="title-container">
+                            <div style={{padding: "8px", paddingRight: "3px"}}>Your Collections</div>
+                            <AddButton handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
+                        </div>
+                        {collections?.map(renderCollections)}
+                        <div className="title-container">
+                            <div style={{padding: "8px", paddingRight: "3px"}}>Daily Mixes</div>
+                            <AddButton handleClick={() => handleAddSubList(props.user.email, "New sublist")}/>
+                        </div>
+                        {subLists?.map(renderSubLists)}
+                    </div>
+                </Nav>
+            
                 <style jsx>
                 {`
+                    .my-music{
+                        display: flex; 
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        width: 100%;
+                        
+                    }
+                    .my-music-title{
+                        font-size: 24px;
+                        font-family: Lato, sans-serif;
+                        color: white;
+                        margin-bottom: 2.6vh;
+                        padding-left: 9.4%; 
+
+                    }
                     .title-container{
                         display: flex;
                         align-items: center;
+                    }
+                    .nav-link{
+                        color: #5c6096;
                     }
                 `}
                 </style>
