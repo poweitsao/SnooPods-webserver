@@ -20,108 +20,8 @@ import {emptyCollections} from "../../redux/actions/collectionActions"
 import {emptyLikedTracks} from "../../redux/actions/likedTracksActions"
 import {emptySubLists} from "../../redux/actions/SubListActions"
 
-
-const logout = () => {
-    // console.log("Logout clicked")
-    Cookie.remove("session_id")
-    Cookie.remove("email")
-    store.dispatch(emptyUserSessionInfo())
-
-    store.dispatch(emptyRegisterationInfo())
-
-    store.dispatch(emptyAudioStore())
-
-    store.dispatch(emptyQueue())
-
-
-    store.dispatch(emptyCollections())
-
-    store.dispatch(emptyLikedTracks())
-
-    store.dispatch(emptySubLists())
-
-    Router.push("/")
-
-}
-const logoutFailed = () => {
-    console.log("logout failed")
-}
-
-
-const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    <Nav.Link 
-        style={{ paddingLeft: "unset" }} 
-        href=""
-        ref={ref}
-        onClick={(e) => {
-            e.preventDefault();
-            onClick(e);
-        }}
-    >
-      {children}
-      
-    </Nav.Link>
-  ));
-
-const ProfilePicGroup = (props) => {
-    return (
-        <div className="profile-pic-group" >
-            <Nav style={{ whiteSpace: "nowrap" }}>
-                <div style={{ display: "flex", justifyContent: "flex-start", alignItems:"center"}}>
-                    <div className="settings-icon" style={{height:"15px", width: "15px", backgroundColor: "white"}}></div>
-                    <Dropdown
-                        
-                        // title={props.user.firstName}
-                        // title={
-                        //     <span className=" my-auto" style={{color:"#5c6096"}}>{props.user.firstName + "▼"}</span>
-                        // }
-                        id="basic-nav-dropdown"
-                        
-                        alignRight
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "flex-start",
-                            color:"#5c6096"
-                        }}>
-                        <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                            <div style={{color: "#5c6096"}}>
-                                {props.user.firstName}
-                            </div>
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu renderOnMount={true}>
-                            <GoogleLogout
-                                clientId={CLIENT_ID}
-                                render={renderProps => (
-                                    <Dropdown.Item
-                                        onClick={renderProps.onClick}
-                                        disabled={renderProps.disabled}
-                                    >Log Out
-                                    </Dropdown.Item>
-                                )}
-                                buttonText="custom logout"
-                                onLogoutSuccess={logout}
-                                onFailure={logoutFailed}
-                                cookiePolicy={'single_host_origin'}
-                            />
-                        </Dropdown.Menu>
-                    </Dropdown>
-                    <Image src={props.user.pictureURL}
-                        roundedCircle
-                        style={{
-                            width: "40px", height: "40px",
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "flex-start"
-                        }} />
-                </div>
-            </Nav>
-        </div >
-    )
-}
+import ProfilePicGroup from './components/ProfilePicGroup';
+import SearchIcon from '@material-ui/icons/Search';
 
 const LoginGroup = (props) => {
 
@@ -301,53 +201,42 @@ const DesktopNavBar = (props) => {
 
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
-            <Navbar.Collapse id="responsive-navbar-nav" style={{backgroundColor:"#131538"}}>
+            <Navbar.Collapse 
+                id="responsive-navbar-nav" 
+                style={{
+                    backgroundColor:"#131538",
+                    justifyContent: "center"
+                    }}>
                 <Nav 
-                    className="m-auto" 
                     style={{fontFamily:"font-family: Lato, sans-serif", 
                             fontSize:"18px",
                             display: "flex", 
-                            alignItems:"center"}}>
+                            alignItems:"center",
+                            justifyContent:"center",
+                            width: "88.6%",
+                            height: "40px"}}>
                         {/* <Navbar.Brand style={{ cursor: "pointer", marginRight: "0", fontSize: 30 }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand> */}
-                        <div className="prev-next-buttons">
-                            <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div>
-                            <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div>
-                        </div>
-                        <div>
-                            {/* <input style={{borderRadius:"25px", width: "288px", height:"32px", backgroundColor: "white"}}></input> */}
-                            <input type="text" className="input-rounded" style={{borderRadius:"25px"}}/>
-                            <style>
-                                {`
-                                    .input-rounded {
-                                        border: 1px solid #ccc;
-                                        -moz-border-radius: 25px;
-                                        -webkit-border-radius: 25px;
-                                        border-radius: 25px;
-                                        font-size: 20px;
-                                        padding: 4px 7px;
-                                        outline: 0;
-                                        -webkit-appearance: none;
-                                    }
-                                    .input-rounded:focus {
-                                        border-color: #339933;
-                                    }
-                                `}
-                            </style>
-                        </div>
+                        {/* <div
+                            className="prev-next-buttons" 
+                            style={{display: "flex", width:"3.8%"}}>
+                            
+                        </div> */}
+                        <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white", marginRight: "12px"}}></div>
+                        <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div>
+                        <SearchBar searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/>
                         
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096" }} onClick={() => { Router.push("/library") }}>Library</Nav.Link>
-
+                        <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
+                        <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
+                        <Nav.Link style={{ padding: "unset", color:"#5c6096", marginRight:"auto" }} onClick={() => { Router.push("/library") }}>Library</Nav.Link>
                         {/* <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link> */}
 
                         {/* <Divider orientation="vertical" flexItem={true} /> */}
-                        <div style={{ marginRight: "auto"}}>
-                            {props.user && !isEmpty(props.user)
-                                ?<ProfilePicGroup user={props.user} />
-                                :<LoginGroup paddingLeft="0px" />
-                            }
-                        </div>
+                        {/* <div style={{   }}> */}
+                        {props.user && !isEmpty(props.user)
+                            ?<ProfilePicGroup user={props.user} />
+                            :<LoginGroup paddingLeft="0px" />
+                        }
+                        {/* </div> */}
                     </Nav>
 
             </Navbar.Collapse>
@@ -359,12 +248,12 @@ const NavBarContent = (props) => {
     // console.log("props in navbarcontent", props)
     if (width <= 991) {
         return (
-            <MobileNavBar user={props.user} />
+            <MobileNavBar user={props.user} searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/>
         )
     }
     else {
         return (
-            <DesktopNavBar user={props.user} />
+            <DesktopNavBar user={props.user} searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/>
         )
     }
 
@@ -373,7 +262,7 @@ const NavBarContent = (props) => {
 class ExploreNavbar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = props.user
+        this.state = props
     }
 
 
@@ -383,7 +272,7 @@ class ExploreNavbar extends React.Component {
             // dropdown customization: https://react-bootstrap.github.io/components/dropdowns/
             <div style={{ width: "100%", height: "8.69%" }}>
                 {/* <div style={{ display: "flex", justifyContent: "space-around" }}> */}
-                <NavBarContent user={this.state} />
+                <NavBarContent user={this.state.user} searchTerm={this.state.searchTerm} setSearchTerm={this.state.setSearchTerm} />
 
 
 
@@ -425,6 +314,51 @@ class ExploreNavbar extends React.Component {
             </div >
         )
     }
+}
+
+const SearchBar = (props) => {
+    return(
+        <div  style={{height:"80%", paddingLeft:"4.3%", paddingRight: "10.8%"}}>
+            <div className="input-parent">
+                <SearchIcon />  
+                <input 
+                    type="text" 
+                    placeholder="Search for Podcasts" 
+                    className="input-rounded" 
+                    style={{borderRadius:"25px"}} 
+                    
+                    onChange={(e) => props.setSearchTerm(e.target.value)}
+                    />
+            </div>
+            <style>
+                {`  
+                    .input-parent{
+                        display: flex;
+                        justify-content: flex-end;
+                        border: 1px solid #ccc;
+                        -moz-border-radius: 25px;
+                        -webkit-border-radius: 25px;
+                        border-radius: 25px;
+                        font-size: 12px;
+                        padding: 4px 7px;
+                        outline: 0;
+                        -webkit-appearance: none;
+                        height: 100%;
+                        background-color: white;
+                    }
+                    .input-rounded {
+                        border:none;    
+                        height: 100%;
+                        width: 90%;
+                    }
+                    .input-rounded:focus {
+                        border: none;
+                        outline: none;
+                    }
+                `}
+            </style>
+        </div>
+    )
 }
 
 export default ExploreNavbar

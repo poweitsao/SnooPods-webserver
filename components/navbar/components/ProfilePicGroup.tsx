@@ -21,59 +21,76 @@ import {emptyLikedTracks} from "../../../redux/actions/likedTracksActions"
 import {emptySubLists} from "../../../redux/actions/SubListActions"
 const ProfilePicGroup = (props) => {
     return (
-        <div className="profile-pic-group">
-            <Nav style={{ whiteSpace: "nowrap" }}>
-                <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "37px" }}>
-                    <Image src={props.user.pictureURL}
-                        roundedCircle
-                        style={{
-                            width: "40px", height: "40px", marginRight: "10px",
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "flex-start"
-                        }} />
-                    <NavDropdown
-                        title={props.user.firstName}
-                        id="basic-nav-dropdown"
-                        renderMenuOnMount={true}
-                        alignRight
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "flex-start"
-                        }}>
-                        {/* <GoogleLogout
+        <div className="profile-pic-group"
+            style={{ display: "flex", justifyContent: "flex-end", alignItems:"center", height: "100%", width: "14%"}} >
+            <div style={{paddingRight: "11.1%"}}>
+                <div className="settings-icon" style={{height:"15px", width: "15px", backgroundColor: "white", marginRight: "11.1%"}}></div>
+            </div>
+            <Dropdown
+                id="basic-nav-dropdown"
+                alignRight
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    color:"#5c6096"
+                }}>
+                <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
+                    <div style={{color: "#5c6096", marginRight: "20px"}}>
+                        {props.user.firstName}
+                    </div>
+                    <div style={{color: "#5c6096", height: "8px", marginRight: "18px"}}>▼</div>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu renderOnMount={true}>
+                    <GoogleLogout
                         clientId={CLIENT_ID}
                         render={renderProps => (
-                            <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
+                            <Dropdown.Item
+                                onClick={renderProps.onClick}
+                                disabled={renderProps.disabled}
+                            >Log Out
+                            </Dropdown.Item>
                         )}
                         buttonText="custom logout"
                         onLogoutSuccess={logout}
                         onFailure={logoutFailed}
-                        cookiePolicy={'single_host_origin'}
-                    /> */}
-                        <GoogleLogout
-                            clientId={CLIENT_ID}
-                            render={renderProps => (
-                                <Dropdown.Item
-                                    onClick={renderProps.onClick}
-                                    disabled={renderProps.disabled}
-                                >Log Out
-                                </Dropdown.Item>
-                            )}
-                            buttonText="custom logout"
-                            onLogoutSuccess={logout}
-                            onFailure={logoutFailed}
-                            // cookiePolicy={'single_host_origin'}
-                        />
-                    </NavDropdown>
-                </div>
-            </Nav>
+                    />
+                </Dropdown.Menu>
+            </Dropdown>
+            <Image src={props.user.pictureURL}
+                roundedCircle
+                style={{
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "flex-start"
+                }} />
         </div >
     )
 }
+
+type Props = {
+    onClick: (e) => void
+  }
+
+const CustomToggle = React.forwardRef<any, Props>(({ children, onClick }, ref) => (
+    <Nav.Link 
+        style={{ padding: "unset", display: "flex" }} 
+        href=""
+        ref={ref}
+        onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+        }}
+    >
+      {children}
+      
+    </Nav.Link>
+  ));
+
 
 const logout = () => {
     // console.log("Logout clicked")

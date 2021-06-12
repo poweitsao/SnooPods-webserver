@@ -248,7 +248,7 @@ const home = ({ userSession }) => {
         <div className="main-page">
           {!user["validSession"]
             ? <div></div>
-            : <ExploreNavbar user={user} />
+            : <ExploreNavbar user={user} setSearchTerm={setSearchTerm} searchTerm={searchTerm}/>
           }
           
         

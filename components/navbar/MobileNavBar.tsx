@@ -95,3 +95,5 @@ const MobileNavBar = (props) => {
         </Navbar>
     )
 }
+
+export default MobileNavBar
