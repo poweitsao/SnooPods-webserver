@@ -1,5 +1,5 @@
 import Layout from "../../components/layout"
-import CustomNavbar from "../../components/CustomNavbar"
+import CustomNavbar from "../../components/navbar/CustomNavbar"
 import MusicPlayer from "../../components/musicPlayer"
 import PlayableTile from "../../components/PlayableTile"
 import { server } from '../../config';

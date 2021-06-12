@@ -6,7 +6,7 @@ import validateSession from "../lib/validateUserSessionOnPage";
 import Router from "next/router";
 import Cookie, { set } from "js-cookie";
 import Layout from "./layout";
-import CustomNavbar from "./CustomNavbar";
+import CustomNavbar from "./navbar/CustomNavbar";
 import AudioPlayerBar from "./AudioPlayerBar";
 import AudioPlayerBarContainer from "./containers/AudioPlayerBarContainer";
 import { connect, Provider } from "react-redux";

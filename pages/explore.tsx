@@ -1,5 +1,5 @@
 import Layout from "../components/layout"
-import ExploreNavbar from "../components/ExploreNavbar"
+import ExploreNavbar from "../components/navbar/ExploreNavbar"
 import MusicPlayer from "../components/musicPlayer"
 import PlayableTile from "../components/PlayableTile"
 import { server } from '../config';

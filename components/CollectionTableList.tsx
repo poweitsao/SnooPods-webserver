@@ -26,7 +26,7 @@ import { connect, Provider } from "react-redux";
 import LoginPopup from "./LoginPopup";
 import isEmpty from "../lib/isEmptyObject";
 import Sidebar from "./sidebar/Sidebar";
-import CustomNavbar from "./CustomNavbar";
+import CustomNavbar from "./navbar/CustomNavbar";
 
 import EditNameModal from "./EditNameModal"
 import EditIcon from '@material-ui/icons/Edit';

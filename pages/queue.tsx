@@ -1,5 +1,5 @@
 import Layout from "../components/layout"
-import CustomNavbar from "../components/CustomNavbar"
+import CustomNavbar from "../components/navbar/CustomNavbar"
 import React, { useState, useEffect } from 'react';
 import validateSession from "../lib/validateUserSessionOnPage"
 import isEmpty from "../lib/isEmptyObject"

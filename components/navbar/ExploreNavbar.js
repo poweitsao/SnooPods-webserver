@@ -1,24 +1,24 @@
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Image, Dropdown } from 'react-bootstrap/'
 import React, { useState, useEffect } from "react"
-import ProfilePicMenu from "../components/ProfilePicMenu"
+import ProfilePicMenu from "../ProfilePicMenu"
 import { useGoogleLogout, GoogleLogout } from 'react-google-login';
-import { CLIENT_ID } from "../lib/constants"
+import { CLIENT_ID } from "../../lib/constants"
 import Router from "next/router"
-import useWindowDimensions from "../components/hooks/useWindowDimensions"
+import useWindowDimensions from "../hooks/useWindowDimensions"
 import Collapse from 'react-bootstrap/Collapse'
-import store from "../redux/store"
-import { emptyAudioStore, emptyRegisterationInfo, storeRegisterationInfo } from "../redux/actions/index"
+import store from "../../redux/store"
+import { emptyAudioStore, emptyRegisterationInfo, storeRegisterationInfo } from "../../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
 import { Divider } from '@material-ui/core';
 
 import Cookie from "js-cookie"
-import isEmpty from '../lib/isEmptyObject';
-import { emptyQueue } from '../redux/actions/queueActions';
-import {emptyUserSessionInfo} from "../redux/actions/userSessionActions"
-import {emptyCollections} from "../redux/actions/collectionActions"
-import {emptyLikedTracks} from "../redux/actions/likedTracksActions"
-import {emptySubLists} from "../redux/actions/SubListActions"
+import isEmpty from '../../lib/isEmptyObject';
+import { emptyQueue } from '../../redux/actions/queueActions';
+import {emptyUserSessionInfo} from "../../redux/actions/userSessionActions"
+import {emptyCollections} from "../../redux/actions/collectionActions"
+import {emptyLikedTracks} from "../../redux/actions/likedTracksActions"
+import {emptySubLists} from "../../redux/actions/SubListActions"
 
 
 const logout = () => {
@@ -47,80 +47,76 @@ const logoutFailed = () => {
     console.log("logout failed")
 }
 
-// const ProfilePicToggle = React.forwardRef(({ children, onClick }, ref) => (
-//     <div>
-//         {/* <img
-//             src="/logo.svg"
-//             width="30"
-//             height="30"
-//             className="d-inline-block align-top"
-//             alt="React Bootstrap logo"
-//           /> */}
-//         <a
-//             href=""
-//             ref={ref}
-//             onClick={(e) => {
-//                 e.preventDefault();
-//                 onClick(e);
-//             }}
-//         >
-//             {children}
-//         &#x25bc;
-//       </a>
-//     </div>
-// ));
 
+const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+    <Nav.Link 
+        style={{ paddingLeft: "unset" }} 
+        href=""
+        ref={ref}
+        onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+        }}
+    >
+      {children}
+      
+    </Nav.Link>
+  ));
 
 const ProfilePicGroup = (props) => {
     return (
-        <div className="profile-pic-group">
+        <div className="profile-pic-group" >
             <Nav style={{ whiteSpace: "nowrap" }}>
-                <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "37px" }}>
-                    <Image src={props.user.pictureURL}
-                        roundedCircle
-                        style={{
-                            width: "40px", height: "40px", marginRight: "10px",
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "flex-start"
-                        }} />
-                    <NavDropdown
-                        title={props.user.firstName}
+                <div style={{ display: "flex", justifyContent: "flex-start", alignItems:"center"}}>
+                    <div className="settings-icon" style={{height:"15px", width: "15px", backgroundColor: "white"}}></div>
+                    <Dropdown
+                        
+                        // title={props.user.firstName}
+                        // title={
+                        //     <span className=" my-auto" style={{color:"#5c6096"}}>{props.user.firstName + "▼"}</span>
+                        // }
                         id="basic-nav-dropdown"
-                        renderMenuOnMount={true}
+                        
                         alignRight
                         style={{
                             display: "flex",
                             justifyContent: "center",
                             flexDirection: "column",
-                            alignItems: "flex-start"
+                            alignItems: "flex-start",
+                            color:"#5c6096"
                         }}>
-                        {/* <GoogleLogout
-                        clientId={CLIENT_ID}
-                        render={renderProps => (
-                            <NavDropdown.Item onClick={renderProps.onClick} disabled={renderProps.disabled}>Log Out</NavDropdown.Item>
-                        )}
-                        buttonText="custom logout"
-                        onLogoutSuccess={logout}
-                        onFailure={logoutFailed}
-                        cookiePolicy={'single_host_origin'}
-                    /> */}
-                        <GoogleLogout
-                            clientId={CLIENT_ID}
-                            render={renderProps => (
-                                <Dropdown.Item
-                                    onClick={renderProps.onClick}
-                                    disabled={renderProps.disabled}
-                                >Log Out
-                                </Dropdown.Item>
-                            )}
-                            buttonText="custom logout"
-                            onLogoutSuccess={logout}
-                            onFailure={logoutFailed}
-                            cookiePolicy={'single_host_origin'}
-                        />
-                    </NavDropdown>
+                        <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
+                            <div style={{color: "#5c6096"}}>
+                                {props.user.firstName}
+                            </div>
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu renderOnMount={true}>
+                            <GoogleLogout
+                                clientId={CLIENT_ID}
+                                render={renderProps => (
+                                    <Dropdown.Item
+                                        onClick={renderProps.onClick}
+                                        disabled={renderProps.disabled}
+                                    >Log Out
+                                    </Dropdown.Item>
+                                )}
+                                buttonText="custom logout"
+                                onLogoutSuccess={logout}
+                                onFailure={logoutFailed}
+                                cookiePolicy={'single_host_origin'}
+                            />
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <Image src={props.user.pictureURL}
+                        roundedCircle
+                        style={{
+                            width: "40px", height: "40px",
+                            display: "flex",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            alignItems: "flex-start"
+                        }} />
                 </div>
             </Nav>
         </div >
@@ -230,15 +226,16 @@ const MobileNavBar = (props) => {
                 <Navbar.Brand style={{ cursor: "pointer", marginRight: "0", fontSize: 30 }} >SnooPods</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" aria-expanded={open} onClick={() => { setOpen(!open) }} />
 
-                {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" /> */}
             </div>
 
             <Collapse id="basic-navbar-nav" in={open}>
                 <div>
                     <Nav className="m-auto">
 
+
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                             <div className="center-button">
+
                                 <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/home") }}>Home</Nav.Link>
                                 <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
                                 <Nav.Link style={{ paddingLeft: "50px" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
@@ -298,22 +295,54 @@ const DesktopNavBar = (props) => {
             paddingRight: "20px",
             fontSize: 20,
             height: "100%", 
-            padding: "unset"
+            padding: "unset",
+            
             }}>
 
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
-            <Navbar.Collapse id="responsive-navbar-nav" >
-                <Nav className="m-auto">
-                        <Navbar.Brand style={{ cursor: "pointer", marginRight: "0", fontSize: 30 }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand>
-                        <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
-                        <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
-                        <Nav.Link style={{ paddingLeft: "20px" }} onClick={() => { Router.push("/library") }}>Library</Nav.Link>
+            <Navbar.Collapse id="responsive-navbar-nav" style={{backgroundColor:"#131538"}}>
+                <Nav 
+                    className="m-auto" 
+                    style={{fontFamily:"font-family: Lato, sans-serif", 
+                            fontSize:"18px",
+                            display: "flex", 
+                            alignItems:"center"}}>
+                        {/* <Navbar.Brand style={{ cursor: "pointer", marginRight: "0", fontSize: 30 }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand> */}
+                        <div className="prev-next-buttons">
+                            <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div>
+                            <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div>
+                        </div>
+                        <div>
+                            {/* <input style={{borderRadius:"25px", width: "288px", height:"32px", backgroundColor: "white"}}></input> */}
+                            <input type="text" className="input-rounded" style={{borderRadius:"25px"}}/>
+                            <style>
+                                {`
+                                    .input-rounded {
+                                        border: 1px solid #ccc;
+                                        -moz-border-radius: 25px;
+                                        -webkit-border-radius: 25px;
+                                        border-radius: 25px;
+                                        font-size: 20px;
+                                        padding: 4px 7px;
+                                        outline: 0;
+                                        -webkit-appearance: none;
+                                    }
+                                    .input-rounded:focus {
+                                        border-color: #339933;
+                                    }
+                                `}
+                            </style>
+                        </div>
+                        
+                        <Nav.Link style={{ padding: "unset", color:"#5c6096" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
+                        <Nav.Link style={{ padding: "unset", color:"#5c6096" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
+                        <Nav.Link style={{ padding: "unset", color:"#5c6096" }} onClick={() => { Router.push("/library") }}>Library</Nav.Link>
 
                         {/* <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link> */}
 
                         {/* <Divider orientation="vertical" flexItem={true} /> */}
-                        <div style={{ marginRight: "auto", paddingLeft: "20px" }}>
+                        <div style={{ marginRight: "auto"}}>
                             {props.user && !isEmpty(props.user)
                                 ?<ProfilePicGroup user={props.user} />
                                 :<LoginGroup paddingLeft="0px" />
@@ -341,7 +370,7 @@ const NavBarContent = (props) => {
 
 }
 
-class CustomNavbar extends React.Component {
+class ExploreNavbar extends React.Component {
     constructor(props) {
         super(props);
         this.state = props.user
@@ -398,4 +427,4 @@ class CustomNavbar extends React.Component {
     }
 }
 
-export default CustomNavbar
+export default ExploreNavbar
