@@ -967,6 +967,28 @@ export async function searchCategoriesAndSubreddits(query: string){
     }
 }
 
+export async function getAllCategoriesAndSubreddits(){
+    const categoriesRef = db.collection("categories") 
+    try{
+        const querySnapshot = await categoriesRef.get()
+        let result = []
+        querySnapshot.forEach((doc) => {
+            var categoryData = doc.data()
+            result.push(categoryData)
+            // doc.data() is never undefined for query doc snapshots
+            // console.log(doc.id, " => ", doc.data());
+        });
+        console.log("result", result)
+        return {status: 200, categories:result}
+    } catch (e){
+        console.error("error in getAllCategoriesAndSubreddits", e)
+        return {status: 500, categories: []}
+
+    }
+
+    
+}
+
 export async function getCategorySubreddits(categoryID: string){
     const categoryRef = db.collection("categories").doc(categoryID)
     try{
@@ -1047,6 +1069,7 @@ module.exports = {
     updateUserHistory,
     getHistoryTracks,
     searchCategoriesAndSubreddits,
+    getAllCategoriesAndSubreddits,
     getCategorySubreddits,
     getUserVolume,
     updateUserVolume,

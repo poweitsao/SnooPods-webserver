@@ -134,7 +134,7 @@ const FeaturedGridMenu = (props) => {
     </div>)
 }
 
-const home = ({ userSession }) => {
+const Explore = ({ userSession }) => {
 
   const [subreddit, setSubreddit] = useState("")
   const [podcast, setPodcast] = useState("")
@@ -145,15 +145,9 @@ const home = ({ userSession }) => {
 
   const [mounted, setMounted] = useState(false)
   const [searchResult, setSearchResult] = useState({"categories": [], "subreddits": []})
+  const [categories, setCategories] = useState<Array<any>>([])
   const [searchTerm, setSearchTerm] = useState("")
 
-//   const {data: endpoint2} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
-  // console.log(mounted)
-  // console.log("endpoint2", endpoint2)
-
-//   const {data: endpoint3} = useSWR("/api/subredditPlaylist/cscareerquestions")
-  // console.log(mounted)
-  // console.log("endpoint3.1", endpoint3)  
 
   useEffect(() => {
     const validateUserSession = async (session_id: string, email: string) => {
@@ -186,7 +180,17 @@ const home = ({ userSession }) => {
       setShowLoginPopup(true)
     }
 
-   
+    const getAllCategories = async () => {
+      if(categories.length == 0){
+        let response = await fetch("/api/search/getAll", {method: "GET"})
+        let categories = await response.json()
+        console.log("all categories", categories)
+        setCategories(categories.categories)
+      }
+    }
+    getAllCategories()
+    getQueue(userSession.email)
+
     // console.log("usersessionstore", )
     const delayDebounceFn = setTimeout(() => {
         console.log(searchTerm)
@@ -194,7 +198,6 @@ const home = ({ userSession }) => {
         search()
       }, 500)        
       return () => clearTimeout(delayDebounceFn)
-    
   }, [searchTerm]);
 
 
@@ -226,7 +229,65 @@ const home = ({ userSession }) => {
         }
     }
 
+    const SubredditTile = (props) => {
+      return (
+        
+          <div className="featured-tile-container" style={{marginRight: "2.4%"}}>
+            {/* <button className="featured-button"
+              onClick={() => {
+                Router.push("/subreddit/" + props.subredditName)
+              }}> */}
+    
+              {/* <div className="featured-tile">
+                <div className="featured-tile-overlay"> */}
+                <button style={{
+                    width: "fit-content",
+                    backgroundColor: "transparent",
+                    border: "none"}}>
+                  <div 
+                    style={{
+                      width: "152px", 
+                      height:"152px", 
+                      border:"2px solid black", 
+                      display:"flex",
+                      // paddingRight:"2.4%"
+                      }}>
+                    <div style={{ padding: "10px", width: "100%", wordWrap: "break-word" }}>{"r/" + props.subredditName}</div>
+                  </div>
+                </button>
+                {/* </div>
+              </div> */}
+            {/* </button> */}
+    
+    
+          </div>
+        )
+    }
 
+    const CategorySubreddits = ({subreddits}) => {
+      let items = []
+      for (var i = 0; i < subreddits.length; i ++){
+        items.push(<SubredditTile subredditName={subreddits[i]} />)
+      }
+      return(
+        <div style={{display: "flex"}}>
+          {items}
+        </div>
+      )
+    }
+
+    const renderExplorePage = (category, index) => {
+      console.log("category", category)
+      return(
+        <div key={index} style={{marginLeft:"5.9%", marginBottom: "7.7%"}}>
+          <h5>{category.categoryName}</h5>
+            {/* {category.subreddits.map(renderSubredditSearchResult)} */}
+            {/* <SubredditGridMenu subreddits={category.subreddits}/> */}
+            <CategorySubreddits subreddits={category.subreddits} />
+
+        </div>
+      )
+    }
   return (
 
     <Layout>
@@ -252,28 +313,27 @@ const home = ({ userSession }) => {
           }
           
         
-          <div className="heading">
+          {/* <div className="heading">
             <h1> Explore </h1>
-          </div>
-
-          {/* <div className="grid-container">
-            {featuredSubreddits === {}
-              ? <div></div>
-              : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
           </div> */}
-          <div className="search-container">
-            <input onChange={(e) => setSearchTerm(e.target.value)}></input>
+
+          <div className="search-container" style={{height: "100%"}}>
+            {/* <input onChange={(e) => setSearchTerm(e.target.value)}></input>
             <div className="search-result-category">
                 <h3>categories</h3>
-                {/* {searchResult.categories.map(renderCategorySearchResult)} */}
-                <CategoryGridMenu categories={searchResult.categories}/>
-            </div>
-            <div className="search-result-category">
-                <h3>subreddits</h3>
-                {/* {searchResult.subreddits.map(renderSubredditSearchResult)} */}
-                <SubredditGridMenu subreddits={searchResult.subreddits}/>
+                <button onClick={() => console.log(categories)}>click</button> */}
+                <div>
 
-            </div>
+                </div>
+                {categories.length == 0
+                  ? <div></div>
+                  : <div style={{height:"100%", width: "100%"}}>
+                      {categories.map(renderExplorePage)}
+                    <div style={{height: "5%"}}>
+                    </div></div> }
+                
+                
+            {/* </div> */}
           </div>
 
           {/* <div className="button-container">
@@ -287,12 +347,14 @@ const home = ({ userSession }) => {
           }
           .main-page{
             width: 86.25%;
-            height: 91.26%;
+            height: 90.5%;
             display:flex;
             flex-direction:column;
             align-content:center;
             align-text:center;
             align-self: flex-start;
+
+            
 
           }
 
@@ -335,6 +397,7 @@ const home = ({ userSession }) => {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow-y: scroll;
         }
         .search-result-category{
             padding-top: 10px;
@@ -359,7 +422,7 @@ const home = ({ userSession }) => {
   )
 }
 
-home.getInitialProps = async ({ req }) => {
+Explore.getInitialProps = async ({ req }) => {
   // console.log("req", req)
   const cookies = parseCookies(req)
 
@@ -367,7 +430,7 @@ home.getInitialProps = async ({ req }) => {
   //   if (res.status === 200) {
 
   //     var featured = await res.json()
-  //     console.log("featured in home: ", featured)
+  //     console.log("featured in Explore: ", featured)
   //     // setFeaturedSubreddits(featured);
   //   } else{
   //     var featured = {} 
@@ -383,4 +446,4 @@ home.getInitialProps = async ({ req }) => {
   };
 }
 
-export default home
+export default Explore

@@ -59,7 +59,7 @@ class AudioPlayerBar extends React.Component {
                     bg="light" 
                     fixed="bottom" 
                     style={{width: "100%", 
-                            height: "9.52%",
+                            height: "9.5%",
                             padding: "unset",
                             display: "flex",
                             justifyContent: "center"}}>

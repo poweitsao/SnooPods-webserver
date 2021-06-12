@@ -217,7 +217,7 @@ const SubListPage = ({ userSession, subListID }) => {
             }
             .main-page{
               width: 86.25%;
-              height: 91.26%;
+              height: 90.5%;
               display:flex;
               flex-direction:column;
               align-content:center;

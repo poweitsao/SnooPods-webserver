@@ -23,6 +23,9 @@ import {emptySubLists} from "../../redux/actions/SubListActions"
 import ProfilePicGroup from './components/ProfilePicGroup';
 import SearchIcon from '@material-ui/icons/Search';
 
+import NextButton from "../buttons/NextButton"
+import PrevButton from '../buttons/PrevButton';
+
 const LoginGroup = (props) => {
 
     return (
@@ -219,10 +222,13 @@ const DesktopNavBar = (props) => {
                         {/* <div
                             className="prev-next-buttons" 
                             style={{display: "flex", width:"3.8%"}}>
-                            
+                        
                         </div> */}
-                        <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white", marginRight: "12px"}}></div>
-                        <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div>
+                        <PrevButton style={{marginRight: "12px"}}/>
+                        {/* <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white", marginRight: "12px"}}></div> */}
+                        <NextButton />
+                        
+                        {/* <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div> */}
                         <SearchBar searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/>
                         
                         <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
@@ -262,7 +268,7 @@ const NavBarContent = (props) => {
 class ExploreNavbar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = props
+        this.state = {...props}
     }
 
 
@@ -270,7 +276,7 @@ class ExploreNavbar extends React.Component {
     render() {
         return (
             // dropdown customization: https://react-bootstrap.github.io/components/dropdowns/
-            <div style={{ width: "100%", height: "8.69%" }}>
+            <div style={{ width: "100%", height: "8.7%" }}>
                 {/* <div style={{ display: "flex", justifyContent: "space-around" }}> */}
                 <NavBarContent user={this.state.user} searchTerm={this.state.searchTerm} setSearchTerm={this.state.setSearchTerm} />
 
@@ -318,12 +324,12 @@ class ExploreNavbar extends React.Component {
 
 const SearchBar = (props) => {
     return(
-        <div  style={{height:"80%", paddingLeft:"4.3%", paddingRight: "10.8%"}}>
+        <div  style={{height:"80%", paddingLeft:"4.3%", paddingRight: "10.8%", width: "36%"}}>
             <div className="input-parent">
                 <SearchIcon />  
                 <input 
                     type="text" 
-                    placeholder="Search for Podcasts" 
+                    placeholder="Search" 
                     className="input-rounded" 
                     style={{borderRadius:"25px"}} 
                     
@@ -345,6 +351,7 @@ const SearchBar = (props) => {
                         -webkit-appearance: none;
                         height: 100%;
                         background-color: white;
+                        width: 100%;
                     }
                     .input-rounded {
                         border:none;    

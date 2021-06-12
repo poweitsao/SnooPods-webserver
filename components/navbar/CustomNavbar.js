@@ -355,7 +355,7 @@ class CustomNavbar extends React.Component {
     render() {
         return (
             // dropdown customization: https://react-bootstrap.github.io/components/dropdowns/
-            <div style={{ width: "100%", height: "8.69%" }}>
+            <div style={{ width: "100%", height: "8.7%" }}>
                 {/* <div style={{ display: "flex", justifyContent: "space-around" }}> */}
                 <NavBarContent user={this.state} />
 
