@@ -1,5 +1,5 @@
 import Layout from "../components/layout"
-import CustomNavbar from "../components/CustomNavbar"
+import ExploreNavbar from "../components/ExploreNavbar"
 import MusicPlayer from "../components/musicPlayer"
 import PlayableTile from "../components/PlayableTile"
 import { server } from '../config';
@@ -248,7 +248,7 @@ const home = ({ userSession }) => {
         <div className="main-page">
           {!user["validSession"]
             ? <div></div>
-            : <CustomNavbar user={user} />
+            : <ExploreNavbar user={user} />
           }
           
         
