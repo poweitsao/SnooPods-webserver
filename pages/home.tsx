@@ -223,17 +223,18 @@ const home = ({ userSession }) => {
             : <CustomNavbar user={user} />
           }
           
-        
-          <div className="heading">
-            <h1> Featured Subreddits </h1>
-          </div>
+          <div className="page-container" 
+            style={{height: "100%", overflowY: "scroll", display: "flex", justifyContent:"center"}}>
+            <div className="heading">
+              <h1> Home </h1>
+            </div>
 
-          <div className="grid-container">
-            {featuredSubreddits === {}
-              ? <div></div>
-              : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
+            {/* <div className="grid-container">
+              {featuredSubreddits === {}
+                ? <div></div>
+                : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
+            </div> */}
           </div>
-
           {/* <div className="button-container">
             <button onClick={getQueueStore}>get queueStore</button>
             <button onClick={() => {console.log("user", user)}}>get user</button>

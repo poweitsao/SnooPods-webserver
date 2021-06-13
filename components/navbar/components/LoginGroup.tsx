@@ -23,53 +23,82 @@ import {emptySubLists} from "../../../redux/actions/SubListActions"
 const LoginGroup = (props) => {
 
     return (
-        // <div>
-        //     <Nav style={{ whiteSpace: "nowrap" }}>
 
-        <Nav style={{ whiteSpace: "nowrap" }}>
-            <NavDropdown
-                id="login-dropdown"
-                title="Login"
-                // id="basic-nav-dropdown"
-                renderMenuOnMount={true}
+        <div className="login-group"
+            style={{ display: "flex", justifyContent: "flex-end", alignItems:"center", height: "100%", width: "14%"}} >
+            <Dropdown
+                id="basic-nav-dropdown"
                 alignRight
                 style={{
                     display: "flex",
                     justifyContent: "center",
                     flexDirection: "column",
                     alignItems: "flex-start",
-                    paddingLeft: props.paddingLeft
+                    color:"#5c6096"
                 }}>
+                <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
+                    <div style={{color: "white", marginRight: "20px"}}>
+                        Login
+                    </div>
+                </Dropdown.Toggle>
 
-                <GoogleLogin
-                    clientId={CLIENT_ID}
-                    render={renderProps => (
-                        <Nav>
-                            <NavDropdown.Item
-                                style={{
-                                    paddingLeft: "10px",
-                                    paddingRight: "10px",
-                                    display: "flex",
-                                    alignItems: "flex-start",
-                                    justifyContent: "space-around"
-                                }}
-                                onClick={renderProps.onClick}
-                                disabled={renderProps.disabled}>
-                                <img
-                                    src={"https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"}
-                                    width="20" height="20"></img>
-                                <div style={{ paddingLeft: "10px" }}>Sign In with Google</div>
-                            </NavDropdown.Item>
-                        </Nav>
+                <Dropdown.Menu renderOnMount={true}>
+                    <LoginComponent />
+                </Dropdown.Menu>
+            </Dropdown>
+        </div >
+    )
+}
 
-                    )}
-                    buttonText="Sign In with Google"
-                    onSuccess={onGoogleLoginSuccess}
-                    onFailure={onGoogleLoginFailed}
-                    cookiePolicy={'single_host_origin'}
-                />
-            </NavDropdown>
-        </Nav>
+type Props = {
+    onClick: (e) => void
+  }
+
+const CustomToggle = React.forwardRef<any, Props>(({ children, onClick }, ref) => (
+    <Nav.Link 
+        style={{ padding: "unset", display: "flex" }} 
+        href=""
+        ref={ref}
+        onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+        }}
+    >
+      {children}
+      
+    </Nav.Link>
+  ));
+
+
+const LoginComponent = () => {
+    return (
+        <GoogleLogin
+        clientId={CLIENT_ID}
+        render={renderProps => (
+            <Nav>
+                <NavDropdown.Item
+                    style={{
+                        paddingLeft: "10px",
+                        paddingRight: "10px",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "space-around"
+                    }}
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}>
+                    <img
+                        src={"https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"}
+                        width="20" height="20"></img>
+                    <div style={{ paddingLeft: "10px" }}>Sign In with Google</div>
+                </NavDropdown.Item>
+            </Nav>
+
+        )}
+        buttonText="Sign In with Google"
+        onSuccess={onGoogleLoginSuccess}
+        onFailure={onGoogleLoginFailed}
+        cookiePolicy={'single_host_origin'}
+    />
     )
 }
 
