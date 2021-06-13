@@ -313,7 +313,7 @@ function AudioPlayerInfo(props) {
             display:flex;
             justify-content: space-between;
             align-items:center;
-            background-color: #EAECEF;
+            background-color: #1d2460;
           }
           .center-piece{
               display:flex;
@@ -370,7 +370,7 @@ function EmptyAudioPlayerInfo(props) {
                         {/* <button onClick={testQueueStore}>test</button> */}
                     </div>
                     <div className="track-duration-info">
-                        {/* <Bar curTime={0} duration={0} onTimeUpdate={() =>{}} /> */}
+                        <Bar curTime={0} duration={0} onTimeUpdate={() =>{}} />
                     </div>
                 </div>
                 <div className="volume">
@@ -385,7 +385,7 @@ function EmptyAudioPlayerInfo(props) {
             align-items:center;
             padding-top: 10px;
             padding-bottom:10px;
-            background-color: #EAECEF;
+            background-color: #1d2460;
           }
           .center-piece{
               display:flex;

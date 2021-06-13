@@ -38,7 +38,7 @@ const FeaturedTile = (props) => {
 
           <div className="featured-tile">
             <div className="featured-tile-overlay">
-              <div style={{ padding: "10px" }}>{"r/" + props.subredditInfo.subredditName}</div>
+              <div style={{ padding: "10px"}}>{"r/" + props.subredditInfo.subredditName}</div>
             </div>
             <img className="featured-tile-img" src=""></img>
           </div>
@@ -53,7 +53,7 @@ const FeaturedTile = (props) => {
 
                 display:flex;
                 justify-content:center;
-                border: 2px solid black;
+                border: 2px solid white;
                 border-radius: 10px;
 
             }
@@ -230,6 +230,11 @@ const Explore = ({ userSession }) => {
     }
 
     const SubredditTile = (props) => {
+      const colors = ["linear-gradient(to top, #fa7f9e, #54a8d2)", 
+                      "linear-gradient(to top, #0e69f7, #542089)", 
+                      "linear-gradient(to top, #178bdc, #c266d2)"]
+      var randomColor = colors[Math.floor(Math.random()*colors.length)];
+      // console.log("randomColor", randomColor)
       return (
         
           <div className="featured-tile-container" style={{marginRight: "2.4%"}}>
@@ -243,16 +248,22 @@ const Explore = ({ userSession }) => {
                 <button style={{
                     width: "fit-content",
                     backgroundColor: "transparent",
-                    border: "none"}}>
+                    border: "none",
+                    padding: "unset"
+                  }}
+                    onClick={() => {
+                      Router.push("/subreddit/" + props.subredditName)}}
+                    >
                   <div 
                     style={{
-                      width: "152px", 
-                      height:"152px", 
-                      border:"2px solid black", 
+                      width: "125px", 
+                      height:"125px", 
+                      // border:"2px solid white", 
+                      backgroundImage: randomColor,
                       display:"flex",
                       // paddingRight:"2.4%"
                       }}>
-                    <div style={{ padding: "10px", width: "100%", wordWrap: "break-word" }}>{"r/" + props.subredditName}</div>
+                    <div style={{ padding: "10px", width: "100%", wordWrap: "break-word", color: "white" }}>{"r/" + props.subredditName}</div>
                   </div>
                 </button>
                 {/* </div>
@@ -279,8 +290,8 @@ const Explore = ({ userSession }) => {
     const renderExplorePage = (category, index) => {
       console.log("category", category)
       return(
-        <div key={index} style={{marginLeft:"5.9%", marginBottom: "7.7%"}}>
-          <h5>{category.categoryName}</h5>
+        <div key={index} style={{height: "19.6%", width:"88.6%", marginLeft:"5.9%", marginBottom: "5%"}}>
+          <h3 style={{ color: "white" }}>{category.categoryName}</h3>
             {/* {category.subreddits.map(renderSubredditSearchResult)} */}
             {/* <SubredditGridMenu subreddits={category.subreddits}/> */}
             <CategorySubreddits subreddits={category.subreddits} />
@@ -306,7 +317,7 @@ const Explore = ({ userSession }) => {
           }
          
         
-        <div className="main-page">
+        <div className="main-page" style={{backgroundColor: "#121538"}}>
           {!user["validSession"]
             ? <div></div>
             : <ExploreNavbar user={user} setSearchTerm={setSearchTerm} searchTerm={searchTerm}/>
