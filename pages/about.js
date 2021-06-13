@@ -1,6 +1,6 @@
 import Layout from "../components/layout"
 import React, { useState, useEffect } from 'react';
-import CustomNavbar from "../components/CustomNavbar"
+import CustomNavbar from "../components/navbar/CustomNavbar"
 import validateSession from "../lib/validateUserSessionOnPage"
 import { Image } from "react-bootstrap"
 
