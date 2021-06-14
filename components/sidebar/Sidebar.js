@@ -10,11 +10,23 @@ import Router from "next/router"
 import store from '../../redux/store';
 import {storeLikedTracks} from "../../redux/actions/likedTracksActions"
 import EmptySideBar from './EmptySideBar';
+import CollectionIcon from "../../resources/icons/left/collection/collection_icon.svg"
+import ExploreIcon from "../../resources/icons/left/explore/explore_icon.svg"
+import FavoriteIcon from "../../resources/icons/left/favorite/favorite_icon.svg"
+import HomeIcon from "../../resources/icons/left/home/home_icon.svg"
+import MixIcon from "../../resources/icons/left/mix/mix_icon.svg"
+import LibraryIcon from "../../resources/icons/left/library/library_icon.svg"
+import { SvgIcon } from '@material-ui/core';
 
-const MyMusicOption = ({redirect, name}) => {
+
+
+
+const MyMusicOption = ({redirect, name, icon}) => {
     return(
         <div className="my-music-option-container">
-            <div className="my-music-option-icon"></div>
+            {/* <div className="my-music-option-icon"></div> */}
+            <SvgIcon className="my-music-option-icon" component={icon} />
+
                 <Nav.Link 
                     style={{color: "#5c6096", padding: "unset", paddingLeft: "25px", paddingTop: "9.5px", paddingBottom:"9.5px", width: "100%"}} 
                     onClick={() => { Router.push(redirect) }}>
@@ -29,7 +41,7 @@ const MyMusicOption = ({redirect, name}) => {
                     padding-left: 9.4%;
                 }
                 .my-music-option-icon{
-                    background: white;
+                    color: #5c6096;
                     width: 22px;
                     height: 22px;   
                 }
@@ -258,12 +270,12 @@ const Sidebar = (props) => {
                 width: "77%"
             }}>
                 <div className="my-music">
-                    <div className="my-music-title">My Music</div>
+                    <div className="my-music-title">Dashboard</div>
 
-                    <MyMusicOption name="Home" redirect="/home"/>
-                    <MyMusicOption name="Explore" redirect="/explore"/>
-                    <MyMusicOption name="Liked Tracks" redirect={"/likedTracks/"+likedTracks.collectionID}/>
-                    <MyMusicOption name="Library" redirect="/home"/>
+                    <MyMusicOption name="Home" redirect="/home" icon={HomeIcon}/>
+                    <MyMusicOption name="Explore" redirect="/explore" icon={ExploreIcon}/>
+                    <MyMusicOption name="Liked Tracks" redirect={"/likedTracks/"+likedTracks.collectionID} icon={FavoriteIcon}/>
+                    <MyMusicOption name="Library" redirect="/home" icon={LibraryIcon}/>
 
                 </div>
                 </Nav>
