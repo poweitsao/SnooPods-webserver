@@ -258,6 +258,7 @@ const Sidebar = (props) => {
             flexDirection: "column",
             alignItems: "center",
             padding: "unset",
+            overflowY: "scroll"
             
         }}>
             <Nav style={{
