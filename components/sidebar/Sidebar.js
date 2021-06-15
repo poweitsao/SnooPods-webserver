@@ -14,7 +14,7 @@ import CollectionIcon from "../../resources/icons/left/collection/collection_ico
 import ExploreIcon from "../../resources/icons/left/explore/explore_icon.svg"
 import FavoriteIcon from "../../resources/icons/left/favorite/favorite_icon.svg"
 import HomeIcon from "../../resources/icons/left/home/home_icon.svg"
-import MixIcon from "../../resources/icons/left/mix/mix_icon.svg"
+import MixIcon from "../../resources/icons/left/mix/new_mix.svg"
 import LibraryIcon from "../../resources/icons/left/library/library_icon.svg"
 import { SvgIcon } from '@material-ui/core';
 
@@ -118,7 +118,7 @@ const Sidebar = (props) => {
         return <EmptySideBar/>
     } 
 
-    const renderCollections = (collection, index) => {
+    const oldrenderCollections = (collection, index) => {
         const collectionID = collection.collectionID
         const collectionName = collection.collectionName
         return(
@@ -181,7 +181,7 @@ const Sidebar = (props) => {
         trigger("/api/user/collections/getCollections/"+email)
     }
 
-    const renderSubLists = (subList, index) => {
+    const oldrenderSubLists = (subList, index) => {
         // console.log("params in renderSubLists", subList, index)
         // console.log(showSubListDelete)
         const subListID = subList.subscriptionListID
@@ -225,6 +225,111 @@ const Sidebar = (props) => {
                     onClick={()=> {Router.push("/subList/"+subList.subscriptionListID)}}>
                     {subListName}
                 </Nav.Link>
+            </div>
+        )
+    }
+
+    const renderCollections = (collection, index) => {
+        const collectionID = collection.collectionID
+        const collectionName = collection.collectionName
+        return(
+            <div key={collectionID} style={{
+                display: "flex",
+                alignItems: "center",
+                maxWidth: "100%",
+                paddingLeft:"9.4%", 
+                width: "100%",}}
+                //  onMouseEnter={() => {
+                //     let array = showCollectionDelete.map((item, itemIndex) => {
+                //         if (itemIndex == index){
+                //             return true
+                //         } else{
+                //             return false
+                //         }
+                //     })
+                //     setShowCollectionDelete(array)
+                // }}
+                // onMouseLeave={() => {
+                //     let array = showCollectionDelete.map((item, itemIndex) => {
+                //         return false
+                //     })
+                //     setShowCollectionDelete(array)
+                // }}
+                >
+                {/* {showCollectionDelete[index]
+                    ?<DeleteButton width={"24px"} height={"24px"} handleClick={() =>{handleDeleteCollection(email, collectionID, collectionName )}}/>
+                    :<div style={{width: "24px", height: "24px"}}></div>} */}
+                <div style={{display: "flex", justifyContent:"center", alignItems:"center", paddingBottom:"18px", width: "100%",}}>
+                    <SvgIcon component={CollectionIcon} style={{fill:"none", marginRight:"18.8%"}}/>
+                    <Nav.Link
+                        style={{ 
+                            flex: "1", 
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            color:"#5c6096",
+                            padding:"unset",
+                            fontSize:"14px"
+                            }} 
+                                            
+                        onClick={() => { Router.push("/collection/"+collection.collectionID) 
+                    }}>{collection.collectionName}</Nav.Link>
+                </div>
+            </div>
+        )
+    }
+
+    const renderSubLists = (subList, index) => {
+        const subListID = subList.subscriptionListID
+        const subListName = subList.subscriptionListName
+        return(
+            <div key={subListID} style={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                maxWidth: "100%",
+                paddingLeft:"9.4%"}}
+                //  onMouseEnter={() => {
+                //     let array = showSubListDelete.map((item, itemIndex) => {
+                //         if (itemIndex == index){
+                //             return true
+                //         } else{
+                //             return false
+                //         }
+                //     })
+                //     setshowSubListDelete(array)
+                // }}
+                // onMouseLeave={() => {
+                //     let array = showSubListDelete.map((item, itemIndex) => {
+                //         return false
+                //     })
+                //     setshowSubListDelete(array)
+                // }}
+                >
+                {/* {showSubListDelete[index]
+                    ?<DeleteButton width={"24px"} height={"24px"} handleClick={() =>{handleDeleteSubList(email, subListID, subListName )}}/>
+                    :<div style={{width: "24px", height: "24px"}}></div>} */}
+                <div style={{display: "flex", justifyContent:"center", alignItems:"center", paddingBottom:"18px", width: "100%"}}>
+                    <div style={{marginRight:"18.8%", width:"19px", height:"14px"}}>
+                        <SvgIcon component={MixIcon} style={{fill:"none"}}/>
+                    </div>
+                    <Nav.Link
+                        style={{ 
+                            flex: "1", 
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            "color": "#5c6096",
+                            padding:"unset",
+                            fontSize:"14px"
+
+                            }} 
+                                            
+                        // onClick={() => { Router.push("/subList/"+subList.subListID) 
+                        onClick={()=> {Router.push("/subList/"+subList.subscriptionListID)}}>
+                        {subListName}
+                    </Nav.Link>
+                </div>
             </div>
         )
     }
@@ -286,18 +391,21 @@ const Sidebar = (props) => {
                     alignItems: "flex-start",
                     maxWidth: "100%", 
                     color: "#5c6096",
-                    marginTop: "7vh"
+                    marginTop: "7vh",
+                    width: "77%"
                 }}>
-                    <div className="my-playlists">
+                    <div className="my-playlists" style={{width: "100%"}}>
                         <div className="title-container">
-                            <div style={{padding: "8px", paddingRight: "3px"}}>Your Collections</div>
-                            <AddButton handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
+                            <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"24px", color:"white"}}>Collections</div>
+                            <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
                         </div>
-                        {collections?.map(renderCollections)}
+                        {/* {collections?.map(renderCollections)}
                         <div className="title-container">
                             <div style={{padding: "8px", paddingRight: "3px"}}>Daily Mixes</div>
                             <AddButton handleClick={() => handleAddSubList(props.user.email, "New sublist")}/>
                         </div>
+                        {subLists?.map(renderSubLists)} */}
+                        {collections?.map(renderCollections)}
                         {subLists?.map(renderSubLists)}
                     </div>
                 </Nav>
@@ -309,7 +417,6 @@ const Sidebar = (props) => {
                         flex-direction: column;
                         justify-content: flex-start;
                         width: 100%;
-                        
                     }
                     .my-music-title{
                         font-size: 24px;
@@ -322,6 +429,7 @@ const Sidebar = (props) => {
                     .title-container{
                         display: flex;
                         align-items: center;
+                        margin-bottom: 10.9%;
                     }
                     .nav-link{
                         color: #5c6096;
