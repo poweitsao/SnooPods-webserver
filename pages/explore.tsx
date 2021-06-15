@@ -237,7 +237,7 @@ const Explore = ({ userSession }) => {
       // console.log("randomColor", randomColor)
       return (
         
-          <div className="featured-tile-container" style={{marginRight: "2.4%"}}>
+          <div key={props.subredditName} className="featured-tile-container" style={{marginRight: "2.4%"}}>
             {/* <button className="featured-button"
               onClick={() => {
                 Router.push("/subreddit/" + props.subredditName)
@@ -278,7 +278,7 @@ const Explore = ({ userSession }) => {
     const CategorySubreddits = ({subreddits}) => {
       let items = []
       for (var i = 0; i < subreddits.length; i ++){
-        items.push(<SubredditTile subredditName={subreddits[i]} />)
+        items.push(<SubredditTile key={i} subredditName={subreddits[i]} />)
       }
       return(
         <div style={{display: "flex"}}>
@@ -290,7 +290,7 @@ const Explore = ({ userSession }) => {
     const renderExplorePage = (category, index) => {
       console.log("category", category)
       return(
-        <div key={index} style={{height: "19.6%", width:"88.6%", marginLeft:"5.9%", marginBottom: "5%"}}>
+        <div key={category.categoryName} style={{height: "19.6%", width:"88.6%", marginLeft:"5.9%", marginBottom: "5%"}}>
           <h3 style={{ color: "white" }}>{category.categoryName}</h3>
             {/* {category.subreddits.map(renderSubredditSearchResult)} */}
             {/* <SubredditGridMenu subreddits={category.subreddits}/> */}
