@@ -347,7 +347,7 @@ const Sidebar = (props) => {
         useEffect(()=> {
             if (isCurrentTab && color !== "white"){
                 setCurrIcon(<div style={{marginRight:"18.8%", width: "19px", height: "14px"}}>
-                                <SvgIcon component={MixIconOnClick} style={{fill:"none", marginRight:"18.8%", width: "19px", height: "14px"}}/>
+                                <SvgIcon component={MixIconOnClick} style={{fill:"none"}}/>
                             </div>)
                 setColor("white")
             }
@@ -365,7 +365,7 @@ const Sidebar = (props) => {
                 onClick={() => {
                     // if(!isCurrentTab){
                     setCurrIcon(<div style={{marginRight:"18.8%", width: "19px", height: "14px"}}>
-                                    <SvgIcon component={MixIconOnClick} style={{fill:"none", marginRight:"18.8%", width: "19px", height: "14px"}}/>
+                                    <SvgIcon component={MixIconOnClick} style={{fill:"none"}}/>
                                 </div>)
                     setColor("white")
                 }}
