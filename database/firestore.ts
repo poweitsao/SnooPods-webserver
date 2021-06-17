@@ -947,7 +947,8 @@ export async function searchCategoriesAndSubreddits(query: string){
             if( categoryName.search(query) >= 0){
                 categories.push({
                     categoryName: categoryData.categoryName, 
-                    categoryID: categoryData.categoryID
+                    categoryID: categoryData.categoryID,
+                    subreddits: categoryData.subreddits
                 })
             }
 

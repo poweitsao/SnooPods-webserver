@@ -222,7 +222,15 @@ const Explore = ({ userSession }) => {
             )
             let searchQueryResult = await searchQueryResponse.json()
             console.log("searchQueryResult", searchQueryResult)
-            setSearchResult(searchQueryResult)
+            // setSearchResult(searchQueryResult)
+            if (searchQueryResult.subreddits.length > 0){
+              searchQueryResult.categories.push({
+                categoryName: "Individual Subreddits",
+                categoryID: "123", 
+                subreddits: searchQueryResult.subreddits
+              })
+            }
+            setCategories(searchQueryResult.categories)
         } else if (searchTerm == ""){
             setSearchResult({"categories": [], "subreddits": []})
 
@@ -329,6 +337,7 @@ const Explore = ({ userSession }) => {
           </div> */}
 
           <div className="search-container" style={{height: "100%"}}>
+           
             {/* <input onChange={(e) => setSearchTerm(e.target.value)}></input>
             <div className="search-result-category">
                 <h3>categories</h3>
@@ -338,7 +347,7 @@ const Explore = ({ userSession }) => {
                 </div>
                 {categories.length == 0
                   ? <div></div>
-                  : <div style={{height:"100%", width: "100%"}}>
+                  : <div style={{height:"100%", width: "100%", marginTop: "100px"}}>
                       {categories.map(renderExplorePage)}
                     <div style={{height: "5%"}}>
                     </div></div> }
