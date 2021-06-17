@@ -74,7 +74,7 @@ const MyMusicOption = ({redirect, name, icon, onClickIcon}) => {
             }
 
                 <Nav.Link 
-                    style={{color: textColor, padding: "unset", paddingLeft: "25px", paddingTop: "9.5px", paddingBottom:"9.5px", width: "100%"}} 
+                    style={{color: textColor, padding: "unset", paddingLeft: "18.8%", paddingTop: "9.5px", paddingBottom:"9.5px", width: "100%"}} 
                     onClick={() => { Router.push(redirect) }}>
                     {name}
                 </Nav.Link>
@@ -460,7 +460,8 @@ const Sidebar = (props) => {
             flexDirection: "column",
             alignItems: "center",
             padding: "unset",
-            overflowY: "scroll"
+            overflowY: "scroll",
+            fontFamily:"Lato, sans-serif"
             
         }}>
             <Nav style={{
