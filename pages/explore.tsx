@@ -311,7 +311,8 @@ const Explore = ({ userSession }) => {
 
     <Layout>
       <div>
-        <LoginPopup show={showLoginPopup}
+        <LoginPopup 
+          show={showLoginPopup}
           onHide={() => {
             setShowLoginPopup(false);
             Router.push("/")
