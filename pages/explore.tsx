@@ -24,6 +24,8 @@ import {UserSession} from "../ts/interfaces"
 import CategoryGridMenu from "../components/CategoryGridMenu";
 import SubredditGridMenu from "../components/SubredditGridMenu";
 import EmptySideBar from "../components/sidebar/EmptySideBar";
+import useWindowDimensions from "../components/hooks/useWindowDimensions"
+
 
 
 
@@ -238,6 +240,8 @@ const Explore = ({ userSession }) => {
     }
 
     const SubredditTile = (props) => {
+      const { height, width } = useWindowDimensions();
+      const tileSideLength = width * 0.079
       const colors = ["linear-gradient(to top, #fa7f9e, #54a8d2)", 
                       "linear-gradient(to top, #0e69f7, #542089)", 
                       "linear-gradient(to top, #178bdc, #c266d2)"]
@@ -245,7 +249,7 @@ const Explore = ({ userSession }) => {
       // console.log("randomColor", randomColor)
       return (
         
-          <div key={props.subredditName} className="featured-tile-container" style={{marginRight: "2.4%"}}>
+          <div key={props.subredditName} className="featured-tile-container" style={{marginRight: "2.4%", width: tileSideLength, height: "100%"}}>
             {/* <button className="featured-button"
               onClick={() => {
                 Router.push("/subreddit/" + props.subredditName)
@@ -254,24 +258,36 @@ const Explore = ({ userSession }) => {
               {/* <div className="featured-tile">
                 <div className="featured-tile-overlay"> */}
                 <button style={{
-                    width: "fit-content",
+                    width: "100%",
+                    height: "100%",
                     backgroundColor: "transparent",
                     border: "none",
-                    padding: "unset"
+                    padding: "unset",
+
                   }}
                     onClick={() => {
                       Router.push("/subreddit/" + props.subredditName)}}
                     >
                   <div 
                     style={{
-                      width: "125px", 
-                      height:"125px", 
+                      width: "100%", 
+                      height:"100%", 
                       // border:"2px solid white", 
                       backgroundImage: randomColor,
                       display:"flex",
                       // paddingRight:"2.4%"
                       }}>
-                    <div style={{ padding: "10px", width: "100%", wordWrap: "break-word", color: "white" }}>{"r/" + props.subredditName}</div>
+                    <div 
+                      style={{ 
+                          padding: "10px", 
+                          width: "100%", 
+                          height: "100%", 
+                          wordWrap: "break-word", 
+                          color: "white",
+                          fontSize:"1vw",
+                          textAlign: "center" }}>
+                            {"r/" + props.subredditName}
+                    </div>
                   </div>
                 </button>
                 {/* </div>
@@ -284,12 +300,14 @@ const Explore = ({ userSession }) => {
     }
 
     const CategorySubreddits = ({subreddits}) => {
+      const { height, width } = useWindowDimensions();
+      const tileSideLength = width * 0.079
       let items = []
       for (var i = 0; i < subreddits.length; i ++){
         items.push(<SubredditTile key={i} subredditName={subreddits[i]} />)
       }
       return(
-        <div style={{display: "flex"}}>
+        <div style={{display: "flex", height: tileSideLength}}>
           {items}
         </div>
       )
@@ -299,7 +317,7 @@ const Explore = ({ userSession }) => {
       console.log("category", category)
       return(
         <div key={category.categoryName} style={{height: "19.6%", width:"88.6%", marginLeft:"5.9%", marginBottom: "5%"}}>
-          <h3 style={{ color: "white" }}>{category.categoryName}</h3>
+          <h3 style={{ color: "white", fontSize: "24px", fontFamily:"Roboto", fontWeight:"bold", paddingBottom: "15px" }}>{category.categoryName}</h3>
             {/* {category.subreddits.map(renderSubredditSearchResult)} */}
             {/* <SubredditGridMenu subreddits={category.subreddits}/> */}
             <CategorySubreddits subreddits={category.subreddits} />

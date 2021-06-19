@@ -61,19 +61,33 @@ const LoginPopup = (props) => {
             <Modal.Body 
                 style={{ display: "flex", justifyContent: "center", width: width * 0.6, height: height *0.58, maxWidth: width, padding: "unset" }}>
                 <div style={{display: "flex", justifyContent:"center", alignItems: "center", width: "100%", height: "100%"}}>
-                    <div style={{height: "100%", width: "50%", backgroundColor: "#d9d9d9"}}>
-                        <Image src={logo}/>
+                    <div 
+                        style={{
+                            height: "100%", 
+                            width: "50%", 
+                            backgroundColor: "#d9d9d9",
+                            display: "flex",
+                            justifyContent:"center",
+                            alignItems:"center"
+                        }}
+                    >
+                        <div 
+                        style={{display: "flex", alignItems: "center", justifyContent:"center", flexDirection: "column"}}>
+                            <Image src={logo} style={{width: "210.4px", height: "91.2px"}}/>
+                            <h1>Snoopods</h1>
+                        </div>
                     </div>
 
-                    <div style={{height: "100%", width: "50%", backgroundColor: "#162048"}}>
-
-                    </div>
-                        {/* <GoogleLogin
+                    <div style={{height: "100%", width: "50%", backgroundColor: "#162048", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
+                        <h2 bold style={{color: "white", paddingBottom: "4.8%"}}>Welcome</h2>
+                        <GoogleLogin
                             clientId={CLIENT_ID}
-                            buttonText="Sign In with Google"
+                            buttonText="Continue with Google"
                             onSuccess={onGoogleLoginSuccess}
                             onFailure={onGoogleLoginFailed}
-                            cookiePolicy={'single_host_origin'} /> */}
+                            cookiePolicy={'single_host_origin'} />
+                    </div>
+                        
                 </div>
             </Modal.Body>
             {/* <Modal.Footer>
