@@ -11,7 +11,7 @@ export default function Replay(props) {
 
     return (
         
-            <button className="add-button" onClick={() => handleClick()}>
+            <button className="add-button" style={{padding: "unset"}} onClick={() => handleClick()}>
                 
                 {/* <div className="circle-icon">
 

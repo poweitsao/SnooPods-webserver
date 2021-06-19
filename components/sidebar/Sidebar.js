@@ -74,7 +74,7 @@ const MyMusicOption = ({redirect, name, icon, onClickIcon}) => {
             }
 
                 <Nav.Link 
-                    style={{color: textColor, padding: "unset", paddingLeft: "18.8%", paddingTop: "9.5px", paddingBottom:"9.5px", width: "100%"}} 
+                    style={{color: textColor, padding: "unset", paddingLeft: "15.25%%", paddingTop: "9.5px", paddingBottom:"9.5px", width: "100%"}} 
                     onClick={() => { Router.push(redirect) }}>
                     {name}
                 </Nav.Link>
@@ -83,12 +83,14 @@ const MyMusicOption = ({redirect, name, icon, onClickIcon}) => {
                     display: flex;
                     align-items: center;  
                     font-family: Lato, sans-serif;
-                    font-size: 14px;
+                    font-size: 0.729vw;
                     padding-left: 9.4%;
                 }
                 .my-music-option-icon{
                     width: 22px;
                     height: 22px;   
+                    fill: none;
+                    margin-right: 13.5%;
                 }
             `}</style>
         </div>
@@ -191,8 +193,8 @@ const Sidebar = (props) => {
                 }}
                 >
                 {showCollectionDelete[index]
-                    ?<DeleteButton width={"24px"} height={"24px"} handleClick={() =>{handleDeleteCollection(email, collectionID, collectionName )}}/>
-                    :<div style={{width: "24px", height: "24px"}}></div>}
+                    ?<DeleteButton width={"1.25vw"} height={"1.25vw"} handleClick={() =>{handleDeleteCollection(email, collectionID, collectionName )}}/>
+                    :<div style={{width: "1.25vw", height: "1.25vw"}}></div>}
                     
                 <Nav.Link
                     style={{ 
@@ -256,8 +258,8 @@ const Sidebar = (props) => {
                 }}
                 >
                 {showSubListDelete[index]
-                    ?<DeleteButton width={"24px"} height={"24px"} handleClick={() =>{handleDeleteSubList(email, subListID, subListName )}}/>
-                    :<div style={{width: "24px", height: "24px"}}></div>}
+                    ?<DeleteButton width={"1.25vw"} height={"1.25vw"} handleClick={() =>{handleDeleteSubList(email, subListID, subListName )}}/>
+                    :<div style={{width: "1.25vw", height: "1.25vw"}}></div>}
                     
                 <Nav.Link
                     style={{ 
@@ -280,10 +282,10 @@ const Sidebar = (props) => {
         const router = useRouter()
         const isCurrentTab = router.asPath == "/collection/"+collectionID
         var [color, setColor] = useState("#5c6096")
-        var [currIcon, setCurrIcon] = useState(<SvgIcon component={CollectionIcon} style={{fill:"none", marginRight:"18.8%"}}/>)
+        var [currIcon, setCurrIcon] = useState(<SvgIcon component={CollectionIcon} style={{fill:"none", marginRight:"13.5%"}}/>)
         useEffect(()=> {
             if (isCurrentTab && color !== "white"){
-                setCurrIcon(<SvgIcon component={CollectionIconOnClick} style={{fill:"none", marginRight:"18.8%"}}/>)
+                setCurrIcon(<SvgIcon component={CollectionIconOnClick} style={{fill:"none", marginRight:"13.5%"}}/>)
                 setColor("white")
             }
         }, [isCurrentTab])
@@ -299,7 +301,7 @@ const Sidebar = (props) => {
                 }}
                 onClick={() => {
                     // if(!isCurrentTab){
-                    setCurrIcon(<SvgIcon component={CollectionIconOnClick} style={{fill:"none", marginRight:"18.8%"}}/>)
+                    setCurrIcon(<SvgIcon component={CollectionIconOnClick} style={{fill:"none", marginRight:"13.5%"}}/>)
                     setColor("white")
                 }}
                 
@@ -320,7 +322,7 @@ const Sidebar = (props) => {
                             whiteSpace: "nowrap",
                             color: color,
                             padding:"unset",
-                            fontSize:"14px"
+                            fontSize:"0.729vw"
                         }} 
                                             
                         onClick={() => { Router.push("/collection/" + collectionID) 
@@ -343,10 +345,10 @@ const Sidebar = (props) => {
         const router = useRouter()
         const isCurrentTab = router.asPath == "/subList/"+subListID
         var [color, setColor] = useState("#5c6096")
-        var [currIcon, setCurrIcon] = useState(<div style={{marginRight:"18.8%", width: "19px", height: "14px"}}><SvgIcon component={MixIcon} style={{fill:"none"}}/></div>)
+        var [currIcon, setCurrIcon] = useState(<div style={{marginRight:"13.5%", width: "19px", height: "0.729vw"}}><SvgIcon component={MixIcon} style={{fill:"none"}}/></div>)
         useEffect(()=> {
             if (isCurrentTab && color !== "white"){
-                setCurrIcon(<div style={{marginRight:"18.8%", width: "19px", height: "14px"}}>
+                setCurrIcon(<div style={{marginRight:"13.5%", width: "19px", height: "0.729vw"}}>
                                 <SvgIcon component={MixIconOnClick} style={{fill:"none"}}/>
                             </div>)
                 setColor("white")
@@ -364,7 +366,7 @@ const Sidebar = (props) => {
                 }}
                 onClick={() => {
                     // if(!isCurrentTab){
-                    setCurrIcon(<div style={{marginRight:"18.8%", width: "19px", height: "14px"}}>
+                    setCurrIcon(<div style={{marginRight:"13.5%", width: "19px", height: "0.729vw"}}>
                                     <SvgIcon component={MixIconOnClick} style={{fill:"none"}}/>
                                 </div>)
                     setColor("white")
@@ -387,7 +389,7 @@ const Sidebar = (props) => {
                             whiteSpace: "nowrap",
                             color: color,
                             padding:"unset",
-                            fontSize:"14px"
+                            fontSize:"0.729vw"
                         }} 
                                             
                         onClick={() => { Router.push("/subList/" + subListID) 
@@ -470,11 +472,11 @@ const Sidebar = (props) => {
                 alignItems: "flex-start",
                 maxWidth: "100%", 
                 color: "#5c6096",
-                marginTop: "5vh",
+                marginTop: "10.5vh",
                 width: "77%"
             }}>
                 <div className="my-music">
-                    <div className="my-music-title">Dashboard</div>
+                    <div className="my-music-title">My Music</div>
 
                     <MyMusicOption name="Home" redirect="/home" icon={HomeIcon} onClickIcon={HomeIconOnClick}/>
                     <MyMusicOption name="Explore" redirect="/explore" icon={ExploreIcon} onClickIcon={ExploreIconOnClick}/>
@@ -489,13 +491,15 @@ const Sidebar = (props) => {
                     alignItems: "flex-start",
                     maxWidth: "100%", 
                     color: "#5c6096",
-                    marginTop: "3vh",
+                    marginTop: "7vh",
                     width: "77%"
                 }}>
                     <div className="my-playlists" style={{width: "100%"}}>
                         <div className="title-container">
-                            <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.3em", color:"white"}}>Collections</div>
-                            <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
+                            <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.25vw", color:"white"}}>Collections</div>
+                            <div style={{width: "fit-content", height: "fit-content", paddingLeft: "7.2%"}}>
+                                <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddSubList(props.user.email, "New Mix")}/>
+                            </div>                        
                         </div>
                         {/* {collections?.map(renderCollections)}
                         <div className="title-container">
@@ -514,13 +518,15 @@ const Sidebar = (props) => {
                     alignItems: "flex-start",
                     maxWidth: "100%", 
                     color: "#5c6096",
-                    marginTop: "3vh",
+                    marginTop: "7vh",
                     width: "77%"
                 }}>
                     <div className="my-playlists" style={{width: "100%"}}>
                         <div className="title-container">
-                            <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.3em", color:"white"}}>Mixes</div>
-                            <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddSubList(props.user.email, "New Mix")}/>
+                            <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.25vw", color:"white"}}>Mixes</div>
+                            <div style={{width: "fit-content", height: "fit-content", paddingLeft: "7.2%"}}>
+                                <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddSubList(props.user.email, "New Mix")}/>
+                            </div>
                         </div>
                         {subLists?.map(renderSubLists)}
                     </div>
@@ -536,17 +542,22 @@ const Sidebar = (props) => {
                         width: 100%;
                     }
                     .my-music-title{
-                        font-size: 1.3em;
-                        font-family: Lato, sans-serif;
+                        font-size: 1.25vw;
+                        font-weight: bold;
+                        font-stretch: normal;
+                        font-style: normal;
+                        line-height: normal;
+                        letter-spacing: 1px;
+                        font-family: Lato;
                         color: white;
-                        margin-bottom: 2vh;
+                        margin-bottom: 13.8%;
                         padding-left: 9.4%; 
 
                     }
                     .title-container{
                         display: flex;
                         align-items: center;
-                        margin-bottom: 10.9%;
+                        margin-bottom: 13.8%;
                     }
                     .nav-link{
                         color: #5c6096;

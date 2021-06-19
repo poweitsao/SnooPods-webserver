@@ -242,6 +242,7 @@ const Explore = ({ userSession }) => {
     const SubredditTile = (props) => {
       const { height, width } = useWindowDimensions();
       const tileSideLength = width * 0.079
+      
       const colors = ["linear-gradient(to top, #fa7f9e, #54a8d2)", 
                       "linear-gradient(to top, #0e69f7, #542089)", 
                       "linear-gradient(to top, #178bdc, #c266d2)"]
@@ -249,7 +250,7 @@ const Explore = ({ userSession }) => {
       // console.log("randomColor", randomColor)
       return (
         
-          <div key={props.subredditName} className="featured-tile-container" style={{marginRight: "2.4%", width: tileSideLength, height: "100%"}}>
+          <div key={props.subredditName} className="featured-tile-container" style={{marginRight: props.marginRight, width: tileSideLength, height: tileSideLength}}>
             {/* <button className="featured-button"
               onClick={() => {
                 Router.push("/subreddit/" + props.subredditName)
@@ -275,6 +276,7 @@ const Explore = ({ userSession }) => {
                       // border:"2px solid white", 
                       backgroundImage: randomColor,
                       display:"flex",
+                      borderRadius:"5px"
                       // paddingRight:"2.4%"
                       }}>
                     <div 
@@ -304,7 +306,12 @@ const Explore = ({ userSession }) => {
       const tileSideLength = width * 0.079
       let items = []
       for (var i = 0; i < subreddits.length; i ++){
-        items.push(<SubredditTile key={i} subredditName={subreddits[i]} />)
+        if (i == subreddits.length - 1){
+          items.push(<SubredditTile key={i} subredditName={subreddits[i]} marginRight={"0%"} />)
+
+        } else{
+          items.push(<SubredditTile key={i} subredditName={subreddits[i]} marginRight={"2.4%"} />)
+        }
       }
       return(
         <div style={{display: "flex", height: tileSideLength}}>
@@ -315,9 +322,10 @@ const Explore = ({ userSession }) => {
 
     const renderExplorePage = (category, index) => {
       console.log("category", category)
+      
       return(
-        <div key={category.categoryName} style={{height: "19.6%", width:"88.6%", marginLeft:"5.9%", marginBottom: "5%"}}>
-          <h3 style={{ color: "white", fontSize: "24px", fontFamily:"Roboto", fontWeight:"bold", paddingBottom: "15px" }}>{category.categoryName}</h3>
+        <div key={category.categoryName} style={{ width:"88.6%", marginLeft:"5.9%", marginBottom: "4.85%"}}>
+          <h3 style={{ color: "white", fontSize: "1.25vw", fontFamily:"Roboto", fontWeight:"bold",letterSpacing: "1px", margin:"unset", marginBottom: "2.19%" }}>{category.categoryName}</h3>
             {/* {category.subreddits.map(renderSubredditSearchResult)} */}
             {/* <SubredditGridMenu subreddits={category.subreddits}/> */}
             <CategorySubreddits subreddits={category.subreddits} />

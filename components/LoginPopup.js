@@ -79,7 +79,7 @@ const LoginPopup = (props) => {
                     </div>
 
                     <div style={{height: "100%", width: "50%", backgroundColor: "#162048", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
-                        <h2 bold style={{color: "white", paddingBottom: "4.8%"}}>Welcome</h2>
+                        <h2 style={{color: "white", paddingBottom: "4.8%", fontWeight: "bold", letterSpacing: "1px"}}>Welcome</h2>
                         <GoogleLogin
                             clientId={CLIENT_ID}
                             buttonText="Continue with Google"
