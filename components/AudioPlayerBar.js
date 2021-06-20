@@ -357,8 +357,8 @@ function EmptyAudioPlayerInfo(props) {
         console.log("currStore", queueCurrStore)
     }
     return (
-        <div>
-            <div className="player" style={{ width: "100%" }}>
+        <div style={{height: "100%"}}>
+            <div className="player" style={{ width: "100%", height: "100%" }}>
                 <div className="track-info">
                     <Track trackName={""} subreddit={""} />
                 </div>

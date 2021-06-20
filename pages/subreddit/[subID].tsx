@@ -46,6 +46,9 @@ import SubredditTableList from "../../components/SubredditTableList"
 import SubredditPlaylistOptionsButton from "../../components/buttons/SubredditPlaylistOptionsButton";
 import EmptySideBar from "../../components/sidebar/EmptySideBar";
 
+import SimpleBarReact from 'simplebar-react';
+import "simplebar/src/simplebar.css";
+
 function isEmpty(obj: Object) {
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) {
@@ -119,7 +122,6 @@ const Subreddit = ({ userSession, playlist }) => {
       let result = await getTracksResponse.json()
       console.log("getTracksTest result", result)
     }
-
     useEffect(() => {
         setMounted(true)
       }, [])
@@ -163,7 +165,12 @@ const Subreddit = ({ userSession, playlist }) => {
       </div>
     );
   };
+
+
+
   const { height, width } = useWindowDimensions();
+  const scrollableNodeRef = React.createRef();
+
   return (
     <Layout>
       <div>
@@ -179,24 +186,38 @@ const Subreddit = ({ userSession, playlist }) => {
           : <Sidebar user={user}></Sidebar>}
         <div className="main-page">
           {isEmpty(user) ? <div></div> : <CustomNavbar user={user} />}
+          <SimpleBarReact style={{
+              height: "91.3%",  
+              display: "flex",
+              flexDirection:"column",
+              justifyContent: "nowrap",
+              alignItems: "center"
+            }} 
+            id="simple-bar"
+            scrollableNodeProps={{ ref: scrollableNodeRef }}
+          >
+            
+            {/* <div className="page-body" id="page-body"> */}
+              {playlist == undefined ? (
+                <div></div>
+              ) : (
+                <SubredditInfo albumCover={playlist["pictureURL"]} playlist={playlist} />
+              )}
+              {playlist == undefined ? (
+                <div></div>
+              ) : (
+                <Provider store={store}>
+                  {/* <button onClick={() => console.log("scrollableNodeRef", scrollableNodeRef.current)}>click</button> */}
 
-          <div className="page-body" id="page-body">
-            {playlist == undefined ? (
-              <div></div>
-            ) : (
-              <SubredditInfo albumCover={playlist["pictureURL"]} playlist={playlist} />
-            )}
-            {playlist == undefined ? (
-              <div></div>
-            ) : (
-              <Provider store={store}>
-                <SubredditTableList playlist={playlist} />
-              </Provider>
-              // <div></div>
-              // <Tablelist playlist={playlist} />
+                  <SubredditTableList playlist={playlist} scrollableTarget={scrollableNodeRef} hi="hi"/>
+                </Provider>
+                // <div></div>
+                // <Tablelist playlist={playlist} />
 
-            )}
-          </div>
+              )}
+            {/* </div> */}
+          </SimpleBarReact>
+
         </div>
         <Provider store={store}>
           <AudioPlayerBarContainer />
@@ -209,7 +230,7 @@ const Subreddit = ({ userSession, playlist }) => {
             justify-content:nowrap;
             align-items:center;
             
-            overflow-y: scroll;
+            
             }
             .main-page{
               width: 86.25%;

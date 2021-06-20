@@ -57,6 +57,15 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 const SubredditTableList = (props) => {
   const { playlist }:
     { playlist: any} = props
+  
+  const {scrollableTarget} :{ scrollableTarget: any}= props
+  const {hi} = props
+
+  console.log("playlist in SubredditTableList", playlist)
+
+  console.log("scrollableTarget in SubredditTableList", scrollableTarget.current)
+  console.log("hi in SubredditTableList", hi)
+
 
   const {email} = props.userSessionInfo
 
@@ -260,13 +269,44 @@ const SubredditTableList = (props) => {
 
   return (
     <div style={{ width: "100%" }}>
-    <InfiniteScroll
-    dataLength={tracks.length}
-    next={loadMore}
-    hasMore={trackIDIndex < trackIDs.length}
-    loader={loading}
-    scrollableTarget="page-body"
-    style={{ width: "100%" }}>
+    <button onClick={() => console.log("scrollableTarget.current", scrollableTarget)}>click</button>
+    {
+      scrollableTarget.current 
+      ? <InfiniteScroll
+          dataLength={tracks.length}  
+          next={loadMore}
+          hasMore={trackIDIndex < trackIDs.length}
+          loader={loading}
+          scrollableTarget={scrollableTarget.current}
+          style={{ width: "100%" }}>
+          <Table responsive hover>
+            {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+            <thead>
+              <tr>
+                <td></td>
+                <td>Title</td>
+                <td></td>
+                <td>Duration</td>
+                <td>Date posted</td>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                tracks.map((trackKey, index) => {
+                  return renderTrackOnTable(trackKey, index, { likedTracks: LikedTracks, likedTracksCollectionID: likedTracksCollectionID })
+                })
+              }
+              
+            </tbody>
+          </Table>
+          {/* <button onClick={() => {console.log(trackIDIndex, trackIDs.length)}}>has more?</button> */}
+      </InfiniteScroll>
+
+
+      : <div></div>
+
+    }
+    
     {/* <InfiniteScroll
       initialLoad={true}
       loadMore={loadMore}
@@ -278,31 +318,7 @@ const SubredditTableList = (props) => {
 
         {/* <ListGroup variant="flush"></ListGroup> */}
 
-        <Table responsive hover>
-          {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
-          <thead>
-            <tr>
-              <td></td>
-              <td>Title</td>
-              <td></td>
-              <td>Duration</td>
-              <td>Date posted</td>
-            </tr>
-          </thead>
-          <tbody>
-            
-          
-            
-            {
-              tracks.map((trackKey, index) => {
-                return renderTrackOnTable(trackKey, index, { likedTracks: LikedTracks, likedTracksCollectionID: likedTracksCollectionID })
-              })
-            }
-            
-          </tbody>
-        </Table>
-        {/* <button onClick={() => {console.log(trackIDIndex, trackIDs.length)}}>has more?</button> */}
-    </InfiniteScroll>
+        
     </div>
 
 

@@ -344,12 +344,11 @@ const QueuePageBody = (props) => {
               </Provider>
               <style>
                 {`.page-body{
-                display:flex;
-                flex-direction:column;
-                justify-content:nowrap;
-                align-items:center;
-                
-                overflow-y: scroll;
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:nowrap;
+                    align-items:center;
+                    overflow-y:scroll;
                 }`}
               </style>
         </div>

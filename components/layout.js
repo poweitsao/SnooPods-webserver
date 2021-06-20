@@ -5,7 +5,7 @@ import Sidebar from "./sidebar/Sidebar"
 import useSWR, { SWRConfig } from 'swr'
 import fetch from "isomorphic-unfetch"
 // import withRedux from "next-redux-wrapper"
-
+import SimpleBar from 'simplebar-react';
 const Layout = (props) => (
     
         
@@ -15,6 +15,12 @@ const Layout = (props) => (
                 <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
                 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
                 <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet"/>
+                <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700;1,700&family=Roboto:wght@700&display=swap" rel="stylesheet"></link>
+                <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet"></link>
+                <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,700;1,700&family=Roboto:wght@700&display=swap" rel="stylesheet"></link>
+
+                {/* <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:wght@700&display=swap" rel="stylesheet"></link>
+                <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"></link> */}
             </Head>
             <SWRConfig value={{fetcher: (url) => fetch(url).then((r) => r.json())}}>
                 

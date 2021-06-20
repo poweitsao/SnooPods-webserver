@@ -41,6 +41,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
+    "simplebar-react": "^2.3.4",
     "swr": "^0.2.3",
     "trim-newlines": "^4.0.1",
     "tslint": "^6.1.3",

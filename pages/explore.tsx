@@ -26,7 +26,8 @@ import SubredditGridMenu from "../components/SubredditGridMenu";
 import EmptySideBar from "../components/sidebar/EmptySideBar";
 import useWindowDimensions from "../components/hooks/useWindowDimensions"
 
-
+import SimpleBarReact from 'simplebar-react';
+import "simplebar/src/simplebar.css";
 
 
 const FeaturedTile = (props) => {
@@ -325,7 +326,17 @@ const Explore = ({ userSession }) => {
       
       return(
         <div key={category.categoryName} style={{ width:"88.6%", marginLeft:"5.9%", marginBottom: "4.85%"}}>
-          <h3 style={{ color: "white", fontSize: "1.25vw", fontFamily:"Roboto", fontWeight:"bold",letterSpacing: "1px", margin:"unset", marginBottom: "2.19%" }}>{category.categoryName}</h3>
+          <p 
+            style={{ 
+              color: "white", 
+              fontSize: "1.25vw", 
+              fontFamily:"Roboto", 
+              fontWeight: "bold",
+              // letterSpacing: "1px", 
+              margin:"unset", 
+              marginBottom: "2.19%" 
+              }}
+            >{category.categoryName}</p>
             {/* {category.subreddits.map(renderSubredditSearchResult)} */}
             {/* <SubredditGridMenu subreddits={category.subreddits}/> */}
             <CategorySubreddits subreddits={category.subreddits} />
@@ -362,26 +373,27 @@ const Explore = ({ userSession }) => {
           {/* <div className="heading">
             <h1> Explore </h1>
           </div> */}
+          <SimpleBarReact style={{height: "91.3%"}}>
+            <div className="search-container" style={{height: "100%"}} >
+            
+              {/* <input onChange={(e) => setSearchTerm(e.target.value)}></input>
+              <div className="search-result-category">
+                  <h3>categories</h3>
+                  <button onClick={() => console.log(categories)}>click</button> */}
+                  <div>
 
-          <div className="search-container" style={{height: "100%"}}>
-           
-            {/* <input onChange={(e) => setSearchTerm(e.target.value)}></input>
-            <div className="search-result-category">
-                <h3>categories</h3>
-                <button onClick={() => console.log(categories)}>click</button> */}
-                <div>
-
-                </div>
-                {categories.length == 0
-                  ? <div></div>
-                  : <div style={{height:"100%", width: "100%", marginTop: "100px"}}>
-                      {categories.map(renderExplorePage)}
-                    <div style={{height: "5%"}}>
-                    </div></div> }
-                
-                
-            {/* </div> */}
-          </div>
+                  </div>
+                  {categories.length == 0
+                    ? <div></div>
+                    : <div style={{height:"100%", width: "100%", marginTop: "100px"}}>
+                        {categories.map(renderExplorePage)}
+                      <div style={{height: "5%"}}>
+                      </div></div> }
+                  
+                  
+              {/* </div> */}
+            </div>
+          </SimpleBarReact>
 
           {/* <div className="button-container">
             <button onClick={getQueueStore}>get queueStore</button>
@@ -444,7 +456,6 @@ const Explore = ({ userSession }) => {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow-y: scroll;
         }
         .search-result-category{
             padding-top: 10px;

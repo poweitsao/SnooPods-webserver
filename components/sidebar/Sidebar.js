@@ -28,6 +28,9 @@ import LibraryIconOnClick from "../../resources/icons/left/library/library_icon_
 import { SvgIcon } from '@material-ui/core';
 import { useRouter } from 'next/router'
 import { Favorite } from '@material-ui/icons';
+import SimpleBarReact from 'simplebar-react';
+import "simplebar/src/simplebar.css";
+import useWindowDimensions from '../hooks/useWindowDimensions';
 
 
 
@@ -83,6 +86,7 @@ const MyMusicOption = ({redirect, name, icon, onClickIcon}) => {
                     display: flex;
                     align-items: center;  
                     font-family: Lato, sans-serif;
+                    font-weight: bold;
                     font-size: 0.729vw;
                     padding-left: 9.4%;
                 }
@@ -91,6 +95,7 @@ const MyMusicOption = ({redirect, name, icon, onClickIcon}) => {
                     height: 22px;   
                     fill: none;
                     margin-right: 13.5%;
+                    
                 }
             `}</style>
         </div>
@@ -111,7 +116,7 @@ const Sidebar = (props) => {
 
     const {data: subLists} = useSWR("/api/user/sublists/getSubLists/"+ props.user.email)
     const {data: history} = useSWR("/api/user/history/get/"+ props.user.email)
-
+    const {width, height} = useWindowDimensions()
 
     // if(likedTracks){
     //     console.log("likedTracks in sidebar", likedTracks)
@@ -454,117 +459,130 @@ const Sidebar = (props) => {
         trigger("/api/user/sublists/getSubLists/"+ email)
     }
 
+    const [scrollableElement, setScrollableElement] = useState(null)
+    const scrollableNodeRef = React.createRef();
+    // useEffect(() => {
+    //     console.log("scrollableNodeRef.current", scrollableNodeRef.current)
+    // }, scrollableNodeRef)
     return (
-        <Navbar className="sidebar" style={{
-            backgroundImage: "linear-gradient(to bottom, #1d2460, #131639)",
-            width: "13.75%",
-            height:"90.5%",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: "unset",
-            overflowY: "scroll",
-            fontFamily:"Lato, sans-serif"
-            
-        }}>
-            <Nav style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                maxWidth: "100%", 
-                color: "#5c6096",
-                marginTop: "10.5vh",
-                width: "77%"
-            }}>
-                <div className="my-music">
-                    <div className="my-music-title">My Music</div>
+            <SimpleBarReact 
+                style={{width: "13.75%", height: "90.5%"}}
+                scrollableNodeProps={{ ref: scrollableNodeRef }}>
 
-                    <MyMusicOption name="Home" redirect="/home" icon={HomeIcon} onClickIcon={HomeIconOnClick}/>
-                    <MyMusicOption name="Explore" redirect="/explore" icon={ExploreIcon} onClickIcon={ExploreIconOnClick}/>
-                    <MyMusicOption name="Favorites" redirect={"/likedTracks/"+likedTracks.collectionID} icon={FavoriteIcon} onClickIcon={FavoriteIconOnClick}/>
-                    <MyMusicOption name="Library" redirect="/library" icon={LibraryIcon} onClickIcon={LibraryIconOnClick}/>
-
-                </div>
-                </Nav>
-                <Nav style={{
-                    display: "flex",
+                  {/* <button onClick={() => console.log("scrollableNodeRef", scrollableNodeRef.current.children[0])}>click</button> */}
+                  {/* <button onClick={() => }>set</button> */}
+              
+                    {/* (scrollableNodeRef.current) ? scrollableNodeRef.current.children[0].style.height = "100%" : console.log()  */}
+                    {/* { (scrollableNodeRef.current !== scrollableElement) ? {setScrollableElement(scrollableNodeRef.current)} : <div>not rendered</div> } */}
+                  <Navbar className="sidebar" style={{
+                    backgroundImage: "linear-gradient(to bottom, #1d2460, #131639)",
+                    width: "100%",
+                    height: "100%",
                     flexDirection: "column",
-                    alignItems: "flex-start",
-                    maxWidth: "100%", 
-                    color: "#5c6096",
-                    marginTop: "7vh",
-                    width: "77%"
-                }}>
-                    <div className="my-playlists" style={{width: "100%"}}>
-                        <div className="title-container">
-                            <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.25vw", color:"white"}}>Collections</div>
-                            <div style={{width: "fit-content", height: "fit-content", paddingLeft: "7.2%"}}>
-                                <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddSubList(props.user.email, "New Mix")}/>
-                            </div>                        
-                        </div>
-                        {/* {collections?.map(renderCollections)}
-                        <div className="title-container">
-                            <div style={{padding: "8px", paddingRight: "3px"}}>Daily Mixes</div>
-                            <AddButton handleClick={() => handleAddSubList(props.user.email, "New sublist")}/>
-                        </div>
-                        {subLists?.map(renderSubLists)} */}
-                        {collections?.map(renderCollections)}
-                    </div>
+                    alignItems: "center",
+                    padding: "unset",
+                    // overflowY: "scroll",
+                    fontFamily:"Lato, sans-serif"
                     
-
-                </Nav>
-                <Nav style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    maxWidth: "100%", 
-                    color: "#5c6096",
-                    marginTop: "7vh",
-                    width: "77%"
                 }}>
-                    <div className="my-playlists" style={{width: "100%"}}>
-                        <div className="title-container">
-                            <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.25vw", color:"white"}}>Mixes</div>
-                            <div style={{width: "fit-content", height: "fit-content", paddingLeft: "7.2%"}}>
-                                <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddSubList(props.user.email, "New Mix")}/>
-                            </div>
-                        </div>
-                        {subLists?.map(renderSubLists)}
-                    </div>
-                </Nav>
-                
-            
-                <style jsx>
-                {`
-                    .my-music{
-                        display: flex; 
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        width: 100%;
-                    }
-                    .my-music-title{
-                        font-size: 1.25vw;
-                        font-weight: bold;
-                        font-stretch: normal;
-                        font-style: normal;
-                        line-height: normal;
-                        letter-spacing: 1px;
-                        font-family: Lato;
-                        color: white;
-                        margin-bottom: 13.8%;
-                        padding-left: 9.4%; 
 
-                    }
-                    .title-container{
-                        display: flex;
-                        align-items: center;
-                        margin-bottom: 13.8%;
-                    }
-                    .nav-link{
-                        color: #5c6096;
-                    }
-                `}
-                </style>
-        </Navbar>
+                    <Nav style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        maxWidth: "100%", 
+                        color: "#5c6096",
+                        marginTop: "10.5vh",
+                        width: "77%"
+                    }}>
+                        <div className="my-music">
+                            <p className="my-music-title">My Podcasts</p>
+
+                            <MyMusicOption name="Home" redirect="/home" icon={HomeIcon} onClickIcon={HomeIconOnClick}/>
+                            <MyMusicOption name="Explore" redirect="/explore" icon={ExploreIcon} onClickIcon={ExploreIconOnClick}/>
+                            <MyMusicOption name="Favorites" redirect={"/likedTracks/"+likedTracks.collectionID} icon={FavoriteIcon} onClickIcon={FavoriteIconOnClick}/>
+                            <MyMusicOption name="Library" redirect="/library" icon={LibraryIcon} onClickIcon={LibraryIconOnClick}/>
+
+                        </div>
+                        </Nav>
+                        <Nav style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            maxWidth: "100%", 
+                            color: "#5c6096",
+                            marginTop: "7vh",
+                            width: "77%"
+                        }}>
+                            <div className="my-playlists" style={{width: "100%"}}>
+                                <div className="title-container">
+                                    <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.25vw", color:"white", fontWeight:"bold"}}>Collections</div>
+                                    <div style={{width: "fit-content", height: "fit-content", paddingLeft: "7.2%"}}>
+                                        <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddSubList(props.user.email, "New Mix")}/>
+                                    </div>                        
+                                </div>
+                                {/* {collections?.map(renderCollections)}
+                                <div className="title-container">
+                                    <div style={{padding: "8px", paddingRight: "3px"}}>Daily Mixes</div>
+                                    <AddButton handleClick={() => handleAddSubList(props.user.email, "New sublist")}/>
+                                </div>
+                                {subLists?.map(renderSubLists)} */}
+                                {collections?.map(renderCollections)}
+                            </div>
+                            
+
+                        </Nav>
+                        <Nav style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            maxWidth: "100%", 
+                            color: "#5c6096",
+                            marginTop: "7vh",
+                            width: "77%"
+                        }}>
+                            <div className="my-playlists" style={{width: "100%"}}>
+                                <div className="title-container">
+                                    <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.25vw", color:"white", fontWeight:"bold"}}>Mixes</div>
+                                    <div style={{width: "fit-content", height: "fit-content", paddingLeft: "7.2%"}}>
+                                        <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddSubList(props.user.email, "New Mix")}/>
+                                    </div>
+                                </div>
+                                {subLists?.map(renderSubLists)}
+                            </div>
+                        </Nav>
+                        
+                    
+                        <style jsx>
+                    {`
+                        .my-music{
+                            display: flex; 
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            width: 100%;
+                        }
+                        .my-music-title{
+                            font-size: 1.25vw;
+                            font-weight: bold;
+                            font-family: Lato;
+                            color: white;
+                            margin-bottom: 13.8%;
+                            padding-left: 9.4%; 
+
+                        }
+                        .title-container{
+                            display: flex;
+                            align-items: center;
+                            margin-bottom: 13.8%;
+                        }
+                        .nav-link{
+                            color: #5c6096;
+                        }
+                    `}
+                    </style>
+                </Navbar>
+            </SimpleBarReact>
+
     )
 
 }
