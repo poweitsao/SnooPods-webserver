@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 import ProfilePicMenu from "../ProfilePicMenu"
 import { useGoogleLogout, GoogleLogout } from 'react-google-login';
 import { CLIENT_ID } from "../../lib/constants"
-import Router from "next/router"
+import Router, { useRouter } from "next/router"
 import useWindowDimensions from "../hooks/useWindowDimensions"
 import Collapse from 'react-bootstrap/Collapse'
 import store from "../../redux/store"
@@ -67,6 +67,7 @@ import NextButton from '../buttons/NextButton';
 
 const DesktopNavBar = (props) => {
     // console.log("DesktopNavBar props", props)
+    const router = useRouter()
 
     return (
         <Navbar bg="white" expand="lg" style={{
@@ -103,9 +104,9 @@ const DesktopNavBar = (props) => {
                             style={{display: "flex", width:"3.8%"}}>
                         
                         </div> */}
-                        <PrevButton style={{marginRight: "12px"}}/>
+                        <PrevButton style={{marginRight: "12px"}} handleClick={router.back} />
                         {/* <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white", marginRight: "12px"}}></div> */}
-                        <NextButton />
+                        <NextButton handleClick={() => {window.history.forward();}}/>
                         
                         {/* <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div> */}
                         {/* <SearchBar searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/> */}

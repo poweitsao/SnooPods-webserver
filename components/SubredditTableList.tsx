@@ -265,11 +265,11 @@ const SubredditTableList = (props) => {
     getInitialTracks()
 
   }, [])
-  const loading = <div key={"loading"}>loading...</div>
+  const loading = <div  style={{width: "100%", display: "flex", justifyContent: "center", paddingBottom: "30px"}} key={"loading"}>loading...</div>
 
   return (
     <div style={{ width: "100%" }}>
-    <button onClick={() => console.log("scrollableTarget.current", scrollableTarget)}>click</button>
+    {/* <button onClick={() => console.log("scrollableTarget.current", scrollableTarget)}>click</button> */}
     {
       scrollableTarget.current 
       ? <InfiniteScroll

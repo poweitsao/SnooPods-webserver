@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Navbar, Nav } from "react-bootstrap"
 import { server } from '../../config';
 import fetch from "isomorphic-unfetch";
@@ -121,6 +121,8 @@ const Sidebar = (props) => {
     // if(likedTracks){
     //     console.log("likedTracks in sidebar", likedTracks)
     // }
+    const [sidebarHeight, setSidebarHeight] = useState(0)
+    const sidebarRef = useRef(null)
 
     useEffect(() => {
         setMounted(true)
@@ -166,6 +168,9 @@ const Sidebar = (props) => {
             })
         }
 
+        // const sidebarHeight = document.getElementById('sidebar-nav').clientHeight;
+        // console.log("sidebarHeight", sidebarHeight)
+        // setSidebarHeight(sidebarRef.current.clientHeight)
       }, [collections, likedTracks, subLists, history]);
 
     if(!collections|| !likedTracks || !subLists || !history){
@@ -459,32 +464,40 @@ const Sidebar = (props) => {
         trigger("/api/user/sublists/getSubLists/"+ email)
     }
 
-    const [scrollableElement, setScrollableElement] = useState(null)
+    // const [scrollableElement, setScrollableElement] = useState(null)
     const scrollableNodeRef = React.createRef();
+    if (scrollableNodeRef.current){
+        // scrollableNodeRef.current.children[0].style.height = "100%"
+        console.log(scrollableNodeRef)
+    }
     // useEffect(() => {
     //     console.log("scrollableNodeRef.current", scrollableNodeRef.current)
     // }, scrollableNodeRef)
     return (
             <SimpleBarReact 
-                style={{width: "13.75%", height: "90.5%"}}
+                style={{width: "13.75%", height: "90.5%", backgroundImage: "linear-gradient(to bottom, #1d2460, #131639)"}}
                 scrollableNodeProps={{ ref: scrollableNodeRef }}>
+                    {/* <div>sidebarHeight</div> */}
 
                   {/* <button onClick={() => console.log("scrollableNodeRef", scrollableNodeRef.current.children[0])}>click</button> */}
                   {/* <button onClick={() => }>set</button> */}
               
-                    {/* (scrollableNodeRef.current) ? scrollableNodeRef.current.children[0].style.height = "100%" : console.log()  */}
+                    {/* scrollableNodeRef.current ? scrollableNodeRef.current.children[0].style.height = "100%" : console.log()  */}
                     {/* { (scrollableNodeRef.current !== scrollableElement) ? {setScrollableElement(scrollableNodeRef.current)} : <div>not rendered</div> } */}
-                  <Navbar className="sidebar" style={{
-                    backgroundImage: "linear-gradient(to bottom, #1d2460, #131639)",
-                    width: "100%",
-                    height: "100%",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    padding: "unset",
-                    // overflowY: "scroll",
-                    fontFamily:"Lato, sans-serif"
-                    
-                }}>
+                  <Navbar className="sidebar" 
+                    style={{
+                        
+                        width: "100%",
+                        height: "fit-content",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        padding: "unset",
+                        // overflowY: "scroll",
+                        fontFamily:"Lato, sans-serif"
+                        
+                    }}
+                    id="sidebar-nav"
+                    ref={sidebarRef}>
 
                     <Nav style={{
                         display: "flex",
@@ -518,7 +531,9 @@ const Sidebar = (props) => {
                                 <div className="title-container">
                                     <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.25vw", color:"white", fontWeight:"bold"}}>Collections</div>
                                     <div style={{width: "fit-content", height: "fit-content", paddingLeft: "7.2%"}}>
-                                        <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddSubList(props.user.email, "New Mix")}/>
+                                        {/* <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddCollection(props.user.email, "New Collection")}/> */}
+                                        <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => console.log("add")}/>
+
                                     </div>                        
                                 </div>
                                 {/* {collections?.map(renderCollections)}
@@ -581,6 +596,16 @@ const Sidebar = (props) => {
                     `}
                     </style>
                 </Navbar>
+                
+
+                <style>
+                    
+                    {`
+                    .simplebar-content{
+                        height: 100%;
+                    }
+                    `}
+                </style>
             </SimpleBarReact>
 
     )

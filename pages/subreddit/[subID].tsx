@@ -154,7 +154,7 @@ const Subreddit = ({ userSession, playlist }) => {
         <style>{`
                 .subreddit-info-container{
                     display:flex;
-                    justify-content:space-between;
+                    justify-content: center;
                     align-items:center;
                     padding: 20px;
                 }
