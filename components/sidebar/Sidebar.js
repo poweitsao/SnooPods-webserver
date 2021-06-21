@@ -531,8 +531,8 @@ const Sidebar = (props) => {
                                 <div className="title-container">
                                     <div style={{padding: "unset", paddingLeft:"9.4%", fontSize:"1.25vw", color:"white", fontWeight:"bold"}}>Collections</div>
                                     <div style={{width: "fit-content", height: "fit-content", paddingLeft: "7.2%"}}>
-                                        {/* <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddCollection(props.user.email, "New Collection")}/> */}
-                                        <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => console.log("add")}/>
+                                        <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => handleAddCollection(props.user.email, "New Collection")}/>
+                                        {/* <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => console.log("add")}/> */}
 
                                     </div>                        
                                 </div>
