@@ -104,7 +104,9 @@ const Subreddit = ({ userSession, playlist }) => {
       setShowLoginPopup(true)
     }
     // console.log(data)
-    getQueue(userSession.email)
+    if(userSession.email){
+      getQueue(userSession.email)
+    }
 
 
 

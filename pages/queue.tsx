@@ -79,7 +79,7 @@ const Queue = ({ userSession }) => {
         setQueueDisplayInfo(queueInfo)
       }
 
-      if (isEmpty(queueDisplayInfo)){
+      if (isEmpty(queueDisplayInfo) && userSession.email){
         waitForGetQueue()
       } 
       

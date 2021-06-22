@@ -106,7 +106,8 @@ const FeaturedGridMenu = (props) => {
   const subreddits = []
   if(mounted){
     // console.log("data", data)
-    if (!data) return <div>loading...</div>
+    if (!data) return <div style={{width: "100%", display: "flex", justifyContent: "center", paddingBottom: "30px"}} key={"loading"}>loading...</div>
+
     for (const [index, value] of data._keys.entries()) {
       subreddits.push(<div key={index} className={"card-container"}><FeaturedTile subredditInfo={data[value]} /></div>
       )
@@ -186,8 +187,10 @@ const home = ({ userSession }) => {
     // console.log("usersessionstore", )
     
     setMounted(true)
-
-    getQueue(userSession.email)
+    if (userSession.email){
+      getQueue(userSession.email)
+    }
+    
     
   }, []);
 

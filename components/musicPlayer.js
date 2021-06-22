@@ -14,7 +14,7 @@ function ShowMusicPlayer(props) {
         }
         if (!data) {
             console.log("No data")
-            return (<div>Loading... </div>);
+            return (<div style={{width: "100%", display: "flex", justifyContent: "center", paddingBottom: "30px"}} key={"loading"}>loading...</div>);
         }
 
         return (

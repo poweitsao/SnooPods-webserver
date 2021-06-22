@@ -248,7 +248,7 @@ const CollectionTableList = (props) => {
     // }
 
     // console.log("playlist in Tablelist", playlist)
-    const loading = <div key={"loading"}>loading...</div>
+    const loading = <div  style={{width: "100%", display: "flex", justifyContent: "center", paddingBottom: "30px"}} key={"loading"}>loading...</div>
 
     return (
       <div style={{ width: "100%" }}>

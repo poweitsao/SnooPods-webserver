@@ -33,13 +33,19 @@ import EditIcon from '@material-ui/icons/Edit';
 import CollectionTableList from "../components/CollectionTableList"
 import HistoryTableList from "../components/HistoryTableList";
 import EmptySideBar from "../components/sidebar/EmptySideBar";
+import userSessionInfoReducer from "../redux/reducers/userSessionInfoReducer";
 
 
 const HistoryPage = ({ userSession, collectionID }) => {
+
     const fetcher = (url) => fetch(url).then((r) => r.json());
     const fetchCollectionURL = "/api/user/history/get/" + userSession.email
 
-    const {data: tracks} = useSWR(fetchCollectionURL, fetcher)
+    var tracks
+    if(userSession.email){
+      const {data} = useSWR(fetchCollectionURL, fetcher)
+      tracks = data
+    }
 
     const [mounted, setMounted] = useState<Boolean>(false);
     const [user, setUser] = useState<UserSession | {}>({});
@@ -77,7 +83,9 @@ const HistoryPage = ({ userSession, collectionID }) => {
       } else {
         setShowLoginPopup(true)
       }
-      getQueue(userSession.email)
+      if (userSession.email){
+        getQueue(userSession.email)
+      }
     }, []);
 
     if(tracks){
@@ -209,11 +217,17 @@ HistoryPage.getInitialProps = async ({ req, query }) => {
     const cookies = parseCookies(req);
 
     // const collectionID: string = query["collectionID"].toString();
-  
+    let email
+    if (!cookies.email){
+      email = null
+    } else{
+      email = cookies.email
+    }
+
     return {
       userSession: {
         session_id: cookies.session_id,
-        email: cookies.email,
+        email: email,
       }
     };
   };

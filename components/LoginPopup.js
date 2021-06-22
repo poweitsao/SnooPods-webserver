@@ -50,9 +50,13 @@ const LoginPopup = (props) => {
             // size="lg"
             // style={{maxWidth: width}}
             dialogClassName="my-modal"
+            backdrop="static"
             
         >
-             
+             <link rel="preconnect" href="https://fonts.gstatic.com"/>
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com"/>
+            <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet"/>
             {/* <Modal.Header closeButton style={{width: width, height: height}}style={{width: width, height: height}}>
                 <Modal.Title id="contained-modal-title-vcenter">
                     Please sign in to continue.
@@ -74,12 +78,12 @@ const LoginPopup = (props) => {
                         <div 
                         style={{display: "flex", alignItems: "center", justifyContent:"center", flexDirection: "column"}}>
                             <Image src={logo} style={{width: "210.4px", height: "91.2px"}}/>
-                            <h1>Snoopods</h1>
+                            <p style={{fontFamily: "'Lato'", fontSize:"2.5vw", fontWeight: "600", color: "black"}}>Snoopods</p>
                         </div>
                     </div>
 
                     <div style={{height: "100%", width: "50%", backgroundColor: "#162048", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
-                        <h2 style={{color: "white", paddingBottom: "4.8%", fontWeight: "bold", letterSpacing: "1px"}}>Welcome</h2>
+                        <p style={{color: "white", paddingBottom: "4.8%", fontFamily:"'Lato'", fontWeight: "bold", letterSpacing: "1px", fontSize: "1.875vw"}}>Welcome</p>
                         <GoogleLogin
                             clientId={CLIENT_ID}
                             buttonText="Continue with Google"

@@ -37,7 +37,11 @@ import EmptySideBar from "../../components/sidebar/EmptySideBar";
 const CollectionPage = ({ userSession, collectionID }) => {
     const fetcher = (url) => fetch(url).then((r) => r.json());
     const fetchCollectionURL = "/api/user/collections/get/" + userSession.email + "/" + collectionID
-    const {data: playlist} = useSWR(fetchCollectionURL, fetcher)
+    var playlist
+    if(userSession.email){
+      const {data} = useSWR(fetchCollectionURL, fetcher)
+      playlist = data
+    }
 
     const [mounted, setMounted] = useState<Boolean>(false);
     const [user, setUser] = useState<UserSession | {}>({});
@@ -75,7 +79,9 @@ const CollectionPage = ({ userSession, collectionID }) => {
       } else {
         setShowLoginPopup(true)
       }
-      getQueue(userSession.email)
+      if(userSession.email){
+        getQueue(userSession.email)
+      }    
     }, []);
 
     if(playlist){

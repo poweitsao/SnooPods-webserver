@@ -40,7 +40,12 @@ import EmptySideBar from "../../components/sidebar/EmptySideBar";
 const SubListPage = ({ userSession, subListID }) => {
     const fetcher = (url) => fetch(url).then((r) => r.json());
     const fetchCollectionURL = "/api/user/sublists/get/" + userSession.email + "/" + subListID
-    const {data: subList} = useSWR(fetchCollectionURL, fetcher)
+    var subList
+    if(userSession.email){
+      const {data} = useSWR(fetchCollectionURL, fetcher)
+      subList = data
+    }
+    
     const [show, setShow] = useState(false)
     const [mounted, setMounted] = useState<Boolean>(false);
     const [user, setUser] = useState<UserSession | {}>({});
@@ -78,7 +83,9 @@ const SubListPage = ({ userSession, subListID }) => {
       } else {
         setShowLoginPopup(true)
       }
-      getQueue(userSession.email)
+      if(userSession.email){
+        getQueue(userSession.email)
+      }
     }, []);
 
     if(subList){
