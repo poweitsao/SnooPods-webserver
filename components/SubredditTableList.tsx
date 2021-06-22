@@ -59,12 +59,8 @@ const SubredditTableList = (props) => {
     { playlist: any} = props
   
   const {scrollableTarget} :{ scrollableTarget: any}= props
-  const {hi} = props
-
-  console.log("playlist in SubredditTableList", playlist)
 
   console.log("scrollableTarget in SubredditTableList", scrollableTarget.current)
-  console.log("hi in SubredditTableList", hi)
 
 
   const {email} = props.userSessionInfo

@@ -211,7 +211,7 @@ const Subreddit = ({ userSession, playlist }) => {
                 <Provider store={store}>
                   {/* <button onClick={() => console.log("scrollableNodeRef", scrollableNodeRef.current)}>click</button> */}
 
-                  <SubredditTableList playlist={playlist} scrollableTarget={scrollableNodeRef} hi="hi"/>
+                  <SubredditTableList playlist={playlist} scrollableTarget={scrollableNodeRef}/>
                 </Provider>
                 // <div></div>
                 // <Tablelist playlist={playlist} />

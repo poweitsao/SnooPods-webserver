@@ -46,6 +46,7 @@ const CollectionTableList = (props) => {
     // console.log("props in CollectionTableList", props)
     let likedTracks = props.likedTracksInfo.LikedTracks
     let likedTracksCollectionID = props.likedTracksInfo.likedTracksCollectionID
+    const {scrollableTarget} :{ scrollableTarget: any} = props
 
     useEffect(()=>{
       const getInitialTracks = async () => {
@@ -253,37 +254,39 @@ const CollectionTableList = (props) => {
     return (
       <div style={{ width: "100%" }}>
         {/* <ListGroup variant="flush"></ListGroup> */}
-        <InfiniteScroll
-          dataLength={tracks.length}
-          next={loadMore}
-          hasMore={trackIDIndex < trackIDs.length}
-          loader={loading}
-          scrollableTarget="page-body"
-          style={{ width: "100%" }}
-          >
-          <Table responsive hover>
-            {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
-            <thead>
-              <tr>
-                <td></td>
-                <td>Title</td>
-                <td></td>
-                <td>Duration</td>
-                <td>Date posted</td>
-              </tr>
-            </thead>
-            <tbody>{tracks.map(
-              (track, index, array) => {
-                return renderTrackOnTable(track, index, array, 
-                  {   collectionName: playlist.collectionName, 
-                      collectionID: playlist.collectionID, 
-                      likedTracks: likedTracks, 
-                      likedTracksCollectionID: likedTracksCollectionID
-                  })
-                })}</tbody>
-          </Table>
-        </InfiniteScroll>
-
+        {scrollableTarget.current 
+          ?<InfiniteScroll
+              dataLength={tracks.length}
+              next={loadMore}
+              hasMore={trackIDIndex < trackIDs.length}
+              loader={loading}
+              scrollableTarget={scrollableTarget.current} 
+              style={{ width: "100%" }}
+              >
+              <Table responsive hover>
+                {/* <ListGroup.Item ><div style={{ paddingLeft: "45px" }}>Title</div></ListGroup.Item> */}
+                <thead>
+                  <tr>
+                    <td></td>
+                    <td>Title</td>
+                    <td></td>
+                    <td>Duration</td>
+                    <td>Date posted</td>
+                  </tr>
+                </thead>
+                <tbody>{tracks.map(
+                  (track, index, array) => {
+                    return renderTrackOnTable(track, index, array, 
+                      {   collectionName: playlist.collectionName, 
+                          collectionID: playlist.collectionID, 
+                          likedTracks: likedTracks, 
+                          likedTracksCollectionID: likedTracksCollectionID
+                      })
+                    })}</tbody>
+              </Table>
+            </InfiniteScroll>
+          :<div></div>
+        }
 
 
       </div>

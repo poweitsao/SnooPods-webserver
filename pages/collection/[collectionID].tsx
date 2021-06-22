@@ -33,6 +33,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import CollectionTableList from "../../components/CollectionTableList"
 import EmptySideBar from "../../components/sidebar/EmptySideBar";
 
+import SimpleBarReact from 'simplebar-react';
+import "simplebar/src/simplebar.css";
 
 const CollectionPage = ({ userSession, collectionID }) => {
     const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -149,7 +151,7 @@ const CollectionPage = ({ userSession, collectionID }) => {
           <style>{`
                   .subreddit-info-container{
                       display:flex;
-                      justify-content:space-between;
+                      justify-content: center;
                       align-items:center;
                       padding: 20px;
                   }
@@ -160,6 +162,8 @@ const CollectionPage = ({ userSession, collectionID }) => {
         </div>
       );
     };
+
+    const scrollableNodeRef = React.createRef();
 
     return (
       <Layout>
@@ -178,7 +182,16 @@ const CollectionPage = ({ userSession, collectionID }) => {
         <div className="main-page">
           {isEmpty(user) ? <div></div> : <CustomNavbar user={user} />}
 
-          <div className="page-body" id="page-body">
+          <SimpleBarReact style={{
+              height: "91.3%",  
+              display: "flex",
+              flexDirection:"column",
+              justifyContent: "nowrap",
+              alignItems: "center"
+            }} 
+            id="simple-bar"
+            scrollableNodeProps={{ ref: scrollableNodeRef }}
+          >
             {playlist == undefined ? (
               <div></div>
             ) : (
@@ -189,10 +202,10 @@ const CollectionPage = ({ userSession, collectionID }) => {
             ) : (
               // <Tablelist playlist={playlist} />
               <Provider store={store}>
-                <CollectionTableList playlist={playlist}/>
+                <CollectionTableList playlist={playlist} scrollableTarget={scrollableNodeRef}/>
               </Provider>
             )}
-          </div>
+          </SimpleBarReact>
         </div>
         <Provider store={store}>
           <AudioPlayerBarContainer />
