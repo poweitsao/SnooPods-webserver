@@ -12,7 +12,7 @@ import fetch from "isomorphic-unfetch"
 import { Icon, InlineIcon } from '@iconify/react';
 import headphonesAlt from '@iconify/icons-fa-solid/headphones-alt';
 import validateSession from "../lib/validateUserSessionOnPage"
-import CustomNavbar from "../components/navbar/CustomNavbar"
+import IndexNavBar from "../components/navbar/IndexNavBar"
 
 import { storeRegisterationInfo } from "../redux/actions/index"
 import store from "../redux/store"
@@ -64,9 +64,8 @@ const Index = ({ userSession }) => {
 
   return (
     <IndexLayout>
-      <div>
-        <CustomNavbar />
-        {/* <CustomNavbar /> */}
+      <div className="index-nav-bar-container">
+        <IndexNavBar />
       </div>
       <div className="page-body">
         <div className="heading">
@@ -108,25 +107,29 @@ const Index = ({ userSession }) => {
         align-content:center;
         align-text:center;
       }
-    .button-container{
-      margin:20px;
-      text-align:center;
-    }
-    .heading{
-      text-align: center;
-    }
-    .logo{
-      text-align:center;
-      margin-bottom: 15px;
-    }
-    .desc{
-      text-align: center;
-    }
-    .navbar{
-      display:flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
+      .button-container{
+        margin:20px;
+        text-align:center;
+      }
+      .heading{
+        text-align: center;
+      }
+      .logo{
+        text-align:center;
+        margin-bottom: 15px;
+      }
+      .desc{
+        text-align: center;
+      }
+      .navbar{
+        display:flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .index-nav-bar-container{
+        width: 100%;
+        height: 7.93%;
+      }
 
 `}</style>
       </div>

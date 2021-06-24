@@ -34,13 +34,12 @@ const IndexLayout = (props) => (
                     font-size: 16px;
                     
                     display:flex;
-                    margin-top:30px;
-                    margin-bottom:30px;
                     justify-content: center;
                     flex-direction:row;
                     align-content:center;
                     align-text:center;
-                    width: 88%;
+                    width: 100%;
+                    height: 100%;
                 }
 
                 

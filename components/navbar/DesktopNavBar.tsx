@@ -92,7 +92,7 @@ const DesktopNavBar = (props) => {
                     }}>
                 <Nav 
                     style={{fontFamily:"font-family: Lato, sans-serif", 
-                            fontSize:"18px",
+                            fontSize:"0.9375vw",
                             display: "flex", 
                             alignItems:"center",
                             justifyContent:"center",
