@@ -554,6 +554,7 @@ const Sidebar = (props) => {
                             maxWidth: "100%", 
                             color: "#5c6096",
                             marginTop: "7vh",
+                            marginBottom: "10.5vh",
                             width: "77%"
                         }}>
                             <div className="my-playlists" style={{width: "100%"}}>
