@@ -16,6 +16,8 @@ import IndexNavBar from "../components/navbar/IndexNavBar"
 
 import { storeRegisterationInfo } from "../redux/actions/index"
 import store from "../redux/store"
+import Button from 'react-bootstrap/Button'
+
 
 const Index = ({ userSession }) => {
   useEffect(() => {
@@ -68,44 +70,24 @@ const Index = ({ userSession }) => {
         <IndexNavBar />
       </div>
       <div className="page-body">
-        <div className="heading">
-          <div className="logo">
-            {/* <Icon icon={headphonesAlt} width={100} height={100} /> */}
-          </div>
-          <div style={{ height: "10%" }}></div>
-          <h1 style={{ fontSize: 60, fontWeight: "bold", color: "black" }}> SNOOPODS </h1>
 
+
+        <div className="desc" style={{width: "60.93%", height: "18.75%"}}>
+          <p style={{ fontSize: "3.75vw", fontFamily: "Inter", fontWeight: "500", margin: "unset", marginBottom: "35.8%"}}>Listen to your favorite subreddits like never before.</p>
+          <Button style={{width: "18.8%"}}>GET SNOOPODS FREE</Button>
         </div>
 
-        <div className="desc">
-          <p style={{ fontSize: 20 }}>Listen to your favorite subreddits like never before.</p>
-          <p style={{ fontSize: 10 }}>We are currently in our Alpha Version. Stay tuned for more updates!</p>
-
-        </div>
-        <div className="button-container">
-          <div>
-            {/* //? figure out how to make this server side rendering so that login button loads faster */}
-            {/* <GoogleLogin
-              clientId={CLIENT_ID}
-              buttonText="Sign In with Google"
-              onSuccess={onGoogleLoginSuccess}
-              onFailure={onGoogleLoginFailed}
-              cookiePolicy={'single_host_origin'}
-            />         */}
-          </div>
-
-
-        </div>
         {/* <img className="image" src="http://www.poweitsao.com/images/kenobi.jpg"></img> */}
         <style>{`
       .page-body{
-        margin-top:50px;
         display:flex;
         flex-wrap:wrap;
         flex-direction:column;
         justify-content:center;
         align-content:center;
         align-text:center;
+        margin-top: 21.43%;
+        margin-bottom: 34%;
       }
       .button-container{
         margin:20px;
@@ -119,6 +101,8 @@ const Index = ({ userSession }) => {
         margin-bottom: 15px;
       }
       .desc{
+        justify-content: center;
+        align-items: center;
         text-align: center;
       }
       .navbar{

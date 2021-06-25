@@ -58,7 +58,7 @@ const DesktopNavBar = (props) => {
                             height: "40px"}}>
                         <div className="branding-group" style={{width: "18.54%", display: "flex", justifyContent: "center", alignItems: "center", height: "100%", marginRight: "auto"}}>
                             <div className="logo" style={{width: "32.4%", height: "61%", margin: "unset", marginRight: "auto", backgroundColor: "white"}}></div>
-                            <div className="name" style={{width: "46.4%", height: "61%", backgroundColor: "white"}}></div>
+                            <div className="name" style={{width: "46.4%", height: "fit-content", fontSize: "1.25vw", color: "white"}}>Snoopods</div>
                         </div>
                         
                         <div className="nav-buttons-group">
