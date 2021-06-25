@@ -50,8 +50,7 @@ const LoginPopup = (props) => {
             // size="lg"
             // style={{maxWidth: width}}
             dialogClassName="my-modal"
-            backdrop="static"
-            
+            backdrop="static"            
         >
              <link rel="preconnect" href="https://fonts.gstatic.com"/>
             <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"/>
@@ -89,7 +88,8 @@ const LoginPopup = (props) => {
                             buttonText="Continue with Google"
                             onSuccess={onGoogleLoginSuccess}
                             onFailure={onGoogleLoginFailed}
-                            cookiePolicy={'single_host_origin'} />
+                            cookiePolicy={'single_host_origin'} 
+                            />
                     </div>
                         
                 </div>
@@ -98,7 +98,9 @@ const LoginPopup = (props) => {
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer> */}
             <style>
-                {`
+                {`  .modal-content{
+                        border: unset;
+                    }
                     .my-modal{
                         max-width: ${width}px;
                         width: 60%;

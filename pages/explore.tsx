@@ -326,6 +326,92 @@ const Explore = ({ userSession }) => {
       )
     }
 
+    const LongSubredditTile = (props) => {
+      const { height, width } = useWindowDimensions();
+      const smallTileSideLength = width * 0.079
+      
+      const colors = ["linear-gradient(to bottom, #178bdc, #c266d2)"]
+      var randomColor = colors[Math.floor(Math.random()*colors.length)];
+      // console.log("randomColor", randomColor)
+      return (
+        
+          <div 
+            className="featured-tile-container" 
+            style={{
+              marginRight: props.marginRight, 
+              width: smallTileSideLength * 2.21, 
+              height: smallTileSideLength * 1.184}}
+            >
+            <button style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "transparent",
+                border: "none",
+                padding: "unset",
+
+              }}
+                // onClick={() => {
+                //   Router.push("/subreddit/" + props.subredditName)}}
+                >
+              <div 
+                style={{
+                  width: "100%", 
+                  height:"100%", 
+                  backgroundImage: randomColor,
+                  display:"flex",
+                  borderRadius:"5px"
+                  }}>
+                <div 
+                  style={{ 
+                      padding: "10px", 
+                      width: "100%", 
+                      height: "100%", 
+                      wordWrap: "break-word", 
+                      color: "white",
+                      fontSize:"1vw",
+                      textAlign: "center" }}>
+                        {/* {"r/" + props.subredditName} */}
+                </div>
+              </div>
+            </button>
+          </div>
+        )
+    }
+
+    const TopSubreddits = () => {
+      const { height, width } = useWindowDimensions();
+      const tileHeight = width * 0.079  * 1.184
+      // let items = []
+      // for (var i = 0; i < subreddits.length; i ++){
+      //   if (i == subreddits.length - 1){
+      //     items.push(<SubredditTile key={i} subredditName={subreddits[i]} marginRight={"0%"} />)
+
+      //   } else{
+      //     items.push(<SubredditTile key={i} subredditName={subreddits[i]} marginRight={"2.4%"} />)
+      //   }
+      // }
+      return(
+        <div style={{ width: "88.6%", marginLeft: "5.9%", marginBottom: "4.85%"}}>
+          <p style={{ 
+              color: "white", 
+              fontSize: "1.25vw", 
+              fontFamily:"Roboto", 
+              fontWeight: "bold",
+              margin:"unset", 
+              marginBottom: "2.19%" 
+              }}
+            >Top Subreddits</p>
+          <div style={{display: "flex", height: tileHeight}}>
+            <LongSubredditTile marginRight={"2.4%"} />
+            <LongSubredditTile marginRight={"2.4%"} />
+            <LongSubredditTile marginRight={"2.4%"} />
+            <LongSubredditTile marginRight={"0%"} />
+          </div>
+        </div>
+      )
+    }
+    
+
     const renderExplorePage = (category, index) => {
       console.log("category", category)
       
@@ -391,6 +477,7 @@ const Explore = ({ userSession }) => {
                   {categories.length == 0
                     ? <div></div>
                     : <div style={{height:"100%", width: "100%", marginTop: "100px"}}>
+                        <TopSubreddits />
                         {categories.map(renderExplorePage)}
                       <div style={{height: "5%"}}>
                       </div></div> }
