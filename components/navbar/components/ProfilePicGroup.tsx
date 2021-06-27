@@ -63,13 +63,13 @@ const ProfilePicGroup = (props) => {
                     justifyContent: "center",
                     flexDirection: "column",
                     alignItems: "flex-start",
-                    color:"#5c6096"
+                    color:"white"
                 }}>
                 <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                    <div style={{color: "#5c6096", marginRight: "20px"}}>
+                    <div style={{color: "white", marginRight: "20px"}}>
                         {props.user.firstName}
                     </div>
-                    <div style={{color: "#5c6096", height: "8px", marginRight: "18px"}}>▼</div>
+                    <div style={{color: "#c4c4c4", height: "8px", marginRight: "18px"}}>▼</div>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu renderOnMount={true}>
