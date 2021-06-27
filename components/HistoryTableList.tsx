@@ -91,7 +91,7 @@ const HistoryTableList = (props) => {
     // const [playButton, setPlayButton] = useState(playCircleOutlined);
     // console.log(index)
     // console.log("likedtracks in rendertrack", options.likedTracks)
-      console.log("track in renderTrackOnTable", track)
+      // console.log("track in renderTrackOnTable", track)
     return (
         <tr key={index}>
         <td style={{ width: "5%" }}>

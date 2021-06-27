@@ -76,7 +76,7 @@ const Index = ({ userSession }) => {
           <p style={{ fontSize: "3.75vw", fontFamily: "Inter", fontWeight: "500", margin: "unset", marginBottom: "6.3%"}}>Listen to your favorite subreddits like never before.</p>
           <Button style={{width: "18.8%"}}>GET SNOOPODS FREE</Button>
         </div>
-        <div className="footer" style={{height: "24.56%", width: "100%", backgroundColor: "#181727"}}></div>
+        <div className="footer" style={{height: "27%", width: "100%", backgroundColor: "#181727"}}></div>
         {/* <img className="image" src="http://www.poweitsao.com/images/kenobi.jpg"></img> */}
         <style>{`
       .page-body{
@@ -98,7 +98,7 @@ const Index = ({ userSession }) => {
       }
       .desc{
         margin-top: 21.4%;
-        margin-bottom: 32.3%; 
+        margin-bottom: 34%; 
         justify-content: center;
         align-items: center;
         text-align: center;

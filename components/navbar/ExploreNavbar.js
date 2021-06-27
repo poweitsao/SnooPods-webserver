@@ -123,7 +123,6 @@ const MobileNavBar = (props) => {
             alignItems: "stretch",
             paddingLeft: "20px",
             paddingRight: "20px",
-            fontSize: 20
         }}>
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -197,10 +196,8 @@ const DesktopNavBar = (props) => {
             alignItems: "stretch",
             paddingLeft: "20px",
             paddingRight: "20px",
-            fontSize: 20,
             height: "100%", 
             padding: "unset",
-            
             }}>
 
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -213,7 +210,7 @@ const DesktopNavBar = (props) => {
                     }}>
                 <Nav 
                     style={{fontFamily:"font-family: Lato, sans-serif", 
-                            fontSize:"18px",
+                            fontSize:"0.9375vw",
                             display: "flex", 
                             alignItems:"center",
                             justifyContent:"center",

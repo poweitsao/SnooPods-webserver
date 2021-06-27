@@ -68,6 +68,7 @@ import NextButton from '../buttons/NextButton';
 const DesktopNavBar = (props) => {
     // console.log("DesktopNavBar props", props)
     const router = useRouter()
+    console.log("router stuff", router.asPath)
 
     return (
         <Navbar bg="white" expand="lg" style={{
@@ -112,9 +113,9 @@ const DesktopNavBar = (props) => {
                         {/* <SearchBar searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/> */}
                         <div  style={{height:"80%", paddingLeft:"4.3%", paddingRight: "10.8%", width: "36%"}}></div>
                         
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096", marginRight:"auto" }} onClick={() => { Router.push("/library") }}>Library</Nav.Link>
+                        <Nav.Link style={{ padding: "unset", color: (router.asPath == "/queue")? "white": "#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
+                        <Nav.Link style={{ padding: "unset", color: (router.asPath == "/history")? "white": "#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
+                        <Nav.Link style={{ padding: "unset", color: (router.asPath == "/library")? "white": "#5c6096", marginRight:"auto" }} onClick={() => { Router.push("/library") }}>Library</Nav.Link>
                         {/* <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link> */}
 
                         {/* <Divider orientation="vertical" flexItem={true} /> */}

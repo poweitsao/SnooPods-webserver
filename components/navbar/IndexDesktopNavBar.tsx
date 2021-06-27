@@ -34,7 +34,6 @@ const DesktopNavBar = (props) => {
             alignItems: "stretch",
             paddingLeft: "20px",
             paddingRight: "20px",
-            fontSize: 20,
             height: "100%", 
             padding: "unset",
             
