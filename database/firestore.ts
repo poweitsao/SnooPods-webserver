@@ -573,7 +573,7 @@ export async function backgroundAddToQueue(email: string, trackIDs: Array<string
                     if (userQueue[i].playlistID == playlistID){
                         let newQueueTracks = userQueue[i].tracks.concat(getTracksRes.tracks)
                         userQueue[i].tracks = newQueueTracks
-                        userRef.set({
+                        await userRef.set({
                             queue: userQueue 
                         }, { merge: true })
                     }
@@ -648,7 +648,7 @@ export async function backgroundAddToCurrentPlaylist(email: string, trackIDs: Ar
 
                 let newCurrentPlaylistTracks = userCurrentPlaylist.tracks.concat(getTracksRes.tracks)
                 userCurrentPlaylist.tracks = newCurrentPlaylistTracks
-                userRef.set({
+                await userRef.set({
                     currentPlaylist: userCurrentPlaylist 
                 }, { merge: true })
                 // for(var i = 0; i < userQueue.length; i ++){

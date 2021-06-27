@@ -67,11 +67,11 @@ const SubredditTableList = (props) => {
   const playPodcast = async (track: Track, trackIndex: number, trackIDs: Array<string>) => {
 
     var queuePlaylistTracks = []
-    var trackIDsAfter = trackIDs.slice(trackIndex)
+    // var trackIDsAfter = trackIDs.slice(trackIndex)
     var playlistName = playlist.collectionName
 
     const addToCurrentPlaylistRes = await fetch("/api/queue/addToCurrentPlaylist", 
-      {method: "POST", body: JSON.stringify({email: email, trackIDs: trackIDsAfter, playlistName: playlistName})
+      {method: "POST", body: JSON.stringify({email: email, trackIDs: trackIDs, playlistName: playlistName})
     })
     var result = await addToCurrentPlaylistRes.json()
 
