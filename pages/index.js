@@ -72,22 +72,18 @@ const Index = ({ userSession }) => {
       <div className="page-body">
 
 
-        <div className="desc" style={{width: "60.93%", height: "18.75%"}}>
-          <p style={{ fontSize: "3.75vw", fontFamily: "Inter", fontWeight: "500", margin: "unset", marginBottom: "35.8%"}}>Listen to your favorite subreddits like never before.</p>
+        <div className="desc" style={{width: "60.93%", height: "17.7%", marginBottom: "32.3%"}}>
+          <p style={{ fontSize: "3.75vw", fontFamily: "Inter", fontWeight: "500", margin: "unset", marginBottom: "6.3%"}}>Listen to your favorite subreddits like never before.</p>
           <Button style={{width: "18.8%"}}>GET SNOOPODS FREE</Button>
         </div>
-
+        <div className="footer" style={{height: "24.56%", width: "100%", backgroundColor: "#181727"}}></div>
         {/* <img className="image" src="http://www.poweitsao.com/images/kenobi.jpg"></img> */}
         <style>{`
       .page-body{
         display:flex;
         flex-wrap:wrap;
-        flex-direction:column;
         justify-content:center;
-        align-content:center;
-        align-text:center;
-        margin-top: 21.43%;
-        margin-bottom: 34%;
+        height: 94.9%;
       }
       .button-container{
         margin:20px;
@@ -101,6 +97,8 @@ const Index = ({ userSession }) => {
         margin-bottom: 15px;
       }
       .desc{
+        margin-top: 21.4%;
+        margin-bottom: 32.3%; 
         justify-content: center;
         align-items: center;
         text-align: center;
@@ -112,7 +110,7 @@ const Index = ({ userSession }) => {
       }
       .index-nav-bar-container{
         width: 100%;
-        height: 7.93%;
+        height: 5%;
       }
 
 `}</style>
