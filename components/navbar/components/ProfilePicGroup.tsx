@@ -10,7 +10,7 @@ import store from "../../../redux/store"
 import { emptyAudioStore, emptyRegisterationInfo, storeRegisterationInfo } from "../../../redux/actions/index"
 
 import GoogleLogin from 'react-google-login';
-import { Divider } from '@material-ui/core';
+import { Divider, SvgIcon } from '@material-ui/core';
 
 import Cookie from "js-cookie"
 import isEmpty from '../../../lib/isEmptyObject';
@@ -19,12 +19,41 @@ import {emptyUserSessionInfo} from "../../../redux/actions/userSessionActions"
 import {emptyCollections} from "../../../redux/actions/collectionActions"
 import {emptyLikedTracks} from "../../../redux/actions/likedTracksActions"
 import {emptySubLists} from "../../../redux/actions/SubListActions"
+
+import SettingsIcon from "../../../resources/icons/top/Setting/settings_icon.svg"
+import SettingsIconOnClick from "../../../resources/icons/top/Setting/settings_icon_onclick.svg"
+
+const SettingsIconElement = (props) => {
+    var [color, setColor] = useState("#5c6096")
+    var [currIcon, setCurrIcon] = useState(<SvgIcon component={SettingsIcon} style={{fill:"none"}}/>)
+
+    return (
+        <div
+            style={{
+                width: "100%",
+                height: "100%"
+            }}
+            onClick={() => {
+                setCurrIcon(<SvgIcon component={SettingsIconOnClick} style={{fill:"none"}}/>)
+                setColor("white")
+            }}
+            
+        >
+            <div style={{display: "flex", justifyContent:"center", alignItems:"center", width: "100%", height: "100%"}}>
+                {currIcon}
+            </div>
+        </div>
+    )
+}
+
 const ProfilePicGroup = (props) => {
     return (
         <div className="profile-pic-group"
             style={{ display: "flex", justifyContent: "flex-end", alignItems:"center", height: "100%", width: "14%"}} >
             <div style={{paddingRight: "11.1%"}}>
-                <div className="settings-icon" style={{height:"15px", width: "15px", backgroundColor: "white", marginRight: "11.1%"}}></div>
+                {/* <SettingsIconElement className="settings-icon" style={{height:"15px", width: "15px", backgroundColor: "white", marginRight: "11.1%"}}/> */}
+                {/* <SvgIcon component={SettingsIcon} style={{fill:"none"}}/> */}
+                <SettingsIcon/>
             </div>
             <Dropdown
                 id="basic-nav-dropdown"
