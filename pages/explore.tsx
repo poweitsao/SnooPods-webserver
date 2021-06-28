@@ -189,6 +189,13 @@ const Explore = ({ userSession }) => {
         let response = await fetch("/api/search/getAll", {method: "GET"})
         let categories = await response.json()
         console.log("all categories", categories)
+        categories.categories.sort((a, b) => {
+          var keyA = a.subreddits.length
+          var keyB = b.subreddits.length
+          if (keyA > keyB) return -1;
+          if (keyA < keyB) return 1;
+          return 0
+        })
         setCategories(categories.categories)
       }
     }
