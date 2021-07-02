@@ -11,8 +11,8 @@ import useSWR from 'swr'
 import store from "../redux/store";
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
-import {getQueue} from "../lib/syncQueue";
-import {UserSession} from "../ts/interfaces"
+import { getQueue } from "../lib/syncQueue";
+import { UserSession } from "../ts/interfaces"
 import EmptySideBar from "../components/sidebar/EmptySideBar";
 
 const FeaturedTile = (props) => {
@@ -79,119 +79,41 @@ const FeaturedTile = (props) => {
     </div>)
 }
 
-const FeaturedGridMenu = (props) => {
-
-  const [mounted, setMounted] = useState(false)
-  const {data} = useSWR(mounted ? "/api/podcasts/getFeatured/": null)
-  const {data: endpoint3} = useSWR(mounted?"/api/subredditPlaylist/cscareerquestions":null)
-  // console.log(mounted)
-  // console.log("endpoint3.2", endpoint3)
-
-  // const { data } = useSWR( '/api/data' : null, fetchData)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const subreddits = []
-  if(mounted){
-    // console.log("data", data)
-    if (!data) return <div style={{width: "100%", display: "flex", justifyContent: "center", paddingBottom: "30px"}} key={"loading"}>loading...</div>
-
-    for (const [index, value] of data._keys.entries()) {
-      subreddits.push(<div key={index} className={"card-container"}><FeaturedTile subredditInfo={data[value]} /></div>
-      )
-    }
-  }
-
-  
-
-  
-  
-  return (
-    <div >
-      <Grid container spacing={3} justify={"center"}>
-        {subreddits}
-      </Grid>  <style>{`
-    
-    .card-container{
-      padding: 10px;
-      display: flex;
-      justify-content:center;
-    }
-    `}</style>
-    </div>)
-}
-
 const home = ({ userSession }) => {
 
-  const [subreddit, setSubreddit] = useState("")
-  const [podcast, setPodcast] = useState("")
-  const [featuredSubreddits, setFeaturedSubreddits] = useState({})
   const [user, setUser] = useState({})
-  const [podcastURL, setPodcastURL] = useState("")
   const [showLoginPopup, setShowLoginPopup] = useState(false)
-
-  const [mounted, setMounted] = useState(false)
-
-  const {data: endpoint2} = useSWR("/api/user/collections/getCollections/poweitsao@gmail.com")
-  // console.log(mounted)
-  // console.log("endpoint2", endpoint2)
-
-  const {data: endpoint3} = useSWR("/api/subredditPlaylist/cscareerquestions")
-  // console.log(mounted)
-  // console.log("endpoint3.1", endpoint3)  
 
   useEffect(() => {
     const validateUserSession = async (session_id: string, email: string) => {
       let userSession: UserSession = await validateSession(session_id, email);
-      if (userSession.validSession){
-        // console.log("user from validateUserSession", userSession)
+      if (userSession.validSession) {
         setUser(userSession)
-        
         store.dispatch({
-          type:"STORE_USER_SESSION_INFO",
+          type: "STORE_USER_SESSION_INFO",
           userSession
         })
-        
-      } else{
+      } else {
         Router.push("/")
       }
     }
 
     if (userSession.session_id && userSession.email) {
-      // console.log("UserSession: ", store.getState().userSessionInfo)
-      if (!store.getState().userSessionInfo.validSession){
+      if (!store.getState().userSessionInfo.validSession) {
         validateUserSession(userSession.session_id, userSession.email);
-      } else{
+      } else {
         console.log("not validating user session because it's already valid")
         setUser(store.getState().userSessionInfo)
       }
-      
-
     } else {
       setShowLoginPopup(true)
     }
 
-   
-    // console.log("usersessionstore", )
-    
-    setMounted(true)
-    if (userSession.email){
+    if (userSession.email) {
       getQueue(userSession.email)
     }
-    
-    
   }, []);
 
-  const getQueueStore = () =>{
-    let queueInfo = store.getState().queueInfo;
-    console.log(queueInfo)
-  }
-  const getUserSessionStore = () =>{
-    let UserSessionInfo = store.getState().userSessionInfo
-    console.log(UserSessionInfo)
-  }
   return (
 
     <Layout>
@@ -205,33 +127,26 @@ const home = ({ userSession }) => {
       </div>
       <div className="page-container">
         {!user["validSession"]
-            ? <EmptySideBar/>
-            : <Sidebar user={user}></Sidebar>
-          }
-         
-        
+          ? <EmptySideBar />
+          : <Sidebar user={user}></Sidebar>
+        }
+
+
         <div className="main-page">
           {!user["validSession"]
             ? <div></div>
             : <CustomNavbar user={user} />
           }
-          
-          <div className="page-container" 
-            style={{height: "100%", overflowY: "scroll", display: "flex", justifyContent:"center"}}>
-            <div className="heading">
-              <h1> Home </h1>
-            </div>
 
-            {/* <div className="grid-container">
-              {featuredSubreddits === {}
-                ? <div></div>
-                : <FeaturedGridMenu featuredSubreddits={featuredSubreddits} />}
-            </div> */}
+          <div className="page-container">
+            <div>
+              <div className="popular-subreddits"></div>
+              <div className="recently-played-subreddits"></div>
+            </div>
+            <div>
+              <div className="currently-playing"></div>
+            </div>
           </div>
-          {/* <div className="button-container">
-            <button onClick={getQueueStore}>get queueStore</button>
-            <button onClick={() => {console.log("user", user)}}>get user</button>
-          </div> */}
 
           <style>{`
           .heading{
@@ -248,76 +163,63 @@ const home = ({ userSession }) => {
 
           }
 
-        .page-container{
-          display: flex;
-          height: 100%;
-          
-        }
-        .button-container{
-          margin:20px;
-          text-align:center;
-        }
-        .image{
-          -webkit-user-select: none;
-          margin: auto;}
-          .heading{
-            text-align:center;
-        }
-        .musicPlayer{
-          text-align:center;
-          padding: 20px;
-        }
-        .grid-container{
-          padding:20px;
-          width: 80%;
-          display: flex;
-          justify-content:center;
-          align-self:center;
-          margin-right: 50px;
-          margin-left:50px;
-          max-width: 690px;
-        }
-        .navbar{
-          display:flex;
-          flex-direction: column;
-          align-items: stretch;
-        }
-    `}</style>
+            .page-container{
+              display: flex;
+              height: 100%;
+              justify-content: center;
+              background-image: linear-gradient(to bottom, #121538, #12102b, #12091a);
+            }
+            .button-container{
+              margin:20px;
+              text-align:center;
+            }
+            .image{
+              -webkit-user-select: none;
+              margin: auto;}
+              .heading{
+                text-align:center;
+            }
+            .musicPlayer{
+              text-align:center;
+              padding: 20px;
+            }
+            .grid-container{
+              padding:20px;
+              width: 80%;
+              display: flex;
+              justify-content:center;
+              align-self:center;
+              margin-right: 50px;
+              margin-left:50px;
+              max-width: 690px;
+            }
+            .navbar{
+              display:flex;
+              flex-direction: column;
+              align-items: stretch;
+            }
+          `}</style>
         </div>
-        </div>
-        <div>
-
+      </div>
+      <div>
         <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
-        </div>
-      
+      </div>
+
     </Layout >
 
   )
 }
 
 home.getInitialProps = async ({ req }) => {
-  // console.log("req", req)
   const cookies = parseCookies(req)
-
-  // const res = await fetch(server + "/api/podcasts/getFeatured", { method: "GET" })
-  //   if (res.status === 200) {
-
-  //     var featured = await res.json()
-  //     console.log("featured in home: ", featured)
-  //     // setFeaturedSubreddits(featured);
-  //   } else{
-  //     var featured = {} 
-  //   }
 
   return {
     userSession: {
       "session_id": cookies.session_id,
       "email": cookies.email
     }
-    // featured: data,
-    // revalidate: 60 //seconds
   };
 }
 
