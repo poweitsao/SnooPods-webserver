@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from "react";
 import Image from "react-bootstrap/Image";
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 
 function processTrackName(trackName) {
@@ -15,7 +16,8 @@ function processTrackName(trackName) {
 }
 
 function Track(props) {
-
+  const {height, width} = useWindowDimensions()
+  const trackImageSideLength = height * 0.0714
   const { trackName, subreddit, pictureURL } = props;
 
   var displayTrackName = processTrackName(trackName)
@@ -24,7 +26,7 @@ function Track(props) {
       <div className="track">
         <div className="trackImage">
           {pictureURL
-            ?<Image src={pictureURL} width="90px" height="90px"/>
+            ?<Image src={pictureURL} width={trackImageSideLength} height={trackImageSideLength} />
             : <div></div>}
           
         </div>
@@ -51,7 +53,7 @@ function Track(props) {
       }
 
       .trackImage{
-        padding-right: 25px;
+        padding-right: 25px;        
       }
 
       .track-words{

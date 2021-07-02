@@ -1,17 +1,10 @@
 import Layout from "../components/layout"
 import CustomNavbar from "../components/navbar/CustomNavbar"
-import MusicPlayer from "../components/musicPlayer"
-import PlayableTile from "../components/PlayableTile"
-import { server } from '../config';
 import React, { useState, useEffect } from 'react';
 import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
-import Cookie, { set } from "js-cookie"
 import validateSession from "../lib/validateUserSessionOnPage"
 import { Grid } from '@material-ui/core';
-import AudioPlayerBar from "../components/AudioPlayerBar"
-import fetch from "isomorphic-unfetch"
-import isEmpty from "../lib/isEmptyObject"
 import LoginPopup from "../components/LoginPopup"
 import Sidebar from "../components/sidebar/Sidebar"
 import useSWR from 'swr'
@@ -19,11 +12,8 @@ import store from "../redux/store";
 import AudioPlayerBarContainer from "../components/containers/AudioPlayerBarContainer";
 import { Provider } from "react-redux";
 import {getQueue} from "../lib/syncQueue";
-
 import {UserSession} from "../ts/interfaces"
 import EmptySideBar from "../components/sidebar/EmptySideBar";
-
-
 
 const FeaturedTile = (props) => {
   return (
