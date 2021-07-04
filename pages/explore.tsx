@@ -263,7 +263,12 @@ const Explore = ({ userSession }) => {
     // console.log("randomColor", randomColor)
     return (
 
-      <div key={props.subredditName} className="featured-tile-container" style={{ marginRight: props.marginRight, width: tileSideLength, height: tileSideLength }}>
+      <div key={props.subredditName} className="featured-tile-container" 
+          style={{ marginRight: props.marginRight, 
+            width: tileSideLength, 
+            height: tileSideLength, 
+            maxHeight: "152px",
+            maxWidth: "152px" }}>
         {/* <button className="featured-button"
               onClick={() => {
                 Router.push("/subreddit/" + props.subredditName)
@@ -287,31 +292,30 @@ const Explore = ({ userSession }) => {
             style={{
               width: "100%",
               height: "100%",
-              // border:"2px solid white", 
               backgroundImage: randomColor,
               display: "flex",
               borderRadius: "5px"
-              // paddingRight:"2.4%"
             }}>
-            <div
+            <div className="tile-name"
               style={{
                 padding: "10px",
                 width: "100%",
                 height: "100%",
                 wordWrap: "break-word",
                 color: "white",
-                fontSize: "1vw",
                 textAlign: "center"
               }}>
               {"r/" + props.subredditName}
             </div>
+            <style>
+              {`
+                .tile-name{
+                  font-size: min(1vw, 18px)
+                }
+              `}
+        </style>
           </div>
         </button>
-        {/* </div>
-              </div> */}
-        {/* </button> */}
-
-
       </div>
     )
   }
@@ -329,7 +333,7 @@ const Explore = ({ userSession }) => {
       }
     }
     return (
-      <div style={{ display: "flex", height: tileSideLength }}>
+      <div style={{ display: "flex", height: tileSideLength, maxHeight: "152px", maxWidth: "1468px" }}>
         {items}
       </div>
     )
@@ -341,7 +345,6 @@ const Explore = ({ userSession }) => {
 
     const colors = ["linear-gradient(to bottom, #178bdc, #c266d2)"]
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
-    // console.log("randomColor", randomColor)
     return (
 
       <div
@@ -349,7 +352,9 @@ const Explore = ({ userSession }) => {
         style={{
           marginRight: props.marginRight,
           width: smallTileSideLength * 2.21,
-          height: smallTileSideLength * 1.184
+          height: smallTileSideLength * 1.184,
+          maxHeight: "180px",
+          maxWidth: "336px"
         }}
       >
         <button style={{
@@ -360,8 +365,6 @@ const Explore = ({ userSession }) => {
           padding: "unset",
 
         }}
-        // onClick={() => {
-        //   Router.push("/subreddit/" + props.subredditName)}}
         >
           <div
             style={{
@@ -381,7 +384,6 @@ const Explore = ({ userSession }) => {
                 fontSize: "1vw",
                 textAlign: "center"
               }}>
-              {/* {"r/" + props.subredditName} */}
             </div>
           </div>
         </button>
@@ -402,20 +404,20 @@ const Explore = ({ userSession }) => {
     //   }
     // }
     return (
-      <div style={{ width: "88.6%", marginLeft: "5.9%", marginBottom: "4.85%" }}>
-        <p style={{
+      <div className="category-container" style={{ width: "88.6%", marginLeft: "auto", marginRight:"auto", maxHeight: "232px", maxWidth: "1468px" }}>
+        <p className="category-name" style={{
           color: "white",
-          fontSize: "1.25vw",
           fontFamily: "Roboto",
           fontWeight: 500,
           margin: "unset",
-          marginBottom: "2.19%"
+          marginBottom: "min(2.19%, 32px)",
+          maxHeight: "20px"
         }}
         >Top Subreddits</p>
-        <div style={{ display: "flex", height: tileHeight }}>
-          <LongSubredditTile marginRight={"2.4%"} />
-          <LongSubredditTile marginRight={"2.4%"} />
-          <LongSubredditTile marginRight={"2.4%"} />
+        <div style={{ display: "flex", height: tileHeight, maxHeight: "180px" }}>
+          <LongSubredditTile marginRight={"2.7%"} />
+          <LongSubredditTile marginRight={"2.7%"} />
+          <LongSubredditTile marginRight={"2.7%"} />
           <LongSubredditTile marginRight={"0%"} />
         </div>
       </div>
@@ -427,20 +429,19 @@ const Explore = ({ userSession }) => {
     console.log("category", category)
 
     return (
-      <div key={category.categoryName} style={{ width: "88.6%", marginLeft: "5.9%", marginBottom: "4.85%" }}>
-        <p
+      <div className="category-container" key={category.categoryName} style={{ width: "88.6%", marginLeft: "auto", marginRight: "auto", maxWidth: "1468px" }}>
+        <p className="category-name"
           style={{
             color: "white",
-            fontSize: "1.25vw",
             fontFamily: "Roboto",
             fontWeight: 500,
             margin: "unset",
-            marginBottom: "2.19%"
+            marginBottom: "min(2.19%, 32px)",
+            maxHeight: "20px"
           }}
         >{category.categoryName}</p>
 
         <CategorySubreddits subreddits={category.subreddits} />
-
       </div>
     )
   }
@@ -494,6 +495,16 @@ const Explore = ({ userSession }) => {
 
               {/* </div> */}
             </div>
+            <style>
+              {`
+                .category-name{
+                  font-size: min(1.25vw, 24px);
+                }
+                .category-container{
+                  margin-bottom: min(4.85%, 80px);
+                }
+              `}
+            </style>
           </SimpleBarReact>
 
           {/* <div className="button-container">
