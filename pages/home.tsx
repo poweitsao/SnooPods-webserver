@@ -1,6 +1,6 @@
 import Layout from "../components/layout"
 import CustomNavbar from "../components/navbar/CustomNavbar"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import parseCookies from "../lib/parseCookies"
 import Router from "next/router"
 import validateSession from "../lib/validateUserSessionOnPage"
@@ -14,6 +14,7 @@ import { Provider } from "react-redux";
 import { getQueue } from "../lib/syncQueue";
 import { UserSession } from "../ts/interfaces"
 import EmptySideBar from "../components/sidebar/EmptySideBar";
+import useWindowDimensions from "../components/hooks/useWindowDimensions"
 
 const FeaturedTile = (props) => {
   return (
@@ -79,7 +80,9 @@ const FeaturedTile = (props) => {
     </div>)
 }
 
-const home = ({ userSession }) => {
+
+
+const Home = ({ userSession }) => {
 
   const [user, setUser] = useState({})
   const [showLoginPopup, setShowLoginPopup] = useState(false)
@@ -114,6 +117,19 @@ const home = ({ userSession }) => {
     }
   }, []);
 
+  const LeftPanel = () => {
+    const { height, width } = useWindowDimensions();
+    const popularSubsHeight = height * 0.6289
+    return(
+      <div style={{ width: popularSubsHeight * 1.064, height: popularSubsHeight, backgroundColor: "white" }} >
+        <div className="popular-subreddits" style={{ height: "50.5%", width: "100%", backgroundColor: "black"}} ></div>
+        <div className="recently-played-subreddits" style={{ height: "39.4%", width: "100%", marginTop: "10.1%", backgroundColor: "black"}}></div>
+      </div>
+    )
+  }
+
+
+
   return (
 
     <Layout>
@@ -138,11 +154,8 @@ const home = ({ userSession }) => {
             : <CustomNavbar user={user} />
           }
 
-          <div className="page-container">
-            <div>
-              <div className="popular-subreddits"></div>
-              <div className="recently-played-subreddits"></div>
-            </div>
+          <div className="page-container" >
+            <LeftPanel/>
             <div>
               <div className="currently-playing"></div>
             </div>
@@ -212,7 +225,7 @@ const home = ({ userSession }) => {
   )
 }
 
-home.getInitialProps = async ({ req }) => {
+Home.getInitialProps = async ({ req }) => {
   const cookies = parseCookies(req)
 
   return {
@@ -223,4 +236,4 @@ home.getInitialProps = async ({ req }) => {
   };
 }
 
-export default home
+export default Home
