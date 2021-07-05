@@ -30,13 +30,9 @@ import PrevButton from '../buttons/PrevButton';
 const LoginGroup = (props) => {
 
     return (
-        // <div>
-        //     <Nav style={{ whiteSpace: "nowrap" }}>
-
         <Nav style={{ whiteSpace: "nowrap" }}>
             <NavDropdown
                 title="Login"
-                // id="basic-nav-dropdown"
                 renderMenuOnMount={true}
                 alignRight
                 style={{
@@ -86,21 +82,12 @@ async function onGoogleLoginSuccess(googleUser) {
     if (response.status == 200) {
         let res = await response.json()
         if (res.registered) {
-            //store session_id
             Cookie.set("session_id", res.session_id)
             Cookie.set("email", res.verification.payload.email)
-
-            console.log("Taking user to their homepage")
             Router.push('/home')
         }
         else if (!res.registered) {
-            // res.userID = id_token
-            console.log("response in index.js", res)
-            // const store = createStore(registerReducer)
-
             store.dispatch(storeRegisterationInfo(res))
-            // console.log("store: ", store.getState())
-            console.log("Taking user to registeration page ")
             Router.push('/register')
         }
     }
@@ -187,15 +174,9 @@ const MobileNavBar = (props) => {
 }
 
 const DesktopNavBar = (props) => {
-    // console.log("DesktopNavBar props", props)
     const router = useRouter()
     return (
         <Navbar bg="white" expand="lg" style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "stretch",
-            paddingLeft: "20px",
-            paddingRight: "20px",
             height: "100%", 
             padding: "unset",
             }}>
@@ -208,49 +189,37 @@ const DesktopNavBar = (props) => {
                     backgroundColor:"#131538",
                     justifyContent: "center"
                     }}>
-                <Nav 
-                    style={{fontFamily:"font-family: Lato, sans-serif", 
-                            fontSize:"0.9375vw",
-                            display: "flex", 
-                            alignItems:"center",
-                            justifyContent:"center",
-                            width: "88.6%",
-                            height: "40px"}}>
-                        {/* <Navbar.Brand style={{ cursor: "pointer", marginRight: "0", fontSize: 30 }} onClick={() => { Router.push("/home") }}>SnooPods</Navbar.Brand> */}
-                        {/* <div
-                            className="prev-next-buttons" 
-                            style={{display: "flex", width:"3.8%"}}>
-                        
-                        </div> */}
-                        <PrevButton style={{marginRight: "12px"}} handleClick={router.back} />
-                        
-                        {/* <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white", marginRight: "12px"}}></div> */}
-                        <NextButton handleClick={() => {window.history.forward();}}/>
-                        
-                        {/* <div style={{borderRadius:"50%", width: "22px", height:"22px", backgroundColor: "white"}}></div> */}
-                        <SearchBar searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/>
-                        
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
-                        <Nav.Link style={{ padding: "unset", color:"#5c6096", marginRight:"auto" }} onClick={() => { Router.push("/library") }}>Library</Nav.Link>
-                        {/* <Nav.Link style={{ paddingLeft: "20px", paddingRight: "28px" }} onClick={() => { Router.push("/about") }}>About</Nav.Link> */}
+                <Nav
+                    style={{
+                        fontFamily: "font-family: Lato, sans-serif",
+                        fontSize: "min(0.9375vw, 18px)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "min(88.6%, 1468px)",
+                        height: "40px"
+                    }}>
 
-                        {/* <Divider orientation="vertical" flexItem={true} /> */}
-                        {/* <div style={{   }}> */}
-                        {props.user && !isEmpty(props.user)
-                            ?<ProfilePicGroup user={props.user} />
-                            :<LoginGroup paddingLeft="0px" />
-                        }
-                        {/* </div> */}
-                    </Nav>
+                    <PrevButton style={{marginRight: "12px"}} handleClick={router.back} />
+                    <NextButton handleClick={() => {window.history.forward();}}/>
+                    <SearchBar searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/>
+
+                    <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/queue") }}>Queue</Nav.Link>
+                    <Nav.Link style={{ padding: "unset", color:"#5c6096", paddingRight: "3.2%" }} onClick={() => { Router.push("/history") }}>History</Nav.Link>
+                    <Nav.Link style={{ padding: "unset", color:"#5c6096", marginRight:"auto" }} onClick={() => { Router.push("/library") }}>Library</Nav.Link>
+
+                    {props.user && !isEmpty(props.user)
+                        ?<ProfilePicGroup user={props.user} />
+                        :<LoginGroup paddingLeft="0px" />
+                    }
+                </Nav>
 
             </Navbar.Collapse>
         </Navbar>)
 }
 
 const NavBarContent = (props) => {
-    const { height, width } = useWindowDimensions();
-    // console.log("props in navbarcontent", props)
+    const { width } = useWindowDimensions();
     if (width <= 991) {
         return (
             <MobileNavBar user={props.user} searchTerm={props.searchTerm} setSearchTerm={props.setSearchTerm}/>
@@ -270,51 +239,40 @@ class ExploreNavbar extends React.Component {
         this.state = {...props}
     }
 
-
-
     render() {
         return (
             // dropdown customization: https://react-bootstrap.github.io/components/dropdowns/
-            <div style={{ width: "100%", height: "8.7%" }}>
-                {/* <div style={{ display: "flex", justifyContent: "space-around" }}> */}
+            <div style={{ width: "100%", height: "min(8.7%, 100px)" }}>
                 <NavBarContent user={this.state.user} searchTerm={this.state.searchTerm} setSearchTerm={this.state.setSearchTerm} />
-
-
-
                 <style jsx> {`
-                .parent{
-                    display:flex;   
-                }
-                .navbar-content{
-                    display:flex;
-                    justify-content:center;
-                }
-                .navbar-content-container{
-                    display:flex;
-                    justify-content:center;
-                }
-                .center-button{
-                    padding-left: 10px;
-                    padding-right: 10px;
-                    padding-top:5px;
-                    padding-bottom:5px;
-
-                }
-                .brand{
-                    margin-left:auto;
-
-
-                }
-                .profile-pic-group{
-                    margin-right:auto;
-                    display:flex;
-                    flex-direction:column;
-                }
-                .profile-pic-button{
-                    padding: unset;
-                }
-                
-                
+                    .parent{
+                        display:flex;   
+                    }
+                    .navbar-content{
+                        display:flex;
+                        justify-content:center;
+                    }
+                    .navbar-content-container{
+                        display:flex;
+                        justify-content:center;
+                    }
+                    .center-button{
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        padding-top:5px;
+                        padding-bottom:5px;
+                    }
+                    .brand{
+                        margin-left:auto;
+                    }
+                    .profile-pic-group{
+                        margin-right:auto;
+                        display:flex;
+                        flex-direction:column;
+                    }
+                    .profile-pic-button{
+                        padding: unset;
+                    }
                 `}</style>
             </div >
         )
@@ -330,8 +288,7 @@ const SearchBar = (props) => {
                     type="text" 
                     placeholder="Search" 
                     className="input-rounded" 
-                    style={{borderRadius:"25px"}} 
-                    
+                    style={{borderRadius:"25px"}}  
                     onChange={(e) => props.setSearchTerm(e.target.value)}
                     />
             </div>

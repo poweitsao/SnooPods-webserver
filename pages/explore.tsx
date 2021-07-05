@@ -205,8 +205,6 @@ const Explore = ({ userSession }) => {
       getQueue(userSession.email)
     }
 
-
-    // console.log("usersessionstore", )
     const delayDebounceFn = setTimeout(() => {
       console.log(searchTerm)
       // Send Axios request here
@@ -214,20 +212,6 @@ const Explore = ({ userSession }) => {
     }, 500)
     return () => clearTimeout(delayDebounceFn)
   }, [searchTerm]);
-
-
-  const renderSubredditSearchResult = (searchResult) => {
-    return (
-      <a key={searchResult} href={"/subreddit/" + searchResult}>{searchResult}</a>
-    )
-  }
-
-  const renderCategorySearchResult = (searchResult) => {
-    return (
-      <a key={searchResult} href={"/category/" + searchResult.categoryID}>{searchResult.categoryName}</a>
-
-    )
-  }
 
   const search = async () => {
 
@@ -253,29 +237,23 @@ const Explore = ({ userSession }) => {
   }
 
   const SubredditTile = (props) => {
-    const { height, width } = useWindowDimensions();
+    const { width } = useWindowDimensions();
     const tileSideLength = width * 0.079
 
     const colors = ["linear-gradient(to top, #fa7f9e, #54a8d2)",
       "linear-gradient(to top, #0e69f7, #542089)",
       "linear-gradient(to top, #178bdc, #c266d2)"]
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
-    // console.log("randomColor", randomColor)
     return (
 
-      <div key={props.subredditName} className="featured-tile-container" 
-          style={{ marginRight: props.marginRight, 
-            width: tileSideLength, 
-            height: tileSideLength, 
-            maxHeight: "152px",
-            maxWidth: "152px" }}>
-        {/* <button className="featured-button"
-              onClick={() => {
-                Router.push("/subreddit/" + props.subredditName)
-              }}> */}
-
-        {/* <div className="featured-tile">
-                <div className="featured-tile-overlay"> */}
+      <div key={props.subredditName} className="featured-tile-container"
+        style={{
+          marginRight: props.marginRight,
+          width: tileSideLength,
+          height: tileSideLength,
+          maxHeight: "152px",
+          maxWidth: "152px"
+        }}>
         <button style={{
           width: "100%",
           height: "100%",
@@ -307,13 +285,6 @@ const Explore = ({ userSession }) => {
               }}>
               {"r/" + props.subredditName}
             </div>
-            <style>
-              {`
-                .tile-name{
-                  font-size: min(1vw, 18px)
-                }
-              `}
-        </style>
           </div>
         </button>
       </div>
@@ -327,7 +298,6 @@ const Explore = ({ userSession }) => {
     for (var i = 0; i < subreddits.length; i++) {
       if (i == subreddits.length - 1) {
         items.push(<SubredditTile key={i} subredditName={subreddits[i]} marginRight={"0%"} />)
-
       } else {
         items.push(<SubredditTile key={i} subredditName={subreddits[i]} marginRight={"2.4%"} />)
       }
@@ -394,34 +364,40 @@ const Explore = ({ userSession }) => {
   const TopSubreddits = () => {
     const { height, width } = useWindowDimensions();
     const tileHeight = width * 0.079 * 1.184
-    // let items = []
-    // for (var i = 0; i < subreddits.length; i ++){
-    //   if (i == subreddits.length - 1){
-    //     items.push(<SubredditTile key={i} subredditName={subreddits[i]} marginRight={"0%"} />)
 
-    //   } else{
-    //     items.push(<SubredditTile key={i} subredditName={subreddits[i]} marginRight={"2.4%"} />)
-    //   }
-    // }
     return (
-      <div className="category-container" style={{ width: "88.6%", marginLeft: "auto", marginRight:"auto", maxHeight: "232px", maxWidth: "1468px" }}>
-        <p className="category-name" style={{
-          color: "white",
-          fontFamily: "Roboto",
-          fontWeight: 500,
-          margin: "unset",
-          marginBottom: "min(2.19%, 32px)",
-          maxHeight: "20px"
-        }}
-        >Top Subreddits</p>
-        <div style={{ display: "flex", height: tileHeight, maxHeight: "180px" }}>
+      <div
+        className="category-container"
+        style={{
+          width: "88.6%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          maxHeight: "232px",
+          maxWidth: "1468px",
+        }}>
+        <p
+          className="category-name"
+          style={{
+            color: "white",
+            fontFamily: "Roboto",
+            fontWeight: 500,
+            margin: "unset",
+            marginBottom: "min(2.19%, 32px)",
+            maxHeight: "20px",
+          }}
+        >
+          Top Subreddits
+        </p>
+        <div
+          style={{ display: "flex", height: tileHeight, maxHeight: "180px" }}
+        >
           <LongSubredditTile marginRight={"2.7%"} />
           <LongSubredditTile marginRight={"2.7%"} />
           <LongSubredditTile marginRight={"2.7%"} />
           <LongSubredditTile marginRight={"0%"} />
         </div>
       </div>
-    )
+    );
   }
 
 
@@ -429,7 +405,9 @@ const Explore = ({ userSession }) => {
     console.log("category", category)
 
     return (
-      <div className="category-container" key={category.categoryName} style={{ width: "88.6%", marginLeft: "auto", marginRight: "auto", maxWidth: "1468px" }}>
+      <div className="category-container" 
+          key={category.categoryName} 
+          style={{ width: "88.6%", marginLeft: "auto", marginRight: "auto", maxWidth: "1468px" }}>
         <p className="category-name"
           style={{
             color: "white",
@@ -463,156 +441,115 @@ const Explore = ({ userSession }) => {
           : <Sidebar user={user}></Sidebar>
         }
 
-
         <div className="main-page" style={{ backgroundColor: "#121538" }}>
           {!user["validSession"]
             ? <div></div>
             : <ExploreNavbar user={user} setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
           }
 
-
-          {/* <div className="heading">
-            <h1> Explore </h1>
-          </div> */}
           <SimpleBarReact style={{ height: "91.3%" }}>
-            <div className="search-container" style={{ height: "100%" }} >
-
-              {/* <input onChange={(e) => setSearchTerm(e.target.value)}></input>
-              <div className="search-result-category">
-                  <h3>categories</h3>
-                  <button onClick={() => console.log(categories)}>click</button> */}
-              <div>
-
-              </div>
+            <div className="search-container" style={{ height: "100%", marginTop: "min(7.93vh, 100px)" }} >
               {categories.length == 0
                 ? <div></div>
-                : <div style={{ height: "100%", width: "100%", marginTop: "100px" }}>
+                : <div style={{ height: "100%", width: "100%" }}>
                   <TopSubreddits />
                   {categories.map(renderExplorePage)}
                   <div style={{ height: "5%" }}>
                   </div></div>}
-
-
-              {/* </div> */}
             </div>
-            <style>
-              {`
-                .category-name{
-                  font-size: min(1.25vw, 24px);
-                }
-                .category-container{
-                  margin-bottom: min(4.85%, 80px);
-                }
-              `}
-            </style>
           </SimpleBarReact>
 
-          {/* <div className="button-container">
-            <button onClick={getQueueStore}>get queueStore</button>
-            <button onClick={() => {console.log("user", user)}}>get user</button>
-          </div> */}
-
           <style>{`
-          .heading{
-            text-align:center;
-          }
-          .main-page{
-            width: 86.25%;
-            height: 90.5%;
-            display:flex;
-            flex-direction:column;
-            align-content:center;
-            align-text:center;
-            align-self: flex-start;
-
-            
-
-          }
-
-        .page-container{
-          display: flex;
-          height: 100%;
-          
-        }
-        .button-container{
-          margin:20px;
-          text-align:center;
-        }
-        .image{
-          -webkit-user-select: none;
-          margin: auto;}
-          .heading{
-            text-align:center;
-        }
-        .musicPlayer{
-          text-align:center;
-          padding: 20px;
-        }
-        .grid-container{
-          padding:20px;
-          width: 80%;
-          display: flex;
-          justify-content:center;
-          align-self:center;
-          margin-right: 50px;
-          margin-left:50px;
-          max-width: 690px;
-        }
-        .navbar{
-          display:flex;
-          flex-direction: column;
-          align-items: stretch;
-        }
-        .search-container{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .search-result-category{
-            padding-top: 10px;
-            padding-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-    `}</style>
+            .heading{
+              text-align:center;
+            }
+            .main-page{
+              width: 86.25%;
+              height: 90.5%;
+              display:flex;
+              flex-direction:column;
+              align-content:center;
+              align-text:center;
+              align-self: flex-start;
+            }
+            .page-container{
+              display: flex;
+              height: 100%;
+              
+            }
+            .button-container{
+              margin:20px;
+              text-align:center;
+            }
+            .image{
+              -webkit-user-select: none;
+              margin: auto;}
+              .heading{
+                text-align:center;
+            }
+            .musicPlayer{
+              text-align:center;
+              padding: 20px;
+            }
+            .grid-container{
+              padding:20px;
+              width: 80%;
+              display: flex;
+              justify-content:center;
+              align-self:center;
+              margin-right: 50px;
+              margin-left:50px;
+              max-width: 690px;
+            }
+            .navbar{
+              display:flex;
+              flex-direction: column;
+              align-items: stretch;
+            }
+            .search-container{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .search-result-category{
+                padding-top: 10px;
+                padding-bottom: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .category-name{
+              font-size: min(1.25vw, 24px);
+            }
+            .category-container{
+              margin-bottom: min(4.85%, 80px);
+            }
+            .tile-name{
+              font-size: min(1vw, 18px)
+            }
+          `}</style>
         </div>
       </div>
       <div>
-
         <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
       </div>
-
     </Layout >
 
   )
 }
 
 Explore.getInitialProps = async ({ req }) => {
-  // console.log("req", req)
   const cookies = parseCookies(req)
-
-  // const res = await fetch(server + "/api/podcasts/getFeatured", { method: "GET" })
-  //   if (res.status === 200) {
-
-  //     var featured = await res.json()
-  //     console.log("featured in Explore: ", featured)
-  //     // setFeaturedSubreddits(featured);
-  //   } else{
-  //     var featured = {} 
-  //   }
 
   return {
     userSession: {
       "session_id": cookies.session_id,
       "email": cookies.email
     }
-    // featured: data,
-    // revalidate: 60 //seconds
   };
 }
 
