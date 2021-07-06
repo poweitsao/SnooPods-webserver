@@ -464,8 +464,8 @@ const Explore = ({ userSession }) => {
               text-align:center;
             }
             .main-page{
-              width: 86.25%;
-              height: 90.5%;
+              width: 100%;
+              height: 100%;
               display:flex;
               flex-direction:column;
               align-content:center;
@@ -532,11 +532,11 @@ const Explore = ({ userSession }) => {
           `}</style>
         </div>
       </div>
-      <div>
+      
         <Provider store={store}>
           <AudioPlayerBarContainer />
         </Provider>
-      </div>
+      
     </Layout >
 
   )
