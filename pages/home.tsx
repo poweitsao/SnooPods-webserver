@@ -118,17 +118,22 @@ const Home = ({ userSession }) => {
   }, []);
 
   const LeftPanel = () => {
-    const { height, width } = useWindowDimensions();
-    const popularSubsHeight = height * 0.6289
     return(
-      <div style={{ width: popularSubsHeight * 1.064, height: popularSubsHeight, backgroundColor: "white" }} >
+      <div style={{ width: "58.1%", height: "100%", backgroundColor: "white", marginRight: "auto" }} >
         <div className="popular-subreddits" style={{ height: "50.5%", width: "100%", backgroundColor: "black"}} ></div>
         <div className="recently-played-subreddits" style={{ height: "39.4%", width: "100%", marginTop: "10.1%", backgroundColor: "black"}}></div>
       </div>
     )
   }
 
-
+  const RightPanel = () => {
+    return(
+      <div style={{ width: "35.5%", height: "100%", backgroundColor: "white", display: "flex", flexDirection: "column", alignItems: "center"}} >
+        <div className="current-album" style={{ height: "35.7%", width: "93%", backgroundColor: "black"}} ></div>
+        <div className="track-list" style={{ height: "55.1%", width: "100%", marginTop: "auto", backgroundColor: "black"}}></div>
+      </div>
+    )
+  }
 
   return (
 
@@ -154,10 +159,10 @@ const Home = ({ userSession }) => {
             : <CustomNavbar user={user} />
           }
 
-          <div className="page-container" >
-            <LeftPanel/>
-            <div>
-              <div className="currently-playing"></div>
+          <div className="page-container">
+            <div className="panel-container">
+              <LeftPanel/>
+              <RightPanel/>
             </div>
           </div>
 
@@ -181,6 +186,12 @@ const Home = ({ userSession }) => {
               height: 100%;
               justify-content: center;
               background-image: linear-gradient(to bottom, #121538, #12102b, #12091a);
+            }
+            .panel-container{
+              display: flex;
+              width: min(115.39vh, 1454px);
+              height: min(62.89vh, 793px);
+              margin-top: min(7.93vh, 100px);
             }
             .button-container{
               margin:20px;
