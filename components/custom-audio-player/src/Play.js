@@ -14,8 +14,8 @@ export default function Play(props) {
       <style>
         {`
       .play__button {
-        width: 36px;
-        height: 36px;
+        width: min(4vh, 51px);
+        height: min(4vh, 51px);
         background-color: transparent;
         border: none;
         padding: unset;

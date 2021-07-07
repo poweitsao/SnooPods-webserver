@@ -12,9 +12,11 @@ function calculateCurPercentage(duration, curTime) {
 }
 
 export default function Bar(props) {
-  const { duration, curTime, onTimeUpdate } = props;
+  const { duration, curTime, onTimeUpdate, setSyncBarTimeWithAudio, setCurrentlyScrubbing, currentlyScrubbing } = props;
 
   const curPercentage = calculateCurPercentage(duration, curTime)
+  const [mouseInBar, setMouseInBar] = useState(false)
+
   const [barLeftColor, setBarLeftColor] = useState("#e8e8e8")
   const [knobSize, setKnobSize] = useState("5px")
 
@@ -26,18 +28,21 @@ export default function Bar(props) {
 
   function calcClickedTime(e) {
     const clickPositionInPage = e.pageX;
+    // console.log("e.pageX", e.pageX)
     const bar = document.querySelector(".bar__progress");
     const barStart = bar.getBoundingClientRect().left + window.scrollX;
     const barWidth = bar.offsetWidth;
-    const clickPositionInBar = clickPositionInPage - barStart;
+    const clickPositionInBar = Math.min(clickPositionInPage, barStart + barWidth) - barStart;
+    // console.log("clickPositionInBar", clickPositionInBar)
+    // console.log("max", barStart + barWidth)
     const timePerPixel = duration / barWidth;
     return timePerPixel * clickPositionInBar;
   }
 
   function handleTimeDrag(e) {
     onTimeUpdate(calcClickedTime(e));
-
     const updateTimeOnMove = eMove => {
+      
       onTimeUpdate(calcClickedTime(eMove));
     };
 
@@ -45,6 +50,20 @@ export default function Bar(props) {
     document.addEventListener("mouseup", () => {
       document.removeEventListener("mousemove", updateTimeOnMove);
     });
+  }
+
+  const mouseUpHandler = () => {
+    console.log("mouseup!")
+    setCurrentlyScrubbing(false)
+    if(!mouseInBar){
+      setKnobSize("5px")
+      setBarLeftColor("#e8e8e8")
+    } else{
+      setKnobSize("10px")
+      setBarLeftColor("#2651D2")
+    }
+    setSyncBarTimeWithAudio(true)
+    removeEventListener('mouseup', mouseUpHandler);
   }
 
   return (
@@ -62,21 +81,40 @@ export default function Bar(props) {
               handleTimeDrag(e)
               setKnobSize("8px")
               setBarLeftColor("#2651D2")
+              setCurrentlyScrubbing(true)
+
           }}
           onMouseUp={
-            () => setBarLeftColor("#e8e8e8")
+            () => {
+              setCurrentlyScrubbing(false)
+              if(!mouseInBar){
+                setKnobSize("5px")
+                setBarLeftColor("#e8e8e8")
+              } else{
+                setKnobSize("10px")
+                setBarLeftColor("#2651D2")
+              }
+              setSyncBarTimeWithAudio(true)
+              // audio.play()
+            }
           }
 
           onMouseEnter={
             () => {
                     setKnobSize("10px")
                     setBarLeftColor("#2651D2")
+                    setMouseInBar(true)
                   }
           }
           onMouseLeave={
             () => {
-                    setKnobSize("5px")
-                    setBarLeftColor("#e8e8e8")
+                    if(!currentlyScrubbing){
+                      setKnobSize("5px")
+                      setBarLeftColor("#e8e8e8")
+                    } else{
+                      window.addEventListener("mouseup", mouseUpHandler)
+                    }
+                    setMouseInBar(false)
                   }
           }
         >
@@ -101,7 +139,7 @@ export default function Bar(props) {
         }
         .bar__time {
           color: #c4c4c4;
-          font-size: 16px;
+          font-size: min(0.95vh, 12px);
           padding-left: 15px;
           padding-right: 15px;
           font-family: Roboto, sans-serif;

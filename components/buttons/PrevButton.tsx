@@ -18,8 +18,8 @@ const PrevButton = (props) => {
                         border: none;
                     }
                     .nav-icon{
-                        width: 22px;
-                        height: 22px;
+                        width: min(22px, 0.0114vw);
+                        height: min(22px, 0.0114vw);
                         border-radius: 50%;
                         background-image: #13163a;
                         display: flex;

@@ -32,7 +32,7 @@ import SimpleBarReact from "simplebar-react";
 import "simplebar/src/simplebar.css";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 
-const MyMusicOption = ({ redirect, name, icon, onClickIcon }) => {
+const MyMusicOption = ({ redirect, name, icon, onClickIcon, viewBox }) => {
     const router = useRouter();
     const isCurrentTab = router.asPath == redirect;
     var [optionContainerColor, setOptionContainerColor] = useState("none");
@@ -40,7 +40,7 @@ const MyMusicOption = ({ redirect, name, icon, onClickIcon }) => {
     // console.log()
     // const [isHoveringOver, setIsHoveringOver] = useState(false)
     const [iconButton, setIconButton] = useState(
-        <SvgIcon className="my-music-option-icon" component={icon} />
+        <SvgIcon viewBox={viewBox} className="my-music-option-icon" component={icon} />
     );
 
     // const [currIcon, setCurrIcon] = useState(icon)
@@ -59,13 +59,13 @@ const MyMusicOption = ({ redirect, name, icon, onClickIcon }) => {
             style={{ backgroundColor: optionContainerColor }}
             onClick={() => {
                 setIconButton(
-                    <SvgIcon className="my-music-option-icon" component={onClickIcon} />
+                    <SvgIcon viewBox={viewBox} className="my-music-option-icon" component={onClickIcon} />
                 );
                 setTextColor("white");
             }}
         >
             {isCurrentTab ? (
-                <SvgIcon className="my-music-option-icon" component={onClickIcon} />
+                <SvgIcon viewBox={viewBox} className="my-music-option-icon" component={onClickIcon} />
             ) : (
                 iconButton
             )}
@@ -91,12 +91,11 @@ const MyMusicOption = ({ redirect, name, icon, onClickIcon }) => {
                     align-items: center;  
                     font-family: Lato, sans-serif;
                     font-weight: bold;
-                    font-size: 0.729vw;
+                    font-size: min(0.729vw, 14px);
                     padding-left: 9.4%;
                 }
                 .my-music-option-icon{
-                    width: 22px;
-                    height: 22px;   
+                    width: min(1.145vw, 22px);
                     fill: none;
                     margin-right: 13.5%;
                     
@@ -109,15 +108,14 @@ const MyMusicOption = ({ redirect, name, icon, onClickIcon }) => {
 const Sidebar = (props) => {
     // console.log("sidebar pathname", router.pathname)
 
-    const [mounted, setMounted] = useState(false);
     const [showCollectionDelete, setShowCollectionDelete] = useState([]);
     const [showSubListDelete, setshowSubListDelete] = useState([]);
+    const { height } = useWindowDimensions()
 
     const [email, setEmail] = useState(props.user.email);
     const { data: collections } = useSWR(
         "/api/user/collections/getCollections/" + props.user.email
     );
-    // const collections = []
     const { data: likedTracks } = useSWR(
         "/api/user/collections/likedTracks/get/" + props.user.email
     );
@@ -126,17 +124,9 @@ const Sidebar = (props) => {
         "/api/user/sublists/getSubLists/" + props.user.email
     );
     const { data: history } = useSWR("/api/user/history/get/" + props.user.email);
-    const { width, height } = useWindowDimensions();
-
-    // if(likedTracks){
-    //     console.log("likedTracks in sidebar", likedTracks)
-    // }
-    const [sidebarHeight, setSidebarHeight] = useState(0);
     const sidebarRef = useRef(null);
 
     useEffect(() => {
-        setMounted(true);
-
         if (collections !== undefined) {
             if (collections.length !== showCollectionDelete.length) {
                 setShowCollectionDelete(
@@ -150,10 +140,8 @@ const Sidebar = (props) => {
                 likedTracks: likedTracks.tracks,
                 collectionID: likedTracks.collectionID,
             });
-            // console.log("likedTracks", store.getState().likedTracksInfo)
         }
         if (collections) {
-            // console.log("collections from useSWR", collections)
             store.dispatch({
                 type: "STORE_COLLECTIONS",
                 collections: collections,
@@ -161,7 +149,6 @@ const Sidebar = (props) => {
         }
 
         if (subLists) {
-            // console.log("subLists from useSWR", subLists)
             if (subLists.length !== showSubListDelete.length) {
                 setshowSubListDelete([...Array(subLists.length)].map((_, i) => false));
             }
@@ -169,7 +156,6 @@ const Sidebar = (props) => {
                 type: "STORE_SUBLISTS",
                 subLists: subLists,
             });
-            // console.log("subLists from redux", store.getState().subListInfo)
         }
         if (history) {
             store.dispatch({
@@ -177,10 +163,6 @@ const Sidebar = (props) => {
                 history: history,
             });
         }
-
-        // const sidebarHeight = document.getElementById('sidebar-nav').clientHeight;
-        // console.log("sidebarHeight", sidebarHeight)
-        // setSidebarHeight(sidebarRef.current.clientHeight)
     }, [collections, likedTracks, subLists, history]);
 
     if (!collections || !likedTracks || !subLists || !history) {
@@ -258,10 +240,6 @@ const Sidebar = (props) => {
         collectionID,
         collectionName
     ) => {
-        // console.log("delete collection clicked")
-        // console.log(email)
-        // console.log(collectionID)
-        // console.log(collectionName)
 
         await fetch("/api/user/collections/deleteCollection/", {
             method: "DELETE",
@@ -275,8 +253,6 @@ const Sidebar = (props) => {
     };
 
     const oldrenderSubLists = (subList, index) => {
-        // console.log("params in renderSubLists", subList, index)
-        // console.log(showSubListDelete)
         const subListID = subList.subscriptionListID;
         const subListName = subList.subscriptionListName;
         return (
@@ -324,7 +300,6 @@ const Sidebar = (props) => {
                         whiteSpace: "nowrap",
                         color: "#5c6096",
                     }}
-                    // onClick={() => { Router.push("/subList/"+subList.subListID)
                     onClick={() => {
                         Router.push("/subList/" + subList.subscriptionListID);
                     }}
@@ -341,16 +316,18 @@ const Sidebar = (props) => {
         var [color, setColor] = useState("#5c6096");
         var [currIcon, setCurrIcon] = useState(
             <SvgIcon
+                viewBox="0 0 22 22"
                 component={CollectionIcon}
-                style={{ fill: "none", marginRight: "13.5%" }}
+                style={{ fill: "none", marginRight: "13.5%", width:"min(1.145vw, 22px)", height: "min(1.145vw, 22px)" }}
             />
         );
         useEffect(() => {
             if (isCurrentTab && color !== "white") {
                 setCurrIcon(
                     <SvgIcon
+                        viewBox="0 0 22 22"
                         component={CollectionIconOnClick}
-                        style={{ fill: "none", marginRight: "13.5%" }}
+                        style={{ fill: "none", marginRight: "13.5%", width:"min(1.145vw, 22px)", height: "min(1.145vw, 22px)" }}
                     />
                 );
                 setColor("white");
@@ -368,11 +345,11 @@ const Sidebar = (props) => {
                     width: "100%",
                 }}
                 onClick={() => {
-                    // if(!isCurrentTab){
                     setCurrIcon(
                         <SvgIcon
+                            viewBox="0 0 22 22"
                             component={CollectionIconOnClick}
-                            style={{ fill: "none", marginRight: "13.5%" }}
+                            style={{ fill: "none", marginRight: "13.5%", width:"min(1.145vw, 22px)", height: "min(1.145vw, 22px)" }}
                         />
                     );
                     setColor("white");
@@ -383,16 +360,11 @@ const Sidebar = (props) => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        paddingBottom: "18px",
+                        paddingBottom: "min(0.937vw, 18px)",
                         width: "100%",
                     }}
                 >
                     {currIcon}
-                    {/* {
-                        isCurrentTab
-                        ? <SvgIcon component={CollectionIcon} style={{fill:"none", marginRight:"15%"}}/>
-                        : <SvgIcon component={CollectionIconOnClick} style={{fill:"none", marginRight:"15%"}}/>
-                    } */}
                     <Nav.Link
                         style={{
                             flex: "1",
@@ -401,7 +373,7 @@ const Sidebar = (props) => {
                             whiteSpace: "nowrap",
                             color: color,
                             padding: "unset",
-                            fontSize: "0.729vw",
+                            fontSize: "min(0.729vw, 14px)",
                         }}
                         onClick={() => {
                             Router.push("/collection/" + collectionID);
@@ -432,18 +404,12 @@ const Sidebar = (props) => {
         const isCurrentTab = router.asPath == "/subList/" + subListID;
         var [color, setColor] = useState("#5c6096");
         var [currIcon, setCurrIcon] = useState(
-            <div style={{ marginRight: "13.5%", width: "19px", height: "0.729vw" }}>
-                <SvgIcon component={MixIcon} style={{ fill: "none" }} />
-            </div>
+            <SvgIcon viewBox="0 0 19 15" component={MixIcon} style={{ fill: "none", marginRight: "13.5%", width:"min(0.988vw, 19px)", height: "min(0.728vw, 14px)" }} />
         );
         useEffect(() => {
             if (isCurrentTab && color !== "white") {
                 setCurrIcon(
-                    <div
-                        style={{ marginRight: "13.5%", width: "19px", height: "0.729vw" }}
-                    >
-                        <SvgIcon component={MixIconOnClick} style={{ fill: "none" }} />
-                    </div>
+                    <SvgIcon viewBox="0 0 19 15" component={MixIconOnClick} style={{ fill: "none", marginRight: "13.5%", width:"min(0.988vw, 19px)", height: "min(0.728vw, 14px)" }} />
                 );
                 setColor("white");
             }
@@ -460,13 +426,8 @@ const Sidebar = (props) => {
                     width: "100%",
                 }}
                 onClick={() => {
-                    // if(!isCurrentTab){
                     setCurrIcon(
-                        <div
-                            style={{ marginRight: "13.5%", width: "19px", height: "0.729vw" }}
-                        >
-                            <SvgIcon component={MixIconOnClick} style={{ fill: "none" }} />
-                        </div>
+                        <SvgIcon viewBox="0 0 19 15" component={MixIconOnClick} style={{ fill: "none", marginRight: "13.5%", width:"min(0.988vw, 19px)", height: "min(0.728vw, 14px)" }} />
                     );
                     setColor("white");
                 }}
@@ -476,16 +437,11 @@ const Sidebar = (props) => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        paddingBottom: "18px",
+                        paddingBottom: "min(0.937vw, 18px)",
                         width: "100%",
                     }}
                 >
                     {currIcon}
-                    {/* {
-                        isCurrentTab
-                        ? <SvgIcon component={CollectionIcon} style={{fill:"none", marginRight:"15%"}}/>
-                        : <SvgIcon component={CollectionIconOnClick} style={{fill:"none", marginRight:"15%"}}/>
-                    } */}
                     <Nav.Link
                         style={{
                             flex: "1",
@@ -494,7 +450,7 @@ const Sidebar = (props) => {
                             whiteSpace: "nowrap",
                             color: color,
                             padding: "unset",
-                            fontSize: "0.729vw",
+                            fontSize: "min(0.729vw, 14px)"
                         }}
                         onClick={() => {
                             Router.push("/subList/" + subListID);
@@ -516,50 +472,6 @@ const Sidebar = (props) => {
                 subListID={subListID}
                 subListName={subListName}
             />
-        );
-        const router = useRouter();
-        const isCurrentTab = router.asPath == "sublist/" + subListID;
-        return (
-            <div
-                key={subListID}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                    maxWidth: "100%",
-                    paddingLeft: "9.4%",
-                }}
-            >
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        paddingBottom: "18px",
-                        width: "100%",
-                    }}
-                >
-                    <div style={{ marginRight: "15%", width: "19px", height: "14px" }}>
-                        <SvgIcon component={MixIcon} style={{ fill: "none" }} />
-                    </div>
-                    <Nav.Link
-                        style={{
-                            flex: "1",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            color: "#5c6096",
-                            padding: "unset",
-                            fontSize: "14px",
-                        }}
-                        onClick={() => {
-                            Router.push("/subList/" + subList.subscriptionListID);
-                        }}
-                    >
-                        {subListName}
-                    </Nav.Link>
-                </div>
-            </div>
         );
     };
 
@@ -584,31 +496,23 @@ const Sidebar = (props) => {
         trigger("/api/user/sublists/getSubLists/" + email);
     };
 
-    // const [scrollableElement, setScrollableElement] = useState(null)
     const scrollableNodeRef = React.createRef();
     if (scrollableNodeRef.current) {
-        // scrollableNodeRef.current.children[0].style.height = "100%"
         console.log(scrollableNodeRef);
     }
-    // useEffect(() => {
-    //     console.log("scrollableNodeRef.current", scrollableNodeRef.current)
-    // }, scrollableNodeRef)
+
+    const longSidebarHeight = height - 120
+
     return (
         <SimpleBarReact
             style={{
-                width: "13.75%",
-                height: "90.5%",
+                width: "min(13.75%, 264px)",
+                height: "max(90.5%, " + longSidebarHeight.toString() + "px)",
+
                 backgroundImage: "linear-gradient(to bottom, #1d2460, #131639)",
             }}
             scrollableNodeProps={{ ref: scrollableNodeRef }}
         >
-            {/* <div>sidebarHeight</div> */}
-
-            {/* <button onClick={() => console.log("scrollableNodeRef", scrollableNodeRef.current.children[0])}>click</button> */}
-            {/* <button onClick={() => }>set</button> */}
-
-            {/* scrollableNodeRef.current ? scrollableNodeRef.current.children[0].style.height = "100%" : console.log()  */}
-            {/* { (scrollableNodeRef.current !== scrollableElement) ? {setScrollableElement(scrollableNodeRef.current)} : <div>not rendered</div> } */}
             <Navbar
                 className="sidebar"
                 style={{
@@ -617,7 +521,6 @@ const Sidebar = (props) => {
                     flexDirection: "column",
                     alignItems: "center",
                     padding: "unset",
-                    // overflowY: "scroll",
                     fontFamily: "Lato, sans-serif",
                 }}
                 id="sidebar-nav"
@@ -630,7 +533,7 @@ const Sidebar = (props) => {
                         alignItems: "flex-start",
                         maxWidth: "100%",
                         color: "#5c6096",
-                        marginTop: "10.5vh",
+                        marginTop: "min(10.5vh, 120px)",
                         width: "77%",
                     }}
                 >
@@ -642,24 +545,28 @@ const Sidebar = (props) => {
                             redirect="/home"
                             icon={HomeIcon}
                             onClickIcon={HomeIconOnClick}
+                            viewBox="0 0 23 21"
                         />
                         <MyMusicOption
                             name="Explore"
                             redirect="/explore"
                             icon={ExploreIcon}
                             onClickIcon={ExploreIconOnClick}
+                            viewBox="0 0 21 21"
                         />
                         <MyMusicOption
                             name="Favorites"
                             redirect={"/likedTracks/" + likedTracks.collectionID}
                             icon={FavoriteIcon}
                             onClickIcon={FavoriteIconOnClick}
+                            viewBox="0 0 23 21"
                         />
                         <MyMusicOption
                             name="Library"
                             redirect="/library"
                             icon={LibraryIcon}
                             onClickIcon={LibraryIconOnClick}
+                            viewBox="0 0 23 21"
                         />
                     </div>
                 </Nav>
@@ -670,7 +577,7 @@ const Sidebar = (props) => {
                         alignItems: "flex-start",
                         maxWidth: "100%",
                         color: "#5c6096",
-                        marginTop: "7vh",
+                        marginTop: "min(7vh, 70.5px)",
                         width: "77%",
                     }}
                 >
@@ -680,7 +587,7 @@ const Sidebar = (props) => {
                                 style={{
                                     padding: "unset",
                                     paddingLeft: "9.4%",
-                                    fontSize: "1.25vw",
+                                    fontSize: "min(1.25vw, 24px)",
                                     color: "white",
                                     fontWeight: "bold",
                                 }}
@@ -700,15 +607,8 @@ const Sidebar = (props) => {
                                         handleAddCollection(props.user.email, "New Collection")
                                     }
                                 />
-                                {/* <AddButton style={{padding:"unset", paddingLeft:"12%"}} handleClick={() => console.log("add")}/> */}
                             </div>
                         </div>
-                        {/* {collections?.map(renderCollections)}
-                                <div className="title-container">
-                                    <div style={{padding: "8px", paddingRight: "3px"}}>Daily Mixes</div>
-                                    <AddButton handleClick={() => handleAddSubList(props.user.email, "New sublist")}/>
-                                </div>
-                                {subLists?.map(renderSubLists)} */}
                         {collections?.map(renderCollections)}
                     </div>
                 </Nav>
@@ -719,7 +619,7 @@ const Sidebar = (props) => {
                         alignItems: "flex-start",
                         maxWidth: "100%",
                         color: "#5c6096",
-                        marginTop: "7vh",
+                        marginTop: "min(7vh, 70.5px)",
                         marginBottom: "10.5vh",
                         width: "77%",
                     }}
@@ -730,7 +630,7 @@ const Sidebar = (props) => {
                                 style={{
                                     padding: "unset",
                                     paddingLeft: "9.4%",
-                                    fontSize: "1.25vw",
+                                    fontSize: "min(1.25vw, 24px)",
                                     color: "white",
                                     fontWeight: "bold",
                                 }}
@@ -756,31 +656,30 @@ const Sidebar = (props) => {
                     </div>
                 </Nav>
 
-                <style jsx>
-                    {`
-            .my-music {
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-start;
-              width: 100%;
-            }
-            .my-music-title {
-              font-size: 1.25vw;
-              font-weight: bold;
-              font-family: Lato;
-              color: white;
-              margin-bottom: 13.8%;
-              padding-left: 9.4%;
-            }
-            .title-container {
-              display: flex;
-              align-items: center;
-              margin-bottom: 13.8%;
-            }
-            .nav-link {
-              color: #5c6096;
-            }
-          `}
+                <style jsx>{`
+                    .my-music {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    width: 100%;
+                    }
+                    .my-music-title {
+                    font-size: min(1.25vw, 24px);
+                    font-weight: bold;
+                    font-family: Lato;
+                    color: white;
+                    margin-bottom: 9.11%;
+                    padding-left: 9.4%;
+                    }
+                    .title-container {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 13.8%;
+                    }
+                    .nav-link {
+                    color: #5c6096;
+                    }
+                `}
                 </style>
             </Navbar>
 

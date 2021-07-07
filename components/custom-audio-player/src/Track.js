@@ -17,7 +17,7 @@ function processTrackName(trackName) {
 
 function Track(props) {
   const {height, width} = useWindowDimensions()
-  const trackImageSideLength = height * 0.0714
+  // const trackImageSideLength = height * 0.0714
   const { trackName, subreddit, pictureURL } = props;
 
   var displayTrackName = processTrackName(trackName)
@@ -26,7 +26,7 @@ function Track(props) {
       <div className="track">
         <div className="trackImage">
           {pictureURL
-            ?<Image src={pictureURL} width={trackImageSideLength} height={trackImageSideLength} />
+            ?<Image src={pictureURL} style={{width: "min(7.14vh, 90px)", height: "min(7.14vh, 90px)"}} />
             : <div></div>}
           
         </div>

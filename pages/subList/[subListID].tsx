@@ -223,8 +223,8 @@ const SubListPage = ({ userSession, subListID }) => {
             overflow-y: scroll;
             }
             .main-page{
-              width: 86.25%;
-              height: 90.5%;
+              width: 100%;
+              height: 100%;
               display:flex;
               flex-direction:column;
               align-content:center;

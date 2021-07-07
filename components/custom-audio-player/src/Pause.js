@@ -15,8 +15,8 @@ export default function Pause(props) {
       <style>
         {`
       .play__button {
-        width: 36px;
-        height: 36px;
+        width: min(4vh, 51px);
+        height: min(4vh, 51px);
         background-color: transparent;
         border: none;
         padding: unset;
@@ -24,7 +24,7 @@ export default function Pause(props) {
       .custom-play-button{
         flex-grow: 0;
           padding: 50% 50% 50% 50%;
-        background-image: linear-gradient(to top, #2156d9, #4630a0);
+        background-image: linear-gradient(to bottom, #2156d9, #4630a0);
         border-radius: 50%;
         display: flex;
         justify-content: center;

@@ -66,7 +66,7 @@ class AudioPlayerBar extends React.Component {
           fixed="bottom"
           style={{
             width: "100%",
-            height: "9.5%",
+            height: "min(9.5%, 120px)",
             padding: "unset",
             display: "flex",
             justifyContent: "center",
@@ -150,7 +150,7 @@ function AudioPlayer(props) {
   );
 }
 
-const nextTrackFromQueue = async () => {
+const nextTrackFromQueue = async (setWaitingForNextTrack) => {
   // var keyIndex = currStore["keyIndex"]
   // var playlist = currStore["playlist"]
   store.dispatch(togglePlaying(false));
@@ -172,25 +172,28 @@ const nextTrackFromQueue = async () => {
 
   store.dispatch(togglePlaying(false));
   forceSyncQueueWithAudioPlayer(true);
+  setWaitingForNextTrack(false);
 };
 
 function AudioPlayerInfo(props) {
-  const { curTime, setClickedTime, setCurTime } = useAudioPlayer(props.audio);
+  const { curTime, setClickedTime, setSyncBarTimeWithAudio, setCurrentlyScrubbing, currentlyScrubbing } = useAudioPlayer(props.audio);
   const source = props.url;
   const subreddit = props.subreddit;
   const trackName = props.trackName;
   const audio = props.audio;
   const pictureURL = props.pictureURL;
   const duration = store.getState().audioPlayerInfo.audio.duration;
+  const [waitingForNextTrack, setWaitingForNextTrack] = useState(false)
 
   const [volume, setVolume] = useState(1);
 
   useEffect(() => {
-    if (curTime && duration && curTime === duration) {
+    if (audio.currentTime && duration && audio.currentTime === duration && !waitingForNextTrack) {
       console.log("next");
       audio.pause();
-
-      nextTrackFromQueue();
+      // setCurrentlyScrubbing(false)
+      setWaitingForNextTrack(true)
+      nextTrackFromQueue(setWaitingForNextTrack);
     }
   });
 
@@ -202,7 +205,7 @@ function AudioPlayerInfo(props) {
     if (playPromise !== undefined) {
       playPromise
         .then((_) => {
-          if (curTime == duration) {
+          if (audio.currentTime == duration) {
             audio.pause();
           }
         })
@@ -247,74 +250,72 @@ function AudioPlayerInfo(props) {
     <div
       className="player"
       style={{ width: "100%", height: "100%", backgroundColor: "#1d2460" }}
-    >
-      <div className="track-info">
-        <Track
-          pictureURL={pictureURL}
-          trackName={trackName}
-          subreddit={"r/" + subreddit}
-        />
-      </div>
-      <div className="center-piece">
-        <div className="controls">
-          <Previous handleClick={previousTrack} />
-          {/* <Replay10 handleClick={() => {
-                        setClickedTime(Math.max(curTime - 10, 0))
-                    }} /> */}
-
-          {props.playing ? (
-            <Pause
-              handleClick={() => {
-                props.togglePlaying(false);
-                console.log("pausing...");
-                audio.pause();
-              }}
-            />
-          ) : (
-            <Play
-              handleClick={() => {
-                props.togglePlaying(true);
-                audio.play();
-              }}
-            />
-          )}
-          {/* <Forward10 handleClick={() => {
-                        if (curTime + 10 > duration) {
-                            console.log("duration:", duration)
-                            setClickedTime(duration)
-                        } else {
-                            setClickedTime(curTime + 10)
-                        }
-                    }} /> */}
-
-          <Next handleClick={nextTrackFromQueue} />
-
-          {/* <button onClick={testQueueStore}>get currStore</button> */}
-        </div>
-        <div className="track-duration-info">
-          <Bar
-            curTime={curTime}
-            duration={props.audio.duration}
-            onTimeUpdate={(time) => setClickedTime(time)}
+    > 
+      <div className="player-info-container">
+        <div className="track-info">
+          <Track
+            pictureURL={pictureURL}
+            trackName={trackName}
+            subreddit={"r/" + subreddit}
           />
         </div>
-      </div>
-      <div className="volume">
-        {volume !== undefined ? (
-          <Provider store={store}>
-            <VolumeSlider />
-          </Provider>
-        ) : (
-          <div></div>
-        )}
+        <div className="center-piece">
+          <div className="controls">
+            <Previous handleClick={previousTrack} />
+            {props.playing ? (
+              <Pause
+                handleClick={() => {
+                  props.togglePlaying(false);
+                  console.log("pausing...");
+                  audio.pause();
+                }}
+              />
+            ) : (
+              <Play
+                handleClick={() => {
+                  props.togglePlaying(true);
+                  audio.play();
+                }}
+              />
+            )}
+
+            <Next handleClick={nextTrackFromQueue} />
+
+          </div>
+          <div className="track-duration-info">
+            <Bar
+              curTime={curTime}
+              duration={props.audio.duration}
+              onTimeUpdate={(time) => setClickedTime(time)}
+              setSyncBarTimeWithAudio={setSyncBarTimeWithAudio}
+              setCurrentlyScrubbing={setCurrentlyScrubbing}
+              currentlyScrubbing={currentlyScrubbing}
+            />
+          </div>
+        </div>
+        <div className="volume">
+          {volume !== undefined ? (
+            <Provider store={store}>
+              <VolumeSlider />
+            </Provider>
+          ) : (
+            <div></div>
+          )}
+        </div>
       </div>
       <style>
         {`
          .player {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            background-color: #1d2460;
+          }
+          .player-info-container{
             display:flex;
             justify-content: space-between;
             align-items:center;
-            background-color: #1d2460;
+            width: min(96.25vw, 1848px)
           }
           .center-piece{
               display:flex;
@@ -337,6 +338,7 @@ function AudioPlayerInfo(props) {
           }
           .track-duration-info{
             width: 100%;
+            margin-top: min(0.63vh, 8px)
           }
           .controls {
             display: flex; 
@@ -409,6 +411,7 @@ function EmptyAudioPlayerInfo(props) {
           }
           .track-duration-info{
             width: 100%;
+            margin-top: min(0.63vh, 8px)
           }
           .controls {
             display: flex; 
