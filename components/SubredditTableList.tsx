@@ -14,7 +14,8 @@ import store from "../redux/store";
 import { storeAudioPlayerInfo, togglePlaying } from "../redux/actions/index";
 import Image from "react-bootstrap/Image";
 
-import formatDuration from "../lib/formatDuration";
+import { formatDuration } from "../lib/formatDuration";
+
 
 import ListGroup from "react-bootstrap/ListGroup";
 import Table from "react-bootstrap/Table";

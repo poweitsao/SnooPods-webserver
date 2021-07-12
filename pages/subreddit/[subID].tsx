@@ -13,7 +13,7 @@ import { Provider } from "react-redux";
 import store from "../../redux/store";
 import Image from "react-bootstrap/Image";
 
-import formatDuration from "../../lib/formatDuration";
+import { formatDuration } from "../../lib/formatDuration";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import Table from "react-bootstrap/Table";

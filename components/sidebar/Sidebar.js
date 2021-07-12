@@ -27,7 +27,6 @@ import LibraryIconOnClick from "../../resources/icons/left/library/library_icon_
 
 import { SvgIcon } from "@material-ui/core";
 import { useRouter } from "next/router";
-import { Favorite } from "@material-ui/icons";
 import SimpleBarReact from "simplebar-react";
 import "simplebar/src/simplebar.css";
 import useWindowDimensions from "../hooks/useWindowDimensions";
@@ -37,13 +36,11 @@ const MyMusicOption = ({ redirect, name, icon, onClickIcon, viewBox }) => {
     const isCurrentTab = router.asPath == redirect;
     var [optionContainerColor, setOptionContainerColor] = useState("none");
     var [textColor, setTextColor] = useState("#5c6096");
-    // console.log()
-    // const [isHoveringOver, setIsHoveringOver] = useState(false)
+
     const [iconButton, setIconButton] = useState(
         <SvgIcon viewBox={viewBox} className="my-music-option-icon" component={icon} />
     );
 
-    // const [currIcon, setCurrIcon] = useState(icon)
     useEffect(() => {
         if (isCurrentTab) {
             setOptionContainerColor("#484f8b");
@@ -51,8 +48,6 @@ const MyMusicOption = ({ redirect, name, icon, onClickIcon, viewBox }) => {
         }
     });
 
-    console.log(name, "is current tab", isCurrentTab);
-    console.log(router.asPath);
     return (
         <div
             className="my-music-option-container"

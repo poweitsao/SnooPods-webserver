@@ -27,15 +27,7 @@ export default function PlayButton(props) {
               icon={playButton}
             />
           </button>
-            <style>
-                {`
-        .delete-button {
-          padding: 0px;
-          width: fit-content;
-          background-color: transparent;
-          border: none;
-        }`}
-            </style>
+
         </div>
     );
 }

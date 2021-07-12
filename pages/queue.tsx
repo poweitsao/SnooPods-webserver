@@ -24,7 +24,8 @@ import { Table } from "react-bootstrap";
 import playCircleOutlined from "@iconify/icons-ant-design/play-circle-outlined";
 import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
 import Icon from "@iconify/react";
-import formatDuration from "../lib/formatDuration";
+import { formatDuration } from "../lib/formatDuration";
+
 import TrackOptionsButton from "../components/buttons/TrackOptionsButton";
 import convertDate from "../lib/convertDate";
 

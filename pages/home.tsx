@@ -14,6 +14,7 @@ import { Provider } from "react-redux";
 import { getQueue } from "../lib/syncQueue";
 import { UserSession } from "../ts/interfaces"
 import EmptySideBar from "../components/sidebar/EmptySideBar";
+import HomePanelContainer from "../components/containers/HomePanelContainer"
 import Image from "react-bootstrap/Image";
 import AlbumCoverButton from "../components/AlbumCoverButton";
 
@@ -118,44 +119,6 @@ const Home = ({ userSession }) => {
     }
   }, []);
 
-  const LeftPanel = () => {
-    return(
-      <div style={{ width: "58.1%", height: "100%", marginRight: "auto" }} >
-        <div className="popular-subreddits" 
-          style={{ height: "50.5%", width: "100%" }} 
-        >
-          <p style={{height: "13%", width: "100%", fontSize: "min(1.9vh, 24px)", fontFamily: "Roboto", fontWeight: 500, color: "white", margin: "unset"}}>Popular</p>
-          <div style={{width: "100%", height: "87%", display: "flex" }}>
-            <div style={{width: "77.15%", height: "100%", backgroundImage: "radial-gradient(circle at 0 0, #924ae6, #ae39bf, #b932b0, #a74dc2, #7f88eb, #849de4, #8762ec, #9946de)"}}></div>
-            <div style={{width: "22.85%", height: "100%", backgroundImage: "conic-gradient(from 0.25turn, #191bb3, #4362db 0.33turn, #a041c7 0.44turn, #4660dc 0.54turn, #0cacdb 0.94turn, #191bb3)"}}></div>
-          </div>
-        </div>
-        <div className="recently-played-subreddits" 
-              style={{ height: "39.4%", width: "100%", marginTop: "10.1%" }}
-        >
-          <p style={{height: "16.6%", width: "100%", fontSize: "min(1.9vh, 24px)", fontFamily: "Roboto", fontWeight: 500, color: "white", margin: "unset"}}>Recently Played</p>
-          <div style={{width: "100%", height: "83.4%", display: "flex", justifyContent: "space-between"}}>
-            <AlbumCoverButton src="https://img.icons8.com/fluent/800/000000/image.png" handleClick={() => {}}width="30.8%" height="100%"/>
-            <AlbumCoverButton src="https://img.icons8.com/fluent/800/000000/image.png" handleClick={() => {}}width="30.8%" height="100%"/>
-            <AlbumCoverButton src="https://img.icons8.com/fluent/800/000000/image.png" handleClick={() => {}}width="30.8%" height="100%"/>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const RightPanel = () => {
-    return(
-      <div style={{ width: "35.5%", height: "100%", backgroundColor: "white", display: "flex", flexDirection: "column", alignItems: "center"}} >
-        <div className="current-album" style={{ height: "35.7%", width: "93%", backgroundColor: "black"}} >
-        <p style={{height: "18.6%", width: "100%", fontSize: "min(1.9vh, 24px)", fontFamily: "Roboto", fontWeight: 500, color: "white", margin: "unset"}}>Currently Playing</p>
-        <div style={{width: "100%", height: "84.1%", backgroundImage: "radial-gradient(circle at 0 0, #5c0fb2, #4018ae, #322dae, #1761aa, #2461aa, #1068a9, #243cab, #5d11ae)"}}></div>
-        </div>
-        <div className="track-list" style={{ height: "55.1%", width: "100%", marginTop: "auto", backgroundColor: "black"}}></div>
-      </div>
-    )
-  }
-
   return (
 
     <Layout>
@@ -181,10 +144,9 @@ const Home = ({ userSession }) => {
           }
 
           <div className="page-container">
-            <div className="panel-container">
-              <LeftPanel/>
-              <RightPanel/>
-            </div>
+          <Provider store={store}>
+            <HomePanelContainer />
+          </Provider>
           </div>
 
           <style>{`

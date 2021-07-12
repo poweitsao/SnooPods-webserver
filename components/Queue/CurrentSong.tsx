@@ -11,7 +11,7 @@ import playCircleOutlined from '@iconify/icons-ant-design/play-circle-outlined'
 import Icon from "@iconify/react";
 import { connect, Provider } from 'react-redux'
 import convertDate from '../../lib/convertDate'
-import formatDuration from '../../lib/formatDuration'
+import { formatDuration } from '../../lib/formatDuration'
 import QueuePlaylistOptionsButtonContainer from '../containers/QueuePlaylistOptionsButtonContainer'
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';

@@ -269,6 +269,11 @@ function AudioPlayerInfo(props) {
                   console.log("pausing...");
                   audio.pause();
                 }}
+                width="min(4vh, 51px)" 
+                height="min(4vh, 51px)"
+                backgroundImage="linear-gradient(to bottom, #2156d9, #4630a0)"
+                playIconWidth="24"
+                playIconColor="white"
               />
             ) : (
               <Play
@@ -276,6 +281,11 @@ function AudioPlayerInfo(props) {
                   props.togglePlaying(true);
                   audio.play();
                 }}
+                width="min(4vh, 51px)" 
+                height="min(4vh, 51px)"
+                backgroundImage="linear-gradient(to bottom, #2156d9, #4630a0)"
+                playIconWidth="24"
+                playIconColor="white"
               />
             )}
 
@@ -350,15 +360,6 @@ function AudioPlayerInfo(props) {
 }
 
 function EmptyAudioPlayerInfo(props) {
-  // const { curTime, duration, setClickedTime, setCurTime } = useAudioPlayer(props.audio);
-  const source = props.url;
-  const subreddit = props.subreddit;
-  const trackName = props.trackName;
-  const audio = props.audio;
-  const testQueueStore = () => {
-    let queueCurrStore = store.getState();
-    console.log("currStore", queueCurrStore);
-  };
   return (
     <div style={{ height: "100%" }}>
       <div className="player" style={{ width: "100%", height: "100%" }}>
@@ -367,10 +368,14 @@ function EmptyAudioPlayerInfo(props) {
         </div>
         <div className="center-piece">
           <div className="controls">
-            {/* <Replay10 handleClick={() => {}} /> */}
-            <Play handleClick={() => {}} />
-            {/* <Forward10 handleClick={() => {}} /> */}
-            {/* <button onClick={testQueueStore}>test</button> */}
+            <Play
+              handleClick={() => {}}
+              width="min(4vh, 51px)"
+              height="min(4vh, 51px)"
+              backgroundImage="linear-gradient(to bottom, #2156d9, #4630a0)"
+              playIconWidth="24"
+              playIconColor="white"
+            />
           </div>
           <div className="track-duration-info">
             <Bar curTime={0} duration={0} onTimeUpdate={() => {}} />

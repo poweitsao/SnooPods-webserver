@@ -2,7 +2,7 @@ import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
 import playCircleOutlined from "@iconify/icons-ant-design/play-circle-outlined";
 import React, { useEffect, useState } from "react";
 import convertDate from "../../lib/convertDate";
-import formatDuration from "../../lib/formatDuration";
+import { formatDuration } from "../../lib/formatDuration";
 import isEmpty from "../../lib/isEmptyObject";
 import { syncDB, syncQueueWithAudioPlayer } from "../../lib/syncQueue";
 import { togglePlaying } from "../../redux/actions";

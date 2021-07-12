@@ -13,7 +13,7 @@ import { replaceCurrentPlaylist, replaceCurrentTrack } from "../../redux/actions
 import playCircleOutlined from "@iconify/icons-ant-design/play-circle-outlined";
 import playCircleFilled from "@iconify/icons-ant-design/play-circle-filled";
 import { Icon } from "@iconify/react";
-import formatDuration from "../../lib/formatDuration";
+import { formatDuration } from "../../lib/formatDuration";
 import convertDate from "../../lib/convertDate";
 import CollectionsTrackOptionsButton from "../../components/buttons/CollectionsTrackOptionsButton";
 import { Table } from "react-bootstrap";

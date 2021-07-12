@@ -2,61 +2,40 @@ import React from "react";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 export default function Play(props) {
-  const { handleClick } = props;
+  const { handleClick, width, height, backgroundImage, playIconWidth, playIconColor } = props;
 
   return (
-    <div>
-      <button className="play__button" onClick={() => handleClick()}>
-        <div className="custom-play-button">
-          <PlayArrowIcon  style={{color:"white"}}/>
+    // <div         
+    //   style={{
+    //   width: width,
+    //   height: height}}> 
+      <button
+        className="play__button"
+        onClick={() => handleClick()}
+        style={{
+          width: width,
+          height: height,
+          backgroundColor: "transparent",
+          border: "none",
+          padding: "unset",
+        }}
+      >
+        <div
+          className="custom-play-button"
+          style={{
+            flexGrow: "0",
+            padding: "50% 50% 50% 50%",
+            backgroundImage: backgroundImage,
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <PlayArrowIcon style={{ color: playIconColor, width: playIconWidth, height: playIconWidth }} />
         </div>
       </button>
-      <style>
-        {`
-      .play__button {
-        width: min(4vh, 51px);
-        height: min(4vh, 51px);
-        background-color: transparent;
-        border: none;
-        padding: unset;
-
-      }
-      .custom-play-button{
-        flex-grow: 0;
-          padding: 50% 50% 50% 50%;
-        background-image: linear-gradient(to bottom, #2156d9, #4630a0);
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%; 
-
-      } 
-      .play-button-container{
-        display: flex;
-        width: 100%;
-        height: 100%;
-      }
-      `}
-      </style>
-    </div>
+    // </div>
   );
-}
-
-const CustomPlayIcon = () => {
-  return(
-    <div className="play-button-container">
-      
-
-      
-      <style>{`
-
-      .play-icon{
-
-      }
-
-    `}</style>
-  </div>
-
-  )
 }

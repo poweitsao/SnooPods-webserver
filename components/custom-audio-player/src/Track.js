@@ -2,25 +2,14 @@ import React from 'react';
 import { useState } from "react";
 import Image from "react-bootstrap/Image";
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-
-
-function processTrackName(trackName) {
-
-  if (trackName.length > 60) {
-    for (var i = 60; trackName[i] !== " "; i--) {
-    }
-    return trackName.substring(0, i) + "..."
-  } else {
-    return trackName
-  }
-}
+import processTrackName from '../../../lib/processTrackName';
 
 function Track(props) {
   const {height, width} = useWindowDimensions()
   // const trackImageSideLength = height * 0.0714
   const { trackName, subreddit, pictureURL } = props;
 
-  var displayTrackName = processTrackName(trackName)
+  var displayTrackName = processTrackName(trackName, 60)
   return (
     <div>
       <div className="track">
