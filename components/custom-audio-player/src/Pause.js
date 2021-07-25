@@ -3,7 +3,7 @@ import React from "react";
 import PauseIcon from '@material-ui/icons/Pause';
 
 export default function Pause(props) {
-  const { handleClick, width, height, backgroundImage, playIconWidth } = props;
+  const { handleClick, width, height, backgroundImage, playIconWidth, playIconColor } = props;
 
   return (
     // <div         
@@ -34,7 +34,7 @@ export default function Pause(props) {
             height: "100%",
           }}
         >
-          <PauseIcon style={{ color: "white", width: playIconWidth, height: playIconWidth }} />
+          <PauseIcon style={{ color: playIconColor, width: playIconWidth, height: playIconWidth }} />
         </div>
       </button>
     // </div>

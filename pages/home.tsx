@@ -150,61 +150,61 @@ const Home = ({ userSession }) => {
           </div>
 
           <style>{`
-          .heading{
-            text-align:center;
-          }
-          .main-page{
-            width: 100%;
-            height: 100%;
-            display:flex;
-            flex-direction:column;
-            align-content:center;
-            align-text:center;
-            align-self: flex-start;
-
-          }
-
-            .page-container{
-              display: flex;
+            .heading{
+              text-align:center;
+            }
+            .main-page{
+              width: 100%;
               height: 100%;
-              justify-content: center;
-              background-image: linear-gradient(to bottom, #121538, #12102b, #12091a);
-            }
-            .panel-container{
-              display: flex;
-              width: min(115.39vh, 1454px);
-              height: min(62.89vh, 793px);
-              margin-top: min(7.93vh, 100px);
-            }
-            .button-container{
-              margin:20px;
-              text-align:center;
-            }
-            .image{
-              -webkit-user-select: none;
-              margin: auto;}
-              .heading{
-                text-align:center;
-            }
-            .musicPlayer{
-              text-align:center;
-              padding: 20px;
-            }
-            .grid-container{
-              padding:20px;
-              width: 80%;
-              display: flex;
-              justify-content:center;
-              align-self:center;
-              margin-right: 50px;
-              margin-left:50px;
-              max-width: 690px;
-            }
-            .navbar{
               display:flex;
-              flex-direction: column;
-              align-items: stretch;
+              flex-direction:column;
+              align-content:center;
+              align-text:center;
+              align-self: flex-start;
+
             }
+
+              .page-container{
+                display: flex;
+                height: 100%;
+                justify-content: center;
+                background-image: linear-gradient(to bottom, #121538, #12102b, #12091a);
+              }
+              .panel-container{
+                display: flex;
+                width: min(115.39vh, 1454px);
+                height: min(62.89vh, 793px);
+                margin-top: min(7.93vh, 100px);
+              }
+              .button-container{
+                margin:20px;
+                text-align:center;
+              }
+              .image{
+                -webkit-user-select: none;
+                margin: auto;}
+                .heading{
+                  text-align:center;
+              }
+              .musicPlayer{
+                text-align:center;
+                padding: 20px;
+              }
+              .grid-container{
+                padding:20px;
+                width: 80%;
+                display: flex;
+                justify-content:center;
+                align-self:center;
+                margin-right: 50px;
+                margin-left:50px;
+                max-width: 690px;
+              }
+              .navbar{
+                display:flex;
+                flex-direction: column;
+                align-items: stretch;
+              }
           `}</style>
         </div>
       </div>

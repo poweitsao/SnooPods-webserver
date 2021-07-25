@@ -46,6 +46,7 @@ function useAudioPlayer(audioObject, trackPlaying) {
     }
 
     if (curSource !== source) {
+      console.log("curSource !== source", curSource !== source)
       setPlaying(false)
       setCurSource(source)
       audio.currentTime = 0;

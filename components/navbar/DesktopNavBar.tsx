@@ -9,7 +9,6 @@ import NextButton from '../buttons/NextButton';
 
 const DesktopNavBar = (props) => {
     const router = useRouter()
-    console.log("router stuff", router.asPath)
 
     return (
         <Navbar bg="white" expand="lg" style={{

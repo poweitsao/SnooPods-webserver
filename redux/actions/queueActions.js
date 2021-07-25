@@ -1,6 +1,6 @@
 const storeQueueInfo = (QueueInfo) => {
     // console.log("storing queue info to redux", QueueInfo)
-    console.log("storing queue info to redux")
+    // console.log("storing queue info to redux")
 
     return {
         type: "STORE_QUEUE_INFO",

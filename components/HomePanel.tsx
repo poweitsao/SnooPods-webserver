@@ -9,7 +9,13 @@ import PlayButton from "./buttons/PlayButton";
 import Pause from "./custom-audio-player/src/Pause";
 import Play from "./custom-audio-player/src/Play";
 import PanelTrackOptionsButtonContainer from "./containers/PanelTrackOptionsButtonContainer";
-
+import store from "../redux/store";
+import { togglePlaying } from "../redux/actions";
+import { removeTrackFromCurrentPlaylist, removeTrackFromQueue, replaceCurrentTrack } from "../redux/actions/queueActions";
+import { syncQueueWithAudioPlayer } from "../lib/syncQueue";
+import { addToHistory } from "../redux/actions/historyActions";
+import { syncHistory } from "../lib/syncHistory";
+import { Track } from "../ts/interfaces";
 
 
 const LeftPanel = ({history}) => {
@@ -89,15 +95,23 @@ const RightPanel = ({queueInfo, audioPlayerInfo}) => {
 
 const generatePanelQueue = (queueInfo) => {
     console.log("queueInfo", queueInfo)
-    const queueTracks = queueInfo.currentPlaylist.tracks.concat(queueInfo.queue)
+    let currentPlaylistTracks = queueInfo.currentPlaylist.tracks.map((track, index) => ({track: track, playlistID: "currentPlaylist", index: index}))
+    let queueTracks = []
+    var j = 0;
+    while (queueTracks.length < 3 - currentPlaylistTracks.length && j < queueInfo.length){
+        queueTracks = queueTracks.concat(queueInfo[j].tracks.map((track, index) => ({track: track, playlistID: queueInfo[j].playlistID, index: index})))
+        j += 1;
+    }
+
+    queueTracks = currentPlaylistTracks.concat(queueTracks)
     console.log("queueTracks", queueTracks)
     const trackList = []
     for(var i = 0; i < 3; i ++){
         if(i >= queueTracks.length){
-            <div className="panel-track-info-container" style={{margin: "unset", backgroundColor: "#3431ac", marginTop: "min(6.2%, 32px)"}}>
-            </div>
+            trackList.push(<div className="panel-track-info-container" key={i} style={{margin: "unset", backgroundColor: "none", marginTop: "min(6.2%, 32px)"}}></div>)
+
         } else{
-            trackList.push(<PanelTrack track={queueTracks[i]} marginTop="min(6.2%, 32px)"/>)
+            trackList.push(<PanelTrack key={i} track={queueTracks[i]} marginTop="min(6.2%, 32px)"/>)
         }
     }
     return trackList
@@ -105,28 +119,58 @@ const generatePanelQueue = (queueInfo) => {
 }   
 
 const PanelTrack = ({track, marginTop}) => {
+    const playTrack = (trackID: string, index: number, track: Track, playlistID:string) => {
+
+        let playing = store.getState().audioPlayerInfo.playing
+        store.dispatch(togglePlaying(!playing))
+    
+        store.dispatch(
+          replaceCurrentTrack(track)
+        )
+        console.log("playlistID", playlistID)
+        console.log("trackID", trackID)
+
+
+        if (playlistID == "currentPlaylist"){
+            store.dispatch(
+                removeTrackFromCurrentPlaylist(trackID, index)
+              )
+        } else{
+            store.dispatch(
+                removeTrackFromQueue(playlistID, trackID, index)
+              )
+        }
+
+        syncQueueWithAudioPlayer(true)
+    
+        store.dispatch(
+          addToHistory(store.getState().queueInfo.QueueInfo.currentTrack)
+        )
+        syncHistory()    
+      }
+
     return(
         <div className="panel-track-info-container" style={{margin: "unset", marginTop: marginTop}}>
         <div className="panel-track-info">
-            <Image src={track.picture_url} style={{height: "min(4.76vh, 60px)", marginRight: "4%"}}></Image>
+            <Image src={track.track.picture_url} style={{height: "min(4.76vh, 60px)", marginRight: "4%"}}></Image>
             <div className="panel-track-info-text">
                 <div className="panel-track-info-track-title-container">
                     <div className="panel-track-info-track-title">
-                        <p style={{fontSize:"min(1vh,13px)", fontFamily: "Roboto", margin: "unset"}}>{processTrackName(track.track_name, 120)}</p>
+                        <p style={{fontSize:"min(1vh,13px)", fontFamily: "Roboto", margin: "unset"}}>{processTrackName(track.track.track_name, 110)}</p>
                     </div>
-                        <PanelTrackOptionsButtonContainer trackInfo={track} width="min(3.96vh, 50px)" height="min(1.58vh, 20px)"/>
+                        <PanelTrackOptionsButtonContainer trackInfo={track.track} width="min(3.96vh, 50px)" height="min(1.58vh, 20px)"/>
                 </div>
                 <div className="panel-track-info-bottom">
                     <Play
-                        handleClick={() => {}}
+                        handleClick={() => playTrack(track.track.track_id, track.index, track.track, track.playlistID)}
                         width="min(1.26vh, 16px)"
                         height="min(1.26vh, 16px)"
                         backgroundImage="linear-gradient(to bottom, white, white)"
                         playIconWidth="7"
                         playIconColor="black"
                         />
-                    <p style={{fontSize:"min(0.87vh,11px)", fontFamily: "Roboto", margin: "unset"}}>{convertDate(track.date_posted)}</p>
-                    <p style={{fontSize:"min(0.87vh,11px)", fontFamily: "Roboto", margin: "unset", marginRight: "2%"}}>{`${formatDurationInMin(track.audio_length)} min`}</p>
+                    <p style={{fontSize:"min(0.87vh,11px)", fontFamily: "Roboto", margin: "unset"}}>{convertDate(track.track.date_posted)}</p>
+                    <p style={{fontSize:"min(0.87vh,11px)", fontFamily: "Roboto", margin: "unset", marginRight: "2%"}}>{`${formatDurationInMin(track.track.audio_length)} min`}</p>
                 </div>
             </div>
         </div>
@@ -135,13 +179,19 @@ const PanelTrack = ({track, marginTop}) => {
 }
 
 const TrackList = ({queueInfo, audioPlayerInfo}) => {
+    const playCurrentTrack = () => {
+        // console.log("playing...")
+        let playing = store.getState().audioPlayerInfo.playing
+        store.dispatch(togglePlaying(!playing))
+      }
+
     const currTrack = queueInfo.currentTrack
     if(currTrack.cloud_storage_url == ""){
         return (
-            <div className="track-list" style={{ height: "55.1%", width: "100%", marginTop: "auto", backgroundColor: "black" }}>
-                <p style={{color: "white", fontFamily: "Roboto", fontSize:"min(1.9vh, 24px)", fontWeight:500, marginRight: "2.5%", marginBottom: "1.5%"}}>
+            <div className="track-list" style={{ height: "55.1%", width: "100%", marginTop: "auto", backgroundColor: "none" }}>
+                {/* <p style={{color: "white", fontFamily: "Roboto", fontSize:"min(1.9vh, 24px)", fontWeight:500, marginRight: "2.5%", marginBottom: "1.5%"}}>
                     Nothing is currently playing
-                </p>
+                </p> */}
             </div>
         )
     }
@@ -153,19 +203,30 @@ const TrackList = ({queueInfo, audioPlayerInfo}) => {
                     <div className="panel-track-info-text">
                         <div className="panel-track-info-track-title-container">
                             <div className="panel-track-info-track-title">
-                                <p style={{fontSize:"min(1vh,13px)", fontFamily: "Roboto", margin: "unset"}}>{processTrackName(currTrack.track_name, 120)}</p>
+                                <p style={{fontSize:"min(1vh,13px)", fontFamily: "Roboto", margin: "unset"}}>{processTrackName(currTrack.track_name, 110)}</p>
                             </div>
                                 <PanelTrackOptionsButtonContainer trackInfo={currTrack} width="min(3.96vh, 50px)" height="min(1.58vh, 20px)"/>
                         </div>
                         <div className="panel-track-info-bottom">
-                            <Play
-                                handleClick={() => {}}
-                                width="min(1.26vh, 16px)"
-                                height="min(1.26vh, 16px)"
-                                backgroundImage="linear-gradient(to bottom, white, white)"
-                                playIconWidth="7"
-                                playIconColor="black"
-                                />
+                            {audioPlayerInfo.playing
+                                ? <Pause
+                                    handleClick={playCurrentTrack}
+                                    width="min(1.26vh, 16px)"
+                                    height="min(1.26vh, 16px)"
+                                    backgroundImage="linear-gradient(to bottom, white, white)"
+                                    playIconWidth="7"
+                                    playIconColor="black"
+                                    />
+                                : <Play
+                                    handleClick={playCurrentTrack}
+                                    width="min(1.26vh, 16px)"
+                                    height="min(1.26vh, 16px)"
+                                    backgroundImage="linear-gradient(to bottom, white, white)"
+                                    playIconWidth="7"
+                                    playIconColor="black"
+                                    />
+                            }
+                            
                             <p style={{fontSize:"min(0.87vh,11px)", fontFamily: "Roboto", margin: "unset"}}>{convertDate(currTrack.date_posted)}</p>
                             <p style={{fontSize:"min(0.87vh,11px)", fontFamily: "Roboto", margin: "unset", marginRight: "2%"}}>{`${formatDurationInMin(currTrack.audio_length)} min`}</p>
                         </div>
@@ -173,13 +234,6 @@ const TrackList = ({queueInfo, audioPlayerInfo}) => {
                 </div>
             </div>
             {generatePanelQueue(queueInfo)}
-            {/* <div className="panel-track-info-container">
-                <Image src={currTrack.picture_url} style={{height: "min(4.76vh, 60px)"}}></Image>
-            </div>
-            <div className="panel-track-info-container">
-            </div>
-            <div className="panel-track-info-container">
-            </div> */}
             <style>
                 {`
                     .panel-track-info-track-title-container{

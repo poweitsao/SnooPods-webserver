@@ -103,26 +103,9 @@ const renderTrackOnTable = (track: Track, index: number, array: Array<Track>, op
   );
 };
 
-// const toggleLike = async (track: Track) => {
-//   // console.log("toggling like for:", track.track_id)
-//   let email = store.getState().userSessionInfo.email
-//   await fetch("/api/user/collections/likedTracks/toggleLike", 
-//       {method: "POST", 
-//       body: JSON.stringify({email: email, trackID: track.track_id })})
-//   trigger("/api/user/collections/likedTracks/get/"+ email)
-// }
-
 const CurrentQueue = (props) => {
   let { queue }: { queue: Array<QueuePlaylist> } = props.queueInfo.QueueInfo
-  console.log("props in CurrentQueue", props)
-  // const [queue, setCurrentQueue] = useState(props.queue)
 
-  // useEffect(() => {
-  //   if(queue !== props.queue){
-  //     setCurrentQueue(props.queue)
-  //     // console.log("queue has changed")
-  //   }
-  // }, [queue])
   if(queue.length == 0){
     return(
       <div></div>

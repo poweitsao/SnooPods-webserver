@@ -150,14 +150,12 @@ function AudioPlayer(props) {
   );
 }
 
-const nextTrackFromQueue = async (setWaitingForNextTrack) => {
-  // var keyIndex = currStore["keyIndex"]
-  // var playlist = currStore["playlist"]
+const nextTrackFromQueue = async () => {
+
   store.dispatch(togglePlaying(false));
 
   let audioCurrStore = store.getState().audioPlayerInfo;
-  console.log("before pushing", audioCurrStore);
-  console.log("pushing next track");
+
   await getQueue(store.getState().userSessionInfo.email);
   store.dispatch(pushNextTrack());
 
@@ -172,7 +170,7 @@ const nextTrackFromQueue = async (setWaitingForNextTrack) => {
 
   store.dispatch(togglePlaying(false));
   forceSyncQueueWithAudioPlayer(true);
-  setWaitingForNextTrack(false);
+  // setWaitingForNextTrack(false);
 };
 
 function AudioPlayerInfo(props) {
@@ -186,19 +184,23 @@ function AudioPlayerInfo(props) {
   const [waitingForNextTrack, setWaitingForNextTrack] = useState(false)
 
   const [volume, setVolume] = useState(1);
+  audio.onended = () => {
+    console.log("next");
+    audio.pause();
+    // setWaitingForNextTrack(true)
+    nextTrackFromQueue();
+  }
+  // useEffect(() => {
+  //   // console.log(audio.currentTime, audio.duration)
+  //   // if(audio.currentTime == duration){
+  //   //   console.log("audio.currentTime == duration", audio.currentTime == duration)
+  //   // }
+  //   if (audio.currentTime && duration && audio.currentTime === duration && !waitingForNextTrack) {
 
-  useEffect(() => {
-    if (audio.currentTime && duration && audio.currentTime === duration && !waitingForNextTrack) {
-      console.log("next");
-      audio.pause();
-      // setCurrentlyScrubbing(false)
-      setWaitingForNextTrack(true)
-      nextTrackFromQueue(setWaitingForNextTrack);
-    }
-  });
+  //   }
+  // });
 
   if (audio !== null && props.playing && duration) {
-    // audio.play()
 
     var playPromise = audio.play();
 
