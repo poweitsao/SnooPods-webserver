@@ -1,24 +1,5 @@
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Image, Dropdown } from 'react-bootstrap/'
 import React, { useState, useEffect } from "react"
-import ProfilePicMenu from "../ProfilePicMenu"
-import { useGoogleLogout, GoogleLogout } from 'react-google-login';
-import { CLIENT_ID } from "../../lib/constants"
-import Router from "next/router"
 import useWindowDimensions from "../hooks/useWindowDimensions"
-import Collapse from 'react-bootstrap/Collapse'
-import store from "../../redux/store"
-import { emptyAudioStore, emptyRegisterationInfo, storeRegisterationInfo } from "../../redux/actions/index"
-
-import GoogleLogin from 'react-google-login';
-import { Divider } from '@material-ui/core';
-
-import Cookie from "js-cookie"
-import isEmpty from '../../lib/isEmptyObject';
-import { emptyQueue } from '../../redux/actions/queueActions';
-import {emptyUserSessionInfo} from "../../redux/actions/userSessionActions"
-import {emptyCollections} from "../../redux/actions/collectionActions"
-import {emptyLikedTracks} from "../../redux/actions/likedTracksActions"
-import {emptySubLists} from "../../redux/actions/SubListActions"
 
 import MobileNavBar from "./MobileNavBar"
 import IndexDesktopNavBar from "./IndexDesktopNavBar"

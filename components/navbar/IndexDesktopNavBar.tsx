@@ -28,7 +28,7 @@ const DesktopNavBar = (props) => {
     const router = useRouter()
 
     return (
-        <Navbar bg="white" expand="lg" style={{
+        <Navbar bg="#1d245f" expand="lg" style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "stretch",
@@ -44,7 +44,7 @@ const DesktopNavBar = (props) => {
             <Navbar.Collapse 
                 id="responsive-navbar-nav" 
                 style={{
-                    backgroundColor:"#131538",
+                    backgroundColor:"white",
                     justifyContent: "center"
                     }}>
                 <Nav 
@@ -56,17 +56,17 @@ const DesktopNavBar = (props) => {
                             width: "64%",
                             height: "40px"}}>
                         <div className="branding-group" style={{width: "18.54%", display: "flex", justifyContent: "center", alignItems: "center", height: "100%", marginRight: "auto"}}>
-                            <div className="logo" style={{width: "32.4%", height: "61%", margin: "unset", marginRight: "auto", backgroundColor: "white"}}></div>
-                            <div className="name" style={{width: "46.4%", height: "fit-content", fontSize: "1.25vw", color: "white"}}>Snoopods</div>
+                            <div className="logo" style={{width: "32.4%", height: "61%", margin: "unset", marginRight: "auto", backgroundColor: "#1d245f"}}></div>
+                            <div className="name" style={{width: "46.4%", height: "fit-content", fontSize: "1.25vw", color: "#1d245f", fontFamily: 'Roboto', fontWeight: 700}}>Snoopods</div>
                         </div>
                         
                         <div className="nav-buttons-group">
-                            <Nav.Link className="support" style={{padding: "unset", color: "white", marginRight: "13.48%"}}>Support</Nav.Link>
-                            <Nav.Link className="download" style={{padding: "unset", color: "white", marginRight: "13.48%"}}>Download</Nav.Link>
-                            <Nav.Link className="about" style={{padding: "unset", color: "white", marginRight: "auto"}}>About</Nav.Link>
+                            <Nav.Link className="support" style={{padding: "unset", color: "#1d245f", marginRight: "13.48%", fontFamily: 'Roboto', fontWeight: 700}}>Support</Nav.Link>
+                            <Nav.Link className="download" style={{padding: "unset", color: "#1d245f", marginRight: "13.48%", fontFamily: 'Roboto', fontWeight: 700}}>Download</Nav.Link>
+                            <Nav.Link className="about" style={{padding: "unset", color: "#1d245f", marginRight: "auto", fontFamily: 'Roboto', fontWeight: 700}}>About</Nav.Link>
                         </div>
                         <div className="divider-container" style={{paddingLeft: "1.86%", paddingRight: "1.86%", width: "fit-content", height: "100%"}}>
-                            <Divider orientation="vertical" flexItem={true} style={{backgroundColor: "white", width: "2px", height: "100%"}} />
+                            <Divider orientation="vertical" flexItem={true} style={{backgroundColor: "#1d245f", width: "2px", height: "100%"}} />
                         </div>
                         {props.user && !isEmpty(props.user)
                                 ?<ProfilePicGroup user={props.user} />

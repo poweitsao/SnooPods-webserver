@@ -70,14 +70,44 @@ const Index = ({ userSession }) => {
         <IndexNavBar />
       </div>
       <div className="page-body">
+        <div className="group-one" style={{display: "flex", height: "min(101.74vh, 1282px)", width: "100%"}}>
+          <div className="group-one-left" style={{height: "100%", width: "50%", backgroundColor: "#C2C4FC"}}></div>
+          <div className="group-one-right" style={{height: "100%", width: "50%", backgroundColor: "#F2F2F2"}}></div>
+        </div>
 
+        <div className="group-two" 
+          style={{
+            display: "flex", 
+            justifyContent: 'center',
+            alignItems: "center",
+            height: "min(47.93vh, 604px)", 
+            width: "100%", 
+            marginTop: "min(49.66%, 300px)", 
+            marginBottom: "min(49.66%, 300px)",
+            
+          }}>
+          <div className="group-two-left" style={{width: "42.09%", height: "100%", display: "flex", alignItems: "center" }}>
+            <p 
+              style={{
+                color: "#0e0e0e", 
+                fontFamily: "Roboto", 
+                fontWeight: "bold", 
+                fontSize: "min(64px, 5.07vh)", 
+                width: "69.47%", 
+                margin: "unset",
+                marginLeft: "17.94%", 
+                marginRight: "10.51%", 
+                textAlign: "center"
+              }}>Add individual tracks to your custom collections</p>
+          </div>
+          <div className="group-two-right" style={{width: "min(1088px, 57.91%)", height: "min(47.93vh, 100%)", backgroundColor: "gray", borderRadius: "5px", marginRight: "1.25%"}}></div>
+        </div>
 
-        <div className="desc" style={{width: "60.93%", height: "17.7%", marginBottom: "32.3%"}}>
+        {/* <div className="desc" style={{width: "60.93%", height: "17.7%", marginBottom: "32.3%"}}>
           <p style={{ fontSize: "3.75vw", fontFamily: "Inter", fontWeight: "500", margin: "unset", marginBottom: "6.3%"}}>Listen to your favorite subreddits like never before.</p>
           <Button style={{width: "18.8%"}}>GET SNOOPODS FREE</Button>
-        </div>
+        </div> */}
         <div className="footer" style={{height: "27%", width: "100%", backgroundColor: "#181727"}}></div>
-        {/* <img className="image" src="http://www.poweitsao.com/images/kenobi.jpg"></img> */}
         <style>{`
       .page-body{
         display:flex;

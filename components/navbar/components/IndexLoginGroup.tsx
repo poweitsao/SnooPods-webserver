@@ -37,7 +37,7 @@ const LoginGroup = (props) => {
                     color:"#5c6096"
                 }}>
                 <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                    <div style={{color: "white", marginRight: "20px"}}>
+                    <div style={{color: "#1d245f", fontFamily: 'Roboto', fontWeight: 700, marginRight: "20px"}}>
                         Login
                     </div>
                 </Dropdown.Toggle>
