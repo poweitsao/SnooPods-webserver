@@ -16,17 +16,9 @@ import store from "../redux/store";
 import { togglePlaying } from "../redux/actions/index";
 
 import {
-  storeQueueInfo,
-  getQueueInfo,
   pushNextTrack,
   replaceCurrentTrack,
-  addPlaylistToQueue,
-  clearCurrentPlaylist,
-  removeTrackFromCurrentPlaylist,
-  removePlaylistFromQueue,
-  removeTrackFromQueue,
 } from "../redux/actions/queueActions";
-import isEmpty from "../lib/isEmptyObject";
 import {
   syncDB,
   syncQueueWithAudioPlayer,
@@ -34,11 +26,8 @@ import {
 } from "../lib/syncQueue";
 import { addToHistory, removeLastTrack } from "../redux/actions/historyActions";
 import { syncHistory } from "../lib/syncHistory";
-import fetch from "isomorphic-unfetch";
 
 import VolumeSlider from "../components/VolumeSlider";
-import useSWR, { trigger } from "swr";
-import { storeVolume } from "../redux/actions/volumeActions";
 import { Provider } from "react-redux";
 import { getQueue } from "../lib/syncQueue";
 
@@ -181,24 +170,16 @@ function AudioPlayerInfo(props) {
   const audio = props.audio;
   const pictureURL = props.pictureURL;
   const duration = store.getState().audioPlayerInfo.audio.duration;
-  const [waitingForNextTrack, setWaitingForNextTrack] = useState(false)
 
-  const [volume, setVolume] = useState(1);
+  // const [volume, setVolume] = useState(1);
+  const defaultVolume = 1;
+
   audio.onended = () => {
     console.log("next");
     audio.pause();
-    // setWaitingForNextTrack(true)
     nextTrackFromQueue();
   }
-  // useEffect(() => {
-  //   // console.log(audio.currentTime, audio.duration)
-  //   // if(audio.currentTime == duration){
-  //   //   console.log("audio.currentTime == duration", audio.currentTime == duration)
-  //   // }
-  //   if (audio.currentTime && duration && audio.currentTime === duration && !waitingForNextTrack) {
 
-  //   }
-  // });
 
   if (audio !== null && props.playing && duration) {
 
@@ -306,13 +287,9 @@ function AudioPlayerInfo(props) {
           </div>
         </div>
         <div className="volume">
-          {volume !== undefined ? (
             <Provider store={store}>
               <VolumeSlider />
             </Provider>
-          ) : (
-            <div></div>
-          )}
         </div>
       </div>
       <style>

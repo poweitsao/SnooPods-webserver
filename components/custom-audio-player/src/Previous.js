@@ -1,6 +1,9 @@
 import React from "react";
-import { SkipPrevious } from "@material-ui/icons";
 import {useState} from "react"
+import { SvgIcon } from "@material-ui/core";
+import PrevTrackIcon from "../../../resources/icons/bottom/previous_track/previous_track.svg";
+import PrevTrackIconOnClick from "../../../resources/icons/bottom/previous_track/previous_track_onclick.svg";
+
 
 export default function Previous(props) {
     const { handleClick } = props;
@@ -13,7 +16,11 @@ export default function Previous(props) {
                 onMouseDown={() => setColor("#4CADC7")}
                 onMouseUp={() => setColor("#5182BE")}
             >
-                <SkipPrevious style={{color: color}}/>
+                <SvgIcon
+                    viewBox="0 0 34 23"
+                    component={PrevTrackIcon}
+                    style={{ fill: "none", color: color }}
+                />
             </button>
             <style>{`
                 .SkipPrev_button {

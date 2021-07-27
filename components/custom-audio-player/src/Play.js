@@ -5,10 +5,6 @@ export default function Play(props) {
   const { handleClick, width, height, backgroundImage, playIconWidth, playIconColor } = props;
 
   return (
-    // <div         
-    //   style={{
-    //   width: width,
-    //   height: height}}> 
       <button
         className="play__button"
         onClick={() => handleClick()}
@@ -36,6 +32,5 @@ export default function Play(props) {
           <PlayArrowIcon style={{ color: playIconColor, width: playIconWidth, height: playIconWidth }} />
         </div>
       </button>
-    // </div>
   );
 }
