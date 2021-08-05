@@ -103,16 +103,52 @@ const Index = ({ userSession }) => {
           <div className="group-two-right" style={{width: "min(1088px, 57.91%)", height: "min(47.93vh, 100%)", backgroundColor: "gray", borderRadius: "5px", marginRight: "1.25%"}}></div>
         </div>
 
-        {/* <div className="desc" style={{width: "60.93%", height: "17.7%", marginBottom: "32.3%"}}>
-          <p style={{ fontSize: "3.75vw", fontFamily: "Inter", fontWeight: "500", margin: "unset", marginBottom: "6.3%"}}>Listen to your favorite subreddits like never before.</p>
-          <Button style={{width: "18.8%"}}>GET SNOOPODS FREE</Button>
-        </div> */}
-        <div className="footer" style={{height: "27%", width: "100%", backgroundColor: "#181727"}}></div>
+        <div className="group-three" style={{display: "flex", justifyContent: "center", alignItems: "center", width: "71.14vw", maxWidth: "1366px", height: "min(130px, 10.31vh)", marginLeft: "auto", marginRight: "auto"}}>
+          <div className="group-three-left" style={{width: "33.33%"}}>
+            <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%"}}>
+              <p style={{fontSize: "min(3.17vh, 40px)", fontFamily: "Lato", fontWeight: 900}}>100+ Podcasts</p> 
+              <p style={{fontSize: "min(1.9vh, 24px)", fontFamily: "Lato", fontWeight: 900}}>From Top Subreddits</p>
+            </div>
+          </div>
+          <div className="group-three-divider" style={{width: "5px", height: '67.69%', backgroundColor: "#aab0f0"}}></div>
+          <div className="group-three-mid" style={{width: "33.33%"}}>
+            <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%"}}>
+              <p style={{fontSize: "min(3.17vh, 40px)", fontFamily: "Lato", fontWeight: 900}}>Over 2000 Tracks</p> 
+              <p style={{fontSize: "min(1.9vh, 24px)", fontFamily: "Lato", fontWeight: 900}}>Per Topic</p>
+            </div>
+          </div>
+          <div className="group-three-divider" style={{width: "5px", height: '67.69%', backgroundColor: "#aab0f0"}}></div>
+          <div className="group-three-right" style={{width: "33.33%"}}>
+            <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%"}}>
+              <p style={{fontSize: "min(3.17vh, 40px)", fontFamily: "Lato", fontWeight: 900}}>2+ Minutes</p> 
+              <p style={{fontSize: "min(1.9vh, 24px)", fontFamily: "Lato", fontWeight: 900}}>Of Content Per Track</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="group-four" style={{display: "flex", width: "min(1378px, 71.77vw)", marginTop: "min(15.87vh, 200px)", marginBottom: "min(23.8vh, 300px)", justifyContent: "center", alignItems: "center", marginLeft: "auto", marginRight: "auto"}}>
+          <div className="group-four-left" style={{width: "48.62%", textAlign: "center", marginRight: "22.27%"}}>
+            <p style={{fontSize: "min(64px, 3.33vw)", fontFamily: "Roboto", fontWeight: "bold" }}>Access your favorite tracks instantly.</p>
+          </div>
+          <div className="group-four-right" style={{width: "min(401px, 20.8vw)", height: "min(401px, 20.8vw)", backgroundColor: "gray"}}></div>
+        </div>
+
+        <div className="group-five" style={{width: "min(83.48vw, 1603px)", height: "min(902px, 46.97vw)", backgroundColor:"#e0e1e3", borderRadius:"10px", marginLeft: "auto", marginRight: "auto"}}></div>
+
+        <div className="group-six" style={{display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "37.77vh", backgroundColor: "#f2f2f2", marginTop: "min(23.8vh, 300px)", marginBottom: "min(23.8vh, 300px)"}}>
+          <div className="group-six-content" style={{width: "min(79.94%, 1535px)", display: "flex", justifyContent: "center", alignItems: 'center'}}>
+            <div className="group-six-content-left" style={{width: "59.73%", textAlign: "center", marginRight: "16.4%"}}>
+              <p style={{fontSize: "min(64px, 3.33vw)", fontFamily: "Roboto", fontWeight: "bold" }}>Queue up different playlists and enjoy them seamlessly.</p>
+            </div>
+            <button className="group-six-content-right" style={{width: "min(303px, 15.7vw)", height: "min(70px, 3.6vw)", backgroundColor: "#8f72d5", borderRadius: "35px", border:"none", display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <p style={{color: "white", fontSize: "min(24px, 1.25vw)", fontWeight: "bold", fontFamily: "Roboto", margin: "unset"}}>Get Started</p>
+            </button>
+          </div>
+          
+        </div>
+        <div className="footer" style={{height: "27%", width: "100%", backgroundColor: "#b9bbf8"}}></div>
         <style>{`
       .page-body{
-        display:flex;
-        flex-wrap:wrap;
-        justify-content:center;
         height: 94.9%;
       }
       .button-container{
