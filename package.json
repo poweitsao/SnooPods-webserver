@@ -21,7 +21,7 @@
     "@types/react": "^17.0.5",
     "bootstrap": "^4.6.0",
     "cookie": "^0.4.1",
-    "firebase-admin": "^9.8.0",
+    "firebase-admin": "^11.4.1",
     "global": "^4.4.0",
     "google-auth-library": "^6.1.6",
     "isomorphic-unfetch": "^3.1.0",
